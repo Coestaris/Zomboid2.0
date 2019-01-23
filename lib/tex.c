@@ -4,13 +4,28 @@
 
 #include "tex.h"
 
-void freeTex(tex2d* tex)
+tex2d* createTex(const char* fn, int uid, int scope)
+{
+    tex2d* tex = malloc(sizeof(tex2d));
+
+    tex->textureId = 0;
+    tex->fn = fn;
+    tex->id = uid;
+    tex->scope = scope;
+}
+
+void freeOGlTex(tex2d* tex)
 {
     glDeleteTextures(1, &tex->textureId);
+    tex->textureId = 0;
+}
+
+void freeTex(tex2d* tex)
+{
     free(tex);
 }
 
-int fileexists(char* filename)
+int fileExists(const char* filename)
 {
     FILE *f = fopen(filename,"rb");
 
@@ -22,7 +37,7 @@ int fileexists(char* filename)
     return 1;
 }
 
-int texSize(char* filename, int* w, int* h)
+int texSize(const char* filename, int* w, int* h)
 {
     FILE *f = fopen(filename, "rb");
 
@@ -82,28 +97,25 @@ int texSize(char* filename, int* w, int* h)
     return 0;
 }
 
-tex2d* loadTex(char* filename)
+void loadTex(tex2d* tex)
 {
     int w, h;
-    if(!texSize(filename, &w, &h)) {
+    if(!texSize(tex->fn, &w, &h)) {
         w = -1;
         h = -1;
     }
 
     GLuint id = SOIL_load_OGL_texture
     (
-            filename,
+            tex->fn,
             SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID,
             SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
     );
 
-    printf("Loaded texture \"%s\". W: %i, H: %i OGlID: %li\n", filename, w, h, id);
-    tex2d* tex = malloc(sizeof(tex2d));
+    printf("Loaded texture \"%s\". W: %i, H: %i OGlID: %i\n", tex->fn, w, h, id);
 
     tex->textureId = id;
     tex->width = w;
     tex->height = h;
-
-    return tex;
 }

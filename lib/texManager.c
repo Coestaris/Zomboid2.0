@@ -1,0 +1,222 @@
+//
+// Created by maxim on 1/23/19.
+//
+
+#include "texManager.h"
+
+texNode* list;
+
+void freeNode(texNode* node)
+{
+    if(node->value)
+    {
+        if(node->value->textureId) freeOGlTex(node->value);
+        freeTex(node->value);
+    }
+    free(node);
+}
+
+
+texNode* createNode(tex2d* tex)
+{
+    texNode* node = malloc(sizeof(texNode));
+    node->value = tex;
+    node->next = NULL;
+
+    return node;
+}
+
+texNode* removeNode(int uid, int free)
+{
+    texNode* prev = NULL;
+    texNode* node = list;
+    while(1)
+    {
+        if(node->value && node->value->id == uid)
+        {
+            if(prev)
+            {
+                prev->next = node->next;
+            }
+            if(free) freeNode(node);
+            return node;
+            //return node;
+        }
+        if(!node->next) break;
+
+        prev = node;
+        node = node->next;
+    }
+
+    return NULL;
+}
+
+void printNode(texNode* node)
+{
+    if(node == NULL)
+    {
+        puts("Texture[NULL]");
+    }
+    else
+    {
+        if (node->value)
+        {
+            if(node->value->textureId != 0) {
+                printf("Texture[UID: %i, Scope %i, FN: \"%s\", Loaded: true, W: %i, H: %i, OGLId: %i]\n", node->value->id, node->value->scope,
+                       node->value->fn, node->value->width, node->value->height, node->value->textureId);
+            } else {
+                printf("Texture[UID: %i, Scope %i, FN: \"%s\", Loaded: false]\n", node->value->id, node->value->scope,
+                       node->value->fn);
+            }
+        } else {
+            puts("Texture[empty]");
+        }
+    }
+}
+
+void printNodes()
+{
+    texNode* node = list;
+    while(1)
+    {
+        printNode(node);
+        if(node->next == NULL) break;
+        node = node->next;
+    }
+}
+
+void removeNodes(int scope, int free)
+{
+    texNode* prev = NULL;
+    texNode* node = list;
+    int removed = 0;
+
+    while(1)
+    {
+        if(node->value && node->value->scope == scope)
+        {
+            if(prev) prev->next = node->next;
+            removed = 1;
+        }
+        if(!node->next) break;
+
+        if(!removed)
+        {
+            prev = node;
+            node = node->next;
+        }
+        else
+        {
+            removed = 0;
+            if (free)
+            {
+                texNode *next = node->next;
+                freeNode(node);
+
+                node = next;
+            }
+            else
+            {
+                node = node->next;
+            }
+        }
+    }
+}
+
+void texmInit(void)
+{
+    list = createNode(NULL);
+}
+
+void texmPush(tex2d* tex)
+{
+    texNode* lastNode = list;
+    while(lastNode->next) lastNode = lastNode->next;
+
+    texNode* node = createNode(tex);
+    lastNode->next = node;
+
+    printNode(node);
+}
+
+void texmLoadID(int uid)
+{
+    texNode* node = list;
+    while(1)
+    {
+        if(node->value && node->value->id == uid)
+        {
+            loadTex(node->value);
+        }
+        if(node->next == NULL) break;
+        node = node->next;
+    }
+}
+
+void texmLoadScope(int scope)
+{
+    texNode* node = list;
+    while(1)
+    {
+        if(node->value && node->value->scope == scope)
+        {
+            loadTex(node->value);
+        }
+        if(node->next == NULL) break;
+        node = node->next;
+    }
+}
+
+tex2d* texmGetID(int uid)
+{
+    texNode* node = list;
+    while(1)
+    {
+        if(node->value && node->value->id == uid)
+        {
+            return node->value;
+        }
+        if(node->next == NULL) break;
+        node = node->next;
+    }
+
+    return NULL;
+}
+
+void texmUnloadID(int uid)
+{
+    texNode* node = list;
+    while(1)
+    {
+        if(node->value && node->value->id == uid)
+        {
+            freeOGlTex(node->value);
+        }
+        if(node->next == NULL) break;
+        node = node->next;
+    }
+}
+
+void texmUnloadScope(int scope)
+{
+    texNode* node = list;
+    while(1)
+    {
+        if(node->value && node->value->scope == scope)
+        {
+            freeOGlTex(node->value);
+        }
+        if(node->next == NULL) break;
+        node = node->next;
+    }
+}
+
+void texmFreeID(int uid)
+{
+    removeNode(uid, 1);
+}
+
+void texmFreeScope(int scope)
+{
+    removeNodes(scope, 1);
+}

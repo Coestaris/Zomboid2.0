@@ -6,6 +6,7 @@
 
 #include "GL/freeglut.h"
 #include "GL/gl.h"
+#include "drawer.h"
 
 void eventLoop()
 {
@@ -19,6 +20,7 @@ void eventLoop()
     glColor3f(0, 1, 0); glVertex3f(400, 0, 0);
     glColor3f(0, 0, 1); glVertex3f(200, 500, 0);
     glEnd();
+
 
     // Flush drawing command buffer to make drawing happen as soon as possible.
     glFlush();

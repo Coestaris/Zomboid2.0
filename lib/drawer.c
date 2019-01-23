@@ -4,12 +4,13 @@
 
 #include "drawer.h"
 
-inline void createPoint(double* x, double* y, double cos, double sin, double hw, double hh, int s1, int s2);
-    *x = pos.x + s1 * hw * cos - s2 * hh * sin,
-    *y = pos.y + s1 * hw * sin + s2 * hh * cos
+void createPoint(double* x, double* y, double inx, double iny, double vcos, double vsin, double hw, double hh, int s1, int s2)
+{
+    *x = inx + s1 * hw * vcos - s2 * hh * vsin;
+    *y = iny + s1 * hw * vsin + s2 * hh * vcos;
 }
 
-void drawTexture(Texture2D* tex, Vector2f position, double angle, double scaleFactor)
+void drawTexture(tex2d* tex, double x, double y, double angle, double scaleFactor)
 {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex->textureId);
@@ -19,24 +20,24 @@ void drawTexture(Texture2D* tex, Vector2f position, double angle, double scaleFa
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    double hw= tex->width / 2;
-    double hh= tex->height / 2;
+    const double hw = tex->width / 2.0;
+    const double hh = tex->height / 2.0;
 
-    double acos = cos(angle) * scaleFactor;
-    double asin = sin(angle) * scaleFactor;
+    const double acos = cos(angle) * scaleFactor;
+    const double asin = sin(angle) * scaleFactor;
 
-    Vector2f p1 = Renderer::createPoint(position, acos, asin, hw, hh, -1, -1);
-    Vector2f p2 = Renderer::createPoint(position, acos, asin, hw, hh, -1,  1);
-    Vector2f p3 = Renderer::createPoint(position, acos, asin, hw, hh,  1, -1);
-    Vector2f p4 = Renderer::createPoint(position, acos, asin, hw, hh,  1,  1);
+    double x1, x2, x3, x4, y1, y2, y3, y4;
+
+    createPoint(&x1, &y1, x, y, acos, asin, hw, hh, -1, -1);
+    createPoint(&x2, &y2, x, y, acos, asin, hw, hh, -1,  1);
+    createPoint(&x3, &y3, x, y, acos, asin, hw, hh,  1, -1);
+    createPoint(&x4, &y4, x, y, acos, asin, hw, hh,  1,  1);
 
     glBegin(GL_QUAD_STRIP);
-    {
-        glTexCoord2f(0, 1); glVertex2f(p1.x, p1.y);
-        glTexCoord2f(0, 0); glVertex2f(p2.x, p2.y);
-        glTexCoord2f(1, 1); glVertex2f(p3.x, p3.y);
-        glTexCoord2f(1, 0); glVertex2f(p4.x, p4.y);
-    }
+        glTexCoord2f(0, 1); glVertex2f((GLfloat)x1, (GLfloat)y1);
+        glTexCoord2f(0, 0); glVertex2f((GLfloat)x2, (GLfloat)y2);
+        glTexCoord2f(1, 1); glVertex2f((GLfloat)x3, (GLfloat)y3);
+        glTexCoord2f(1, 0); glVertex2f((GLfloat)x4, (GLfloat)y4);
     glEnd();
 
     glPopMatrix();
