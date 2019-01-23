@@ -39,12 +39,6 @@ void pumpEvents()
     event* ev;
     while (ev = evqNextEvent())
     {
-        if(ev->eventType == EVT_MouseClick)
-        {
-            mouseEvent* me = (mouseEvent*)ev->data;
-            printf("Mouse Click %i %i %i %i\n", me->state, me->mouse, me->x, me->y);
-        }
-
         freeEvent(ev);
     }
     resetEvents();
@@ -77,22 +71,22 @@ void eventLoop()
 
 void eventKeyDown(int key, int x, int y)
 {
-    evqPushEvent(createEvent(EVT_KeyDown, createKeyboardEvent(key, x, y)));
+    //evqPushEvent(createEvent(EVT_KeyDown, createKeyboardEvent(key, x, y)));
 }
 
 void eventCharKeyDown(unsigned char key, int x, int y)
 {
-    evqPushEvent(createEvent(EVT_CharKeyDown, createKeyboardEvent(key, x, y)));
+    //evqPushEvent(createEvent(EVT_CharKeyDown, createKeyboardEvent(key, x, y)));
 }
 
 void eventKeyCharUp(unsigned char key, int x, int y)
 {
-    evqPushEvent(createEvent(EVT_CharKeyUp, createKeyboardEvent(key, x, y)));
+    //evqPushEvent(createEvent(EVT_CharKeyUp, createKeyboardEvent(key, x, y)));
 }
 
 void eventKeyUp(int key, int x, int y)
 {
-    evqPushEvent(createEvent(EVT_KeyUp, createKeyboardEvent(key, x, y)));
+    //evqPushEvent(createEvent(EVT_KeyUp, createKeyboardEvent(key, x, y)));
 }
 
 void eventMouseClick(int button, int state, int x, int y)
@@ -102,12 +96,12 @@ void eventMouseClick(int button, int state, int x, int y)
 
 void eventMouseMove(int x, int y)
 {
-    evqPushEvent(createEvent(EVT_MouseMove, createMouseEvent(-1, -1, x, y)));
+    //evqPushEvent(createEvent(EVT_MouseMove, createMouseEvent(-1, -1, x, y)));
 }
 
 void eventMouseEntry(int state)
 {
-    evqPushEvent(createEvent(EVT_MouseEntry, createMouseEvent(-1, state, -1, -1)));
+    //evqPushEvent(createEvent(EVT_MouseEntry, createMouseEvent(-1, state, -1, -1)));
 }
 
 void eventReshapeFunc(int w, int h)

@@ -4,6 +4,12 @@
 
 #include "eventQueue.h"
 
+registeredNode* registeredListeners[MAXLISTENERS];
+event* eventQueue[MAXEVENTS];
+
+int listenersCount = 0;
+int eventCount = 0;
+
 keyboardEvent* createKeyboardEvent(int key, int x, int y)
 {
     keyboardEvent* ev = malloc(sizeof(keyboardEvent));
@@ -37,10 +43,27 @@ void freeEvent(event* ev)
     free(ev);
 }
 
-#define MAXEVENTS 256
+void subscribeEvent(gameObject *object, int eventType, void (*callback)(gameObject*, void *))
+{
+    assert(listenersCount < MAXLISTENERS);
 
-event* eventQueue[MAXEVENTS];
-int eventCount = 0;
+    registeredListeners[listenersCount] = malloc(sizeof(registeredNode));
+    registeredListeners[listenersCount]->object = object;
+    registeredListeners[listenersCount]->eventType = eventType;
+    registeredListeners[listenersCount]->callback = callback;
+
+    listenersCount++;
+}
+
+void unsubscribeEvent(gameObject* object, int eventType)
+{
+    for(int i = 0; i < listenersCount; i++) {
+        if(registeredListeners[i]->object == object && registeredListeners[i]->eventType == eventType) {
+            free(registeredListeners[i]);
+            memcpy(registeredListeners + i, registeredListeners + i + 1, (size_t)(listenersCount - i - 1));
+        }
+    }
+}
 
 void evqPushEvent(event* ev)
 {
@@ -50,7 +73,17 @@ void evqPushEvent(event* ev)
 
 event* evqNextEvent(void)
 {
-    if(eventCount > 0) return eventQueue[--eventCount];
+    if(eventCount > 0) {
+        event* ev = eventQueue[--eventCount];
+        for(int i = 0; i < listenersCount; i++)
+        {
+            if(registeredListeners[i]->eventType == ev->eventType)
+            {
+                registeredListeners[i]->callback(registeredListeners[i]->object, ev->data);
+            }
+        }
+        return ev;
+    }
     else return NULL;
 }
 

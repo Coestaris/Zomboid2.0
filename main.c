@@ -5,6 +5,8 @@
 #include "lib/tex.h"
 #include "lib/texManager.h"
 
+#include "game/objects/obj_player.h"
+
 void loadTexture(const char* fn, int id, int scope)
 {
     if(fileExists(fn))
@@ -29,6 +31,8 @@ int main(int argc, char** argv) {
     loadTexture("in2.png", 3, 0);
 
     texmLoadScope(0);
+
+    gameObject* object = createPlayer();
 
     glutMainLoop();
 

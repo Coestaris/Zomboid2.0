@@ -20,7 +20,7 @@
 #define FPSDelay 1000.0 / FPSToLock
 #define FPSAvCounter 1000.0
 
-inline double getMillis(void);
+double getMillis(void);
 double getFPS(void);
 
 void drawFunc(void);
