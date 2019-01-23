@@ -10,7 +10,6 @@ void loadTexture(const char* fn, int id, int scope)
     if(fileExists(fn))
     {
         texmPush(createTex(fn, id, scope));
-
     }
     else
     {
@@ -32,5 +31,7 @@ int main(int argc, char** argv) {
     texmLoadScope(0);
 
     glutMainLoop();
+
+    texmFreeScope(0);
     return 0;
 }

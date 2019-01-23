@@ -5,7 +5,28 @@
 #ifndef ZOMBOID2_EVENTFUNCS_H
 #define ZOMBOID2_EVENTFUNCS_H
 
-void eventLoop();
+#include <unistd.h>
+
+#include "GL/freeglut.h"
+#include "GL/gl.h"
+#include <time.h>
+#include <sys/time.h>
+
+#include "drawer.h"
+#include "texManager.h"
+#include "eventQueue.h"
+
+#define FPSToLock 60.0
+#define FPSDelay 1000.0 / FPSToLock
+#define FPSAvCounter 1000.0
+
+inline double getMillis(void);
+double getFPS(void);
+
+void drawFunc(void);
+void pumpEvents(void);
+
+void eventLoop(void);
 void eventKeyDown(int key, int x, int y);
 void eventCharKeyDown(unsigned char key, int x, int y);
 void eventKeyCharUp(unsigned char key, int x, int y);

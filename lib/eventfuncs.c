@@ -4,73 +4,117 @@
 
 #include "eventfuncs.h"
 
-#include "GL/freeglut.h"
-#include "GL/gl.h"
-#include "drawer.h"
+int counter = 0;
+double elapsed = 0;
+double fps = 0;
 
-#include "texManager.h"
+double getFPS(void)
+{
+    return fps;
+}
+
+double getMillis(void)
+{
+    struct timeval  tv;
+    gettimeofday(&tv, NULL);
+
+    return (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000.0 ;
+}
 
 tex2d* tex = NULL;
 
-void eventLoop()
+void drawFunc()
 {
     if(tex == NULL) tex = texmGetID(2);
 
     glClear(GL_COLOR_BUFFER_BIT);
-/*
-
-    // Drawing is done by specifying a sequence of vertices.  The way these
-    // vertices are connected (or not connected) depends on the argument to
-    // glBegin.  GL_POLYGON constructs a filled polygon.
-    glBegin(GL_POLYGON);
-    glColor3f(1, 0, 0); glVertex3f(0, 0, 0);
-    glColor3f(0, 1, 0); glVertex3f(400, 0, 0);
-    glColor3f(0, 0, 1); glVertex3f(200, 500, 0);
-    glEnd();
-*/
 
     drawTexture(tex, 200, 200, 0, 1);
 
-    // Flush drawing command buffer to make drawing happen as soon as possible.
     glFlush();
+}
+
+void pumpEvents()
+{
+    event* ev;
+    while (ev = evqNextEvent())
+    {
+        if(ev->eventType == EVT_MouseClick)
+        {
+            mouseEvent* me = (mouseEvent*)ev->data;
+            printf("Mouse Click %i %i %i %i\n", me->state, me->mouse, me->x, me->y);
+        }
+
+        freeEvent(ev);
+    }
+    resetEvents();
+}
+
+void eventLoop()
+{
+    double tickStart = getMillis();
+
+    pumpEvents();
+    drawFunc();
+
+    double diff = getMillis() - tickStart;
+    counter++;
+
+    if(diff < FPSDelay) {
+        usleep((unsigned int) (FPSDelay - diff) * 1000);
+    }
+
+    elapsed += getMillis() - tickStart;
+
+
+    if(elapsed > FPSAvCounter)
+    {
+        fps = 1000 * counter / elapsed;
+        counter = 0;
+        elapsed = 0;
+    }
 }
 
 void eventKeyDown(int key, int x, int y)
 {
-
+    evqPushEvent(createEvent(EVT_KeyDown, createKeyboardEvent(key, x, y)));
 }
 
 void eventCharKeyDown(unsigned char key, int x, int y)
 {
-
+    evqPushEvent(createEvent(EVT_CharKeyDown, createKeyboardEvent(key, x, y)));
 }
 
 void eventKeyCharUp(unsigned char key, int x, int y)
 {
-
+    evqPushEvent(createEvent(EVT_CharKeyUp, createKeyboardEvent(key, x, y)));
 }
 
 void eventKeyUp(int key, int x, int y)
 {
-
+    evqPushEvent(createEvent(EVT_KeyUp, createKeyboardEvent(key, x, y)));
 }
 
 void eventMouseClick(int button, int state, int x, int y)
 {
-
+    evqPushEvent(createEvent(EVT_MouseClick, createMouseEvent(button, state, x, y)));
 }
 
 void eventMouseMove(int x, int y)
 {
-
+    evqPushEvent(createEvent(EVT_MouseMove, createMouseEvent(-1, -1, x, y)));
 }
 
 void eventMouseEntry(int state)
 {
-
+    evqPushEvent(createEvent(EVT_MouseEntry, createMouseEvent(-1, state, -1, -1)));
 }
 
-void eventReshapeFunc(int _width, int _height)
+void eventReshapeFunc(int w, int h)
 {
-
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, w, h, 0, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
 }

@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 11)
 
 
 
-add_executable(Zomboid2 main.c lib/graphics.h lib/graphics.c lib/eventfuncs.h lib/eventfuncs.c lib/tex.h lib/tex.c lib/drawer.h lib/drawer.c lib/texManager.h lib/texManager.c)
+add_executable(Zomboid2 main.c lib/graphics.h lib/graphics.c lib/eventfuncs.h lib/eventfuncs.c lib/tex.h lib/tex.c lib/drawer.h lib/drawer.c lib/texManager.h lib/texManager.c lib/eventQueue.h lib/eventQueue.c)
 
 find_path(SOIL_INCLUDE_DIR SOIL.h PATH_SUFFIXES include/SOIL include)
 
