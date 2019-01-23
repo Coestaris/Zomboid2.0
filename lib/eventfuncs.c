@@ -8,9 +8,16 @@
 #include "GL/gl.h"
 #include "drawer.h"
 
+#include "texManager.h"
+
+tex2d* tex = NULL;
+
 void eventLoop()
 {
+    if(tex == NULL) tex = texmGetID(2);
+
     glClear(GL_COLOR_BUFFER_BIT);
+/*
 
     // Drawing is done by specifying a sequence of vertices.  The way these
     // vertices are connected (or not connected) depends on the argument to
@@ -20,7 +27,9 @@ void eventLoop()
     glColor3f(0, 1, 0); glVertex3f(400, 0, 0);
     glColor3f(0, 0, 1); glVertex3f(200, 500, 0);
     glEnd();
+*/
 
+    drawTexture(tex, 200, 200, 0, 1);
 
     // Flush drawing command buffer to make drawing happen as soon as possible.
     glFlush();
