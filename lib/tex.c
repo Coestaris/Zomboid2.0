@@ -137,7 +137,14 @@ void loadTex(tex2d* tex)
                 SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_MULTIPLY_ALPHA
         );
 
-        printf("Loaded frame (%i/%i) \"%s\". W: %i, H: %i OGlID: %i\n", i, tex->framesCount, tex->fns[i], w, h, id);
+        if(tex->framesCount == 1)
+        {
+            printf("Loaded texture \"%s\". W: %i, H: %i, OGlID: %i\n", tex->fns[i], w, h, id);
+        }
+        else
+        {
+            printf("Loaded frame (%i/%i) \"%s\". W: %i, H: %i OGlID: %i\n", i + 1, tex->framesCount, tex->fns[i], w, h, id);
+        }
         tex->textureIds[i] = id;
     }
     tex->width = w;

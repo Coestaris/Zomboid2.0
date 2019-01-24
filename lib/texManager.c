@@ -61,14 +61,38 @@ void printNode(texNode* node)
     {
         if (node->value)
         {
-            /*if(node->value->textureId != 0) {
-                printf("Texture[UID: %i, Scope %i, FN: \"%s\", Loaded: true, W: %i, H: %i, OGLId: %i]\n", node->value->id, node->value->scope,
-                       node->value->fn, node->value->width, node->value->height, node->value->textureId);
-            } else {
-                printf("Texture[UID: %i, Scope %i, FN: \"%s\", Loaded: false]\n", node->value->id, node->value->scope,
-                       node->value->fn);
-            }*/
-        } else {
+            if(node->value->textureIds[0])
+            {
+                if(node->value->framesCount == 1)
+                {
+                    printf("Texture[UID: %i, Scope %i, FN: \"%s\", Loaded: true, W: %i, H: %i, OGLId: %i]\n",
+                           node->value->id, node->value->scope,
+                           node->value->fns[0], node->value->width, node->value->height, node->value->textureIds[0]);
+                }
+                else
+                {
+                    printf("Animation[UID: %i, Scope %i, Loaded: true, W: %i, H: %i, OGLIds: [",
+                            node->value->id, node->value->scope, node->value->width, node->value->height);
+                    for(int i = 0; i < node->value->framesCount; i++) {
+                        printf("%i%c", node->value->textureIds[i], (i == node->value->framesCount - 1) ? ']' : ',');
+                    }
+                    putchar('\n');
+                }
+            }
+            else
+            {
+                if(node->value->framesCount == 1)
+                {
+                    printf("Texture[UID: %i, FN: \"%s\", Scope %i, Loaded: false]\n", node->value->id, node->value->fns[0], node->value->scope);
+                }
+                else
+                {
+                    printf("Animation[UID: %i, Scope %i, Loaded: false]\n", node->value->id, node->value->scope);
+                }
+            }
+        }
+        else
+        {
             puts("Texture[empty]");
         }
     }
