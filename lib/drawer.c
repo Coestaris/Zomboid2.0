@@ -42,3 +42,13 @@ void drawTexture(tex2d* tex, double x, double y, double angle, double scaleFacto
 
     glPopMatrix();
 }
+
+void beginDraw(void)
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void endDraw(void)
+{
+    glFlush();
+}

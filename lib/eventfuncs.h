@@ -6,15 +6,16 @@
 #define ZOMBOID2_EVENTFUNCS_H
 
 #include <unistd.h>
+#include <time.h>
+#include <sys/time.h>
 
 #include "GL/freeglut.h"
 #include "GL/gl.h"
-#include <time.h>
-#include <sys/time.h>
 
 #include "drawer.h"
 #include "texManager.h"
 #include "eventQueue.h"
+#include "gameScene.h"
 
 #define FPSToLock 60.0
 #define FPSDelay 1000.0 / FPSToLock

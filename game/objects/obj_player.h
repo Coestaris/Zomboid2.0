@@ -9,7 +9,8 @@
 #include "../../lib/eventQueue.h"
 
 void player_init(gameObject* object);
-void player_event_mouseClick(gameObject* object, void* data);
+void player_event_mouseMove(gameObject *object, void *data);
+void player_event_mouseClick(gameObject *object, void *data);
 gameObject* createPlayer();
 
 #endif //ZOMBOID2_OBJ_TEST_H

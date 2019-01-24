@@ -25,19 +25,33 @@ tex2d* tex = NULL;
 
 void drawFunc()
 {
-    if(tex == NULL) tex = texmGetID(2);
+    beginDraw();
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    int count = 0;
+    gameObject** obj = getObjects(&count);
 
-    drawTexture(tex, 200, 200, 0, 1);
+    if(obj != NULL) {
+        for (int i = 0; i < count; i++) {
+            if(obj[i]->drawable) {
 
-    glFlush();
+                if(!obj[i]->cachedTex) {
+                    obj[i]->cachedTex = texmGetID(obj[i]->texID);
+                    assert(obj[i]->cachedTex != NULL);
+                    assert(obj[i]->cachedTex->textureId != 0);
+                }
+
+                drawTexture(obj[i]->cachedTex, obj[i]->x, obj[i]->y, obj[i]->angle, obj[i]->size);
+            }
+        }
+    }
+
+    endDraw();
 }
 
 void pumpEvents()
 {
     event* ev;
-    while (ev = evqNextEvent())
+    while ((ev = evqNextEvent()))
     {
         freeEvent(ev);
     }
@@ -47,6 +61,7 @@ void pumpEvents()
 void eventLoop()
 {
     double tickStart = getMillis();
+    evqPushEvent(createEvent(EVT_Update, NULL));
 
     pumpEvents();
     drawFunc();
@@ -66,27 +81,29 @@ void eventLoop()
         fps = 1000 * counter / elapsed;
         counter = 0;
         elapsed = 0;
+
+        printf("FPS: %lf\n", fps);
     }
 }
 
 void eventKeyDown(int key, int x, int y)
 {
-    //evqPushEvent(createEvent(EVT_KeyDown, createKeyboardEvent(key, x, y)));
+    evqPushEvent(createEvent(EVT_KeyDown, createKeyboardEvent(key, x, y)));
 }
 
 void eventCharKeyDown(unsigned char key, int x, int y)
 {
-    //evqPushEvent(createEvent(EVT_CharKeyDown, createKeyboardEvent(key, x, y)));
+    evqPushEvent(createEvent(EVT_CharKeyDown, createKeyboardEvent(key, x, y)));
 }
 
 void eventKeyCharUp(unsigned char key, int x, int y)
 {
-    //evqPushEvent(createEvent(EVT_CharKeyUp, createKeyboardEvent(key, x, y)));
+    evqPushEvent(createEvent(EVT_CharKeyUp, createKeyboardEvent(key, x, y)));
 }
 
 void eventKeyUp(int key, int x, int y)
 {
-    //evqPushEvent(createEvent(EVT_KeyUp, createKeyboardEvent(key, x, y)));
+    evqPushEvent(createEvent(EVT_KeyUp, createKeyboardEvent(key, x, y)));
 }
 
 void eventMouseClick(int button, int state, int x, int y)
@@ -96,12 +113,12 @@ void eventMouseClick(int button, int state, int x, int y)
 
 void eventMouseMove(int x, int y)
 {
-    //evqPushEvent(createEvent(EVT_MouseMove, createMouseEvent(-1, -1, x, y)));
+    evqPushEvent(createEvent(EVT_MouseMove, createMouseEvent(-1, -1, x, y)));
 }
 
 void eventMouseEntry(int state)
 {
-    //evqPushEvent(createEvent(EVT_MouseEntry, createMouseEvent(-1, state, -1, -1)));
+    evqPushEvent(createEvent(EVT_MouseEntry, createMouseEvent(-1, state, -1, -1)));
 }
 
 void eventReshapeFunc(int w, int h)

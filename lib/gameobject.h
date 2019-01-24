@@ -6,13 +6,19 @@
 #define ZOMBOID2_GAMEOBJECT_H
 
 #include <malloc.h>
+#include "tex.h"
 
 typedef struct _GameObject
 {
+    int drawable;
+
     int texID;
     double x;
     double y;
     double angle;
+    double size;
+
+    tex2d* cachedTex;
 
     void* data;
     void (*init)(struct _GameObject* object);

@@ -16,4 +16,7 @@ void createPoint(double* x, double* y, double inx, double iny, double vcos, doub
 
 void drawTexture(tex2d* tex, double x, double y, double angle, double scaleFactor);
 
+void beginDraw(void);
+void endDraw(void);
+
 #endif //ZOMBOID2_DRAWER_H

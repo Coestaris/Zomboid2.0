@@ -6,20 +6,38 @@
 
 void player_init(gameObject* object)
 {
+    subscribeEvent(object, EVT_MouseMove, player_event_mouseMove);
     subscribeEvent(object, EVT_MouseClick, player_event_mouseClick);
     puts("Player created!");
 }
 
-void player_event_mouseClick(gameObject* object, void* data)
+void player_event_mouseMove(gameObject *object, void *data)
 {
     mouseEvent* me = data;
-    printf("Player caught mouse. X: %i, Y: %i, B: %i, S: %i\n", me->x, me->y, me->mouse, me->state);
+    object->x = me->x;
+    object->y = me->y;
 }
 
 gameObject* createPlayer()
 {
     gameObject* go = malloc(sizeof(gameObject));
-    go->texID = 1;
+    go->drawable = 1;
+
+    go->texID = 2;
+    go->size = 1;
     go->init = player_init;
     return go;
+}
+
+void player_event_mouseClick(gameObject *object, void *data)
+{
+    mouseEvent* me = data;
+    if(me->mouse == MB_LEFT && me->state == MS_PRESSED)
+    {
+        object->size *= 1.1;
+    }
+    else if(me->mouse == MB_RIGHT && me->state == MS_PRESSED)
+    {
+        object->size *= 0.9;
+    }
 }

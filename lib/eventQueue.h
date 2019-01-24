@@ -18,9 +18,17 @@
 #define EVT_MouseClick 4
 #define EVT_MouseMove 5
 #define EVT_MouseEntry 6
+#define EVT_Update 7
 
 #define MAXEVENTS 256
 #define MAXLISTENERS 1024 //TODO
+
+#define MB_LEFT 0
+#define MB_RIGHT 2
+#define MB_MIDDLE 1
+
+#define MS_PRESSED 1
+#define MS_RELEASED 0
 
 typedef struct {
     int eventType;

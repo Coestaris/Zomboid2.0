@@ -17,6 +17,8 @@ gameObject** getObjects(int* count)
         *count = objectsCount;
         return  objects;
     }
+
+    return NULL;
 }
 
 void pushObject(gameObject* object)
