@@ -8,7 +8,6 @@
 #include <malloc.h>
 
 #include "tex.h"
-#include "helpers.h"
 
 typedef struct _GameObject
 {
@@ -19,6 +18,12 @@ typedef struct _GameObject
     double y;
     double angle;
     double size;
+
+    int frame;
+    int depth;
+
+    int animationSpeed;
+    int animationCounter;
 
     tex2d* cachedTex;
 

@@ -12,6 +12,8 @@ void player_init(gameObject* object)
 
 void player_event_update(gameObject *object, void *data)
 {
+    if(object->frame == 0) object->animationSpeed = 0;
+
     int mx, my;
     getMousePos(&mx, &my);
     object->angle = toPointsAngle(object->x, object->y, mx, my);
@@ -30,8 +32,10 @@ gameObject* createPlayer()
     go->x = 100;
     go->y = 200;
 
+    go->depth = 1;
     go->texID = TEXID_PLAYER;
-    go->size = 0.5;
+    go->animationSpeed = 0;
+    go->size = 1;
     go->init = player_init;
     return go;
 }
@@ -40,6 +44,12 @@ void player_event_mouseClick(gameObject *object, void *data)
 {
     mouseEvent* me = data;
     if(me->mouse == MB_LEFT && me->state == MS_RELEASED) {
-        pushObject(createBullet(object->x, object->y, me->x, me->y));
+        object->frame = 1;
+        object->animationSpeed = 2;
+
+        double x, y;
+        relativeCoordinates(&x, &y, object);
+
+        pushObject(createBullet(x, y, me->x, me->y));
     }
 }

@@ -14,8 +14,11 @@ gameObject* object(void)
     obj->y = 0;
     obj->texID = -1;
     obj->data = NULL;
-    obj->drawable = false;
-
+    obj->drawable = 0;
+    obj->depth = 0;
+    obj->frame = 0;
+    obj->animationSpeed = 0;
+    obj->animationCounter = 0;
     return obj;
 }
 

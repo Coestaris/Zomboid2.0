@@ -7,7 +7,7 @@
 
 #include "../objectInclude.h"
 
-#define BULLET_SPEED 15
+#define BULLET_SPEED 25
 
 void bullet_event_update(gameObject *object, void *data);
 void bullet_init(gameObject* object);

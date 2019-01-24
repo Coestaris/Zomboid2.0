@@ -4,24 +4,59 @@
 
 #include "tex.h"
 
-tex2d* createTex(const char* fn, int uid, int scope)
+tex2d* createTex(const char* fn, int uid, int scope, int centerX, int centerY)
 {
     tex2d* tex = malloc(sizeof(tex2d));
 
-    tex->textureId = 0;
-    tex->fn = fn;
+    tex->textureIds = malloc(sizeof(GLuint));
+    tex->textureIds[0] = 0;
+
+    tex->fns = malloc(sizeof(char*));
+    tex->fns[0] = fn;
+
+    tex->centerX = centerX;
+    tex->centerY = centerY;
+
+    tex->framesCount = 1;
+
+    tex->id = uid;
+    tex->scope = scope;
+}
+
+tex2d* createAnimation(int framesCount, int uid, int centerX, int centerY, int scope, ...)
+{
+    tex2d* tex = malloc(sizeof(tex2d));
+
+    va_list args;
+    va_start(args, scope);
+
+    tex->textureIds = malloc(sizeof(GLuint) * framesCount);
+    memset(tex->textureIds, 0, sizeof(GLuint) * framesCount);
+
+    tex->centerX = centerX;
+    tex->centerY = centerY;
+
+    tex->fns = malloc(sizeof(char*) * framesCount);
+    for(int i = 0; i < framesCount; i++) {
+        tex->fns[i] = va_arg(args, const char* );
+    }
+
+    tex->framesCount = framesCount;
     tex->id = uid;
     tex->scope = scope;
 }
 
 void freeOGlTex(tex2d* tex)
 {
-    glDeleteTextures(1, &tex->textureId);
-    tex->textureId = 0;
+    for(int i = 0; i < tex->framesCount; i++)
+        if(tex->textureIds[i]) glDeleteTextures(1, &tex->textureIds[i]);
+    memset(tex->textureIds, 0, sizeof(GLuint) * tex->framesCount);
 }
 
 void freeTex(tex2d* tex)
 {
+    free(tex->textureIds);
+    free(tex->fns);
     free(tex);
 }
 
@@ -88,22 +123,23 @@ int texSize(const char* filename, int* w, int* h)
 void loadTex(tex2d* tex)
 {
     int w, h;
-    if(!texSize(tex->fn, &w, &h)) {
+    if(!texSize(tex->fns[0], &w, &h)) {
         w = -1;
         h = -1;
     }
 
-    GLuint id = SOIL_load_OGL_texture
-    (
-            tex->fn,
-            SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID,
-            SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-    );
+    for(int i = 0; i < tex->framesCount; i++)
+    {
+        GLuint id = SOIL_load_OGL_texture (
+                tex->fns[i],
+                SOIL_LOAD_AUTO,
+                SOIL_CREATE_NEW_ID,
+                SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_MULTIPLY_ALPHA
+        );
 
-    printf("Loaded texture \"%s\". W: %i, H: %i OGlID: %i\n", tex->fn, w, h, id);
-
-    tex->textureId = id;
+        printf("Loaded frame (%i/%i) \"%s\". W: %i, H: %i OGlID: %i\n", i, tex->framesCount, tex->fns[i], w, h, id);
+        tex->textureIds[i] = id;
+    }
     tex->width = w;
     tex->height = h;
 }

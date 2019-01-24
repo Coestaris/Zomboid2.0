@@ -7,24 +7,32 @@
 
 #include <malloc.h>
 #include <stdio.h>
+#include <stdarg.h>
+#include <memory.h>
 
 #include <GL/freeglut.h>
 #include <GL/gl.h>
 #include <SOIL/SOIL.h>
 
 typedef struct {
-    const char* fn;
+    const char** fns;
+    GLuint* textureIds;
 
     int id;
     int scope;
 
-    GLuint textureId;
+    int framesCount;
+
+    int centerX;
+    int centerY;
 
     int width;
     int height;
 } tex2d;
 
-tex2d* createTex(const char* fn, int uid, int scope);
+tex2d* createTex(const char* fn, int uid, int scope, int centerX, int centerY);
+
+tex2d* createAnimation(int framesCount, int uid, int centerX, int centerY, int scope, ...);
 
 void freeOGlTex(tex2d* tex);
 void freeTex(tex2d* tex);

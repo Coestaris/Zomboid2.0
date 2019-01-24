@@ -31,21 +31,39 @@ tex2d* tex = NULL;
 void drawFunc()
 {
     beginDraw();
-
     int count = 0;
     gameObject** obj = getObjects(&count);
 
-    if(obj != NULL) {
-        for (int i = 0; i < count; i++) {
-            if(obj[i]->drawable) {
-
-                if(!obj[i]->cachedTex) {
+    if(obj != NULL)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            if(obj[i]->drawable)
+            {
+                if(!obj[i]->cachedTex)
+                {
                     obj[i]->cachedTex = texmGetID(obj[i]->texID);
                     assert(obj[i]->cachedTex != NULL);
-                    assert(obj[i]->cachedTex->textureId != 0);
+
+                    for(int j = 0; j < obj[i]->cachedTex->framesCount; j++)
+                        assert(obj[i]->cachedTex->textureIds[j] != 0);
                 }
 
-                drawTexture(obj[i]->cachedTex, obj[i]->x, obj[i]->y, obj[i]->angle, obj[i]->size);
+                if(obj[i]->animationSpeed != 0)
+                {
+                    obj[i]->animationCounter++;
+                    if(obj[i]->animationCounter == obj[i]->animationSpeed)
+                    {
+                        obj[i]->frame += 1;
+                        obj[i]->animationCounter = 0;
+                        if(obj[i]->frame >= obj[i]->cachedTex->framesCount)
+                        {
+                            obj[i]->frame = 0;
+                        }
+                    }
+                }
+
+                drawTexture(obj[i]->cachedTex, obj[i]->frame, obj[i]->depth, obj[i]->x, obj[i]->y, obj[i]->angle, obj[i]->size);
             }
         }
     }

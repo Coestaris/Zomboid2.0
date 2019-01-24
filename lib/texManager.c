@@ -10,7 +10,7 @@ void freeNode(texNode* node)
 {
     if(node->value)
     {
-        if(node->value->textureId) freeOGlTex(node->value);
+        freeOGlTex(node->value);
         freeTex(node->value);
     }
     free(node);
@@ -61,13 +61,13 @@ void printNode(texNode* node)
     {
         if (node->value)
         {
-            if(node->value->textureId != 0) {
+            /*if(node->value->textureId != 0) {
                 printf("Texture[UID: %i, Scope %i, FN: \"%s\", Loaded: true, W: %i, H: %i, OGLId: %i]\n", node->value->id, node->value->scope,
                        node->value->fn, node->value->width, node->value->height, node->value->textureId);
             } else {
                 printf("Texture[UID: %i, Scope %i, FN: \"%s\", Loaded: false]\n", node->value->id, node->value->scope,
                        node->value->fn);
-            }
+            }*/
         } else {
             puts("Texture[empty]");
         }

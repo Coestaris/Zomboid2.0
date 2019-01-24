@@ -30,3 +30,17 @@ double toDeg(double angle)
 {
     return angle / M_2_PI * 360.0;
 }
+
+void relativeCoordinates(double* x, double* y, gameObject* obj)
+{
+    createPoint(
+            x, y,
+            obj->x, obj->y,
+            cos(obj->angle),
+            sin(obj->angle),
+            0, //obj->cachedTex->width / 2.0,
+            0, //obj->cachedTex->height / 2.0,
+            - obj->cachedTex->centerX + obj->x,
+            - obj->cachedTex->centerY + obj->y,
+            0, 0);
+}
