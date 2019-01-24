@@ -11,7 +11,7 @@
 #include "eventfuncs.h"
 #include "gameScene.h"
 
-void initGraphics(int argc, char** argv, int w, int h, const char* title);
+void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize);
 void registerEvents();
 void run(int sceneID);
 

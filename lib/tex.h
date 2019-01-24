@@ -29,7 +29,6 @@ tex2d* createTex(const char* fn, int uid, int scope);
 void freeOGlTex(tex2d* tex);
 void freeTex(tex2d* tex);
 
-int fileExists(const char* filename);
 int texSize(const char* filename, int* w, int* h);
 void loadTex(tex2d* tex);
 

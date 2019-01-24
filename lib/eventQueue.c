@@ -37,6 +37,11 @@ event* createEvent(int type, void* data)
     return  ev;
 }
 
+int getListenersCount(void)
+{
+    return listenersCount;
+}
+
 void freeEvent(event* ev)
 {
     if(ev->data) free(ev->data);
@@ -55,12 +60,30 @@ void subscribeEvent(gameObject *object, int eventType, void (*callback)(gameObje
     listenersCount++;
 }
 
+int remove_node(registeredNode** from, int total, int index) {
+    if((total - index - 1) > 0) {
+        memmove(from + index, from + index + 1, sizeof(registeredNode*) * (total-index - 1));
+    }
+    return total-1; // return the new array size
+}
+
+void unsubscribeEvents(gameObject* object)
+{
+    for(int i = listenersCount - 1; i >= 0; i--) {
+        if(registeredListeners[i]->object == object) {
+            free(registeredListeners[i]);
+            listenersCount = remove_node(registeredListeners, listenersCount, i);
+        }
+    }
+}
+
 void unsubscribeEvent(gameObject* object, int eventType)
 {
     for(int i = 0; i < listenersCount; i++) {
         if(registeredListeners[i]->object == object && registeredListeners[i]->eventType == eventType) {
             free(registeredListeners[i]);
-            memcpy(registeredListeners + i, registeredListeners + i + 1, (size_t)(listenersCount - i - 1));
+            listenersCount = remove_node(registeredListeners, listenersCount, i);
+            return;
         }
     }
 }

@@ -25,18 +25,6 @@ void freeTex(tex2d* tex)
     free(tex);
 }
 
-int fileExists(const char* filename)
-{
-    FILE *f = fopen(filename,"rb");
-
-    if (f == 0) {
-        return 0;
-    };
-
-    fclose(f);
-    return 1;
-}
-
 int texSize(const char* filename, int* w, int* h)
 {
     FILE *f = fopen(filename, "rb");

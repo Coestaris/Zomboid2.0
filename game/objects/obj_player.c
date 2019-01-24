@@ -6,25 +6,32 @@
 
 void player_init(gameObject* object)
 {
-    subscribeEvent(object, EVT_MouseMove, player_event_mouseMove);
     subscribeEvent(object, EVT_MouseClick, player_event_mouseClick);
-    puts("Player created!");
+    subscribeEvent(object, EVT_Update, player_event_update);
 }
 
-void player_event_mouseMove(gameObject *object, void *data)
+void player_event_update(gameObject *object, void *data)
 {
-    mouseEvent* me = data;
-    object->x = me->x;
-    object->y = me->y;
+    int mx, my;
+    getMousePos(&mx, &my);
+    object->angle = toPointsAngle(object->x, object->y, mx, my);
+
+    if(keyPressed('a') || specKeyPressed(GLUT_KEY_LEFT))  object->x -= 2;
+    if(keyPressed('w') || specKeyPressed(GLUT_KEY_UP))    object->y -= 2;
+    if(keyPressed('s') || specKeyPressed(GLUT_KEY_DOWN))  object->y += 2;
+    if(keyPressed('d') || specKeyPressed(GLUT_KEY_RIGHT)) object->x += 2;
 }
 
 gameObject* createPlayer()
 {
-    gameObject* go = malloc(sizeof(gameObject));
-    go->drawable = 1;
+    gameObject* go = object();
+    go->drawable = true;
 
-    go->texID = 2;
-    go->size = 1;
+    go->x = 100;
+    go->y = 200;
+
+    go->texID = TEXID_PLAYER;
+    go->size = 0.5;
     go->init = player_init;
     return go;
 }
@@ -32,12 +39,7 @@ gameObject* createPlayer()
 void player_event_mouseClick(gameObject *object, void *data)
 {
     mouseEvent* me = data;
-    if(me->mouse == MB_LEFT && me->state == MS_PRESSED)
-    {
-        object->size *= 1.1;
-    }
-    else if(me->mouse == MB_RIGHT && me->state == MS_PRESSED)
-    {
-        object->size *= 0.9;
+    if(me->mouse == MB_LEFT && me->state == MS_RELEASED) {
+        pushObject(createBullet(object->x, object->y, me->x, me->y));
     }
 }

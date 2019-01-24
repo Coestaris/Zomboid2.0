@@ -4,7 +4,7 @@
 
 #include "graphics.h"
 
-void initGraphics(int argc, char **argv, int w, int h, const char *title)
+void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize)
 {
     glutInit(&argc, argv);
 
@@ -18,6 +18,10 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title)
     glLoadIdentity();
     glOrtho(0, w, h, 0, -1, 1);
     glMatrixMode(GL_MODELVIEW);
+
+    if(isFixedSize) {
+        setFixedSize(w, h);
+    }
 }
 
 void registerEvents()

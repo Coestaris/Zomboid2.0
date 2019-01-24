@@ -23,6 +23,10 @@ gameObject** getObjects(int* count)
 
 void pushObject(gameObject* object)
 {
+    if(currentScene != -1 && object->init) {
+        object->init(object);
+    }
+
     objects[objectsCount++] = object;
 }
 
@@ -34,14 +38,24 @@ void destroyAllObjects(int free)
     objectsCount = 0;
 }
 
+int remove_element(gameObject** from, int total, int index) {
+    if((total - index - 1) > 0) {
+        memmove(from + index, from + index + 1, sizeof(gameObject*) * (total-index - 1));
+    }
+    return total-1; // return the new array size
+}
+
 void destroyObject(gameObject* object, int free)
 {
+    unsubscribeEvents(object);
     for(int i = 0; i < objectsCount; i++)
     {
         if(objects[i] == object)
         {
             if(free) freeObject(object);
-            memcpy(objects + i, objects + i + 1, (size_t)(objectsCount - i - 1));
+            objects[i] = NULL;
+            objectsCount = remove_element(objects, objectsCount, i);
+            return;
         }
     }
 }
@@ -80,7 +94,8 @@ void loadScene(int id, int loadScope, int destroyObjects, int freeObjects)
             }
 
             for(int j = 0; j < scenes[i]->startupObjectsCount; j++)
-                scenes[i]->startupObjects[j]->init(scenes[i]->startupObjects[j]);
+                if(scenes[i]->startupObjects[j]->init)
+                    scenes[i]->startupObjects[j]->init(scenes[i]->startupObjects[j]);
 
             currentScene = i;
         }
@@ -95,6 +110,11 @@ gameScene* createScene(int id, int scope)
     scene->startupObjectsCount = 0;
     scene->startupObjectsArrLen = 0;
     return scene;
+}
+
+int getObjectsCount(void)
+{
+    return objectsCount;
 }
 
 void addStarupObject(gameScene* scene, gameObject* object)

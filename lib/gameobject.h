@@ -6,7 +6,9 @@
 #define ZOMBOID2_GAMEOBJECT_H
 
 #include <malloc.h>
+
 #include "tex.h"
+#include "helpers.h"
 
 typedef struct _GameObject
 {
@@ -25,6 +27,7 @@ typedef struct _GameObject
 
 } gameObject;
 
+gameObject* object();
 void freeObject(gameObject* object);
 
 #endif //ZOMBOID2_GAMEOBJECT_H

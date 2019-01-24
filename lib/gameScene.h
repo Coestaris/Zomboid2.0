@@ -9,6 +9,7 @@
 
 #include "gameobject.h"
 #include "texManager.h"
+#include "eventQueue.h"
 
 #define MAXSCENES 256
 #define MAXOBJECTS 1024
@@ -25,6 +26,7 @@ typedef struct
 } gameScene;
 
 gameObject** getObjects(int* count);
+int getObjectsCount(void);
 
 void pushObject(gameObject* object);
 void destroyObject(gameObject* object, int free);

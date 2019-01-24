@@ -7,6 +7,11 @@
 int counter = 0;
 double elapsed = 0;
 double fps = 0;
+int mousex = -1, mousey = -1;
+int fixedW = -1, fixedH = -1;
+
+char keysBuffer[256];
+char specKeysBuffer[256];
 
 double getFPS(void)
 {
@@ -82,27 +87,58 @@ void eventLoop()
         counter = 0;
         elapsed = 0;
 
-        printf("FPS: %lf\n", fps);
+        printf("FPS: %lf (objects %i, listeners: %i)\n", fps, getObjectsCount(), getListenersCount());
     }
+}
+
+void getWinSize(int* w, int* h)
+{
+    if(fixedH != -1) {
+        *w = fixedW;
+        *h = fixedH;
+    } else {
+        *w = glutGet(GLUT_WINDOW_WIDTH);
+        *h = glutGet(GLUT_WINDOW_HEIGHT);
+    }
+}
+
+void getMousePos(int* x, int* y)
+{
+    *x = mousex;
+    *y = mousey;
+}
+
+char specKeyPressed(int key)
+{
+    return specKeysBuffer[key];
+}
+
+char keyPressed(unsigned char key)
+{
+    return keysBuffer[key];
 }
 
 void eventKeyDown(int key, int x, int y)
 {
+    specKeysBuffer[key] = 1;
     evqPushEvent(createEvent(EVT_KeyDown, createKeyboardEvent(key, x, y)));
 }
 
 void eventCharKeyDown(unsigned char key, int x, int y)
 {
+    keysBuffer[tolower(key)] = 1;
     evqPushEvent(createEvent(EVT_CharKeyDown, createKeyboardEvent(key, x, y)));
 }
 
 void eventKeyCharUp(unsigned char key, int x, int y)
 {
+    keysBuffer[tolower(key)] = 0;
     evqPushEvent(createEvent(EVT_CharKeyUp, createKeyboardEvent(key, x, y)));
 }
 
 void eventKeyUp(int key, int x, int y)
 {
+    specKeysBuffer[key] = 0;
     evqPushEvent(createEvent(EVT_KeyUp, createKeyboardEvent(key, x, y)));
 }
 
@@ -113,6 +149,8 @@ void eventMouseClick(int button, int state, int x, int y)
 
 void eventMouseMove(int x, int y)
 {
+    mousex = x;
+    mousey = y;
     evqPushEvent(createEvent(EVT_MouseMove, createMouseEvent(-1, -1, x, y)));
 }
 
@@ -121,11 +159,21 @@ void eventMouseEntry(int state)
     evqPushEvent(createEvent(EVT_MouseEntry, createMouseEvent(-1, state, -1, -1)));
 }
 
+void setFixedSize(int w, int h)
+{
+    fixedW = w;
+    fixedH = h;
+}
+
 void eventReshapeFunc(int w, int h)
 {
-    glViewport(0, 0, w, h);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, w, h, 0, -1, 1);
-    glMatrixMode(GL_MODELVIEW);
+    if(fixedW != -1) {
+        glutReshapeWindow(fixedW, fixedH);
+    } else {
+        glViewport(0, 0, w, h);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0, w, h, 0, -1, 1);
+        glMatrixMode(GL_MODELVIEW);
+    }
 }

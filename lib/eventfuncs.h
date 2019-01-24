@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <sys/time.h>
+#include <ctype.h>
 
 #include "GL/freeglut.h"
 #include "GL/gl.h"
@@ -24,6 +25,11 @@
 double getMillis(void);
 double getFPS(void);
 
+void getWinSize(int* w, int* h);
+void getMousePos(int* x, int* y);
+char keyPressed(unsigned char key);
+char specKeyPressed(int key);
+
 void drawFunc(void);
 void pumpEvents(void);
 
@@ -36,5 +42,7 @@ void eventMouseClick(int button, int state, int x, int y);
 void eventMouseMove(int x, int y);
 void eventMouseEntry(int state);
 void eventReshapeFunc(int _width, int _height);
+
+void setFixedSize(int w, int h);
 
 #endif //ZOMBOID2_EVENTFUNCS_H
