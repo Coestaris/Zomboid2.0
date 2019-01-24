@@ -38,3 +38,8 @@ void registerEvents()
     glutDisplayFunc(eventLoop);
 }
 
+void run(int sceneID)
+{
+    loadScene(sceneID, 1, 1, 1);
+    glutMainLoop();
+}

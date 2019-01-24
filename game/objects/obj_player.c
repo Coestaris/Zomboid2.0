@@ -6,6 +6,7 @@
 
 void player_init(gameObject* object)
 {
+    subscribeEvent(object, EVT_MouseClick, player_event_mouseClick);
     puts("Player created!");
 }
 
@@ -20,6 +21,5 @@ gameObject* createPlayer()
     gameObject* go = malloc(sizeof(gameObject));
     go->texID = 1;
     go->init = player_init;
-    subscribeEvent(go, EVT_MouseClick, player_event_mouseClick);
     return go;
 }

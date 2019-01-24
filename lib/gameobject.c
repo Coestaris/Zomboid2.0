@@ -3,3 +3,9 @@
 //
 
 #include "gameobject.h"
+
+void freeObject(gameObject *object)
+{
+    if(object->data) free(object->data);
+    free(object);
+}

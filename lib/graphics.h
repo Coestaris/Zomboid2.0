@@ -9,8 +9,10 @@
 #include "GL/gl.h"
 
 #include "eventfuncs.h"
+#include "gameScene.h"
 
 void initGraphics(int argc, char** argv, int w, int h, const char* title);
 void registerEvents();
+void run(int sceneID);
 
 #endif //ZOMBOID2_GRAPHICS_H

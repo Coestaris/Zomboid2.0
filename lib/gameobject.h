@@ -19,4 +19,6 @@ typedef struct _GameObject
 
 } gameObject;
 
+void freeObject(gameObject* object);
+
 #endif //ZOMBOID2_GAMEOBJECT_H

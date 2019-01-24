@@ -4,6 +4,7 @@
 
 #include "lib/tex.h"
 #include "lib/texManager.h"
+#include "lib/gameScene.h"
 
 #include "game/objects/obj_player.h"
 
@@ -20,6 +21,8 @@ void loadTexture(const char* fn, int id, int scope)
     }
 }
 
+#define SCENEID_MAIN 0
+
 int main(int argc, char** argv) {
 
     initGraphics(argc, argv, 600, 600, "asd");
@@ -30,11 +33,12 @@ int main(int argc, char** argv) {
     loadTexture("in1.png", 2, 0);
     loadTexture("in2.png", 3, 0);
 
-    texmLoadScope(0);
+    gameScene* mainScene = createScene(SCENEID_MAIN, 0);
+    addStarupObject(mainScene, createPlayer());
 
-    gameObject* object = createPlayer();
+    pushScene(mainScene);
 
-    glutMainLoop();
+    run(SCENEID_MAIN);
 
     texmFreeScope(0);
     return 0;
