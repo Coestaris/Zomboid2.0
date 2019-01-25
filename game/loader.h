@@ -10,11 +10,15 @@
 #include "../lib/gameScene.h"
 
 #include "objects/obj_player.h"
+#include "objects/obj_box.h"
 
 #define TEXSCOPE_MAIN 0
 
 #define TEXID_PLAYER 1
 #define TEXID_BULLET 2
+#define TEXID_BOX 3
+
+#define TEXID_BACK_CONCRETE 4
 
 #define SCENEID_MAIN 0
 

@@ -16,6 +16,9 @@
 
 typedef struct
 {
+    int backgroundTexId;
+    tex2d* cachedBack;
+
     gameObject** startupObjects;
     int startupObjectsArrLen;
     int startupObjectsCount;
@@ -26,6 +29,7 @@ typedef struct
 } gameScene;
 
 gameObject** getObjects(int* count);
+gameScene* activeScene();
 int getObjectsCount(void);
 
 void pushObject(gameObject* object);

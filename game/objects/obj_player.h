@@ -9,8 +9,12 @@
 
 #include "obj_bullet.h"
 
+typedef struct {
+    long long lastFireFrame;
+
+} playerData;
+
 void player_init(gameObject* object);
-void player_event_mouseClick(gameObject *object, void *data);
 void player_event_update(gameObject *object, void *data);
 gameObject* createPlayer();
 

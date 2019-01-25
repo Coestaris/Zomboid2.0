@@ -22,12 +22,20 @@
 #define FPSDelay 1000.0 / FPSToLock
 #define FPSAvCounter 1000.0
 
+#define MOUSE_BUFFER_SIZE 15
+#define KEY_BUFFER_SIZE 256
+#define SPEC_KEY_BUFFER_SIZE 256
+
+void initEventFuncs(void);
+
 double getMillis(void);
 double getFPS(void);
 
+long long getFrame();
 void getWinSize(int* w, int* h);
 void getMousePos(int* x, int* y);
 char keyPressed(unsigned char key);
+int getMouseState(int button);
 char specKeyPressed(int key);
 
 void drawFunc(void);

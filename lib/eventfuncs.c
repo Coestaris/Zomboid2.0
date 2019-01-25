@@ -9,13 +9,31 @@ double elapsed = 0;
 double fps = 0;
 int mousex = -1, mousey = -1;
 int fixedW = -1, fixedH = -1;
+long long frames;
 
-char keysBuffer[256];
-char specKeysBuffer[256];
+char keysBuffer[KEY_BUFFER_SIZE];
+char specKeysBuffer[SPEC_KEY_BUFFER_SIZE];
+int mouseBuffer[MOUSE_BUFFER_SIZE];
+
+long long getFrame()
+{
+    return frames;
+}
+
+void initEventFuncs(void)
+{
+    memset(mouseBuffer, MS_RELEASED, sizeof(int) * MOUSE_BUFFER_SIZE);
+}
 
 double getFPS(void)
 {
     return fps;
+}
+
+int getMouseState(int button)
+{
+    assert(button < MOUSE_BUFFER_SIZE);
+    return mouseBuffer[button];
 }
 
 double getMillis(void)
@@ -33,6 +51,19 @@ void drawFunc()
     beginDraw();
     int count = 0;
     gameObject** obj = getObjects(&count);
+    gameScene* scene = activeScene();
+
+    if(scene->backgroundTexId)
+    {
+        if(!scene->cachedBack)
+        {
+            scene->cachedBack = texmGetID(scene->backgroundTexId);
+            assert(scene->cachedBack != NULL);
+            assert(scene->cachedBack->textureIds[0] != 0);
+        }
+
+        drawBackground(scene->cachedBack, 0, fixedW, fixedH);
+    }
 
     if(obj != NULL)
     {
@@ -91,6 +122,7 @@ void eventLoop()
 
     double diff = getMillis() - tickStart;
     counter++;
+    frames++;
 
     if(diff < FPSDelay) {
         usleep((unsigned int) (FPSDelay - diff) * 1000);
@@ -162,6 +194,7 @@ void eventKeyUp(int key, int x, int y)
 
 void eventMouseClick(int button, int state, int x, int y)
 {
+    mouseBuffer[button] = state;
     evqPushEvent(createEvent(EVT_MouseClick, createMouseEvent(button, state, x, y)));
 }
 

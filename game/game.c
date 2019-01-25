@@ -7,6 +7,7 @@
 void initGame(int argc, char** argv)
 {
     initGraphics(argc, argv, 600, 600, "asd", true);
+    initEventFuncs();
     registerEvents();
     texmInit();
 

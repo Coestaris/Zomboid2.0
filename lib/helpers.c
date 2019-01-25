@@ -3,6 +3,7 @@
 //
 
 #include "helpers.h"
+#include "eventfuncs.h"
 
 int fileExists(const char* filename)
 {
@@ -39,6 +40,20 @@ double toRad(double angle)
 double toDeg(double angle)
 {
     return (angle / M_2_PI) * 360.0;
+}
+
+int isInWindowRect(gameObject* object)
+{
+    int winW, winH, texW = 0, texH = 0;
+    getWinSize(&winW, &winH);
+
+    if(object->cachedTex) {
+        texW = object->cachedTex->width;
+        texH = object->cachedTex->height;
+    }
+
+    return object->x < - texW * object->size || object->x > winW + texW * object->size ||
+           object->y < - texH * object->size || object->y > winH + texH * object->size;
 }
 
 void relativeCoordinates(double* x, double* y, gameObject* obj)

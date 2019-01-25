@@ -6,13 +6,30 @@
 
 void bullet_event_update(gameObject *object, void *data)
 {
-    int winW, winH;
-    getWinSize(&winW, &winH);
+    int objectsCount;
+    gameObject** objects = getObjects(&objectsCount);
 
-    if( object->x < - object->cachedTex->width * object->size ||
-        object->x > winW + object->cachedTex->width * object->size ||
-        object->y < - object->cachedTex->height * object->size ||
-        object->y > winH + object->cachedTex->height * object->size)
+    for(int i = 0; i < objectsCount; i++)
+    {
+        if(objects[i]->texID == TEXID_BOX)
+        {
+            double boxX = objects[i]->x;
+            double boxY = objects[i]->y;
+            double boxW = objects[i]->cachedTex->width * objects[i]->size;
+            double boxH = objects[i]->cachedTex->height * objects[i]->size;
+
+            if(object->x > boxX - boxW / 2 &&
+               object->x < boxX + boxW / 2 &&
+               object->y > boxY - boxH / 2 &&
+               object->y < boxY + boxH / 2)
+            {
+                destroyObject(object, true);
+                return;
+            }
+        }
+    }
+
+    if(isInWindowRect(object))
     {
         destroyObject(object, true);
     }

@@ -27,8 +27,8 @@
 #define MB_RIGHT 2
 #define MB_MIDDLE 1
 
-#define MS_PRESSED 1
-#define MS_RELEASED 0
+#define MS_PRESSED 0
+#define MS_RELEASED 1
 
 typedef struct {
     int eventType;

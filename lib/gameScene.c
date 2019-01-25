@@ -11,6 +11,11 @@ int objectsCount = 0;
 
 int currentScene = -1;
 
+gameScene* activeScene()
+{
+    return scenes[currentScene];
+}
+
 gameObject** getObjects(int* count)
 {
     if(currentScene != -1) {

@@ -6,12 +6,15 @@
 
 void player_init(gameObject* object)
 {
-    subscribeEvent(object, EVT_MouseClick, player_event_mouseClick);
     subscribeEvent(object, EVT_Update, player_event_update);
 }
 
+#define FIRE_RATE 5
+
 void player_event_update(gameObject *object, void *data)
 {
+    playerData* pd = object->data;
+
     if(object->frame == 0) object->animationSpeed = 0;
 
     int mx, my;
@@ -22,11 +25,29 @@ void player_event_update(gameObject *object, void *data)
     if(keyPressed('w') || specKeyPressed(GLUT_KEY_UP))    object->y -= 2;
     if(keyPressed('s') || specKeyPressed(GLUT_KEY_DOWN))  object->y += 2;
     if(keyPressed('d') || specKeyPressed(GLUT_KEY_RIGHT)) object->x += 2;
+
+    if(getMouseState(MB_LEFT) == MS_PRESSED)
+    {
+        long long frame = getFrame();
+        if(frame - pd->lastFireFrame > FIRE_RATE)
+        {
+            pd->lastFireFrame = frame;
+
+            object->frame = 1;
+            object->animationSpeed = 2;
+
+            double x, y;
+            relativeCoordinates(&x, &y, object);
+            pushObject(createBullet(x, y, mx, my));
+        }
+    }
 }
 
 gameObject* createPlayer()
 {
     gameObject* go = object();
+    go->data = malloc(sizeof(playerData));
+
     go->drawable = true;
 
     go->x = 100;
@@ -37,18 +58,4 @@ gameObject* createPlayer()
     go->size = 1;
     go->init = player_init;
     return go;
-}
-
-void player_event_mouseClick(gameObject *object, void *data)
-{
-    mouseEvent* me = data;
-    if(me->mouse == MB_LEFT && me->state == MS_RELEASED) {
-        object->frame = 1;
-        object->animationSpeed = 2;
-
-        double x, y;
-        relativeCoordinates(&x, &y, object);
-
-        pushObject(createBullet(x, y, me->x, me->y));
-    }
 }

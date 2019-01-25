@@ -21,6 +21,7 @@ double toPointsAngle(double x1, double y1, double x2, double y2);
 double randRange(double a, double b);
 
 void relativeCoordinates(double* x, double* y, gameObject* obj);
+int isInWindowRect(gameObject* obj);
 
 double toRad(double angle);
 double toDeg(double angle);
