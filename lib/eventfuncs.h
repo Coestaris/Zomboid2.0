@@ -38,6 +38,8 @@ char keyPressed(unsigned char key);
 int getMouseState(int button);
 char specKeyPressed(int key);
 
+void rotateScene(double angle);
+
 void drawFunc(void);
 void pumpEvents(void);
 

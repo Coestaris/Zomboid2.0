@@ -16,6 +16,7 @@
 
 typedef struct {
     const char** fns;
+    int isBackground;
     GLuint* textureIds;
 
     int id;
@@ -30,9 +31,8 @@ typedef struct {
     int height;
 } tex2d;
 
-tex2d* createTex(const char* fn, int uid, int scope, int centerX, int centerY);
-
-tex2d* createAnimation(int framesCount, int uid, int centerX, int centerY, int scope, ...);
+tex2d* createTex(const char* fn, int uid, int scope, int centerX, int centerY, int isBg);
+tex2d* createAnimation(const char** fileNames, int framesCount, int uid, int scope, int centerX, int centerY);
 
 void freeOGlTex(tex2d* tex);
 void freeTex(tex2d* tex);

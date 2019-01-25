@@ -24,7 +24,9 @@ double randRange(double a, double b)
     double min = a > b ? b : a;
     double max = a > b ? a : b;
 
-    return min + random() / (RAND_MAX / (max - min + 1) + 1);
+    double scale = rand() / (float) RAND_MAX; /* [0, 1.0] */
+
+    return min + scale * ( max - min );
 }
 
 inline double toPointsAngle(double x1, double y1, double x2, double y2)
@@ -68,4 +70,34 @@ void relativeCoordinates(double* x, double* y, gameObject* obj)
             - obj->cachedTex->centerX + obj->x,
             - obj->cachedTex->centerY + obj->y,
             0, 0);
+}
+
+
+void loadTexture(const char* fn, int id, int scope, int cX, int cY, int isBg)
+{
+    if(fileExists(fn)) {
+        texmPush(createTex(fn, id, scope, cX, cY, isBg));
+    } else {
+        printf("Error while loading texture %i. Unable to reach file \"%s\"", id, fn);
+        exit(1);
+    }
+}
+
+void loadAnimation(int framesCount, int id, int scope, int cX, int cY, ...)
+{
+    va_list args;
+    va_start(args, cY);
+
+    const char** fileNames = malloc(sizeof(const char*) * framesCount);
+    for(int i = 0; i < framesCount; i++) {
+        const char* fn = va_arg(args, const char* );
+        if(!fileExists(fn))
+        {
+            printf("Error while loading animation %i (frame %i of %i). Unable to reach file \"%s\"",
+                   id, i + 1, framesCount, fn);
+            exit(1);
+        }
+        fileNames[i] = fn;
+    }
+    texmPush(createAnimation(fileNames, framesCount, id, scope, cX, cY));
 }

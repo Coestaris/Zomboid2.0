@@ -19,25 +19,19 @@ void drawBackground(tex2d* tex, int frame, int windowW, int windowH)
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
 
-    glPushMatrix();
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    //glPushMatrix();
 
     double texW = (double)windowW / tex->width;
     double texH = (double)windowH / tex->height;
 
     glBegin(GL_QUAD_STRIP);
-        glTexCoord2f(0,             (GLfloat)texH); glVertex2f((GLfloat)0,       (GLfloat)      0);
-        glTexCoord2f(0,                         0); glVertex2f((GLfloat)0,       (GLfloat)windowH);
-        glTexCoord2f((GLfloat)texW, (GLfloat)texH); glVertex2f((GLfloat)windowW, (GLfloat)      0);
-        glTexCoord2f((GLfloat)texW,             0); glVertex2f((GLfloat)windowW, (GLfloat)windowH);
+        glTexCoord2f(0,             (GLfloat)texH); glVertex2f((GLfloat)-10,       (GLfloat)      -10);
+        glTexCoord2f(0,                         0); glVertex2f((GLfloat)-10,       (GLfloat)windowH + 10);
+        glTexCoord2f((GLfloat)texW, (GLfloat)texH); glVertex2f((GLfloat)windowW + 10, (GLfloat)      -10);
+        glTexCoord2f((GLfloat)texW,             0); glVertex2f((GLfloat)windowW + 10, (GLfloat)windowH + 10);
     glEnd();
 
-    glPopMatrix();
+    //glPopMatrix();
 }
 
 void drawTexture(tex2d* tex, int frame, double x, double y, double angle, double scaleFactor)
@@ -45,10 +39,7 @@ void drawTexture(tex2d* tex, int frame, double x, double y, double angle, double
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
 
-    glPushMatrix();
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //glPushMatrix();
 
     const double hw = tex->width / 2.0;
     const double hh = tex->height / 2.0;
@@ -70,15 +61,24 @@ void drawTexture(tex2d* tex, int frame, double x, double y, double angle, double
         glTexCoord2f(1, 0); glVertex3f((GLfloat)x4, (GLfloat)y4, 1);
     glEnd();
 
-    glPopMatrix();
+    //glPopMatrix();
 }
 
 void beginDraw(void)
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void endDraw(void)
 {
     glFlush();
+}
+
+void rotateScreen(double angle, double sceneW, double sceneH)
+{
+    glLoadIdentity ();
+    glTranslatef((GLfloat)(sceneW / 2.0), (GLfloat)(sceneH / 2.0), 0);
+    glRotatef((GLfloat)angle, 0, 0, 1);
+    glTranslatef(- (GLfloat)(sceneW / 2.0), - (GLfloat)(sceneH / 2.0), 0);
+
 }

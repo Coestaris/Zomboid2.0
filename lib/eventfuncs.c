@@ -10,6 +10,7 @@ double fps = 0;
 int mousex = -1, mousey = -1;
 int fixedW = -1, fixedH = -1;
 long long frames;
+double sceneAngle = 0;
 
 char keysBuffer[KEY_BUFFER_SIZE];
 char specKeysBuffer[SPEC_KEY_BUFFER_SIZE];
@@ -44,11 +45,17 @@ double getMillis(void)
     return (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000.0 ;
 }
 
-tex2d* tex = NULL;
+void rotateScene(double angle)
+{
+    sceneAngle = angle;
+}
 
 void drawFunc()
 {
     beginDraw();
+
+    rotateScreen(sceneAngle, fixedW, fixedH);
+
     int count = 0;
     gameObject** obj = getObjects(&count);
     gameScene* scene = activeScene();

@@ -18,6 +18,8 @@ void createPoint(double* x, double* y, double inx, double iny, double vcos, doub
 void drawBackground(tex2d* tex, int frame, int windowW, int windowH);
 void drawTexture(tex2d* tex, int frame, double x, double y, double angle, double scaleFactor);
 
+void rotateScreen(double angle, double sceneW, double sceneH);
+
 void beginDraw(void);
 void endDraw(void);
 

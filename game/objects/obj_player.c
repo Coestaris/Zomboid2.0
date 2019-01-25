@@ -15,7 +15,12 @@ void player_event_update(gameObject *object, void *data)
 {
     playerData* pd = object->data;
 
-    if(object->frame == 0) object->animationSpeed = 0;
+    if(object->frame == 0) {
+        rotateScene(0);
+        object->animationSpeed = 0;
+    } else {
+        rotateScene(-randRange(0.3, 0.1));
+    }
 
     int mx, my;
     getMousePos(&mx, &my);
@@ -35,6 +40,7 @@ void player_event_update(gameObject *object, void *data)
 
             object->frame = 1;
             object->animationSpeed = 2;
+            rotateScene(randRange(0.5, 0.1));
 
             double x, y;
             relativeCoordinates(&x, &y, object);
