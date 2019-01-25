@@ -63,7 +63,7 @@ void drawFunc()
                     }
                 }
 
-                drawTexture(obj[i]->cachedTex, obj[i]->frame, obj[i]->depth, obj[i]->x, obj[i]->y, obj[i]->angle, obj[i]->size);
+                drawTexture(obj[i]->cachedTex, obj[i]->frame, obj[i]->x, obj[i]->y, obj[i]->angle, obj[i]->size);
             }
         }
     }

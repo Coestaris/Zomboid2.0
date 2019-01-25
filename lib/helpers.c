@@ -16,6 +16,16 @@ int fileExists(const char* filename)
     return 1;
 }
 
+double randRange(double a, double b)
+{
+    if(a == b) return a;
+
+    double min = a > b ? b : a;
+    double max = a > b ? a : b;
+
+    return min + random() / (RAND_MAX / (max - min + 1) + 1);
+}
+
 inline double toPointsAngle(double x1, double y1, double x2, double y2)
 {
     return atan2(y1 - y2, x1 - x2) + M_PI;
@@ -23,12 +33,12 @@ inline double toPointsAngle(double x1, double y1, double x2, double y2)
 
 double toRad(double angle)
 {
-    return angle / 360.0 * M_2_PI;
+    return (angle / 360.0) * M_2_PI;
 }
 
 double toDeg(double angle)
 {
-    return angle / M_2_PI * 360.0;
+    return (angle / M_2_PI) * 360.0;
 }
 
 void relativeCoordinates(double* x, double* y, gameObject* obj)

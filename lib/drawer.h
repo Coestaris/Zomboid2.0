@@ -15,7 +15,7 @@
 void createPoint(double* x, double* y, double inx, double iny, double vcos, double vsin,
                  double hw, double hh, double cx, double cy, int s1, int s2);
 
-void drawTexture(tex2d* tex, int frame, int depth, double x, double y, double angle, double scaleFactor);
+void drawTexture(tex2d* tex, int frame, double x, double y, double angle, double scaleFactor);
 
 void beginDraw(void);
 void endDraw(void);

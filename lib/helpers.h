@@ -18,6 +18,7 @@
 
 int fileExists(const char* filename);
 double toPointsAngle(double x1, double y1, double x2, double y2);
+double randRange(double a, double b);
 
 void relativeCoordinates(double* x, double* y, gameObject* obj);
 

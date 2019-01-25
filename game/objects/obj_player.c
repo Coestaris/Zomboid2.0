@@ -32,7 +32,6 @@ gameObject* createPlayer()
     go->x = 100;
     go->y = 200;
 
-    go->depth = 1;
     go->texID = TEXID_PLAYER;
     go->animationSpeed = 0;
     go->size = 1;

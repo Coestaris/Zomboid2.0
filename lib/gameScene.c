@@ -27,6 +27,17 @@ void pushObject(gameObject* object)
         object->init(object);
     }
 
+    for(int i = 0; i < objectsCount; i++)
+    {
+        if(objects[i]->depth <= object->depth)
+        {
+            memmove (&objects[i + 1], &objects[i], (objectsCount - i) * sizeof(gameObject*));
+            objects[i] = object;
+            objectsCount++;
+            return;
+        }
+    }
+
     objects[objectsCount++] = object;
 }
 

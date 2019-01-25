@@ -14,7 +14,7 @@ void createPoint(double* x, double* y, double inx, double iny, double vcos, doub
     *y = inx * vsin + iny * vcos - cy * (vcos - 1) - cx * vsin;
 }
 
-void drawTexture(tex2d* tex, int frame, int depth, double x, double y, double angle, double scaleFactor)
+void drawTexture(tex2d* tex, int frame, double x, double y, double angle, double scaleFactor)
 {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
@@ -38,10 +38,10 @@ void drawTexture(tex2d* tex, int frame, int depth, double x, double y, double an
     createPoint(&x4, &y4, x, y, acos, asin, hw, hh, - tex->centerX + x, tex->centerY + y,  1,  1);
 
     glBegin(GL_QUAD_STRIP);
-        glTexCoord2f(0, 1); glVertex3f((GLfloat)x1, (GLfloat)y1, depth);
-        glTexCoord2f(0, 0); glVertex3f((GLfloat)x2, (GLfloat)y2, depth);
-        glTexCoord2f(1, 1); glVertex3f((GLfloat)x3, (GLfloat)y3, depth);
-        glTexCoord2f(1, 0); glVertex3f((GLfloat)x4, (GLfloat)y4, depth);
+        glTexCoord2f(0, 1); glVertex2f((GLfloat)x1, (GLfloat)y1);
+        glTexCoord2f(0, 0); glVertex2f((GLfloat)x2, (GLfloat)y2);
+        glTexCoord2f(1, 1); glVertex2f((GLfloat)x3, (GLfloat)y3);
+        glTexCoord2f(1, 0); glVertex2f((GLfloat)x4, (GLfloat)y4);
     glEnd();
 
     glPopMatrix();

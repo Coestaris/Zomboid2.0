@@ -33,9 +33,10 @@ gameObject* createBullet(double x, double y, double dirx, double diry)
     gameObject* go = object();
     go->drawable = true;
 
+    go->depth = 2;
     go->x = x;
     go->y = y;
-    go->angle = toPointsAngle(x, y, dirx, diry) + toRad(random() % 180 - 90);
+    go->angle = toPointsAngle(x, y, dirx, diry) + toRad(randRange(-50, 50));
     go->texID = TEXID_BULLET;
     go->size = 1;
     go->init = bullet_init;
