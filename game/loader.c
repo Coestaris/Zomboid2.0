@@ -14,9 +14,12 @@ void loadTextures(void)
 
     loadTexture("../resources/images/bullet.png", TEXID_BULLET, TEXSCOPE_MAIN, 0, 0, TEXMODE_DEFAULT);
     loadTexture("../resources/images/box.png", TEXID_BOX, TEXSCOPE_MAIN, 0, 0, TEXMODE_DEFAULT);
-    loadTexture("../resources/images/simpleLight.png", TEXID_SIMPLE_LIGHT, TEXSCOPE_MAIN, 0, 0, TEXMODE_OVERLAY);
-    loadTexture("../resources/images/light.png", TEXID_LIGHT, TEXSCOPE_MAIN, 0, 0, TEXMODE_OVERLAY);
-    loadTexture("../resources/images/flashlight.png", TEXID_FLASHLIGHT, TEXSCOPE_MAIN, 110, 0, TEXMODE_OVERLAY);
+
+    loadTexture("../resources/images/light/simpleLight.png", TEXID_SIMPLE_LIGHT, TEXSCOPE_MAIN, 0, 0, TEXMODE_OVERLAY);
+    loadTexture("../resources/images/light/light.png", TEXID_LIGHT, TEXSCOPE_MAIN, 0, 0, TEXMODE_OVERLAY);
+    loadTexture("../resources/images/light/flashlight.png", TEXID_FLASHLIGHT, TEXSCOPE_MAIN, 110, 0, TEXMODE_OVERLAY);
+
+    loadTexture("../resources/images/shellCase.png", TEXID_SHELLCASE, TEXSCOPE_MAIN, 0, 0, TEXMODE_OVERLAY);
 
     loadTexture("../resources/images/backgrounds/concrete.png", TEXID_BACK_CONCRETE, TEXSCOPE_MAIN, 0, 0, TEXMODE_BACKGROUND);
     puts("Loading textures done!");
@@ -28,11 +31,11 @@ void initScenes(void)
     mainScene->backgroundTexId = TEXID_BACK_CONCRETE;
 
     gameObject* player = createPlayer();
-    addStarupObject(mainScene, player);
+    scmAddStartupObject(mainScene, player);
 
-    addStarupObject(mainScene, createBox(100, 100));
-    addStarupObject(mainScene, createBox(300, 100));
-    addStarupObject(mainScene, createBox(350, 400));
+    scmAddStartupObject(mainScene, createBox(100, 100));
+    scmAddStartupObject(mainScene, createBox(300, 100));
+    scmAddStartupObject(mainScene, createBox(350, 400));
 
-    pushScene(mainScene);
+    scmPushScene(mainScene);
 }

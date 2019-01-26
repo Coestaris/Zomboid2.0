@@ -7,7 +7,7 @@
 void bullet_event_update(gameObject *object, void *data)
 {
     int objectsCount;
-    gameObject** objects = getObjects(&objectsCount);
+    gameObject** objects = scmGetObjects(&objectsCount);
     gameObject* light = ((bulletData*)object->data)->light;
 
     for(int i = 0; i < objectsCount; i++)
@@ -24,8 +24,8 @@ void bullet_event_update(gameObject *object, void *data)
                object->y > boxY - boxH / 2 &&
                object->y < boxY + boxH / 2)
             {
-                destroyObject(light, true);
-                destroyObject(object, true);
+                scmDestroyObject(light, true);
+                scmDestroyObject(object, true);
                 return;
             }
         }
@@ -33,8 +33,8 @@ void bullet_event_update(gameObject *object, void *data)
 
     if(isInWindowRect(object))
     {
-        destroyObject(light, true);
-        destroyObject(object, true);
+        scmDestroyObject(light, true);
+        scmDestroyObject(object, true);
     }
     else
     {
@@ -47,7 +47,7 @@ void bullet_event_update(gameObject *object, void *data)
 
 void bullet_init(gameObject* object)
 {
-    subscribeEvent(object, EVT_Update, bullet_event_update);
+    evqSubscribeEvent(object, EVT_Update, bullet_event_update);
 }
 
 gameObject* createBullet(double x, double y, double dirx, double diry)
@@ -69,6 +69,6 @@ gameObject* createBullet(double x, double y, double dirx, double diry)
 
     ((bulletData*)go->data)->light = light;
 
-    pushObject(light);
+    scmPushObject(light);
     return go;
 }

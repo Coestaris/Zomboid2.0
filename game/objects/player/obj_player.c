@@ -24,16 +24,16 @@ void player_event_keyPressed(gameObject* this, void* data)
 
 void player_init(gameObject* object)
 {
-    subscribeEvent(object, EVT_Update, player_event_update);
-    subscribeEvent(object, EVT_CharKeyUp, player_event_keyPressed);
+    evqSubscribeEvent(object, EVT_Update, player_event_update);
+    evqSubscribeEvent(object, EVT_CharKeyUp, player_event_keyPressed);
 
     playerData* pd = object->data;
     for(int i = 0; i < PLAYER_FLASHLIGHTS; i++) {
         pd->flashlights[i] = createFlashlight(object, flashlightSizes[i], flashlightAlphas[i]);
-        pushObject(pd->flashlights[i]);
+        scmPushObject(pd->flashlights[i]);
     }
 
-    pushObject(pd->backLight);
+    scmPushObject(pd->backLight);
 }
 
 #define FIRE_RATE 5
@@ -42,7 +42,7 @@ void addFireLight(playerData* pd, double x, double y)
 {
     gameObject* light = createLight(x, y ,pd->currLightSize, pd->currLightAlpha);
     pd->fireLights[pd->currentLightsCount++] = light;
-    pushObject(light);
+    scmPushObject(light);
 
     //printf("%i\n", pd->currentLightsCount);
 }
@@ -61,7 +61,7 @@ void player_event_update(gameObject *object, void *data)
         object->animationSpeed = 0;
 
         for(int i = 0; i < pd->currentLightsCount; i++)
-            destroyObject(pd->fireLights[i], true);
+            scmDestroyObject(pd->fireLights[i], true);
 
         pd->currentLightsCount = 0;
 
@@ -103,7 +103,7 @@ void player_event_update(gameObject *object, void *data)
 
             rotateScene(randRange(pd->currShake, pd->currShake * PLAYER_SHAKE_MIN));
 
-            pushObject(createBullet(x, y, mx, my));
+            scmPushObject(createBullet(x, y, mx, my));
         }
     }
 

@@ -60,14 +60,13 @@ mouseEvent* createMouseEvent(int mouse, int state, int x, int y);
 
 event* createEvent(int type, void* data);
 void freeEvent(event* ev);
-int getListenersCount(void);
 
-void subscribeEvent(gameObject *object, int eventType, void (*callback)(gameObject*, void *));
-void unsubscribeEvent(gameObject* object, int eventType);
-void unsubscribeEvents(gameObject* object);
-
+int  evqGetListenersCount(void);
+void evqSubscribeEvent(gameObject *object, int eventType, void (*callback)(gameObject *, void *));
+void evqUnsubscribeEvent(gameObject *object, int eventType);
+void evqUnsubscribeEvents(gameObject *object);
 void evqPushEvent(event* ev);
 event* evqNextEvent(void);
-void resetEvents(void);
+void evqResetEvents(void);
 
 #endif //ZOMBOID2_EVENTQUEUE_H

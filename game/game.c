@@ -17,5 +17,5 @@ void initGame(int argc, char** argv)
 
 void runGame(void)
 {
-    run(SCENEID_MAIN);
+    runApp(SCENEID_MAIN);
 }

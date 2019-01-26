@@ -48,8 +48,8 @@ void registerEvents()
     glutDisplayFunc(eventLoop);
 }
 
-void run(int sceneID)
+void runApp(int sceneID)
 {
-    loadScene(sceneID, 1, 1, 1);
+    scmLoadScene(sceneID, 1, 1, 1);
     glutMainLoop();
 }

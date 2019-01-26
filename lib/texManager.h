@@ -11,14 +11,14 @@ typedef struct _texNode{
     struct _texNode* next;
     tex2d* value;
 
-} texNode;
+} texmNode;
 
-void freeNode(texNode* node);
-texNode* createNode(tex2d* tex);
-texNode* removeNode(int uid, int free);
-void printNode(texNode* node);
-void printNodes();
-void removeNodes(int scope, int free);
+void texmFreeNode(texmNode *node);
+texmNode* temCreateNode(tex2d *tex);
+texmNode* texmRemoveNode(int uid, int free);
+void texmPrintNode(texmNode *node);
+void texmPrintNodes();
+void texmRemoveNodes(int scope, int free);
 
 
 void texmInit(void);

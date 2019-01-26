@@ -11,12 +11,12 @@ int objectsCount = 0;
 
 int currentScene = -1;
 
-gameScene* activeScene()
+gameScene* scmGetActiveScene()
 {
     return scenes[currentScene];
 }
 
-gameObject** getObjects(int* count)
+gameObject** scmGetObjects(int *count)
 {
     if(currentScene != -1) {
         *count = objectsCount;
@@ -26,14 +26,14 @@ gameObject** getObjects(int* count)
     return NULL;
 }
 
-int hasObject(gameObject* object)
+int scmHasObject(gameObject *object)
 {
     for(int i = 0; i < objectsCount; i++)
         if(objects[i] == object) return 1;
     return 0;
 }
 
-void pushObject(gameObject* object)
+void scmPushObject(gameObject *object)
 {
     if(currentScene != -1 && object->init) {
         object->init(object);
@@ -53,7 +53,7 @@ void pushObject(gameObject* object)
     objects[objectsCount++] = object;
 }
 
-void destroyAllObjects(int free)
+void scmDestroyAllObjects(int free)
 {
     if(free) for(int i = 0; i < objectsCount; i++)
         freeObject(objects[i]);
@@ -68,9 +68,9 @@ int remove_element(gameObject** from, int total, int index) {
     return total-1; // return the new array size
 }
 
-void destroyObject(gameObject* object, int free)
+void scmDestroyObject(gameObject *object, int free)
 {
-    unsubscribeEvents(object);
+    evqUnsubscribeEvents(object);
     for(int i = 0; i < objectsCount; i++)
     {
         if(objects[i] == object)
@@ -83,12 +83,12 @@ void destroyObject(gameObject* object, int free)
     }
 }
 
-void pushScene(gameScene* scene)
+void scmPushScene(gameScene *scene)
 {
     scenes[scenesCount++] = scene;
 }
 
-void loadScene(int id, int loadScope, int destroyObjects, int freeObjects)
+void scmLoadScene(int id, int loadScope, int destroyObjects, int freeObjects)
 {
     for(int i = 0; i < scenesCount; i++)
     {
@@ -102,7 +102,7 @@ void loadScene(int id, int loadScope, int destroyObjects, int freeObjects)
 
             if(destroyObjects)
             {
-                destroyAllObjects(freeObjects);
+                scmDestroyAllObjects(freeObjects);
                 objectsCount = scenes[i]->startupObjectsCount;
                 memcpy(objects, scenes[i]->startupObjects, sizeof(gameObject*) * objectsCount);
             }
@@ -136,12 +136,12 @@ gameScene* createScene(int id, int scope)
     return scene;
 }
 
-int getObjectsCount(void)
+int scmGetObjectsCount(void)
 {
     return objectsCount;
 }
 
-void addStarupObject(gameScene* scene, gameObject* object)
+void scmAddStartupObject(gameScene *scene, gameObject *object)
 {
     if(scene->startupObjectsArrLen == 0)
     {

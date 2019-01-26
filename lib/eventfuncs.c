@@ -57,8 +57,8 @@ void drawFunc()
     rotateScreen(sceneAngle, fixedW, fixedH);
 
     int count = 0;
-    gameObject** obj = getObjects(&count);
-    gameScene* scene = activeScene();
+    gameObject** obj = scmGetObjects(&count);
+    gameScene* scene = scmGetActiveScene();
 
     if(scene->backgroundTexId)
     {
@@ -116,7 +116,7 @@ void pumpEvents()
     {
         freeEvent(ev);
     }
-    resetEvents();
+    evqResetEvents();
 }
 
 void eventLoop()
@@ -144,7 +144,7 @@ void eventLoop()
         counter = 0;
         elapsed = 0;
 
-        printf("FPS: %lf (objects %i, listeners: %i)\n", fps, getObjectsCount(), getListenersCount());
+        printf("FPS: %lf (objects %i, listeners: %i)\n", fps, scmGetObjectsCount(), evqGetListenersCount());
     }
 }
 

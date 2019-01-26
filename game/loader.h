@@ -26,6 +26,10 @@
 
 #define TEXID_BACK_CONCRETE 7
 
+
+#define TEXID_SHELLCASE 8
+
+
 #define SCENEID_MAIN 0
 
 void loadTextures(void);

@@ -13,6 +13,6 @@
 
 void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize);
 void registerEvents();
-void run(int sceneID);
+void runApp(int sceneID);
 
 #endif //ZOMBOID2_GRAPHICS_H

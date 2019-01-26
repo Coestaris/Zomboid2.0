@@ -28,20 +28,19 @@ typedef struct
 
 } gameScene;
 
-gameObject** getObjects(int* count);
-gameScene* activeScene();
-int getObjectsCount(void);
+gameObject** scmGetObjects(int *count);
+gameScene* scmGetActiveScene();
+int scmGetObjectsCount(void);
 
-int hasObject(gameObject* object);
-void pushObject(gameObject* object);
-void destroyObject(gameObject* object, int free);
-void destroyAllObjects(int free);
+int scmHasObject(gameObject *object);
+void scmPushObject(gameObject *object);
+void scmDestroyObject(gameObject *object, int free);
+void scmDestroyAllObjects(int free);
 
-void pushScene(gameScene* scene);
-
-void loadScene(int id, int loadScope, int destroyObjects, int freeObjects);
+void scmPushScene(gameScene *scene);
+void scmLoadScene(int id, int loadScope, int destroyObjects, int freeObjects);
 
 gameScene* createScene(int id, int scope);
-void addStarupObject(gameScene* scene, gameObject* object);
+void scmAddStartupObject(gameScene *scene, gameObject *object);
 
 #endif //ZOMBOID2_GAMESCENE_H

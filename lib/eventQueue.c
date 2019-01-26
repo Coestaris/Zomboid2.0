@@ -37,7 +37,7 @@ event* createEvent(int type, void* data)
     return  ev;
 }
 
-int getListenersCount(void)
+int evqGetListenersCount(void)
 {
     return listenersCount;
 }
@@ -48,7 +48,7 @@ void freeEvent(event* ev)
     free(ev);
 }
 
-void subscribeEvent(gameObject *object, int eventType, void (*callback)(gameObject*, void *))
+void evqSubscribeEvent(gameObject *object, int eventType, void (*callback)(gameObject *, void *))
 {
     assert(listenersCount < MAXLISTENERS);
 
@@ -67,7 +67,7 @@ int remove_node(registeredNode** from, int total, int index) {
     return total-1; // return the new array size
 }
 
-void unsubscribeEvents(gameObject* object)
+void evqUnsubscribeEvents(gameObject *object)
 {
     for(int i = listenersCount - 1; i >= 0; i--) {
         if(registeredListeners[i]->object == object) {
@@ -77,7 +77,7 @@ void unsubscribeEvents(gameObject* object)
     }
 }
 
-void unsubscribeEvent(gameObject* object, int eventType)
+void evqUnsubscribeEvent(gameObject *object, int eventType)
 {
     for(int i = 0; i < listenersCount; i++) {
         if(registeredListeners[i]->object == object && registeredListeners[i]->eventType == eventType) {
@@ -110,7 +110,7 @@ event* evqNextEvent(void)
     else return NULL;
 }
 
-void resetEvents(void)
+void evqResetEvents(void)
 {
     eventCount = 0;
 }
