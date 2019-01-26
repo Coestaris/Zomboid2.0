@@ -26,10 +26,17 @@ void drawBackground(tex2d* tex, int frame, int windowW, int windowH)
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     glBegin(GL_QUAD_STRIP);
-        glTexCoord2f(0,             (GLfloat)texH); glVertex2f((GLfloat)-10,       (GLfloat)      -10);
-        glTexCoord2f(0,                         0); glVertex2f((GLfloat)-10,       (GLfloat)windowH + 10);
-        glTexCoord2f((GLfloat)texW, (GLfloat)texH); glVertex2f((GLfloat)windowW + 10, (GLfloat)      -10);
-        glTexCoord2f((GLfloat)texW,             0); glVertex2f((GLfloat)windowW + 10, (GLfloat)windowH + 10);
+        glTexCoord2f(0,             (GLfloat)texH);
+        glVertex2f((GLfloat) - BACKGROUND_OFFSET,        (GLfloat)        - BACKGROUND_OFFSET);
+
+        glTexCoord2f(0,                         0);
+        glVertex2f((GLfloat) - BACKGROUND_OFFSET,        (GLfloat)windowH + BACKGROUND_OFFSET);
+
+        glTexCoord2f((GLfloat)texW, (GLfloat)texH);
+        glVertex2f((GLfloat)windowW + BACKGROUND_OFFSET, (GLfloat)        - BACKGROUND_OFFSET);
+
+        glTexCoord2f((GLfloat)texW,             0);
+        glVertex2f((GLfloat)windowW + BACKGROUND_OFFSET, (GLfloat)windowH + BACKGROUND_OFFSET);
     glEnd();
 
     glPopMatrix();
@@ -84,7 +91,7 @@ void beginDraw(void)
 
 void endDraw(void)
 {
-    glFlush();
+    glutSwapBuffers();
 }
 
 void rotateScreen(double angle, double sceneW, double sceneH)

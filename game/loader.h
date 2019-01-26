@@ -13,6 +13,7 @@
 
 #include "objects/player/obj_player.h"
 #include "objects/box/obj_box.h"
+#include "objects/flashlight/obj_flashlight.h"
 
 #define TEXSCOPE_MAIN 0
 
@@ -20,9 +21,10 @@
 #define TEXID_BULLET 2
 #define TEXID_BOX 3
 #define TEXID_SIMPLE_LIGHT 4
-#define TEXID_FLASHLIGHT 5
+#define TEXID_LIGHT 5
+#define TEXID_FLASHLIGHT 6
 
-#define TEXID_BACK_CONCRETE 6
+#define TEXID_BACK_CONCRETE 7
 
 #define SCENEID_MAIN 0
 

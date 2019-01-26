@@ -12,6 +12,8 @@
 
 #include "tex.h"
 
+#define BACKGROUND_OFFSET 15
+
 void createPoint(double* x, double* y, double inx, double iny, double vcos, double vsin,
                  double hw, double hh, double cx, double cy, int s1, int s2);
 

@@ -8,7 +8,7 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
 {
     glutInit(&argc, argv);
 
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_ALPHA);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA);
     glutInitWindowSize(w, h);
     //glutInitWindowPosition(80, 80);
     glutCreateWindow(title);

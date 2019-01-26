@@ -15,12 +15,19 @@
 #define PLAYER_SHAKE_MIN 0.5
 #define PLAYER_SHAKE_REDUCTION 0.7
 
-#define PLAYER_LIGHT_ALPHA_START 0.03
-#define PLAYER_LIGHT_ALPHA_REDUCTION 0.85
-#define PLAYER_LIGHT_SIZE_START 1
-#define PLAYER_LIGHT_SIZE_INCREASE 2.1
+#define PLAYER_LIGHT_ALPHA_START 0.08
+#define PLAYER_LIGHT_ALPHA_REDUCTION .85
+#define PLAYER_LIGHT_SIZE_START .5
+#define PLAYER_LIGHT_SIZE_INCREASE 1.85
 
 #define PLAYER_MAXLIGHTS 10
+#define PLAYER_FLASHLIGHTS 3
+
+#define PLAYER_BACKLIGHT_SIZE .5
+#define PLAYER_BACKLIGHT_ALPHA .04
+
+#define PLAYER_FLASHLIGHT_MINDIST 100
+#define PLAYER_FLASHLIGHT_MAXDIST 500
 
 typedef struct {
     long long lastFireFrame;
@@ -34,9 +41,14 @@ typedef struct {
     int currentLightsCount;
 
     gameObject* fireLights[PLAYER_MAXLIGHTS];
+    gameObject* backLight;
+    gameObject* flashlights[PLAYER_FLASHLIGHTS];
+
+    int flashLight;
 
 } playerData;
 
+void player_event_keyPressed(gameObject* this, void* data);
 void player_init(gameObject* object);
 void player_event_update(gameObject *object, void *data);
 gameObject* createPlayer();

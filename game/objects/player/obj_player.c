@@ -4,9 +4,36 @@
 
 #include "obj_player.h"
 
+double flashlightAlphas[PLAYER_FLASHLIGHTS] = { .03, .025, .015 };
+double flashlightSizes [PLAYER_FLASHLIGHTS] = { 1, 1.15, 1.5 };
+
+void player_event_keyPressed(gameObject* this, void* data)
+{
+    keyboardEvent* ke = data;
+    playerData* pd = this->data;
+
+    if(ke->key == 'f') {
+        pd->flashLight = !pd->flashLight;
+        pd->backLight->drawable = pd->flashLight;
+
+        for (int i = 0; i < PLAYER_FLASHLIGHTS; i++) {
+            pd->flashlights[i]->drawable = pd->flashLight;
+        }
+    }
+}
+
 void player_init(gameObject* object)
 {
     subscribeEvent(object, EVT_Update, player_event_update);
+    subscribeEvent(object, EVT_CharKeyUp, player_event_keyPressed);
+
+    playerData* pd = object->data;
+    for(int i = 0; i < PLAYER_FLASHLIGHTS; i++) {
+        pd->flashlights[i] = createFlashlight(object, flashlightSizes[i], flashlightAlphas[i]);
+        pushObject(pd->flashlights[i]);
+    }
+
+    pushObject(pd->backLight);
 }
 
 #define FIRE_RATE 5
@@ -80,6 +107,27 @@ void player_event_update(gameObject *object, void *data)
         }
     }
 
+    double dist = distance(x, y, mx, my);
+
+    if(dist < PLAYER_FLASHLIGHT_MINDIST) dist = PLAYER_FLASHLIGHT_MINDIST;
+    else if(dist > PLAYER_FLASHLIGHT_MAXDIST) dist = PLAYER_FLASHLIGHT_MAXDIST;
+
+    if(pd->flashLight) {
+
+        for (int i = 0; i < PLAYER_FLASHLIGHTS; i++) {
+            pd->flashlights[i]->angle = object->angle;
+            pd->flashlights[i]->x =
+                    x + (pd->flashlights[i]->cachedTex ? pd->flashlights[i]->cachedTex->width / 2.0 : 0);
+            pd->flashlights[i]->y = y;
+
+            flashlightData *fd = pd->flashlights[i]->data;
+            pd->flashlights[i]->size = fd->minSize + (dist - PLAYER_FLASHLIGHT_MINDIST) / (PLAYER_FLASHLIGHT_MAXDIST - PLAYER_FLASHLIGHT_MINDIST);
+        }
+
+        pd->backLight->x = x;
+        pd->backLight->y = y;
+    }
+
     pd->prevAnimationFrame = object->frame;
 }
 
@@ -87,15 +135,20 @@ gameObject* createPlayer()
 {
     gameObject* go = object();
     go->data = malloc(sizeof(playerData));
-    ((playerData*)go->data)->lastFireFrame = getFrame();
-
     go->drawable = true;
+
+    playerData* pd = go->data;
 
     int w, h;
     getWinSize(&w,  &h);
 
     go->x = w / 2.0;
     go->y = h / 2.0;
+
+    pd->lastFireFrame = getFrame();
+    pd->currentLightsCount = 0;
+    pd->flashLight = true;
+    pd->backLight = createLight(go->x, go->y, PLAYER_BACKLIGHT_SIZE, PLAYER_BACKLIGHT_ALPHA);
 
     go->texID = TEXID_PLAYER;
     go->animationSpeed = 0;

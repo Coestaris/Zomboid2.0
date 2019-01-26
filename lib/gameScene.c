@@ -130,6 +130,7 @@ gameScene* createScene(int id, int scope)
     gameScene* scene = malloc(sizeof(gameScene));
     scene->scope = scope;
     scene->id = id;
+    scene->cachedBack = NULL;
     scene->startupObjectsCount = 0;
     scene->startupObjectsArrLen = 0;
     return scene;
