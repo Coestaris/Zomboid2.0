@@ -31,6 +31,7 @@ void initEventFuncs(void);
 double getMillis(void);
 double getFPS(void);
 
+
 long long getFrame();
 void getWinSize(int* w, int* h);
 void getMousePos(int* x, int* y);
@@ -40,10 +41,12 @@ char specKeyPressed(int key);
 
 void rotateScene(double angle);
 
-void drawFunc(void);
+void dfDrawBackground(void);
+void dfDrawObjects(void);
+void mainDF(void);
 void pumpEvents(void);
 
-void eventLoop(void);
+void mainEventLoop(void);
 void eventKeyDown(int key, int x, int y);
 void eventCharKeyDown(unsigned char key, int x, int y);
 void eventKeyCharUp(unsigned char key, int x, int y);

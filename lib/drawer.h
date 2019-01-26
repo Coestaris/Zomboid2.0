@@ -10,6 +10,7 @@
 #include <GL/freeglut.h>
 #include <GL/gl.h>
 
+#include "surface.h"
 #include "tex.h"
 
 #define BACKGROUND_OFFSET 15
@@ -19,6 +20,7 @@ void createPoint(double* x, double* y, double inx, double iny, double vcos, doub
 
 void drawBackground(tex2d* tex, int frame, int windowW, int windowH);
 void drawTexture(tex2d* tex, double alpha, int frame, double x, double y, double angle, double scaleFactor);
+void drawSurface(int winW, int winH);
 
 void rotateScreen(double angle, double sceneW, double sceneH);
 

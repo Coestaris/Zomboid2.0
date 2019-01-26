@@ -19,6 +19,12 @@ void player_event_keyPressed(gameObject* this, void* data)
         for (int i = 0; i < PLAYER_FLASHLIGHTS; i++) {
             pd->flashlights[i]->drawable = pd->flashLight;
         }
+    } else if(ke->key == 'e') {
+
+        srfDrawTexture(texmGetID(TEXID_FLASHLIGHT), 0, 1, 100, 100);
+    } else if(ke->key == 'c') {
+
+        srfClear();
     }
 }
 
@@ -102,6 +108,8 @@ void player_event_update(gameObject *object, void *data)
             addFireLight(pd, x, y);
 
             rotateScene(randRange(pd->currShake, pd->currShake * PLAYER_SHAKE_MIN));
+
+            srfDrawTexture(texmGetID(TEXID_SHELLCASE), 0, 1, (int)x, (int)y);
 
             scmPushObject(createBullet(x, y, mx, my));
         }

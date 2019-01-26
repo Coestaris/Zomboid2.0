@@ -44,8 +44,8 @@ void registerEvents()
     glutKeyboardFunc(eventCharKeyDown);
     glutKeyboardUpFunc(eventKeyCharUp);
 
-    glutIdleFunc(eventLoop);
-    glutDisplayFunc(eventLoop);
+    glutIdleFunc(mainEventLoop);
+    glutDisplayFunc(mainEventLoop);
 }
 
 void runApp(int sceneID)

@@ -50,16 +50,9 @@ void rotateScene(double angle)
     sceneAngle = angle;
 }
 
-void drawFunc()
+void dfDrawBackground(void)
 {
-    beginDraw();
-
-    rotateScreen(sceneAngle, fixedW, fixedH);
-
-    int count = 0;
-    gameObject** obj = scmGetObjects(&count);
     gameScene* scene = scmGetActiveScene();
-
     if(scene->backgroundTexId)
     {
         if(!scene->cachedBack)
@@ -71,7 +64,12 @@ void drawFunc()
 
         drawBackground(scene->cachedBack, 0, fixedW, fixedH);
     }
+}
 
+void dfDrawObjects(void)
+{
+    int count = 0;
+    gameObject** obj = scmGetObjects(&count);
     if(obj != NULL)
     {
         for (int i = 0; i < count; i++)
@@ -105,6 +103,16 @@ void drawFunc()
             }
         }
     }
+}
+
+void mainDF(void)
+{
+    beginDraw();
+
+    rotateScreen(sceneAngle, fixedW, fixedH);
+    dfDrawBackground();
+    drawSurface(fixedW, fixedH);
+    dfDrawObjects();
 
     endDraw();
 }
@@ -119,13 +127,13 @@ void pumpEvents()
     evqResetEvents();
 }
 
-void eventLoop()
+void mainEventLoop()
 {
     double tickStart = getMillis();
     evqPushEvent(createEvent(EVT_Update, NULL));
 
     pumpEvents();
-    drawFunc();
+    mainDF();
 
     double diff = getMillis() - tickStart;
     counter++;

@@ -8,6 +8,7 @@
 #include "../lib/graphics.h"
 #include "../lib/gameScene.h"
 #include "../lib/texManager.h"
+#include "../lib/surface.h"
 
 #include "loader.h"
 

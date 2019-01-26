@@ -22,6 +22,7 @@ void loadTextures(void)
     loadTexture("../resources/images/shellCase.png", TEXID_SHELLCASE, TEXSCOPE_MAIN, 0, 0, TEXMODE_OVERLAY);
 
     loadTexture("../resources/images/backgrounds/concrete.png", TEXID_BACK_CONCRETE, TEXSCOPE_MAIN, 0, 0, TEXMODE_BACKGROUND);
+
     puts("Loading textures done!");
 }
 
