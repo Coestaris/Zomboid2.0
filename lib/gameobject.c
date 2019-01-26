@@ -17,6 +17,7 @@ gameObject* object(void)
     obj->drawable = 0;
     obj->depth = 0;
     obj->frame = 0;
+    obj->alpha = 1;
     obj->animationSpeed = 0;
     obj->animationCounter = 0;
     return obj;

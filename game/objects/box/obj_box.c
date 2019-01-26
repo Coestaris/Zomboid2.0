@@ -4,16 +4,6 @@
 
 #include "obj_box.h"
 
-void box_init(gameObject* object)
-{
-
-}
-
-void box_event_update(gameObject *object, void *data)
-{
-
-}
-
 gameObject* createBox(int x, int y)
 {
     gameObject* go = object();

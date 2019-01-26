@@ -60,21 +60,31 @@ int isInWindowRect(gameObject* object)
 
 void relativeCoordinates(double* x, double* y, gameObject* obj)
 {
-    createPoint(
-            x, y,
-            obj->x, obj->y,
-            cos(obj->angle),
-            sin(obj->angle),
-            0, //obj->cachedTex->width / 2.0,
-            0, //obj->cachedTex->height / 2.0,
-            - obj->cachedTex->centerX + obj->x,
-            - obj->cachedTex->centerY + obj->y,
-            0, 0);
+    if(!obj->cachedTex) {
+        *x = obj->x;
+        *y = obj->y;
+    } else {
+        createPoint(
+                x, y,
+                obj->x, obj->y,
+                cos(obj->angle),
+                sin(obj->angle),
+                0, //obj->cachedTex->width / 2.0,
+                0, //obj->cachedTex->height / 2.0,
+                -obj->cachedTex->centerX + obj->x,
+                -obj->cachedTex->centerY + obj->y,
+                0, 0);
+    }
 }
 
 
 void loadTexture(const char* fn, int id, int scope, int cX, int cY, int isBg)
 {
+    if(texmGetID(id)) {
+        printf("Error while loading texture %i. Texture with same ID alreay exists", id);
+        exit(1);
+    }
+
     if(fileExists(fn)) {
         texmPush(createTex(fn, id, scope, cX, cY, isBg));
     } else {
@@ -85,6 +95,11 @@ void loadTexture(const char* fn, int id, int scope, int cX, int cY, int isBg)
 
 void loadAnimation(int framesCount, int id, int scope, int cX, int cY, ...)
 {
+    if(texmGetID(id)) {
+        printf("Error while loading animation %i. Texture with same ID alreay exists", id);
+        exit(1);
+    }
+
     va_list args;
     va_start(args, cY);
 

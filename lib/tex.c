@@ -4,13 +4,13 @@
 
 #include "tex.h"
 
-tex2d* createTex(const char* fn, int uid, int scope, int centerX, int centerY, int isBg)
+tex2d* createTex(const char* fn, int uid, int scope, int centerX, int centerY, int mode)
 {
     tex2d* tex = malloc(sizeof(tex2d));
 
     tex->textureIds = malloc(sizeof(GLuint));
     tex->textureIds[0] = 0;
-    tex->isBackground = isBg;
+    tex->mode = mode;
 
     tex->fns = malloc(sizeof(char*));
     tex->fns[0] = fn;
@@ -27,7 +27,7 @@ tex2d* createTex(const char* fn, int uid, int scope, int centerX, int centerY, i
 tex2d* createAnimation(const char** fileNames, int framesCount, int uid, int scope, int centerX, int centerY)
 {
     tex2d* tex = malloc(sizeof(tex2d));
-    tex->isBackground = 0;
+    tex->mode = TEXMODE_DEFAULT;
 
     tex->textureIds = malloc(sizeof(GLuint) * framesCount);
     memset(tex->textureIds, 0, sizeof(GLuint) * framesCount);
@@ -147,7 +147,8 @@ void loadTex(tex2d* tex)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        if(tex->isBackground) {
+        if(tex->mode == TEXMODE_BACKGROUND)
+        {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         }

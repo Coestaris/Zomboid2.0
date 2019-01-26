@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 11)
 
 
 
-add_executable(Zomboid2 main.c lib/graphics.h lib/graphics.c lib/eventfuncs.h lib/eventfuncs.c lib/tex.h lib/tex.c lib/drawer.h lib/drawer.c lib/texManager.h lib/texManager.c lib/eventQueue.h lib/eventQueue.c game/objects/obj_player.h lib/gameobject.h lib/gameobject.c game/objects/obj_player.c lib/gameScene.h lib/gameScene.c lib/helpers.h lib/helpers.c game/objects/obj_bullet.h game/objectInclude.h game/objects/obj_bullet.c game/loader.h game/loader.c game/game.h game/game.c game/objects/obj_box.h game/objects/obj_box.c)
+add_executable(Zomboid2 main.c lib/graphics.h lib/graphics.c lib/eventfuncs.h lib/eventfuncs.c lib/tex.h lib/tex.c lib/drawer.h lib/drawer.c lib/texManager.h lib/texManager.c lib/eventQueue.h lib/eventQueue.c game/objects/player/obj_player.h lib/gameobject.h lib/gameobject.c game/objects/player/obj_player.c lib/gameScene.h lib/gameScene.c lib/helpers.h lib/helpers.c game/objects/bullet/obj_bullet.h game/objectInclude.h game/objects/bullet/obj_bullet.c game/loader.h game/loader.c game/game.h game/game.c game/objects/box/obj_box.h game/objects/box/obj_box.c game/objects/light/obj_light.h game/objects/light/obj_light.c)
 
 find_path(SOIL_INCLUDE_DIR SOIL.h PATH_SUFFIXES include/SOIL include)
 

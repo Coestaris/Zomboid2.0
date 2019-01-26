@@ -32,6 +32,7 @@ gameObject** getObjects(int* count);
 gameScene* activeScene();
 int getObjectsCount(void);
 
+int hasObject(gameObject* object);
 void pushObject(gameObject* object);
 void destroyObject(gameObject* object, int free);
 void destroyAllObjects(int free);

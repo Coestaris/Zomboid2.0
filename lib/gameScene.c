@@ -26,6 +26,13 @@ gameObject** getObjects(int* count)
     return NULL;
 }
 
+int hasObject(gameObject* object)
+{
+    for(int i = 0; i < objectsCount; i++)
+        if(objects[i] == object) return 1;
+    return 0;
+}
+
 void pushObject(gameObject* object)
 {
     if(currentScene != -1 && object->init) {

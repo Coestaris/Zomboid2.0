@@ -8,6 +8,7 @@ void bullet_event_update(gameObject *object, void *data)
 {
     int objectsCount;
     gameObject** objects = getObjects(&objectsCount);
+    gameObject* light = ((bulletData*)object->data)->light;
 
     for(int i = 0; i < objectsCount; i++)
     {
@@ -23,6 +24,7 @@ void bullet_event_update(gameObject *object, void *data)
                object->y > boxY - boxH / 2 &&
                object->y < boxY + boxH / 2)
             {
+                destroyObject(light, true);
                 destroyObject(object, true);
                 return;
             }
@@ -31,12 +33,15 @@ void bullet_event_update(gameObject *object, void *data)
 
     if(isInWindowRect(object))
     {
+        destroyObject(light, true);
         destroyObject(object, true);
     }
     else
     {
         object->x += cos(object->angle) * BULLET_SPEED;
         object->y += sin(object->angle) * BULLET_SPEED;
+        light->x = object->x;
+        light->y = object->y;
     }
 }
 
@@ -58,5 +63,12 @@ gameObject* createBullet(double x, double y, double dirx, double diry)
     go->size = 1;
     go->init = bullet_init;
 
+    go->data = malloc(sizeof(bulletData));
+
+    gameObject* light = createLight(x, y, BULLET_LIGHT_SIZE, BULLET_LIGHT_ALPHA);
+
+    ((bulletData*)go->data)->light = light;
+
+    pushObject(light);
     return go;
 }

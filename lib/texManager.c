@@ -159,8 +159,6 @@ void texmPush(tex2d* tex)
 
     texNode* node = createNode(tex);
     lastNode->next = node;
-
-    printNode(node);
 }
 
 void texmLoadID(int uid)

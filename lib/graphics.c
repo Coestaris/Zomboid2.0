@@ -10,7 +10,7 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
 
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_ALPHA);
     glutInitWindowSize(w, h);
-    glutInitWindowPosition(80, 80);
+    //glutInitWindowPosition(80, 80);
     glutCreateWindow(title);
 
     glViewport(0, 0, w, h);

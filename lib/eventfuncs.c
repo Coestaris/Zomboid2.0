@@ -90,7 +90,7 @@ void drawFunc()
                 if(obj[i]->animationSpeed != 0)
                 {
                     obj[i]->animationCounter++;
-                    if(obj[i]->animationCounter == obj[i]->animationSpeed)
+                    if(obj[i]->animationCounter >= obj[i]->animationSpeed)
                     {
                         obj[i]->frame += 1;
                         obj[i]->animationCounter = 0;
@@ -101,7 +101,7 @@ void drawFunc()
                     }
                 }
 
-                drawTexture(obj[i]->cachedTex, obj[i]->frame, obj[i]->x, obj[i]->y, obj[i]->angle, obj[i]->size);
+                drawTexture(obj[i]->cachedTex, obj[i]->alpha, obj[i]->frame, obj[i]->x, obj[i]->y, obj[i]->angle, obj[i]->size);
             }
         }
     }

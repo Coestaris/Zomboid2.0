@@ -5,9 +5,17 @@
 #ifndef ZOMBOID2_OBJ_BULLET_H
 #define ZOMBOID2_OBJ_BULLET_H
 
-#include "../objectInclude.h"
-
 #define BULLET_SPEED 25
+#define BULLET_LIGHT_ALPHA .02
+#define BULLET_LIGHT_SIZE 1.3
+
+#include "../../objectInclude.h"
+#include "../light/obj_light.h"
+
+typedef struct {
+    gameObject* light;
+
+} bulletData;
 
 void bullet_event_update(gameObject *object, void *data);
 void bullet_init(gameObject* object);

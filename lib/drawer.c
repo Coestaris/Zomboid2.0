@@ -19,10 +19,11 @@ void drawBackground(tex2d* tex, int frame, int windowW, int windowH)
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
 
-    //glPushMatrix();
+    glPushMatrix();
 
     double texW = (double)windowW / tex->width;
     double texH = (double)windowH / tex->height;
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     glBegin(GL_QUAD_STRIP);
         glTexCoord2f(0,             (GLfloat)texH); glVertex2f((GLfloat)-10,       (GLfloat)      -10);
@@ -31,15 +32,15 @@ void drawBackground(tex2d* tex, int frame, int windowW, int windowH)
         glTexCoord2f((GLfloat)texW,             0); glVertex2f((GLfloat)windowW + 10, (GLfloat)windowH + 10);
     glEnd();
 
-    //glPopMatrix();
+    glPopMatrix();
 }
 
-void drawTexture(tex2d* tex, int frame, double x, double y, double angle, double scaleFactor)
+void drawTexture(tex2d* tex, double alpha, int frame, double x, double y, double angle, double scaleFactor)
 {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
 
-    //glPushMatrix();
+    glPushMatrix();
 
     const double hw = tex->width / 2.0;
     const double hh = tex->height / 2.0;
@@ -54,6 +55,18 @@ void drawTexture(tex2d* tex, int frame, double x, double y, double angle, double
     createPoint(&x3, &y3, x, y, acos, asin, hw, hh, - tex->centerX + x, tex->centerY + y,  1, -1);
     createPoint(&x4, &y4, x, y, acos, asin, hw, hh, - tex->centerX + x, tex->centerY + y,  1,  1);
 
+    if(tex->mode == TEXMODE_OVERLAY)
+    {
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        glBlendEquation(GL_ADD);
+    }
+    else
+    {
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    glColor4f(1.0f, 1.0f, 1.0f, (GLfloat)alpha);
+
     glBegin(GL_QUAD_STRIP);
         glTexCoord2f(0, 1); glVertex3f((GLfloat)x1, (GLfloat)y1, 1);
         glTexCoord2f(0, 0); glVertex3f((GLfloat)x2, (GLfloat)y2, 1);
@@ -61,7 +74,7 @@ void drawTexture(tex2d* tex, int frame, double x, double y, double angle, double
         glTexCoord2f(1, 0); glVertex3f((GLfloat)x4, (GLfloat)y4, 1);
     glEnd();
 
-    //glPopMatrix();
+    glPopMatrix();
 }
 
 void beginDraw(void)

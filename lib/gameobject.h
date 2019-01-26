@@ -18,6 +18,7 @@ typedef struct _GameObject
     double y;
     double angle;
     double size;
+    double alpha;
 
     int frame;
     int depth;

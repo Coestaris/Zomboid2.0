@@ -14,9 +14,14 @@
 #include <GL/gl.h>
 #include <SOIL/SOIL.h>
 
+#define TEXMODE_DEFAULT 0
+#define TEXMODE_BACKGROUND 1
+#define TEXMODE_OVERLAY 2
+
 typedef struct {
     const char** fns;
-    int isBackground;
+    int mode;
+
     GLuint* textureIds;
 
     int id;
@@ -31,7 +36,7 @@ typedef struct {
     int height;
 } tex2d;
 
-tex2d* createTex(const char* fn, int uid, int scope, int centerX, int centerY, int isBg);
+tex2d* createTex(const char* fn, int uid, int scope, int centerX, int centerY, int mode);
 tex2d* createAnimation(const char** fileNames, int framesCount, int uid, int scope, int centerX, int centerY);
 
 void freeOGlTex(tex2d* tex);
