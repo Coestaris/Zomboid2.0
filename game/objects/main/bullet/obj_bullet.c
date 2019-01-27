@@ -7,8 +7,10 @@
 void bullet_event_update(gameObject *object, void *data)
 {
     int objectsCount;
+    bulletData* bd = object->data;
+
     gameObject** objects = scmGetObjects(&objectsCount);
-    gameObject* light = ((bulletData*)object->data)->light;
+    gameObject* light = bd->light;
 
     for(int i = 0; i < objectsCount; i++)
     {
@@ -38,8 +40,8 @@ void bullet_event_update(gameObject *object, void *data)
     }
     else
     {
-        object->x += cos(object->angle) * BULLET_SPEED;
-        object->y += sin(object->angle) * BULLET_SPEED;
+        object->x += bd->xOffset;
+        object->y += bd->yOffset;
         light->x = object->x;
         light->y = object->y;
     }
@@ -66,8 +68,12 @@ gameObject* createBullet(double x, double y, double dirx, double diry)
     go->data = malloc(sizeof(bulletData));
 
     gameObject* light = createLight(x, y, BULLET_LIGHT_SIZE, BULLET_LIGHT_ALPHA);
+    bulletData* bd = go->data;
 
-    ((bulletData*)go->data)->light = light;
+    bd->light = light;
+    bd->xOffset = cos(go->angle) * BULLET_SPEED;
+    bd->yOffset = sin(go->angle) * BULLET_SPEED;
+
 
     scmPushObject(light);
     return go;

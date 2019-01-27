@@ -10,6 +10,7 @@ void initGame(int argc, char** argv)
     initEventFuncs();
     registerEvents();
     srfInit(800, 600);
+    evqInit();
     texmInit();
 
     loadTextures();

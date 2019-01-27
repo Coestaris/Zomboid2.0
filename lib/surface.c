@@ -169,8 +169,7 @@ void srfDrawTexture(tex2d* tex, int frame, double alpha, int inx, int iny, int f
 
                 if(tex->mode == TEXMODE_OVERLAY) {
 
-                    double oldAlpha = pixelData[yPos][xPos][3] / 255.0;
-                    double newAlpha = (a / 255.0) * alpha;
+                    double oldAlpha = pixelData[yPos][xPos][3] / 255.0 * alpha;
 
                     pixelData[yPos][xPos][0] = clip((oldAlpha * pixelData[yPos][xPos][0] + (1 - oldAlpha) * r));
                     pixelData[yPos][xPos][1] = clip((oldAlpha * pixelData[yPos][xPos][1] + (1 - oldAlpha) * g));

@@ -29,12 +29,11 @@ mouseEvent* createMouseEvent(int mouse, int state, int x, int y)
     return ev;
 }
 
-event* createEvent(int type, void* data)
+event* createEvent()
 {
     event* ev = malloc(sizeof(event));
-    ev->data = data;
-    ev->eventType = type;
-    return  ev;
+    ev->data = NULL;
+    return ev;
 }
 
 int evqGetListenersCount(void)
@@ -45,7 +44,6 @@ int evqGetListenersCount(void)
 void freeEvent(event* ev)
 {
     if(ev->data) free(ev->data);
-    free(ev);
 }
 
 void evqSubscribeEvent(gameObject *object, int eventType, void (*callback)(gameObject *, void *))
@@ -60,7 +58,8 @@ void evqSubscribeEvent(gameObject *object, int eventType, void (*callback)(gameO
     listenersCount++;
 }
 
-int remove_node(registeredNode** from, int total, int index) {
+int remove_node(registeredNode** from, int total, int index)
+{
     if((total - index - 1) > 0) {
         memmove(from + index, from + index + 1, sizeof(registeredNode*) * (total-index - 1));
     }
@@ -88,15 +87,18 @@ void evqUnsubscribeEvent(gameObject *object, int eventType)
     }
 }
 
-void evqPushEvent(event* ev)
+void evqPushEvent(int eventType, void* data)
 {
     assert(eventCount < MAXEVENTS);
-    eventQueue[eventCount++] = ev;
+    int index = eventCount++;
+    eventQueue[index]->data = data;
+    eventQueue[index]->eventType = eventType;
 }
 
 event* evqNextEvent(void)
 {
-    if(eventCount > 0) {
+    if(eventCount > 0)
+    {
         event* ev = eventQueue[--eventCount];
         for(int i = 0; i < listenersCount; i++)
         {
@@ -113,4 +115,11 @@ event* evqNextEvent(void)
 void evqResetEvents(void)
 {
     eventCount = 0;
+}
+
+void evqInit(void)
+{
+    for(int i = 0; i < MAXEVENTS; i++) {
+        eventQueue[i] = createEvent();
+    }
 }

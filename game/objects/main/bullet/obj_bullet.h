@@ -14,6 +14,8 @@
 
 typedef struct {
     gameObject* light;
+    double xOffset;
+    double yOffset;
 
 } bulletData;
 

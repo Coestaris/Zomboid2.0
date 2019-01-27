@@ -134,7 +134,7 @@ void pumpEvents()
 void mainEventLoop()
 {
     double tickStart = getMillis();
-    evqPushEvent(createEvent(EVT_Update, NULL));
+    evqPushEvent(EVT_Update, NULL);
 
     pumpEvents();
     mainDF();
@@ -190,43 +190,43 @@ char keyPressed(unsigned char key)
 void eventKeyDown(int key, int x, int y)
 {
     specKeysBuffer[key] = 1;
-    evqPushEvent(createEvent(EVT_KeyDown, createKeyboardEvent(key, x, y)));
+    evqPushEvent(EVT_KeyDown, createKeyboardEvent(key, x, y));
 }
 
 void eventCharKeyDown(unsigned char key, int x, int y)
 {
     keysBuffer[tolower(key)] = 1;
-    evqPushEvent(createEvent(EVT_CharKeyDown, createKeyboardEvent(key, x, y)));
+    evqPushEvent(EVT_CharKeyDown, createKeyboardEvent(key, x, y));
 }
 
 void eventKeyCharUp(unsigned char key, int x, int y)
 {
     keysBuffer[tolower(key)] = 0;
-    evqPushEvent(createEvent(EVT_CharKeyUp, createKeyboardEvent(key, x, y)));
+    evqPushEvent(EVT_CharKeyUp, createKeyboardEvent(key, x, y));
 }
 
 void eventKeyUp(int key, int x, int y)
 {
     specKeysBuffer[key] = 0;
-    evqPushEvent(createEvent(EVT_KeyUp, createKeyboardEvent(key, x, y)));
+    evqPushEvent(EVT_KeyUp, createKeyboardEvent(key, x, y));
 }
 
 void eventMouseClick(int button, int state, int x, int y)
 {
     mouseBuffer[button] = state;
-    evqPushEvent(createEvent(EVT_MouseClick, createMouseEvent(button, state, x, y)));
+    evqPushEvent(EVT_MouseClick, createMouseEvent(button, state, x, y));
 }
 
 void eventMouseMove(int x, int y)
 {
     mousex = x;
     mousey = y;
-    evqPushEvent(createEvent(EVT_MouseMove, createMouseEvent(-1, -1, x, y)));
+    evqPushEvent(EVT_MouseMove, createMouseEvent(-1, -1, x, y));
 }
 
 void eventMouseEntry(int state)
 {
-    evqPushEvent(createEvent(EVT_MouseEntry, createMouseEvent(-1, state, -1, -1)));
+    evqPushEvent(EVT_MouseEntry, createMouseEvent(-1, state, -1, -1));
 }
 
 void setFixedSize(int w, int h)

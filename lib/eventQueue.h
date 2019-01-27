@@ -58,14 +58,15 @@ typedef struct {
 keyboardEvent* createKeyboardEvent(int key, int x, int y);
 mouseEvent* createMouseEvent(int mouse, int state, int x, int y);
 
-event* createEvent(int type, void* data);
+event* createEvent();
 void freeEvent(event* ev);
+void evqInit(void);
 
 int  evqGetListenersCount(void);
 void evqSubscribeEvent(gameObject *object, int eventType, void (*callback)(gameObject *, void *));
 void evqUnsubscribeEvent(gameObject *object, int eventType);
 void evqUnsubscribeEvents(gameObject *object);
-void evqPushEvent(event* ev);
+void evqPushEvent(int eventType, void* data);
 event* evqNextEvent(void);
 void evqResetEvents(void);
 
