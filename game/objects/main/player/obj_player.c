@@ -163,6 +163,7 @@ gameObject* createPlayer()
 
     pd->lastFireFrame = getFrame();
     pd->currentLightsCount = 0;
+    pd->prevAnimationFrame = 0;
     pd->flashLight = true;
     pd->backLight = createLight(go->x, go->y, PLAYER_BACKLIGHT_SIZE, PLAYER_BACKLIGHT_ALPHA);
 
