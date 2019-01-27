@@ -5,7 +5,7 @@
 #ifndef ZOMBOID2_OBJ_FLASHLIGHT_H
 #define ZOMBOID2_OBJ_FLASHLIGHT_H
 
-#include "../../objectInclude.h"
+#include "../../../objectInclude.h"
 
 typedef struct {
     gameObject* player;

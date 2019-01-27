@@ -9,7 +9,7 @@
 #define BULLET_LIGHT_ALPHA .02
 #define BULLET_LIGHT_SIZE 1.3
 
-#include "../../objectInclude.h"
+#include "../../../objectInclude.h"
 #include "../light/obj_light.h"
 
 typedef struct {

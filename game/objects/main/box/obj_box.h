@@ -5,7 +5,7 @@
 #ifndef ZOMBOID2_OBJ_BOX_H
 #define ZOMBOID2_OBJ_BOX_H
 
-#include "../../objectInclude.h"
+#include "../../../objectInclude.h"
 
 gameObject* createBox(int x, int y);
 

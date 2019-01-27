@@ -5,8 +5,8 @@
 #ifndef ZOMBOID2_OBJ_TEST_H
 #define ZOMBOID2_OBJ_TEST_H
 
-#include "../../objectInclude.h"
-#include "../bullet/obj_bullet.h"
+#include "../../../objectInclude.h"
+#include "../../bullet/obj_bullet.h"
 
 #define PLAYER_MOVE_X 2.5
 #define PLAYER_MOVE_Y 2.5
