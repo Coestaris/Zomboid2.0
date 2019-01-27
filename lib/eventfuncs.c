@@ -62,7 +62,7 @@ void dfDrawBackground(void)
             assert(scene->cachedBack->textureIds[0] != 0);
         }
 
-        drawBackground(scene->cachedBack, 0, fixedW, fixedH);
+        dcDrawBackground(scene->cachedBack, 0, fixedW, fixedH);
     }
 }
 
@@ -99,7 +99,8 @@ void dfDrawObjects(void)
                     }
                 }
 
-                drawTexture(obj[i]->cachedTex, obj[i]->alpha, obj[i]->frame, obj[i]->x, obj[i]->y, obj[i]->angle, obj[i]->size);
+                dcDrawTexture(obj[i]->cachedTex, obj[i]->alpha, obj[i]->frame, obj[i]->x, obj[i]->y, obj[i]->angle,
+                              obj[i]->size);
             }
         }
     }
@@ -107,18 +108,15 @@ void dfDrawObjects(void)
 
 void mainDF(void)
 {
-    beginDraw();
+    dcBeginDraw();
 
-    rotateScreen(sceneAngle, fixedW, fixedH);
+    dcRotateScreen(sceneAngle, fixedW, fixedH);
     dfDrawBackground();
-
-    drawText(200, 200, 1, 0.5, 0.5, 1, GLUT_BITMAP_TIMES_ROMAN_24, "HELLO");
-
-    drawSurface(fixedW, fixedH);
+    dcDrawSurface(fixedW, fixedH);
     dfDrawObjects();
+    dcDrawPrimitives();
 
-
-    endDraw();
+    dcEndDraw();
 }
 
 void pumpEvents()

@@ -20,8 +20,10 @@
 #define EVT_MouseEntry 6
 #define EVT_Update 7
 
-#define MAXEVENTS 256
-#define MAXLISTENERS 1024 //TODO
+#define MAXEVENTS_START 256
+#define MAXLISTENERS_START 1024
+
+#define SIZE_INCREASE 1.2
 
 #define MB_LEFT 0
 #define MB_RIGHT 2
@@ -30,29 +32,36 @@
 #define MS_PRESSED 0
 #define MS_RELEASED 1
 
-typedef struct {
+typedef struct _registeredNode {
+
     int eventType;
     gameObject* object;
     void (*callback)(gameObject*, void *);
 
 } registeredNode;
 
-typedef struct {
+typedef struct _event {
+
     int eventType;
     void* data;
+
 } event;
 
-typedef struct {
+typedef struct _keyboardEvent {
+
     int key;
     int x;
     int y;
+
 } keyboardEvent;
 
-typedef struct {
+typedef struct _mouseEvent {
+
     int mouse;
     int state;
     int x;
     int y;
+
 } mouseEvent;
 
 keyboardEvent* createKeyboardEvent(int key, int x, int y);

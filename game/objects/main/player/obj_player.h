@@ -29,7 +29,8 @@
 #define PLAYER_FLASHLIGHT_MINDIST 100
 #define PLAYER_FLASHLIGHT_MAXDIST 500
 
-typedef struct {
+typedef struct _playerData {
+
     long long lastFireFrame;
 
     int prevAnimationFrame;

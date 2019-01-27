@@ -12,7 +12,8 @@
 #include "../../../objectInclude.h"
 #include "../light/obj_light.h"
 
-typedef struct {
+typedef struct _bulletData {
+
     gameObject* light;
     double xOffset;
     double yOffset;

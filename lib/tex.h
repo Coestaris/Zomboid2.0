@@ -18,7 +18,7 @@
 #define TEXMODE_BACKGROUND 1
 #define TEXMODE_OVERLAY 2
 
-typedef struct {
+typedef struct _tex2d {
     const char** fns;
     int mode;
 

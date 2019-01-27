@@ -4,8 +4,8 @@
 
 #include "drawer.h"
 
-void createPoint(double* x, double* y, double inx, double iny, double vcos, double vsin,
-        double hw, double hh, double cx, double cy, int s1, int s2)
+void dcCreatePoint(double *x, double *y, double inx, double iny, double vcos, double vsin,
+                   double hw, double hh, double cx, double cy, int s1, int s2)
 {
     inx += hw * s1;
     iny += hh * s2;
@@ -15,7 +15,7 @@ void createPoint(double* x, double* y, double inx, double iny, double vcos, doub
 }
 
 
-void drawText(float x, float y, double r, double g, double b, double a, void* font, const char *string)
+void dcDrawText(double x, double y, double r, double g, double b, double a, void *font, const char *string)
 {
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -30,7 +30,7 @@ void drawText(float x, float y, double r, double g, double b, double a, void* fo
     }
 }
 
-void drawSurface(int winW, int winH)
+void dcDrawSurface(int winW, int winH)
 {
     srfBind();
 
@@ -42,7 +42,7 @@ void drawSurface(int winW, int winH)
     glEnd();
 }
 
-void drawBackground(tex2d* tex, int frame, int windowW, int windowH)
+void dcDrawBackground(tex2d *tex, int frame, int windowW, int windowH)
 {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
@@ -70,7 +70,7 @@ void drawBackground(tex2d* tex, int frame, int windowW, int windowH)
     glPopMatrix();
 }
 
-void drawTexture(tex2d* tex, double alpha, int frame, double x, double y, double angle, double scaleFactor)
+void dcDrawTexture(tex2d *tex, double alpha, int frame, double x, double y, double angle, double scaleFactor)
 {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
@@ -85,10 +85,10 @@ void drawTexture(tex2d* tex, double alpha, int frame, double x, double y, double
 
     double x1, x2, x3, x4, y1, y2, y3, y4;
 
-    createPoint(&x1, &y1, x, y, acos, asin, hw, hh, - tex->centerX + x, tex->centerY + y, -1, -1);
-    createPoint(&x2, &y2, x, y, acos, asin, hw, hh, - tex->centerX + x, tex->centerY + y, -1,  1);
-    createPoint(&x3, &y3, x, y, acos, asin, hw, hh, - tex->centerX + x, tex->centerY + y,  1, -1);
-    createPoint(&x4, &y4, x, y, acos, asin, hw, hh, - tex->centerX + x, tex->centerY + y,  1,  1);
+    dcCreatePoint(&x1, &y1, x, y, acos, asin, hw, hh, -tex->centerX + x, tex->centerY + y, -1, -1);
+    dcCreatePoint(&x2, &y2, x, y, acos, asin, hw, hh, -tex->centerX + x, tex->centerY + y, -1, 1);
+    dcCreatePoint(&x3, &y3, x, y, acos, asin, hw, hh, -tex->centerX + x, tex->centerY + y, 1, -1);
+    dcCreatePoint(&x4, &y4, x, y, acos, asin, hw, hh, -tex->centerX + x, tex->centerY + y, 1, 1);
 
     if(tex->mode == TEXMODE_OVERLAY)
     {
@@ -112,21 +112,112 @@ void drawTexture(tex2d* tex, double alpha, int frame, double x, double y, double
     glPopMatrix();
 }
 
-void beginDraw(void)
+void dcBeginDraw(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void endDraw(void)
+void dcEndDraw(void)
 {
     glutSwapBuffers();
 }
 
-void rotateScreen(double angle, double sceneW, double sceneH)
+void dcRotateScreen(double angle, double sceneW, double sceneH)
 {
     glLoadIdentity ();
     glTranslatef((GLfloat)(sceneW / 2.0), (GLfloat)(sceneH / 2.0), 0);
     glRotatef((GLfloat)angle, 0, 0, 1);
     glTranslatef(- (GLfloat)(sceneW / 2.0), - (GLfloat)(sceneH / 2.0), 0);
 
+}
+
+#define MAXDP_START 256
+#define SIZE_INCREASE 1.2
+
+size_t MAXDP = MAXDP_START;
+size_t dpCount = 0;
+
+drawingPrimitive** dpList;
+
+void checkDPSize()
+{
+    if(dpCount == MAXDP - 1) {
+        size_t newSize = (size_t)(MAXDP * SIZE_INCREASE);
+        dpList = realloc(dpList, newSize);
+        for(size_t i = dpCount; i < newSize; i++) {
+            dpList[i] = malloc(sizeof(drawingPrimitive));
+        }
+    }
+}
+
+void dqnDrawText(double x, double y, double r, double g, double b, double a, void *font, char *string)
+{
+    checkDPSize();
+    drawingPrimitive* dp = dpList[dpCount++];
+    dp->type = DPTYPE_TEXT;
+
+    dp->x1 = x; dp->y1 = y;
+    dp->r = r; dp->g = g; dp->b = b; dp->a = a;
+    dp->font = font;
+    dp->string = string;
+}
+
+void dqnDrawSprite(tex2d *tex, double alpha, int frame, double x, double y, double angle, double scaleFactor)
+{
+    checkDPSize();
+    drawingPrimitive* dp = dpList[dpCount++];
+    dp->type = DPTYPE_SPRITE;
+
+    dp->tex =tex;
+    dp->a = alpha;
+    dp->frame = frame;
+    dp->x1 = x; dp->y1 = y;
+    dp->angle = angle;
+    dp->scale = scaleFactor;
+};
+
+void dqnDrawLine(double x1, double y1, double x2, double y2, double r, double g, double b, double width)
+{
+    checkDPSize();
+    drawingPrimitive* dp = dpList[dpCount++];
+    dp->type = DPTYPE_SPRITE;
+
+    dp->x1 = x1; dp->y1 = y1; dp->x2 = x2; dp->y2 = y2;
+    dp->r = r; dp->g = g; dp->b = b;
+    dp->scale = width;
+}
+
+void dcDrawPrimitives()
+{
+    for(size_t i = 0; i < dpCount; i++) {
+        drawingPrimitive* dp = dpList[i];
+        switch(dp->type) {
+            case DPTYPE_TEXT:
+                dcDrawText(
+                    dp->x1, dp->y1,
+                    dp->r, dp->g, dp->b, dp->a,
+                    dp->font, dp->string);
+                break;
+
+            case DPTYPE_SPRITE:
+                dcDrawTexture(
+                    dp->tex, dp->a,
+                    dp->frame,
+                    dp->x1, dp->y1,
+                    dp->angle, dp->scale);
+                break;
+
+            default:
+                break;
+        }
+    }
+    dpCount = 0;
+}
+
+void dcInit()
+{
+    dpList = malloc(sizeof(drawingPrimitive*) * MAXDP);
+    for(int i = 0; i < MAXDP; i++) {
+        dpList[i] = malloc(sizeof(drawingPrimitive));
+    }
 }

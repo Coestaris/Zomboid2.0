@@ -142,6 +142,9 @@ void player_event_update(gameObject *object, void *data)
     }
 
     pd->prevAnimationFrame = object->frame;
+
+    dqnDrawText(x + 10, y, 1, 1, 0, 1, GLUT_BITMAP_TIMES_ROMAN_24, "<- player");
+    dqnDrawText(mx + 10, my + 10, 1, 1, 0, 1, GLUT_BITMAP_HELVETICA_18, "<- mouse");
 }
 
 gameObject* createPlayer()

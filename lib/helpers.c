@@ -69,7 +69,7 @@ void relativeCoordinates(double* x, double* y, gameObject* obj)
         *x = obj->x;
         *y = obj->y;
     } else {
-        createPoint(
+        dcCreatePoint(
                 x, y,
                 obj->x, obj->y,
                 cos(obj->angle),

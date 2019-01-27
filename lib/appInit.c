@@ -2,7 +2,7 @@
 // Created by maxim on 1/22/19.
 //
 
-#include "graphics.h"
+#include "appInit.h"
 
 void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize)
 {
@@ -10,7 +10,6 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA);
     glutInitWindowSize(w, h);
-    //glutInitWindowPosition(80, 80);
     glutCreateWindow(title);
 
     glViewport(0, 0, w, h);
@@ -28,6 +27,13 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
     glEnable( GL_ALPHA_TEST );
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+    srfInit(w, h);
+    initEventFuncs();
+    registerEvents();
+    dcInit();
+    evqInit();
+    texmInit();
 }
 
 void registerEvents()

@@ -14,8 +14,8 @@
 #define MAXSCENES 256
 #define MAXOBJECTS 1024
 
-typedef struct
-{
+typedef struct _gameScene {
+
     int backgroundTexId;
     tex2d* cachedBack;
 

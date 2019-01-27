@@ -5,10 +5,7 @@
 #ifndef ZOMBOID2_GAME_H
 #define ZOMBOID2_GAME_H
 
-#include "../lib/graphics.h"
-#include "../lib/gameScene.h"
-#include "../lib/texManager.h"
-#include "../lib/surface.h"
+#include "../lib/appInit.h"
 
 #include "loader.h"
 

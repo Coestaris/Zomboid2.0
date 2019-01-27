@@ -4,8 +4,11 @@
 
 #include "eventQueue.h"
 
-registeredNode* registeredListeners[MAXLISTENERS];
-event* eventQueue[MAXEVENTS];
+registeredNode** registeredListeners;
+event** eventQueue;
+
+size_t MAXLISTENERS = MAXLISTENERS_START;
+size_t MAXEVENTS = MAXEVENTS_START;
 
 int listenersCount = 0;
 int eventCount = 0;
@@ -48,7 +51,11 @@ void freeEvent(event* ev)
 
 void evqSubscribeEvent(gameObject *object, int eventType, void (*callback)(gameObject *, void *))
 {
-    assert(listenersCount < MAXLISTENERS);
+    if(listenersCount == MAXLISTENERS - 1) {
+        size_t newSize = (size_t)(MAXLISTENERS * SIZE_INCREASE);
+        registeredListeners = realloc(registeredListeners, newSize);
+        MAXLISTENERS = newSize;
+    }
 
     registeredListeners[listenersCount] = malloc(sizeof(registeredNode));
     registeredListeners[listenersCount]->object = object;
@@ -89,7 +96,16 @@ void evqUnsubscribeEvent(gameObject *object, int eventType)
 
 void evqPushEvent(int eventType, void* data)
 {
-    assert(eventCount < MAXEVENTS);
+    if(eventCount == MAXEVENTS - 1) {
+        size_t newSize = (size_t)(eventCount * SIZE_INCREASE);
+        eventQueue = realloc(eventQueue, newSize);
+        for(int i = eventCount; i < newSize; i++) {
+            eventQueue[i] = createEvent();
+        }
+
+        MAXEVENTS = newSize;
+    }
+
     int index = eventCount++;
     eventQueue[index]->data = data;
     eventQueue[index]->eventType = eventType;
@@ -119,6 +135,9 @@ void evqResetEvents(void)
 
 void evqInit(void)
 {
+    eventQueue = malloc(sizeof(event*) * MAXEVENTS);
+    registeredListeners = malloc(sizeof(registeredNode*) * MAXLISTENERS);
+
     for(int i = 0; i < MAXEVENTS; i++) {
         eventQueue[i] = createEvent();
     }

@@ -7,7 +7,8 @@
 
 #include "../../../objectInclude.h"
 
-typedef struct {
+typedef struct _flashlightData{
+
     gameObject* player;
     double minSize;
 
