@@ -76,7 +76,7 @@ void getPixel(uint8_t* pixels, int x, int y, int w, int h, uint8_t * r, uint8_t 
     *a = pixels[offset + 3];
 }
 
-void srfDrawTexture(tex2d* tex, int frame, double alpha, int inx, int iny)
+void srfDrawTexture(tex2d* tex, int frame, double alpha, int inx, int iny, int flipX, int flipY)
 {
     GLint width,height;
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
@@ -98,10 +98,13 @@ void srfDrawTexture(tex2d* tex, int frame, double alpha, int inx, int iny)
 
             if(a) {
 
-                pixelData[y + iny][x + inx][0] = r;
-                pixelData[y + iny][x + inx][1] = g;
-                pixelData[y + iny][x + inx][2] = b;
-                pixelData[y + iny][x + inx][3] = (uint8_t)(alpha * a);
+                int xPos = flipX ? (width - x + inx) : (x + inx);
+                int yPos = flipY ? (height- y + iny) : (y + iny);
+
+                pixelData[yPos][xPos][0] = r;
+                pixelData[yPos][xPos][1] = g;
+                pixelData[yPos][xPos][2] = b;
+                pixelData[yPos][xPos][3] = (uint8_t)(alpha * a);
             }
         }
     }

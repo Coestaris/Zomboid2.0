@@ -21,7 +21,7 @@ void player_event_keyPressed(gameObject* this, void* data)
         }
     } else if(ke->key == 'e') {
 
-        srfDrawTexture(texmGetID(TEXID_FLASHLIGHT), 0, 1, 100, 100);
+        srfDrawTexture(texmGetID(TEXID_BOX), 0, 1, 100, 100, 0, 0);
     } else if(ke->key == 'c') {
 
         srfClear();
@@ -109,7 +109,12 @@ void player_event_update(gameObject *object, void *data)
 
             rotateScene(randRange(pd->currShake, pd->currShake * PLAYER_SHAKE_MIN));
 
-            srfDrawTexture(texmGetID(TEXID_SHELLCASE), 0, 1, (int)x, (int)y);
+            int shellCaseFrame = (int)(randRange(0, 5));
+            srfDrawTexture(texmGetID(TEXID_SHELLCASE), shellCaseFrame,
+                    (shellCaseFrame == 0 || shellCaseFrame == 5 ? 0.4 : .8),
+                    (int)(x + randRange(-5, 5)),
+                    (int)(y + randRange(-5, 5)),
+                    (int)random() % 2, (int)random() % 2);
 
             scmPushObject(createBullet(x, y, mx, my));
         }

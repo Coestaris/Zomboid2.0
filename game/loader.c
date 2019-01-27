@@ -19,7 +19,13 @@ void loadTextures(void)
     loadTexture("../resources/images/light/light.png", TEXID_LIGHT, TEXSCOPE_MAIN, 0, 0, TEXMODE_OVERLAY);
     loadTexture("../resources/images/light/flashlight.png", TEXID_FLASHLIGHT, TEXSCOPE_MAIN, 110, 0, TEXMODE_OVERLAY);
 
-    loadTexture("../resources/images/shellCase.png", TEXID_SHELLCASE, TEXSCOPE_MAIN, 0, 0, TEXMODE_OVERLAY);
+    loadAnimation(6, TEXID_SHELLCASE, TEXSCOPE_MAIN, 0, 0,
+            "../resources/images/shellCase/shellCase1.png",
+            "../resources/images/shellCase/shellCase2.png",
+            "../resources/images/shellCase/shellCase3.png",
+            "../resources/images/shellCase/shellCase4.png",
+            "../resources/images/shellCase/shellCase5.png",
+            "../resources/images/shellCase/shellCase6.png");
 
     loadTexture("../resources/images/backgrounds/concrete.png", TEXID_BACK_CONCRETE, TEXSCOPE_MAIN, 0, 0, TEXMODE_BACKGROUND);
 
