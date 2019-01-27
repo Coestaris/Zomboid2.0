@@ -111,7 +111,7 @@ void player_event_update(gameObject *object, void *data)
 
             int shellCaseFrame = (int)(randRange(0, 5));
             srfDrawTexture(texmGetID(TEXID_SHELLCASE), shellCaseFrame,
-                    (shellCaseFrame == 0 || shellCaseFrame == 5 ? 0.4 : .8),
+                    (shellCaseFrame == 0 || shellCaseFrame == 5 ? .5 : 1),
                     (int)(x + randRange(-5, 5)),
                     (int)(y + randRange(-5, 5)),
                     (int)random() % 2, (int)random() % 2);

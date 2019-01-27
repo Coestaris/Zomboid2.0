@@ -11,9 +11,9 @@
 #include "../lib/helpers.h"
 #include "../lib/gameScene.h"
 
-#include "objects/player/obj_player.h"
-#include "objects/box/obj_box.h"
-#include "objects/flashlight/obj_flashlight.h"
+#include "objects/main/player/obj_player.h"
+#include "objects/main/box/obj_box.h"
+#include "objects/main/flashlight/obj_flashlight.h"
 
 #define TEXSCOPE_MAIN 0
 

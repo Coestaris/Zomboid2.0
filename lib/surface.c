@@ -27,6 +27,7 @@ void srfFree()
 
 void srfBind()
 {
+    glColor4f(1, 1, 1, 1);
     glBindTexture(GL_TEXTURE_2D, surfGLID);
 }
 /*
@@ -134,6 +135,13 @@ void getPixel(uint8_t* pixels, int x, int y, int w, int h, uint8_t * r, uint8_t 
     *a = pixels[offset + 3];
 }
 
+uint8_t clip(double a)
+{
+    if(a >= 255) return 255;
+    else if(a <= 0) return 0;
+    else return (uint8_t)a;
+}
+
 void srfDrawTexture(tex2d* tex, int frame, double alpha, int inx, int iny, int flipX, int flipY)
 {
     GLint width,height;
@@ -159,10 +167,24 @@ void srfDrawTexture(tex2d* tex, int frame, double alpha, int inx, int iny, int f
                 int xPos = flipX ? (width - x + inx) : (x + inx);
                 int yPos = flipY ? (height- y + iny) : (y + iny);
 
-                pixelData[yPos][xPos][0] = r;
-                pixelData[yPos][xPos][1] = g;
-                pixelData[yPos][xPos][2] = b;
-                pixelData[yPos][xPos][3] = (uint8_t)(alpha * a);
+                if(tex->mode == TEXMODE_OVERLAY) {
+
+                    double oldAlpha = pixelData[yPos][xPos][3] / 255.0;
+                    double newAlpha = (a / 255.0) * alpha;
+
+                    pixelData[yPos][xPos][0] = clip((oldAlpha * pixelData[yPos][xPos][0] + (1 - oldAlpha) * r));
+                    pixelData[yPos][xPos][1] = clip((oldAlpha * pixelData[yPos][xPos][1] + (1 - oldAlpha) * g));
+                    pixelData[yPos][xPos][2] = clip((oldAlpha * pixelData[yPos][xPos][2] + (1 - oldAlpha) * b));
+                    pixelData[yPos][xPos][3] = clip((oldAlpha * pixelData[yPos][xPos][3] + (1 - oldAlpha) * a));
+
+
+                } else {
+
+                    pixelData[yPos][xPos][0] = clip(r);
+                    pixelData[yPos][xPos][1] = clip(g);
+                    pixelData[yPos][xPos][2] = clip(b);
+                    pixelData[yPos][xPos][3] = clip(a * alpha);
+                }
             }
         }
     }

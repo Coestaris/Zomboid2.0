@@ -24,10 +24,10 @@ tex2d* createTex(const char* fn, int uid, int scope, int centerX, int centerY, i
     tex->scope = scope;
 }
 
-tex2d* createAnimation(const char** fileNames, int framesCount, int uid, int scope, int centerX, int centerY)
+tex2d* createAnimation(const char** fileNames, int framesCount, int uid, int scope, int centerX, int centerY, int mode)
 {
     tex2d* tex = malloc(sizeof(tex2d));
-    tex->mode = TEXMODE_DEFAULT;
+    tex->mode = mode;
 
     tex->textureIds = malloc(sizeof(GLuint) * framesCount);
     memset(tex->textureIds, 0, sizeof(GLuint) * framesCount);

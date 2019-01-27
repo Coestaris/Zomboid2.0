@@ -24,7 +24,7 @@ double randRange(double a, double b)
     double min = a > b ? b : a;
     double max = a > b ? a : b;
 
-    double scale = rand() / (float) RAND_MAX; /* [0, 1.0] */
+    double scale = random() / (float) RAND_MAX; /* [0, 1.0] */
 
     return min + scale * ( max - min );
 }
@@ -83,7 +83,7 @@ void relativeCoordinates(double* x, double* y, gameObject* obj)
 }
 
 
-void loadTexture(const char* fn, int id, int scope, int cX, int cY, int isBg)
+void loadTexture(const char* fn, int id, int scope, int cX, int cY, int mode)
 {
     if(texmGetID(id)) {
         printf("Error while loading texture %i. Texture with same ID alreay exists", id);
@@ -91,14 +91,14 @@ void loadTexture(const char* fn, int id, int scope, int cX, int cY, int isBg)
     }
 
     if(fileExists(fn)) {
-        texmPush(createTex(fn, id, scope, cX, cY, isBg));
+        texmPush(createTex(fn, id, scope, cX, cY, mode));
     } else {
         printf("Error while loading texture %i. Unable to reach file \"%s\"", id, fn);
         exit(1);
     }
 }
 
-void loadAnimation(int framesCount, int id, int scope, int cX, int cY, ...)
+void loadAnimation(int framesCount, int id, int scope, int cX, int cY, int mode, ...)
 {
     if(texmGetID(id)) {
         printf("Error while loading animation %i. Texture with same ID alreay exists", id);
@@ -106,7 +106,7 @@ void loadAnimation(int framesCount, int id, int scope, int cX, int cY, ...)
     }
 
     va_list args;
-    va_start(args, cY);
+    va_start(args, mode);
 
     const char** fileNames = malloc(sizeof(const char*) * framesCount);
     for(int i = 0; i < framesCount; i++) {
@@ -119,5 +119,5 @@ void loadAnimation(int framesCount, int id, int scope, int cX, int cY, ...)
         }
         fileNames[i] = fn;
     }
-    texmPush(createAnimation(fileNames, framesCount, id, scope, cX, cY));
+    texmPush(createAnimation(fileNames, framesCount, id, scope, cX, cY, mode));
 }

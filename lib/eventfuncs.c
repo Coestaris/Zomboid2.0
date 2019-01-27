@@ -111,8 +111,12 @@ void mainDF(void)
 
     rotateScreen(sceneAngle, fixedW, fixedH);
     dfDrawBackground();
+
+    drawText(200, 200, 1, 0.5, 0.5, 1, GLUT_BITMAP_TIMES_ROMAN_24, "HELLO");
+
     drawSurface(fixedW, fixedH);
     dfDrawObjects();
+
 
     endDraw();
 }

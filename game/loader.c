@@ -7,7 +7,7 @@
 void loadTextures(void)
 {
     puts("Loading textures....");
-    loadAnimation(3, TEXID_PLAYER, TEXSCOPE_MAIN, 15, 0,
+    loadAnimation(3, TEXID_PLAYER, TEXSCOPE_MAIN, 15, 0, TEXMODE_DEFAULT,
          "../resources/images/player_1/image0.png",
          "../resources/images/player_1/image1.png",
          "../resources/images/player_1/image2.png");
@@ -19,7 +19,7 @@ void loadTextures(void)
     loadTexture("../resources/images/light/light.png", TEXID_LIGHT, TEXSCOPE_MAIN, 0, 0, TEXMODE_OVERLAY);
     loadTexture("../resources/images/light/flashlight.png", TEXID_FLASHLIGHT, TEXSCOPE_MAIN, 110, 0, TEXMODE_OVERLAY);
 
-    loadAnimation(6, TEXID_SHELLCASE, TEXSCOPE_MAIN, 0, 0,
+    loadAnimation(6, TEXID_SHELLCASE, TEXSCOPE_MAIN, 0, 0, TEXMODE_OVERLAY,
             "../resources/images/shellCase/shellCase1.png",
             "../resources/images/shellCase/shellCase2.png",
             "../resources/images/shellCase/shellCase3.png",

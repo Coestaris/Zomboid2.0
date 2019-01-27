@@ -14,15 +14,31 @@ void createPoint(double* x, double* y, double inx, double iny, double vcos, doub
     *y = inx * vsin + iny * vcos - cy * (vcos - 1) - cx * vsin;
 }
 
+
+void drawText(float x, float y, double r, double g, double b, double a, void* font, const char *string)
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    int j = (int)strlen( string );
+    glColor4d(r, g, b, a);
+
+    glRasterPos2f(x, y);
+
+    for( int i = 0; i < j; i++ ) {
+        glutBitmapCharacter(font, string[i]);
+        //glutStrokeCharacter(font, string[i]);
+    }
+}
+
 void drawSurface(int winW, int winH)
 {
     srfBind();
 
     glBegin( GL_QUADS );
-        glTexCoord2f(0.0, 0.0);		glVertex2f(0.0,	 0.0);
-        glTexCoord2f(1.0, 0.0); 	glVertex2f(winW, 0.0);
-        glTexCoord2f(1.0, 1.0); 	glVertex2f(winW, winH);
-        glTexCoord2f(0.0, 1.0); 	glVertex2f(0.0,  winH);
+        glTexCoord2f(0.0, 0.0);	glVertex2f(0.0,	  0.0);
+        glTexCoord2f(1.0, 0.0); glVertex2f(winW,  0.0);
+        glTexCoord2f(1.0, 1.0); glVertex2f(winW, winH);
+        glTexCoord2f(0.0, 1.0); glVertex2f(0.0,  winH);
     glEnd();
 }
 
