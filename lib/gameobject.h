@@ -29,7 +29,9 @@ typedef struct _GameObject
     tex2d* cachedTex;
 
     void* data;
-    void (*init)(struct _GameObject* object);
+
+    void (*onInit)(struct _GameObject* object);
+    void (*onDestroy)(struct _GameObject* object);
 
 } gameObject;
 

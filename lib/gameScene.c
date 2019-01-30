@@ -35,8 +35,10 @@ int scmHasObject(gameObject *object)
 
 void scmPushObject(gameObject *object)
 {
-    if(currentScene != -1 && object->init) {
-        object->init(object);
+    assert(object != NULL);
+
+    if(currentScene != -1 && object->onInit) {
+        object->onInit(object);
     }
 
     for(int i = 0; i < objectsCount; i++)
@@ -116,10 +118,13 @@ void scmLoadScene(int id, int loadScope, int destroyObjects, int freeObjects)
                 objectsCount += scenes[i]->startupObjectsCount;
             }
 
-            for(int j = 0; j < scenes[i]->startupObjectsCount; j++)
-                if(scenes[i]->startupObjects[j]->init)
-                    scenes[i]->startupObjects[j]->init(scenes[i]->startupObjects[j]);
-
+            for(int j = 0; j < scenes[i]->startupObjectsCount; j++) {
+                if (scenes[i]->startupObjects[j]->onInit) {
+                    scenes[i]->startupObjects[j]->onInit(scenes[i]->startupObjects[j]);
+                }
+                if (scenes[i]->startupObjects[j]->drawable && !scenes[i]->startupObjects[j]->cachedTex)
+                    scenes[i]->startupObjects[j]->cachedTex = texmGetID(scenes[i]->startupObjects[j]->texID);
+            }
             currentScene = i;
         }
     }

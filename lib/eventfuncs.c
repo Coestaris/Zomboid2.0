@@ -114,6 +114,7 @@ void mainDF(void)
     dfDrawBackground();
     dcDrawSurface(fixedW, fixedH);
     dfDrawObjects();
+
     dcDrawPrimitives();
 
     dcEndDraw();

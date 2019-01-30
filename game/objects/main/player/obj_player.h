@@ -6,6 +6,8 @@
 #define ZOMBOID2_OBJ_TEST_H
 
 #include "../../../objectInclude.h"
+
+#include "../enemy/obj_enemy.h"
 #include "../bullet/obj_bullet.h"
 
 #define PLAYER_MOVE_X 2.5

@@ -1,0 +1,5 @@
+; main resource file
+
+inc images.rlist
+; todo: inc levels.rlist
+; todo: inc sounds.rlist

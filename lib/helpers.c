@@ -29,7 +29,7 @@ double randRange(double a, double b)
     return min + scale * ( max - min );
 }
 
-inline double toPointsAngle(double x1, double y1, double x2, double y2)
+inline double twoPointsAngle(double x1, double y1, double x2, double y2)
 {
     return atan2(y1 - y2, x1 - x2) + M_PI;
 }
@@ -83,7 +83,7 @@ void relativeCoordinates(double* x, double* y, gameObject* obj)
 }
 
 
-void loadTexture(const char* fn, int id, int scope, int cX, int cY, int mode)
+void loadTexture(const char* fn, int id, int scope, double cX, double cY, int mode)
 {
     if(texmGetID(id)) {
         printf("Error while loading texture %i. Texture with same ID alreay exists", id);
@@ -98,7 +98,7 @@ void loadTexture(const char* fn, int id, int scope, int cX, int cY, int mode)
     }
 }
 
-void loadAnimation(int framesCount, int id, int scope, int cX, int cY, int mode, ...)
+void loadAnimation(int framesCount, int id, int scope, double cX, double cY, int mode, ...)
 {
     if(texmGetID(id)) {
         printf("Error while loading animation %i. Texture with same ID alreay exists", id);

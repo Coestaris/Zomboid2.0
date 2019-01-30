@@ -7,9 +7,10 @@
 gameObject* object(void)
 {
     gameObject* obj = malloc(sizeof(gameObject));
-    obj->size = 0;
+    obj->size = 1;
     obj->cachedTex = NULL;
-    obj->init = NULL;
+    obj->onInit = NULL;
+    obj->onDestroy = NULL;
     obj->x = 0;
     obj->y = 0;
     obj->texID = -1;
@@ -17,6 +18,7 @@ gameObject* object(void)
     obj->drawable = 0;
     obj->depth = 0;
     obj->frame = 0;
+    obj->angle = 0;
     obj->alpha = 1;
     obj->animationSpeed = 0;
     obj->animationCounter = 0;
@@ -25,6 +27,7 @@ gameObject* object(void)
 
 void freeObject(gameObject *object)
 {
+    if(object->onDestroy) object->onDestroy(object);
     if(object->data) free(object->data);
     free(object);
 }

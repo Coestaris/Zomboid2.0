@@ -1,0 +1,38 @@
+inc defines.rlist
+
+; scopes
+set TEXSCOPE_MAIN 0
+
+; texture IDs
+set TEXID_PLAYER 1
+set TEXID_BULLET 2
+set TEXID_BOX 3
+set TEXID_SIMPLE_LIGHT 4
+set TEXID_LIGHT 5
+set TEXID_FLASHLIGHT 6
+set TEXID_SHELLCASE 8
+set TEXID_ENEMY 9
+set TEXID_ENEMY_LARM 10
+set TEXID_ENEMY_RARM 11
+set TEXID_ENEMY_LARM_D 12
+set TEXID_ENEMY_RARM_D 13
+set TEXID_BACK_CONCRETE 7
+
+; type                  id                  scope                cX   cY   mode         path
+image                   TEXID_BULLET        TEXSCOPE_MAIN        0    0    TM_DEFAULT   images/bullet.png
+image                   TEXID_BOX           TEXSCOPE_MAIN        0    0    TM_DEFAULT   images/box.png
+image                   TEXID_SIMPLE_LIGHT  TEXSCOPE_MAIN        0    0    TM_OVERLAY   images/light/simpleLight.png
+image                   TEXID_LIGHT         TEXSCOPE_MAIN        0    0    TM_OVERLAY   images/light/light.png
+image                   TEXID_FLASHLIGHT    TEXSCOPE_MAIN        110  0    TM_OVERLAY   images/light/flashlight.png
+
+image                   TEXID_BOX           TEXSCOPE_MAIN        0    0    TM_DEFAULT   images/enemy/larm.png
+image                   TEXID_BOX           TEXSCOPE_MAIN        0    0    TM_DEFAULT   images/enemy/rarm.png
+image                   TEXID_BOX           TEXSCOPE_MAIN        0    0    TM_DEFAULT   images/enemy/larm_d.png
+image                   TEXID_BOX           TEXSCOPE_MAIN        0    0    TM_DEFAULT   images/enemy/rarm_d.png
+
+image                   TEXID_BACK_CONCRETE TEXSCOPE_MAIN        0    0    TM_BACK      images/backgrounds/concrete.png
+
+; type      frameCnt    id                  scope                cX  cY    mode         paths
+animation   3           TEXID_ENEMY         TEXSCOPE_MAIN        0   0     TM_DEFAULT   images/enemy/enemy%i.png
+animation   3           TEXID_PLAYER        TEXSCOPE_MAIN        0   0     TM_DEFAULT   images/player_1/image%i.png
+animation   6           TEXID_SHELLCASE     TEXSCOPE_MAIN        0   0     TM_DEFAULT   images/shellCase/shellCase%i.png

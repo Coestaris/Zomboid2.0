@@ -19,11 +19,11 @@
 #define FALSE 0
 
 int fileExists(const char* filename);
-double toPointsAngle(double x1, double y1, double x2, double y2);
+double twoPointsAngle(double x1, double y1, double x2, double y2);
 double randRange(double a, double b);
 
-void loadTexture(const char* fn, int id, int scope, int cX, int cY, int mode);
-void loadAnimation(int framesCount, int id, int scope, int cX, int cY, int mode, ...);
+void loadTexture(const char* fn, int id, int scope, double cX, double cY, int mode);
+void loadAnimation(int framesCount, int id, int scope, double cX, double cY, int mode, ...);
 
 double distance(double x1, double y1, double x2, double y2);
 

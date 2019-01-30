@@ -60,10 +60,10 @@ gameObject* createBullet(double x, double y, double dirx, double diry)
     go->depth = 2;
     go->x = x;
     go->y = y;
-    go->angle = toPointsAngle(x, y, dirx, diry) + toRad(randRange(-50, 50));
+    go->angle = twoPointsAngle(x, y, dirx, diry) + toRad(randRange(-50, 50));
     go->texID = TEXID_BULLET;
     go->size = 1;
-    go->init = bullet_init;
+    go->onInit = bullet_init;
 
     go->data = malloc(sizeof(bulletData));
 

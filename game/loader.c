@@ -14,6 +14,16 @@ void loadTextures(void)
     loadTexture("../resources/images/light/light.png",       TEXID_LIGHT,        TEXSCOPE_MAIN, 0,   0, TEXMODE_OVERLAY);
     loadTexture("../resources/images/light/flashlight.png",  TEXID_FLASHLIGHT,   TEXSCOPE_MAIN, 110, 0, TEXMODE_OVERLAY);
 
+    loadTexture("../resources/images/enemy/larm.png",        TEXID_ENEMY_LARM,   TEXSCOPE_MAIN, -9.5, 5, TEXMODE_DEFAULT);
+    loadTexture("../resources/images/enemy/rarm.png",        TEXID_ENEMY_RARM,   TEXSCOPE_MAIN, -9.5, -5, TEXMODE_DEFAULT);
+    loadTexture("../resources/images/enemy/larm_d.png",      TEXID_ENEMY_LARM_D, TEXSCOPE_MAIN, 0,   0, TEXMODE_DEFAULT);
+    loadTexture("../resources/images/enemy/rarm_d.png",      TEXID_ENEMY_RARM_D, TEXSCOPE_MAIN, 0,   0, TEXMODE_DEFAULT);
+
+    loadAnimation(3, TEXID_ENEMY,    TEXSCOPE_MAIN, 0, 0,  TEXMODE_DEFAULT,
+         "../resources/images/enemy/enemy1.png",
+         "../resources/images/enemy/enemy2.png",
+         "../resources/images/enemy/enemy3.png");
+
     loadAnimation(3, TEXID_PLAYER,   TEXSCOPE_MAIN, 15, 0, TEXMODE_DEFAULT,
          "../resources/images/player_1/image0.png",
          "../resources/images/player_1/image1.png",

@@ -29,15 +29,16 @@ typedef struct _tex2d {
 
     int framesCount;
 
-    int centerX;
-    int centerY;
+    double centerX;
+    double centerY;
 
     int width;
     int height;
 } tex2d;
 
-tex2d* createTex(const char* fn, int uid, int scope, int centerX, int centerY, int mode);
-tex2d* createAnimation(const char** fileNames, int framesCount, int uid, int scope, int centerX, int centerY, int mode);
+tex2d* createTex(const char *fn, int uid, int scope, double centerX, double centerY, int mode);
+tex2d* createAnimation(const char **fileNames, int framesCount, int uid, int scope, double centerX, double centerY,
+                       int mode);
 
 void freeOGlTex(tex2d* tex);
 void freeTex(tex2d* tex);

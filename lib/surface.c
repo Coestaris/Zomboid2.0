@@ -27,6 +27,7 @@ void srfFree()
 
 void srfBind()
 {
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(1, 1, 1, 1);
     glBindTexture(GL_TEXTURE_2D, surfGLID);
 }
@@ -156,9 +157,6 @@ void srfDrawTexture(tex2d* tex, int frame, double alpha, int inx, int iny, int f
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
 
-            if(x + inx >= SCREEN_WIDTH || y + iny >= SCREEN_HEIGHT)
-                continue;
-
             uint8_t r, g, b, a;
             getPixel(pixels, x, y, width, height, &r, &g, &b, &a);
 
@@ -166,6 +164,9 @@ void srfDrawTexture(tex2d* tex, int frame, double alpha, int inx, int iny, int f
 
                 int xPos = flipX ? (width - x + inx) : (x + inx);
                 int yPos = flipY ? (height- y + iny) : (y + iny);
+
+                if(xPos >= SCREEN_WIDTH || yPos >= SCREEN_HEIGHT || xPos <= 0 || yPos <= 0)
+                    continue;
 
                 if(tex->mode == TEXMODE_OVERLAY) {
 

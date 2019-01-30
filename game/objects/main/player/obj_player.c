@@ -25,6 +25,11 @@ void player_event_keyPressed(gameObject* this, void* data)
     } else if(ke->key == 'c') {
 
         srfClear();
+    } else if(ke->key == 'q') {
+
+        int w, h;
+        getWinSize(&w ,&h);
+        scmPushObject(createEnemy(this, randRange(0, w), randRange(0, h)));
     }
 }
 
@@ -86,7 +91,7 @@ void player_event_update(gameObject *object, void *data)
 
     int mx, my;
     getMousePos(&mx, &my);
-    object->angle = toPointsAngle(object->x, object->y, mx, my);
+    object->angle = twoPointsAngle(object->x, object->y, mx, my);
 
     if(keyPressed('a') || specKeyPressed(GLUT_KEY_LEFT))  object->x -= PLAYER_MOVE_X;
     if(keyPressed('w') || specKeyPressed(GLUT_KEY_UP))    object->y -= PLAYER_MOVE_Y;
@@ -142,9 +147,6 @@ void player_event_update(gameObject *object, void *data)
     }
 
     pd->prevAnimationFrame = object->frame;
-
-    dqnDrawText(x + 10, y, 1, 1, 0, 1, GLUT_BITMAP_TIMES_ROMAN_24, "<- player");
-    dqnDrawText(mx + 10, my + 10, 1, 1, 0, 1, GLUT_BITMAP_HELVETICA_18, "<- mouse");
 }
 
 gameObject* createPlayer()
@@ -170,6 +172,6 @@ gameObject* createPlayer()
     go->texID = TEXID_PLAYER;
     go->animationSpeed = 0;
     go->size = 1;
-    go->init = player_init;
+    go->onInit = player_init;
     return go;
 }

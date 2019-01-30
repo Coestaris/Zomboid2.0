@@ -1,0 +1,4 @@
+; Default defines
+set TM_DEFAULT 0
+set TM_BACK    1
+set TM_OVERLAY 2

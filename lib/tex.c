@@ -4,7 +4,7 @@
 
 #include "tex.h"
 
-tex2d* createTex(const char* fn, int uid, int scope, int centerX, int centerY, int mode)
+tex2d* createTex(const char *fn, int uid, int scope, double centerX, double centerY, int mode)
 {
     tex2d* tex = malloc(sizeof(tex2d));
 
@@ -24,7 +24,7 @@ tex2d* createTex(const char* fn, int uid, int scope, int centerX, int centerY, i
     tex->scope = scope;
 }
 
-tex2d* createAnimation(const char** fileNames, int framesCount, int uid, int scope, int centerX, int centerY, int mode)
+tex2d* createAnimation(const char **fileNames, int framesCount, int uid, int scope, double centerX, double centerY, int mode)
 {
     tex2d* tex = malloc(sizeof(tex2d));
     tex->mode = mode;
