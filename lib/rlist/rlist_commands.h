@@ -7,7 +7,10 @@
 
 #include <string.h>
 #include <malloc.h>
+#include <stdlib.h>
+#include <ctype.h>
 
+#include "../texManager.h"
 #include "../helpers.h"
 #include "rlist_c.h"
 
@@ -27,6 +30,7 @@ int rlist_command_inc(rlist_cdata* data);
 int rlist_command_echo(rlist_cdata* data);
 int rlist_command_echo_v(rlist_cdata *data);
 int rlist_command_echo_all_vars(rlist_cdata *data);
+int rlist_command_image(rlist_cdata* data);
 
 void initCommands(void);
 rlist_c** rlist_getcommands(int* count);

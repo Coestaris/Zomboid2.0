@@ -16,9 +16,11 @@ typedef struct rlist_cdata {
 
     char** args;
 
-    char* currentDir;
-    int addLinesArgIndex;
+    char* fnToAddLines;
     int strict;
+
+    int lineIndex;
+    char* filename;
 
 } rlist_cdata;
 

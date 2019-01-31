@@ -4,9 +4,10 @@
 
 int main(int argc, char** argv)
 {
+    texmInit();
     rlist_init();
 
-    const char* s = "../resources/defines.rlist";
+    const char* s = "../resources/images.rlist";
 
     if(!fileExists(s)) {
         puts("File not exists");
