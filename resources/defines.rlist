@@ -1,4 +1,11 @@
 ; Default defines
+
+; Single space escape
+echo Hello\ World,\ my\ friend!
+
+; Multiple space escape
+echo "Hello world, my friend!"
+
 set TM_DEFAULT 0
 set TM_BACK    1
 set TM_OVERLAY 2

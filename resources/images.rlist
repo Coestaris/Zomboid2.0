@@ -1,3 +1,5 @@
+echo hello\ World!
+
 inc defines.rlist
 
 ; scopes
