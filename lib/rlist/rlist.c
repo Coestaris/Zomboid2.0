@@ -2,15 +2,20 @@
 // Created by maxim on 1/31/19.
 //
 
+#include <ctype.h>
 #include "rlist.h"
 
 #define MAX_TOKENS 200
+char** lines;
 char** tokens;
+int linesCount;
 int tokenCount;
 
 void rlist_init()
 {
     tokens = malloc(sizeof(char*) * MAX_TOKENS);
+    lines = malloc(sizeof(char*) * MAX_TOKENS);
+
     initCommands();
 }
 
@@ -81,8 +86,49 @@ void clearTokens()
     tokenCount = 0;
 }
 
+
+void trim(char * s) {
+    char * p = s;
+    int l = strlen(p);
+
+    while(isspace(p[l - 1])) p[--l] = 0;
+    while(* p && isspace(* p)) ++p, --l;
+
+    memmove(s, p, l + 1);
+}
+
+void proceed_line(char* input, int start, int end)
+{
+    size_t len = (size_t)end - start + 2;
+    char* line = malloc(len);
+    memcpy(line, input + start, len - 1);
+    line[len - 1] = '\0';
+    lines[linesCount++] = line;
+    trim(line);
+}
+
+void get_lines(char* str)
+{
+    int a = 0;
+    int startIndex = 0;
+    int endIndex = 0;
+
+    for (int i = 0; i < strlen(str); i++) {
+        if (str[i] == '\n' && str[i - 1] != '\n') {
+            endIndex = i;
+            proceed_line(str, startIndex, endIndex);
+            startIndex = endIndex + 1;
+        }
+    }
+    if(str[strlen(str)] != '\n') {
+        proceed_line(str, startIndex, strlen(str) - 1);
+    }
+}
+
 int rlist_load(char* filename, int strict)
 {
+    clearTokens();
+
     FILE* f = fopen(filename, "r");
     if(!f) return false;
 
@@ -92,19 +138,30 @@ int rlist_load(char* filename, int strict)
     size_t size = (size_t)ftell(f);
     fseek(f, 0, SEEK_SET);
 
-    char* rawInput = malloc(sizeof(char) * size);
-    fread(rawInput, 1, size, f);
+    char* rawInput = malloc(size + 1);
+    memset(rawInput, 0, size + 1);
+    fread(rawInput, size, size, f);
+
     fclose(f);
 
     int commandsCount = 0;
     rlist_c** commands = rlist_getcommands(&commandsCount);
     int lineCounter = 0;
 
-    char* line = strtok(rawInput, "\n");
-    while(line)
+    get_lines(rawInput);
+
+    char** myLines = malloc(sizeof(char*) * linesCount);
+    int myLinesCount = linesCount;
+
+    memcpy(myLines, lines, sizeof(char*) * linesCount);
+    linesCount = 0;
+
+    for(int i = 0; i < myLinesCount; i++)
     {
+        char* line = myLines[i];
+
         if(!getTokens(line)) {
-            printf("Rlist: Invalid syntax at line %i", lineCounter);
+            printf("Rlist error: Invalid syntax at line %i in %s\n", lineCounter, filename);
             if(strict) return false;
             else goto end;
         }
@@ -122,7 +179,7 @@ int rlist_load(char* filename, int strict)
 
 
                     if(commands[i]->argumentCount != ARGC_VARIADIC && tokenCount - 1 != commands[i]->argumentCount) {
-                        printf("Rlist: Wrong argument count. Expected %i, but got %i, at line %i", commands[i]->argumentCount, tokenCount - 1, lineCounter);
+                        printf("Rlist error: Wrong argument count. Expected %i, but got %i, at line %i in %s\n", commands[i]->argumentCount, tokenCount - 1, lineCounter, filename);
                         if(strict) return false;
                         else goto end;
                     }
@@ -131,16 +188,34 @@ int rlist_load(char* filename, int strict)
                     rlist_cdata* data = malloc(sizeof(rlist_cdata));
                     data->args = &tokens[1];
                     data->command = commands[i];
+                    data->strict = strict;
+                    data->addLinesArgIndex = -1;
 
-                    commands[i]->runFunc(data);
+                    if(!commands[i]->runFunc(data)) {
+                        free(data);
+                        return false;
+                    }
 
                     free(data);
+                    if(data->addLinesArgIndex != -1) {
 
+                        char* fn = malloc(strlen(data->args[data->addLinesArgIndex]) + 1);
+                        strcpy(fn, data->args[data->addLinesArgIndex]);
+
+                        if(!rlist_load(fn, strict)) {
+                            if(strict) goto end;
+                            else return false;
+                        }
+
+                        clearTokens();
+
+                        free(fn);
+                    }
                 }
             }
 
             if(!found) {
-                printf("Rlist: Unknown command \"%s\" at line %i", tokens[0], lineCounter);
+                printf("Rlist error: Unknown command \"%s\" at line %i in %s\n", tokens[0], lineCounter, filename);
                 if(strict) return false;
                 else goto end;
             }
@@ -148,8 +223,8 @@ int rlist_load(char* filename, int strict)
 
         end:
         clearTokens();
-        line = strtok(NULL, "\n");
         lineCounter++;
+        free(line);
     }
 
     free(rawInput);

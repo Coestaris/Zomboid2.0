@@ -13,7 +13,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    rlist_load(s, true);
+    rlist_load((char*)s, true);
 
     /*
      * initGame(argc, argv);

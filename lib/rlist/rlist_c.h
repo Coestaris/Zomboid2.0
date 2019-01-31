@@ -18,6 +18,7 @@ typedef struct rlist_cdata {
 
     char* currentDir;
     int addLinesArgIndex;
+    int strict;
 
 } rlist_cdata;
 
@@ -25,9 +26,9 @@ typedef struct rlist_c {
     const char* name;
     int argumentCount;
 
-    void (*runFunc)(rlist_cdata* arguments);
+    int (*runFunc)(rlist_cdata* arguments);
 } rlist_c;
 
-rlist_c* create_command(const char* name, int argCount, void (*runFunc)(rlist_cdata* arguments));
+rlist_c* create_command(const char* name, int argCount, int (*runFunc)(rlist_cdata* arguments));
 
 #endif //ZOMBOID2_RLIST_C_H
