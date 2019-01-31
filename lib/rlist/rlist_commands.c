@@ -26,6 +26,7 @@ void initCommands(void)
     rlist_register_command(create_command("inc", 1, rlist_command_inc));
 
     rlist_register_command(create_command("image", 6, rlist_command_image));
+    rlist_register_command(create_command("animation", 7, rlist_command_animation));
 }
 
 int rlist_command_echo_v(rlist_cdata *data)
@@ -70,8 +71,11 @@ char* getFilename(char* scriptFn, char* filename)
     char* fullPath = malloc(256);
     memset(fullPath, 0, 256);
 
-    fullPath = strcat(fullPath, cwd);
-    fullPath = strcat(fullPath, "/");
+    if(dir[0] != '/') {
+        fullPath = strcat(fullPath, cwd);
+        fullPath = strcat(fullPath, "/");
+    }
+
     fullPath = strcat(fullPath, dir);
     fullPath = strcat(fullPath, "/");
     if(strlen(dirDest) != 1 && dirDest[0] != '.') {
@@ -92,7 +96,7 @@ int rlist_command_inc(rlist_cdata* data)
     char* filename = getFilename(data->filename, data->args[0]);
 
     if(!fileExists(filename)) {
-        printf("Rlist error: Unable to reach specified include file \"%s\", at line %i in \"%s\"", filename, data->lineIndex, data->filename);
+        printf("Rlist error: Unable to reach specified include file \"%s\", at line %i in \"%s\"\n", filename, data->lineIndex, data->filename);
 
         free(filename);
         if(data->strict) return false;
@@ -109,7 +113,7 @@ int rlist_command_set(rlist_cdata *data)
 
     for(int i = 0; i < variablesCount; i++)
         if(!strcmp(data->args[0], variables[i]->name)) {
-            printf("Rlist error: Variable with same name already exists, at line %i in \"%s\"", data->lineIndex, data->filename);
+            printf("Rlist error: Variable with same name already exists, at line %i in \"%s\"\n", data->lineIndex, data->filename);
             return !data->strict;
         }
 
@@ -172,13 +176,13 @@ int getDoubleValue(double * res, char* str, const char* pname, rlist_cdata *data
     if(!isDouble(str, res)) {
         if((var = getVar(str))) {
             if(!isDouble(var->value, res)) {
-                printf("Rlist data error: specified variable for %s should be correct float-point number value, but got %s, at line %i in \"%s\"",
+                printf("Rlist data error: specified variable for %s should be correct float-point number value, but got %s, at line %i in \"%s\"\n",
                        pname, var->value, data->lineIndex, data->filename);
                 return false;
             }
         } else {
 
-            printf("Rlist data error: %s should be correct float-point number value or variable name, but got \"%s\", at line %i in \"%s\"",
+            printf("Rlist data error: %s should be correct float-point number value or variable name, but got \"%s\", at line %i in \"%s\"\n",
                    pname, str, data->lineIndex, data->filename);
             return false;
         }
@@ -199,13 +203,13 @@ int getIntValue(int* res, char* str, const char* pname, rlist_cdata *data)
     {
 
         if(!isInt(var->value)) {
-            printf("Rlist data error: specified variable for %s should be correct integer value, but got %s, at line %i in \"%s\"",
+            printf("Rlist data error: specified variable for %s should be correct integer value, but got %s, at line %i in \"%s\"\n",
                     pname, var->value, data->lineIndex, data->filename);
             return false;
         }
         *res = atoi(var->value);
     } else {
-        printf("Rlist data error: %s should be correct integer value or variable name, but got \"%s\", at line %i in \"%s\"",
+        printf("Rlist data error: %s should be correct integer value or variable name, but got \"%s\", at line %i in \"%s\"\n",
                 pname, str, data->lineIndex, data->filename);
         return false;
     }
@@ -215,7 +219,7 @@ int getIntValue(int* res, char* str, const char* pname, rlist_cdata *data)
 #pragma clang diagnostic pop
 
 int rlist_command_image(rlist_cdata *data) {
-    //id                  scope                cX   cY   mode         path
+
     int id, scope, mode;
     double cX, cY;
     char* path;
@@ -228,9 +232,46 @@ int rlist_command_image(rlist_cdata *data) {
     path = getFilename(data->filename, data->args[5]);
 
     if(!fileExists(path)) {
-        printf("Rlist data error: Specified image path \"%s\" is not exists, at line %i in \"%s\"", path, data->lineIndex, data->filename);
+        printf("Rlist data error: Specified image path \"%s\" is not exists, at line %i in \"%s\"\n", path, data->lineIndex, data->filename);
         return !data->strict;
     }
 
     texmPush(createTex(path, id, scope, cX, cY, mode));
+    return true;
+}
+
+int rlist_command_animation(rlist_cdata* data) {
+    //; type      frameCnt    id                  scope                cX  cY    mode         paths
+    int frameCnt, id, scope, mode;
+    double cX, cY;
+    char **paths;
+
+    if (!getIntValue(&frameCnt, data->args[0], "frameCnt", data)) return !data->strict;
+    if (!getIntValue(&id, data->args[1], "id", data)) return !data->strict;
+    if (!getIntValue(&scope, data->args[2], "scope", data)) return !data->strict;
+    if (!getDoubleValue(&cX, data->args[3], "cX", data)) return !data->strict;
+    if (!getDoubleValue(&cY, data->args[4], "cY", data)) return !data->strict;
+    if (!getIntValue(&mode, data->args[5], "mode", data)) return !data->strict;
+
+    paths = malloc(frameCnt * sizeof(char*));
+    size_t len = strlen(data->args[6] + 5);
+
+    for(int i = 0; i < frameCnt; i++)
+    {
+        char* tmp = malloc(len);
+        memset(tmp, 0, len);
+
+        sprintf(tmp, data->args[6], i);
+
+        paths[i] = getFilename(data->filename, tmp);
+
+        if(!fileExists(paths[i])) {
+            printf("Rlist data error: Specified image path \"%s\" is not exists, at line %i in \"%s\"\n", paths[i], data->lineIndex, data->filename);
+            return !data->strict;
+        }
+
+        free(tmp);
+    }
+
+    texmPush(createAnimation(paths, frameCnt, id, scope, cX, cY, mode));
 }

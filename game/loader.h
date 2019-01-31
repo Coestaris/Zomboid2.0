@@ -36,7 +36,6 @@
 
 #define SCENEID_MAIN 0
 
-void loadTextures(void);
 void initScenes(void);
 
 #endif //ZOMBOID2_TEXLOADER_H

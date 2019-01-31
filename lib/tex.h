@@ -19,7 +19,7 @@
 #define TEXMODE_OVERLAY 2
 
 typedef struct _tex2d {
-    const char** fns;
+    char** fns;
     int mode;
 
     GLuint* textureIds;
@@ -36,14 +36,13 @@ typedef struct _tex2d {
     int height;
 } tex2d;
 
-tex2d* createTex(const char *fn, int uid, int scope, double centerX, double centerY, int mode);
-tex2d* createAnimation(const char **fileNames, int framesCount, int uid, int scope, double centerX, double centerY,
-                       int mode);
+tex2d* createTex(char *fn, int uid, int scope, double centerX, double centerY, int mode);
+tex2d* createAnimation(char **fileNames, int framesCount, int uid, int scope, double centerX, double centerY, int mode);
 
 void freeOGlTex(tex2d* tex);
 void freeTex(tex2d* tex);
 
-int texSize(const char* filename, int* w, int* h);
+int texSize(char* filename, int* w, int* h);
 void loadTex(tex2d* tex);
 
 #endif //ZOMBOID2_TEX_H

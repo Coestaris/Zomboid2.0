@@ -31,6 +31,7 @@ int rlist_command_echo(rlist_cdata* data);
 int rlist_command_echo_v(rlist_cdata *data);
 int rlist_command_echo_all_vars(rlist_cdata *data);
 int rlist_command_image(rlist_cdata* data);
+int rlist_command_animation(rlist_cdata* data);
 
 void initCommands(void);
 rlist_c** rlist_getcommands(int* count);

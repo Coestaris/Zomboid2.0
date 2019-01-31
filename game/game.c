@@ -6,9 +6,7 @@
 
 void initGame(int argc, char** argv)
 {
-    initGraphics(argc, argv, 800, 600, "GAME", true);
-
-    loadTextures();
+    initGraphics(argc, argv, 800, 600, "GAME", true, "../resources/resources.rlist");
     initScenes();
 }
 

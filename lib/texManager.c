@@ -160,7 +160,7 @@ void texmPush(tex2d* tex)
     texmNode* node = temCreateNode(tex);
     lastNode->next = node;
 
-    texmPrintNode(node);
+    //texmPrintNode(node);
 }
 
 void texmLoadID(int uid)

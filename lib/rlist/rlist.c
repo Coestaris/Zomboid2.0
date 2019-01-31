@@ -159,6 +159,7 @@ int rlist_load(char* filename, int strict)
     for(int i = 0; i < myLinesCount; i++)
     {
         char* line = myLines[i];
+        //puts(line);
 
         if(!getTokens(line)) {
             printf("Rlist error: Invalid syntax at line %i in \"%s\"\n", lineCounter, filename);
@@ -198,7 +199,6 @@ int rlist_load(char* filename, int strict)
                         return false;
                     }
 
-                    free(data);
                     if(data->fnToAddLines) {
 
                         if(!rlist_load(data->fnToAddLines, strict)) {
@@ -210,6 +210,8 @@ int rlist_load(char* filename, int strict)
 
                         free(data->fnToAddLines);
                     }
+
+                    free(data);
                 }
             }
 
@@ -226,5 +228,6 @@ int rlist_load(char* filename, int strict)
         free(line);
     }
 
+    free(myLines);
     free(rawInput);
 }

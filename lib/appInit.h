@@ -10,8 +10,10 @@
 
 #include "eventfuncs.h"
 #include "gameScene.h"
+#include "helpers.h"
+#include "rlist/rlist.h"
 
-void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize);
+void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize, char* mainResFile);
 void registerEvents();
 void runApp(int sceneID);
 

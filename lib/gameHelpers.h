@@ -16,7 +16,7 @@
 
 #include "helpers.h"
 
-void loadTexture(const char* fn, int id, int scope, double cX, double cY, int mode);
+void loadTexture(char* fn, int id, int scope, double cX, double cY, int mode);
 void loadAnimation(int framesCount, int id, int scope, double cX, double cY, int mode, ...);
 void relativeCoordinates(double* x, double* y, gameObject* obj);
 int isInWindowRect(gameObject* obj);

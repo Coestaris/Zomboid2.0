@@ -39,7 +39,7 @@ void relativeCoordinates(double* x, double* y, gameObject* obj)
 }
 
 
-void loadTexture(const char* fn, int id, int scope, double cX, double cY, int mode)
+void loadTexture(char* fn, int id, int scope, double cX, double cY, int mode)
 {
     if(texmGetID(id)) {
         printf("Error while loading texture %i. Texture with same ID alreay exists", id);
@@ -64,9 +64,9 @@ void loadAnimation(int framesCount, int id, int scope, double cX, double cY, int
     va_list args;
     va_start(args, mode);
 
-    const char** fileNames = malloc(sizeof(const char*) * framesCount);
+    char** fileNames = malloc(sizeof(char*) * framesCount);
     for(int i = 0; i < framesCount; i++) {
-        const char* fn = va_arg(args, const char* );
+        char* fn = va_arg(args, char* );
         if(!fileExists(fn))
         {
             printf("Error while loading animation %i (frame %i of %i). Unable to reach file \"%s\"",

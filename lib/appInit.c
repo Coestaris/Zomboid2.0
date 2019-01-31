@@ -4,7 +4,7 @@
 
 #include "appInit.h"
 
-void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize)
+void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize, char* mainResFile)
 {
     glutInit(&argc, argv);
 
@@ -34,6 +34,14 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
     dcInit();
     evqInit();
     texmInit();
+    rlist_init();
+
+    if(!fileExists(mainResFile)) {
+        printf("\"%s\" is not exits", mainResFile);
+        exit(1);
+    }
+
+    rlist_load((char*)mainResFile, true);
 }
 
 void registerEvents()
