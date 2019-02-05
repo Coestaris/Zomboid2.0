@@ -44,7 +44,6 @@ void dcDrawSurface(int winW, int winH)
 
 void dcDrawBackground(tex2d *tex, int frame, int windowW, int windowH)
 {
-    glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
 
     glPushMatrix();
@@ -70,9 +69,40 @@ void dcDrawBackground(tex2d *tex, int frame, int windowW, int windowH)
     glPopMatrix();
 }
 
+void dcDrawLine(double x1, double y1, double x2, double y2, double r, double g, double b, double a)
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glBegin(GL_LINES);
+        glVertex3d(x1, y1, 0);
+        glVertex3d(x2, y2, 0);
+    glEnd();
+}
+
+void dcDrawPolygon(double* points, int count, double r, double g, double b, double a)
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glPushMatrix();
+
+    glColor4d(r, g, b, a);
+
+    glBegin(GL_POLYGON);
+        for(int i = 0; i < count; i += 2){
+            glVertex2d(points[i], points[i + 1]);
+        }
+    glEnd();
+    /*glEnableClientState(GL_VERTEX_ARRAY);
+
+    glVertexPointer(count, GL_DOUBLE, 0, points);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, count);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+*/
+    glPopMatrix();
+}
+
 void dcDrawTexture(tex2d *tex, double alpha, int frame, double x, double y, double angle, double scaleFactor)
 {
-    glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
 
     glPushMatrix();
@@ -176,15 +206,25 @@ void dqnDrawSprite(tex2d *tex, double alpha, int frame, double x, double y, doub
     dp->scale = scaleFactor;
 };
 
-void dqnDrawLine(double x1, double y1, double x2, double y2, double r, double g, double b, double width)
+void dqnDrawPolygon(double* points, int count, double r, double g, double b, double a)
 {
     checkDPSize();
     drawingPrimitive* dp = dpList[dpCount++];
-    dp->type = DPTYPE_SPRITE;
+    dp->type = DPTYPE_POLY;
+
+    dp->points = points;
+    dp->scale = count;
+    dp->r = r; dp->g = g; dp->b = b; dp->a = a;
+}
+
+void dqnDrawLine(double x1, double y1, double x2, double y2, double r, double g, double b, double a)
+{
+    checkDPSize();
+    drawingPrimitive* dp = dpList[dpCount++];
+    dp->type = DPTYPE_LINE;
 
     dp->x1 = x1; dp->y1 = y1; dp->x2 = x2; dp->y2 = y2;
-    dp->r = r; dp->g = g; dp->b = b;
-    dp->scale = width;
+    dp->r = r; dp->g = g; dp->b = b; dp->a = a;
 }
 
 void dcDrawPrimitives()
@@ -206,6 +246,16 @@ void dcDrawPrimitives()
                     dp->x1, dp->y1,
                     dp->angle, dp->scale);
                 break;
+            case DPTYPE_LINE:
+                dcDrawLine(
+                    dp->x1, dp->y1,
+                    dp->x2, dp->y2,
+                    dp->r, dp->g, dp->b, dp->a);
+                break;
+            case DPTYPE_POLY:
+                dcDrawPolygon(
+                        dp->points, (int)dp->scale,
+                        dp->r, dp->g, dp->b, dp->a);
 
             default:
                 break;

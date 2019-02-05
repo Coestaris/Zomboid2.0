@@ -13,6 +13,7 @@
 
 #include "objects/main/player/obj_player.h"
 #include "objects/main/box/obj_box.h"
+#include "objects/main/light/obj_light_tracer.h"
 #include "objects/main/flashlight/obj_flashlight.h"
 
 #define TEXSCOPE_MAIN 0

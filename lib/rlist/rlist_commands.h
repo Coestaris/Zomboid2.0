@@ -9,6 +9,8 @@
 #include <malloc.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <libgen.h>
+#include <zconf.h>
 
 #include "../texManager.h"
 #include "../helpers.h"

@@ -13,6 +13,9 @@ int tokenCount;
 
 void rlist_init()
 {
+    linesCount = 0;
+    tokenCount = 0;
+
     tokens = malloc(sizeof(char*) * MAX_TOKENS);
     lines = malloc(sizeof(char*) * MAX_TOKENS);
 
@@ -20,7 +23,7 @@ void rlist_init()
 }
 
 
-void proceedLine(char* token, int start, int end)
+void proceed_token(char *token, int start, int end)
 {
     size_t len = (size_t)end - start + 2;
     char* newToken = malloc(len);
@@ -57,7 +60,7 @@ int getTokens(char *str)
                 }
 
                 endIndex = i - 1;
-                proceedLine(str, startIndex, endIndex);
+                proceed_token(str, startIndex, endIndex);
                 i++;
 
             } else {
@@ -66,7 +69,7 @@ int getTokens(char *str)
                 }
 
                 endIndex = i - 1;
-                proceedLine(str, startIndex, endIndex);
+                proceed_token(str, startIndex, endIndex);
             }
         }
         else

@@ -2,8 +2,6 @@
 // Created by maxim on 1/31/19.
 //
 
-#include <libgen.h>
-#include <zconf.h>
 #include "rlist_commands.h"
 
 rlist_c* commands[MAX_COMMANDS_COUNT];
@@ -254,14 +252,14 @@ int rlist_command_animation(rlist_cdata* data) {
     if (!getIntValue(&mode, data->args[5], "mode", data)) return !data->strict;
 
     paths = malloc(frameCnt * sizeof(char*));
-    size_t len = strlen(data->args[6] + 5);
+    size_t len = strlen(data->args[6]) + 5;
 
     for(int i = 0; i < frameCnt; i++)
     {
         char* tmp = malloc(len);
         memset(tmp, 0, len);
 
-        sprintf(tmp, data->args[6], i);
+        snprintf(tmp, len, data->args[6], i);
 
         paths[i] = getFilename(data->filename, tmp);
 

@@ -22,6 +22,7 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
         setFixedSize(w, h);
     }
 
+    glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
     glEnable( GL_ALPHA_TEST );

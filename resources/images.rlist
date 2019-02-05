@@ -34,7 +34,7 @@ image                   TEXID_BACK_CONCRETE TEXSCOPE_MAIN        0    0    TM_BA
 
 ; type      frameCnt    id                  scope                cX  cY    mode         paths
 animation   3           TEXID_ENEMY         TEXSCOPE_MAIN        0   0     TM_DEFAULT   images/enemy/enemy%i.png
-animation   3           TEXID_PLAYER        TEXSCOPE_MAIN        0   0     TM_DEFAULT   images/player_1/image%i.png
+animation   3           TEXID_PLAYER        TEXSCOPE_MAIN       15   0     TM_DEFAULT   images/player_1/image%i.png
 animation   6           TEXID_SHELLCASE     TEXSCOPE_MAIN        0   0     TM_DEFAULT   images/shellCase/shellCase%i.png
 
 echo_all_vars
