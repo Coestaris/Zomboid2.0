@@ -45,11 +45,11 @@ int getIntersection(double rayX1, double rayY1, double rayX2, double rayY2,
     };*/
 }
 
-#define WIN_W 790
-#define WIN_H 590
+#define WIN_W 800
+#define WIN_H 600
 
-double edges[4][4][2] = {
-        { { 10, 10 }, { WIN_W, 10 }, { WIN_W, WIN_H }, { 10, WIN_H } }
+_point edges[20][4] = {
+        { { 0, 0 }, { WIN_W, 0 }, { WIN_W, WIN_H }, { 0, WIN_H } }
         //{ { 100, 100 }, { 200, 100 }, { 200, 200 }, { 100, 200 } },
 };
 
@@ -58,10 +58,11 @@ void lightTracer_init(gameObject* this)
     evqSubscribeEvent(this, EVT_Update, lightTracer_event_update);
 }
 
-double points[100];
+_point points[200];
 int pointsCount;
+int edgesCount = 1;
 
-void ray_to(double x1, double y1, double x2, double y2)
+void _ray_to(double x1, double y1, double x2, double y2, double angle)
 {
     double nearest = MAXDOUBLE;
     double nearestX = x1;
@@ -70,14 +71,14 @@ void ray_to(double x1, double y1, double x2, double y2)
     double dist = 0;
     double intX, intY;
 
-    for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < edgesCount; i++) {
 
         for(int j = 0; j < 4; j++) {
             int start = j;
             int end = (j + 1) % 4;
 
             if(getIntersection(x1, y1, x2, y2,
-                       edges[i][start][0], edges[i][start][1], edges[i][end][0], edges[i][end][1],
+                       edges[i][start].x, edges[i][start].y, edges[i][end].x, edges[i][end].y,
                        &intX, &intY, &dist))
             {
                 if(dist < nearest) {
@@ -89,22 +90,41 @@ void ray_to(double x1, double y1, double x2, double y2)
         }
     }
 
-    dqnDrawLine(x1, y1, nearestX, nearestY, 1, 1, 1, 1);
+    //dqnDrawLine(x1, y1, nearestX, nearestY, 1, 1, 1, 1);
 
-    points[pointsCount] = nearestX;
-    points[pointsCount + 1] = nearestY;
-    pointsCount+=2;
+    points[pointsCount].x = nearestX;
+    points[pointsCount].y = nearestY;
+    points[pointsCount]._angle = angle;
+
+    pointsCount++;
+}
+
+void ray_to(double x1, double y1, double x2, double y2)
+{
+    double angle = atan2(y2 - y1, x2 - x1);
+    _ray_to(x1, y1, x2, y2, angle);
 }
 
 void ray_twice_to(double x1, double y1, double x2, double y2, double delta)
 {
     double angle = atan2(y2 - y1, x2 - x1);
+    _ray_to(x1, y1, x1 + cos(angle + delta), y1 + sin(angle + delta), angle + delta);
+    _ray_to(x1, y1, x1 + cos(angle - delta), y1 + sin(angle - delta), angle - delta);
 
-    ray_to(x1, y1, x1 + cos(angle + delta), y1 + sin(angle + delta));
-    ray_to(x1, y1, x1 + cos(angle - delta), y1 + sin(angle - delta));
 }
 
 int first = 1;
+double px, py;
+
+int compare(const void* a, const void* b)
+{
+    _point int_a = * ( (_point*) a );
+    _point int_b = * ( (_point*) b );
+
+    if ( int_a._angle == int_b._angle ) return 0;
+    else if ( int_a._angle < int_b._angle ) return -1;
+    else return 1;
+}
 
 void lightTracer_event_update(gameObject* this, void* data)
 {
@@ -114,7 +134,6 @@ void lightTracer_event_update(gameObject* this, void* data)
     if(first) {
         int objCount;
         gameObject **objects = scmGetObjects(&objCount);
-        int counter = 1;
         for (int i = 0; i < objCount; i++) {
             if (objects[i]->texID == TEXID_BOX) {
 
@@ -122,16 +141,16 @@ void lightTracer_event_update(gameObject* this, void* data)
                 double w = 32 * box->size;
                 double h = 32 * box->size;
 
-                edges[counter][0][0] = box->x - w / 2;
-                edges[counter][0][1] = box->y - h / 2;
-                edges[counter][1][0] = box->x + w / 2;
-                edges[counter][1][1] = box->y - h / 2;
-                edges[counter][2][0] = box->x + w / 2;
-                edges[counter][2][1] = box->y + h / 2;
-                edges[counter][3][0] = box->x - w / 2;
-                edges[counter][3][1] = box->y + h / 2;
+                edges[edgesCount][0].x = box->x - w / 2;
+                edges[edgesCount][0].y = box->y - h / 2;
+                edges[edgesCount][1].x = box->x + w / 2;
+                edges[edgesCount][1].y = box->y - h / 2;
+                edges[edgesCount][2].x = box->x + w / 2;
+                edges[edgesCount][2].y = box->y + h / 2;
+                edges[edgesCount][3].x = box->x - w / 2;
+                edges[edgesCount][3].y = box->y + h / 2;
 
-                counter++;
+                edgesCount++;
             }
         }
         first = 0;
@@ -142,23 +161,43 @@ void lightTracer_event_update(gameObject* this, void* data)
 
     //dqnDrawLine(ld->lightSource->x, ld->lightSource->y, mx, my, 1, 0, 0.4, 1);
 
-    for(int i = 0; i < 4; i++) {
-
+    for(int i = 0; i < edgesCount; i++) {
         for(int j = 0; j < 4; j++) {
             int start = j;
             int end = (j + 1) % 4;
-            dqnDrawLine(edges[i][start][0], edges[i][start][1], edges[i][end][0], edges[i][end][1], 1, 0, 0.4, 1);
+             //dqnDrawLine(edges[i][start].x, edges[i][start].y, edges[i][end].x, edges[i][end].y, 1, 0, 0.4, 1);
+        }
+    }
+
+    for(int i = 0; i < edgesCount; i++) {
+        for(int j = 0; j < 4; j++) {
+            int start = j;
+            int end = (j + 1) % 4;
+
+            if(i == 0) {
+                ray_to(
+                        ld->lightSource->x,
+                        ld->lightSource->y,
+                        edges[i][start].x,
+                        edges[i][start].y);
+                continue;
+            }
 
             ray_twice_to(
                     ld->lightSource->x,
                     ld->lightSource->y,
-                    edges[i][start][0],
-                    edges[i][start][1],
-                    0.001);
+                    edges[i][start].x,
+                    edges[i][start].y,
+                    0.00001);
         }
     }
 
-    dqnDrawPolygon(points, pointsCount, 1, 1, 1, 0.4);
+    //sortPoints(ld->lightSource->x, ld->lightSource->y);
+
+    qsort(points, pointsCount, sizeof(_point), compare);
+    /*dqnDrawTexPolygon(texmGetID(TEXID_SIMPLE_LIGHT),
+            points, pointsCount, ld->lightSource->x, ld->lightSource->y, 0.8, 1, 1, 0.2, 5);*/
+    dqnDrawPolygon(points, pointsCount, ld->lightSource->x, ld->lightSource->y, 0.8, 1, 1, 0.2);
 }
 
 gameObject* createLightTracer(gameObject* light_source)
