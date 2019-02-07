@@ -31,10 +31,12 @@ void initScenes(void)
     scmAddStartupObject(mainScene, createBox(360, 430));
     scmAddStartupObject(mainScene, createBox(460, 430));
     scmAddStartupObject(mainScene, createBox(560, 430));
+/*
     scmAddStartupObject(mainScene, createTexturedAreaLT(vec(200, 200), 600, color(1, 0, 0, 0.3), texmGetID(TEXID_LIGHT), 0));
     scmAddStartupObject(mainScene, createTexturedAreaLT(vec(605, 510), 600, color(0, 1, 1, 0.3), texmGetID(TEXID_LIGHT), 0));
     scmAddStartupObject(mainScene, createTexturedAreaLT(vec(205, 515), 600, color(1, 1, 0, 0.3), texmGetID(TEXID_LIGHT), 0));
     scmAddStartupObject(mainScene, createTexturedAreaLT(vec(605, 215), 600, color(0, 1, 0, 0.3), texmGetID(TEXID_LIGHT), 0));
+*/
 
     scmPushScene(mainScene);
 }

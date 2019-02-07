@@ -10,6 +10,7 @@
 #include "../../../objectInclude.h"
 
 #define LT_AREA 1
+#define LT_SPOT 2
 
 typedef struct _lightTracer_data {
 
@@ -21,6 +22,9 @@ typedef struct _lightTracer_data {
     color_t color;
 
     double range;
+    double angleRange;
+
+    double angle;
 
     int textured;
     tex2d* tex;
@@ -33,6 +37,7 @@ void lightTracer_event_update(gameObject* this, void* data);
 
 gameObject* createAreaLT(vec_t pos, double range, color_t color);
 gameObject* createTexturedAreaLT(vec_t pos, double range, color_t color, tex2d* tex, int frame);
+gameObject* createDirectLT(vec_t pos, double range, double angle, color_t color);
 
 void updateEdges(int texId);
 

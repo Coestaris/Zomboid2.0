@@ -143,6 +143,8 @@ void player_event_update(gameObject *object, void *data)
     }
 
     pd->backLight->pos = rel;
+    ((lightTracer_data*)pd->backLight->data)->angle = object->angle;
+
     pd->prevAnimationFrame = object->frame;
 }
 
@@ -162,10 +164,11 @@ gameObject* createPlayer()
     pd->lastFireFrame = getFrame();
     pd->currentLightsCount = 0;
     pd->prevAnimationFrame = 0;
-    pd->flashLight = true;
+    pd->flashLight = false;
+
     pd->backLight =
-            //createAreaLT(go->pos, 400, color(1, 1, 1, 0.4));
-            createTexturedAreaLT(go->pos, 400, color(1, 1, 1, 0.2), texmGetID(TEXID_LIGHT), 0);
+            createDirectLT(go->pos, 400, M_PI_4, color(1, 1, 1, 0.4));
+            //createTexturedAreaLT(go->pos, 400, color(1, 1, 1, 0.2), texmGetID(TEXID_LIGHT), 0);
             //createLight(go->pos, PLAYER_BACKLIGHT_SIZE, PLAYER_BACKLIGHT_ALPHA);
 
     go->texID = TEXID_PLAYER;
