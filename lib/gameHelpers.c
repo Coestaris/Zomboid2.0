@@ -15,31 +15,36 @@ int isInWindowRect(gameObject* object)
         texH = object->cachedTex->height;
     }
 
-    return object->x < - texW * object->size || object->x > winW + texW * object->size ||
-           object->y < - texH * object->size || object->y > winH + texH * object->size;
+    return object->pos.x < - texW * object->size ||
+           object->pos.x >   texW * object->size + winW ||
+           object->pos.y < - texH * object->size ||
+           object->pos.y >   texH * object->size + winH;
 }
 
-void relativeCoordinates(double* x, double* y, gameObject* obj)
+vec_t relativeCoordinates(gameObject* obj)
 {
     if(!obj->cachedTex) {
-        *x = obj->x;
-        *y = obj->y;
+        return obj->pos;
+
     } else {
+        vec_t result;
         dcCreatePoint(
-                x, y,
-                obj->x, obj->y,
+                &result,
+                obj->pos,
                 cos(obj->angle),
                 sin(obj->angle),
-                0, //obj->cachedTex->width / 2.0,
-                0, //obj->cachedTex->height / 2.0,
-                -obj->cachedTex->centerX + obj->x,
-                -obj->cachedTex->centerY + obj->y,
+                0,
+                0,
+                vec(
+                    -obj->cachedTex->center.x + obj->pos.x,
+                    -obj->cachedTex->center.y + obj->pos.y),
                 0, 0);
+        return result;
     }
 }
 
 
-void loadTexture(char* fn, int id, int scope, double cX, double cY, int mode)
+void loadTexture(char* fn, int id, int scope, vec_t pos, int mode)
 {
     if(texmGetID(id)) {
         printf("Error while loading texture %i. Texture with same ID alreay exists", id);
@@ -47,14 +52,14 @@ void loadTexture(char* fn, int id, int scope, double cX, double cY, int mode)
     }
 
     if(fileExists(fn)) {
-        texmPush(createTex(fn, id, scope, cX, cY, mode));
+        texmPush(createTex(fn, id, scope, pos, mode));
     } else {
         printf("Error while loading texture %i. Unable to reach file \"%s\"", id, fn);
         exit(1);
     }
 }
 
-void loadAnimation(int framesCount, int id, int scope, double cX, double cY, int mode, ...)
+void loadAnimation(int framesCount, int id, int scope, vec_t pos, int mode, ...)
 {
     if(texmGetID(id)) {
         printf("Error while loading animation %i. Texture with same ID alreay exists", id);
@@ -75,5 +80,5 @@ void loadAnimation(int framesCount, int id, int scope, double cX, double cY, int
         }
         fileNames[i] = fn;
     }
-    texmPush(createAnimation(fileNames, framesCount, id, scope, cX, cY, mode));
+    texmPush(createAnimation(fileNames, framesCount, id, scope, pos, mode));
 }

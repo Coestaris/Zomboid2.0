@@ -143,7 +143,7 @@ uint8_t clip(double a)
     else return (uint8_t)a;
 }
 
-void srfDrawTexture(tex2d* tex, int frame, double alpha, int inx, int iny, int flipX, int flipY)
+void srfDrawTexture(tex2d* tex, int frame, double alpha, vec_t pos, int flipX, int flipY)
 {
     GLint width,height;
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
@@ -162,8 +162,8 @@ void srfDrawTexture(tex2d* tex, int frame, double alpha, int inx, int iny, int f
 
             if(a) {
 
-                int xPos = flipX ? (width - x + inx) : (x + inx);
-                int yPos = flipY ? (height- y + iny) : (y + iny);
+                int xPos = (int)(flipX ? (width - x + pos.x) : (x + pos.x));
+                int yPos = (int)(flipY ? (height- y + pos.y) : (y + pos.y));
 
                 if(xPos >= SCREEN_WIDTH || yPos >= SCREEN_HEIGHT || xPos <= 0 || yPos <= 0)
                     continue;

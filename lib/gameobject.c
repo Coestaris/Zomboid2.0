@@ -11,8 +11,7 @@ gameObject* object(void)
     obj->cachedTex = NULL;
     obj->onInit = NULL;
     obj->onDestroy = NULL;
-    obj->x = 0;
-    obj->y = 0;
+    obj->pos = vec(0, 0);
     obj->texID = -1;
     obj->data = NULL;
     obj->drawable = 0;

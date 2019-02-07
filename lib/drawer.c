@@ -4,25 +4,30 @@
 
 #include "drawer.h"
 
-void dcCreatePoint(double *x, double *y, double inx, double iny, double vcos, double vsin,
-                   double hw, double hh, double cx, double cy, int s1, int s2)
-{
-    inx += hw * s1;
-    iny += hh * s2;
+size_t MAXDP = MAXDP_START;
+size_t dpCount = 0;
 
-    *x = inx * vcos - iny * vsin - cx * (vcos - 1) + cy * vsin;
-    *y = inx * vsin + iny * vcos - cy * (vcos - 1) - cx * vsin;
+drawingPrimitive** dpList;
+
+
+void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, double hh, vec_t cp, int s1, int s2)
+{
+    inp.x += hw * s1;
+    inp.y += hh * s2;
+
+    p->x = inp.x * vcos - inp.y * vsin - cp.x * (vcos - 1) + cp.y * vsin;
+    p->y = inp.x * vsin + inp.y * vcos - cp.y * (vcos - 1) - cp.x * vsin;
 }
 
 
-void dcDrawText(double x, double y, double r, double g, double b, double a, void *font, const char *string)
+void dcDrawText(vec_t pos, color_t col, void *font, const char *string)
 {
-    glBindTexture(GL_TEXTURE_2D, 0);
+    bindTex(NULL, 0);
 
     int j = (int)strlen( string );
-    glColor4d(r, g, b, a);
+    glColor4d(col.r, col.g, col.b, col.a);
 
-    glRasterPos2f(x, y);
+    glRasterPos2d(pos.x, pos.y);
 
     for( int i = 0; i < j; i++ ) {
         glutBitmapCharacter(font, string[i]);
@@ -44,7 +49,7 @@ void dcDrawSurface(int winW, int winH)
 
 void dcDrawBackground(tex2d *tex, int frame, int windowW, int windowH)
 {
-    glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
+    bindTex(tex, frame);
 
     glPushMatrix();
 
@@ -69,98 +74,69 @@ void dcDrawBackground(tex2d *tex, int frame, int windowW, int windowH)
     glPopMatrix();
 }
 
-void dcDrawLine(double x1, double y1, double x2, double y2, double r, double g, double b, double a)
+void dcDrawLine(vec_t p1, vec_t p2, color_t col)
 {
-    glBindTexture(GL_TEXTURE_2D, 0);
+    bindTex(NULL, 0);
 
+    glColor4d(col.r, col.g, col.b, col.a);
     glBegin(GL_LINES);
-        glVertex3d(x1, y1, 0);
-        glVertex3d(x2, y2, 0);
+        glVertex3d(p1.x, p1.y, 0);
+        glVertex3d(p2.x, p2.y, 0);
     glEnd();
 }
 
 #include "helpers.h"
 
-void dcDrawPolygon(_point* points, int count, double x1, double y1, double r, double g, double b, double a)
+void dcDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col)
 {
-    glBindTexture(GL_TEXTURE_2D, 0);
+    bindTex(NULL, 0);
+
     glPushMatrix();
 
-    glColor4d(r, g, b, a);
+    glColor4d(col.r, col.g, col.b, col.a);
     glBegin(GL_TRIANGLES);
 
         for(int i = 0; i < count; i++) {
             int c = (i + 1) % count;
 
-            glVertex2d(x1, y1);
+            glVertex2d(center.x, center.y);
 
-            glVertex2d(points[i].x, points[i].y);
-            glVertex2d(points[c].x, points[c].y);
+            glVertex2d(points[i].point.x, points[i].point.y);
+            glVertex2d(points[c].point.x, points[c].point.y);
         }
     glEnd();
 
     glPopMatrix();
 }
 
-double clip_coord(double x) {
-    if(x < 0) {
-        return 0.5 + x / 2;
-    }
-    return x / 2;
-}
-
-
-void dcDrawTexPolygon(tex2d *tex, _point *points, int count, double x, double y, double r, double g, double b, double a,
-                      double scale)
+void dcDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale)
 {
-
-    //glBindTexture(GL_TEXTURE_2D, tex->textureIds[0]);
-
+    bindTex(tex, frame);
     glPushMatrix();
 
-    glColor4d(r, 0, b, a);
+    glColor4d(col.r, col.g, col.b, col.a);
     glBegin(GL_TRIANGLES);
 
-    double maxDist = 300;
+    double x = center.x;
+    double y = center.y;
 
     for(int i = 0; i < count; i++) {
         int c = (i + 1) % count;
 
+        double x1 = points[i].point.x;
+        double x2 = points[c].point.x;
+        double y1 = points[i].point.y;
+        double y2 = points[c].point.y;
+
         glTexCoord2d(0.5, 0.5);
         glVertex2d(x, y);
 
-        /*glTexCoord2d(
-                clamp((points[i].x - x) / (scale * tex->width)),
-                clamp((points[i].y - y) / (scale * tex->height))
-                );*/
+        glTexCoord2d((x1 - x) / scale + 0.5, (y1 - y) / scale + 0.5);
+        glVertex2d(x1, y1);
 
-        double angle1 = atan2(points[i].y - y, points[i].x - x);
-        double dist1  = distance(x, y, points[i].x, points[i].y);
-        if(dist1 >= maxDist) dist1 = maxDist;
+        glTexCoord2d((x2 - x) / scale + 0.5, (y2 - y) / scale + 0.5);
+        glVertex2d(x2, y2);
 
-        /*glTexCoord2d(
-                clip_coord(cos(angle1) * dist1 / maxDist),
-                clip_coord(sin(angle1) * dist1 / maxDist));*/
-        glVertex2d  (x + cos(angle1) * dist1, y + sin(angle1) * dist1);
-
-
-        /*glVertex2d  (x + cos(angle1 + 0.01) * dist1, y + sin(angle1 + 0.01) * dist1);
-        glVertex2d  (x + cos(angle1 - 0.01) * dist1, y + sin(angle1 - 0.01) * dist1);
-*/
-
-        /*glTexCoord2d(
-                clip_coord(cos(angle1) * dist1 / maxDist),
-                clip_coord(sin(angle1) * dist1 / maxDist));
-
-*/
-        double angle2 = atan2   (points[c].y - y, points[c].x - x);
-        double dist2  = distance(x, y, points[c].x, points[c].y);
-        if(dist2 >= maxDist) dist2 = maxDist;
-/*
-        glTexCoord2d(
-                clip_coord(cos(angle1)),
-                clip_coord(sin(angle1)));*/
-        glVertex2d(x + cos(angle2) * dist2, y + sin(angle2) * dist2);
     }
     glEnd();
 
@@ -168,9 +144,9 @@ void dcDrawTexPolygon(tex2d *tex, _point *points, int count, double x, double y,
 }
 
 
-void dcDrawTexture(tex2d *tex, double alpha, int frame, double x, double y, double angle, double scaleFactor)
+void dcDrawTexture(tex2d *tex, color_t col, int frame, vec_t pos, double angle, double scaleFactor)
 {
-    glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
+    bindTex(tex, frame);
 
     glPushMatrix();
 
@@ -180,30 +156,20 @@ void dcDrawTexture(tex2d *tex, double alpha, int frame, double x, double y, doub
     const double acos = cos(angle) * scaleFactor;
     const double asin = sin(angle) * scaleFactor;
 
-    double x1, x2, x3, x4, y1, y2, y3, y4;
+    vec_t p1, p2, p3, p4;
 
-    dcCreatePoint(&x1, &y1, x, y, acos, asin, hw, hh, -tex->centerX + x, tex->centerY + y, -1, -1);
-    dcCreatePoint(&x2, &y2, x, y, acos, asin, hw, hh, -tex->centerX + x, tex->centerY + y, -1, 1);
-    dcCreatePoint(&x3, &y3, x, y, acos, asin, hw, hh, -tex->centerX + x, tex->centerY + y, 1, -1);
-    dcCreatePoint(&x4, &y4, x, y, acos, asin, hw, hh, -tex->centerX + x, tex->centerY + y, 1, 1);
+    dcCreatePoint(&p1, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), -1, -1);
+    dcCreatePoint(&p2, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), -1,  1);
+    dcCreatePoint(&p3, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y),  1, -1);
+    dcCreatePoint(&p4, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y),  1,  1);
 
-    if(tex->mode == TEXMODE_OVERLAY)
-    {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-        glBlendEquation(GL_ADD);
-    }
-    else
-    {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
-
-    glColor4f(1.0f, 1.0f, 1.0f, (GLfloat)alpha);
+    glColor4d(col.r, col.g, col.b, col.a);
 
     glBegin(GL_QUAD_STRIP);
-        glTexCoord2f(0, 1); glVertex3f((GLfloat)x1, (GLfloat)y1, 1);
-        glTexCoord2f(0, 0); glVertex3f((GLfloat)x2, (GLfloat)y2, 1);
-        glTexCoord2f(1, 1); glVertex3f((GLfloat)x3, (GLfloat)y3, 1);
-        glTexCoord2f(1, 0); glVertex3f((GLfloat)x4, (GLfloat)y4, 1);
+        glTexCoord2f(0, 1); glVertex3d(p1.x, p1.y, 1);
+        glTexCoord2f(0, 0); glVertex3d(p2.x, p2.y, 1);
+        glTexCoord2f(1, 1); glVertex3d(p3.x, p3.y, 1);
+        glTexCoord2f(1, 0); glVertex3d(p4.x, p4.y, 1);
     glEnd();
 
     glPopMatrix();
@@ -228,18 +194,10 @@ void dcRotateScreen(double angle, double sceneW, double sceneH)
 
 }
 
-#define MAXDP_START 256
-#define SIZE_INCREASE 1.2
-
-size_t MAXDP = MAXDP_START;
-size_t dpCount = 0;
-
-drawingPrimitive** dpList;
-
 void checkDPSize()
 {
     if(dpCount == MAXDP - 1) {
-        size_t newSize = (size_t)(MAXDP * SIZE_INCREASE);
+        size_t newSize = (size_t)(dpCount * SIZE_INCREASE);
         dpList = realloc(dpList, newSize);
         for(size_t i = dpCount; i < newSize; i++) {
             dpList[i] = malloc(sizeof(drawingPrimitive));
@@ -247,71 +205,68 @@ void checkDPSize()
     }
 }
 
-void dqnDrawText(double x, double y, double r, double g, double b, double a, void *font, char *string)
+void dqnDrawText(vec_t pos, color_t col, void *font, char *string)
 {
     checkDPSize();
     drawingPrimitive* dp = dpList[dpCount++];
     dp->type = DPTYPE_TEXT;
 
-    dp->x1 = x; dp->y1 = y;
-    dp->r = r; dp->g = g; dp->b = b; dp->a = a;
+    dp->p1 =  pos;
+    dp->col = col;
     dp->font = font;
     dp->string = string;
 }
 
-void dqnDrawSprite(tex2d *tex, double alpha, int frame, double x, double y, double angle, double scaleFactor)
+void dqnDrawSprite(tex2d *tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor)
 {
     checkDPSize();
     drawingPrimitive* dp = dpList[dpCount++];
     dp->type = DPTYPE_SPRITE;
 
+    dp->col = color;
+    dp->p1 = pos;
     dp->tex =tex;
-    dp->a = alpha;
     dp->frame = frame;
-    dp->x1 = x; dp->y1 = y;
     dp->angle = angle;
     dp->scale = scaleFactor;
 };
 
-void dqnDrawPolygon(_point *points, int count, double x, double y, double r, double g, double b, double a)
+void dqnDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col)
 {
     checkDPSize();
     drawingPrimitive* dp = dpList[dpCount++];
     dp->type = DPTYPE_POLY;
 
-    dp->x1 = x;
-    dp->y1 = y;
-
     dp->points = points;
-    dp->scale = count;
-    dp->r = r; dp->g = g; dp->b = b; dp->a = a;
+    dp->p1 = center;
+    dp->count = count;
+    dp->col = col;
 }
 
-void dqnDrawTexPolygon(tex2d* tex, _point *points, int count, double x, double y, double r, double g, double b, double a,
-                       double scale)
+void dqnDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale)
 {
     checkDPSize();
     drawingPrimitive* dp = dpList[dpCount++];
     dp->type = DPTYPE_POLY_TEX;
 
-    dp->x1 = x;
-    dp->y1 = y;
 
     dp->tex = tex;
+    dp->frame = frame;
     dp->points = points;
-    dp->scale = count;
-    dp->y2 = scale;
-    dp->r = r; dp->g = g; dp->b = b; dp->a = a;
+    dp->count= count;
+    dp->p1 = center;
+    dp->col = col;
+    dp->scale = scale;
 }
 
-void dqnDrawLine(double x1, double y1, double x2, double y2, double r, double g, double b, double a)
+void dqnDrawLine(vec_t p1, vec_t p2, color_t col)
 {
     checkDPSize();
     drawingPrimitive* dp = dpList[dpCount++];
     dp->type = DPTYPE_LINE;
-
-    dp->x1 = x1; dp->y1 = y1; dp->x2 = x2; dp->y2 = y2;
-    dp->r = r; dp->g = g; dp->b = b; dp->a = a;
+    dp->p1 = p1;
+    dp->p2 = p2;
+    dp->col = col;
 }
 
 void dcDrawPrimitives()
@@ -320,38 +275,29 @@ void dcDrawPrimitives()
         drawingPrimitive* dp = dpList[i];
         switch(dp->type) {
             case DPTYPE_TEXT:
-                dcDrawText(
-                    dp->x1, dp->y1,
-                    dp->r, dp->g, dp->b, dp->a,
-                    dp->font, dp->string);
+                dcDrawText(dp->p1, dp->col, dp->font, dp->string);
                 break;
 
             case DPTYPE_SPRITE:
                 dcDrawTexture(
-                    dp->tex, dp->a,
-                    dp->frame,
-                    dp->x1, dp->y1,
+                    dp->tex, dp->col, dp->frame, dp->p1,
                     dp->angle, dp->scale);
                 break;
+
             case DPTYPE_LINE:
-                dcDrawLine(
-                    dp->x1, dp->y1,
-                    dp->x2, dp->y2,
-                    dp->r, dp->g, dp->b, dp->a);
+                dcDrawLine(dp->p1, dp->p2, dp->col);
                 break;
+
             case DPTYPE_POLY:
-                dcDrawPolygon(
-                        dp->points, (int)dp->scale,
-                        dp->x1, dp->y1,
-                        dp->r, dp->g, dp->b, dp->a);
+                dcDrawPolygon(dp->points, dp->count, dp->p1, dp->col);
                 break;
+
             case DPTYPE_POLY_TEX:
                 dcDrawTexPolygon(
-                        dp->tex,
-                        dp->points, (int)dp->scale,
-                        dp->x1, dp->y1,
-                        dp->r, dp->g, dp->b, dp->a,
-                        dp->y2);
+                        dp->tex, dp->frame,
+                        dp->points, dp->count,
+                        dp->p1, dp->col,
+                        dp->scale);
                 break;
             default:
                 break;

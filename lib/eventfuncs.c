@@ -99,8 +99,8 @@ void dfDrawObjects(void)
                     }
                 }
 
-                dcDrawTexture(obj[i]->cachedTex, obj[i]->alpha, obj[i]->frame, obj[i]->x, obj[i]->y, obj[i]->angle,
-                              obj[i]->size);
+                dcDrawTexture(obj[i]->cachedTex, color(1, 1, 1, obj[i]->alpha),
+                        obj[i]->frame, obj[i]->pos, obj[i]->angle, obj[i]->size);
             }
         }
     }
@@ -113,9 +113,11 @@ void mainDF(void)
     dcRotateScreen(sceneAngle, fixedW, fixedH);
     dfDrawBackground();
     dcDrawSurface(fixedW, fixedH);
-    dfDrawObjects();
 
     dcDrawPrimitives();
+
+    dfDrawObjects();
+
 
     dcEndDraw();
 }
@@ -170,10 +172,10 @@ void getWinSize(int* w, int* h)
     }
 }
 
-void getMousePos(int* x, int* y)
+vec_t getMousePos()
 {
-    *x = mousex;
-    *y = mousey;
+    vec_t res = {mousex, mousey};
+    return res;
 }
 
 char specKeyPressed(int key)

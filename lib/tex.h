@@ -13,6 +13,7 @@
 #include <GL/freeglut.h>
 #include <GL/gl.h>
 #include <SOIL/SOIL.h>
+#include "structs.h"
 
 #define TEXMODE_DEFAULT 0
 #define TEXMODE_BACKGROUND 1
@@ -29,18 +30,18 @@ typedef struct _tex2d {
 
     int framesCount;
 
-    double centerX;
-    double centerY;
+    vec_t center;
 
     int width;
     int height;
 } tex2d;
 
-tex2d* createTex(char *fn, int uid, int scope, double centerX, double centerY, int mode);
-tex2d* createAnimation(char **fileNames, int framesCount, int uid, int scope, double centerX, double centerY, int mode);
+tex2d* createTex(char *fn, int uid, int scope, vec_t center, int mode);
+tex2d* createAnimation(char **fileNames, int framesCount, int uid, int scope, vec_t center, int mode);
 
 void freeOGlTex(tex2d* tex);
 void freeTex(tex2d* tex);
+void bindTex(tex2d* tex, int frame);
 
 int texSize(char* filename, int* w, int* h);
 void loadTex(tex2d* tex);

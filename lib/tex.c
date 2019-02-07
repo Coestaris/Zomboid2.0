@@ -2,9 +2,10 @@
 // Created by maxim on 1/22/19.
 //
 
+#include <assert.h>
 #include "tex.h"
 
-tex2d* createTex(char *fn, int uid, int scope, double centerX, double centerY, int mode)
+tex2d* createTex(char *fn, int uid, int scope, vec_t center, int mode)
 {
     tex2d* tex = malloc(sizeof(tex2d));
 
@@ -15,16 +16,14 @@ tex2d* createTex(char *fn, int uid, int scope, double centerX, double centerY, i
     tex->fns = malloc(sizeof(char*));
     tex->fns[0] = fn;
 
-    tex->centerX = centerX;
-    tex->centerY = centerY;
-
+    tex->center = center;
     tex->framesCount = 1;
 
     tex->id = uid;
     tex->scope = scope;
 }
 
-tex2d* createAnimation(char **fileNames, int framesCount, int uid, int scope, double centerX, double centerY, int mode)
+tex2d* createAnimation(char **fileNames, int framesCount, int uid, int scope, vec_t center, int mode)
 {
     tex2d* tex = malloc(sizeof(tex2d));
     tex->mode = mode;
@@ -32,8 +31,7 @@ tex2d* createAnimation(char **fileNames, int framesCount, int uid, int scope, do
     tex->textureIds = malloc(sizeof(GLuint) * framesCount);
     memset(tex->textureIds, 0, sizeof(GLuint) * framesCount);
 
-    tex->centerX = centerX;
-    tex->centerY = centerY;
+    tex->center = center;
 
     tex->fns = fileNames;
 
@@ -155,4 +153,25 @@ void loadTex(tex2d* tex)
     }
     tex->width = w;
     tex->height = h;
+}
+
+void bindTex(tex2d* tex, int frame)
+{
+    if(!tex) glBindTexture(GL_TEXTURE_2D, 0);
+    else {
+
+        assert(frame < tex->framesCount);
+
+        if(tex->mode == TEXMODE_OVERLAY)
+        {
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+            glBlendEquation(GL_ADD);
+        }
+        else
+        {
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        }
+
+        glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
+    }
 }

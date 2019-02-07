@@ -13,8 +13,7 @@ gameObject* createFlashlight(gameObject* player, double minSize, double alpha)
     go->data = malloc(sizeof(flashlightData));
     ((flashlightData*)go->data)->minSize = minSize;
 
-    go->x = player->x;
-    go->y = player->y;
+    go->pos = player->pos;
     go->size = minSize;
     go->alpha = alpha;
 

@@ -22,6 +22,6 @@ typedef struct _bulletData {
 
 void bullet_event_update(gameObject *object, void *data);
 void bullet_init(gameObject* object);
-gameObject* createBullet(double x, double y, double dirx, double diry);
+gameObject* createBullet(vec_t a, vec_t dir);
 
 #endif //ZOMBOID2_OBJ_BULLET_H

@@ -16,9 +16,9 @@
 
 #include "helpers.h"
 
-void loadTexture(char* fn, int id, int scope, double cX, double cY, int mode);
-void loadAnimation(int framesCount, int id, int scope, double cX, double cY, int mode, ...);
-void relativeCoordinates(double* x, double* y, gameObject* obj);
+void loadTexture(char* fn, int id, int scope, vec_t center, int mode);
+void loadAnimation(int framesCount, int id, int scope, vec_t center, int mode, ...);
+vec_t relativeCoordinates(gameObject* obj);
 int isInWindowRect(gameObject* obj);
 
 #endif //ZOMBOID2_GAMEHELPERS_H

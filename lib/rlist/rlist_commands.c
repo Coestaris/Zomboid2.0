@@ -234,7 +234,7 @@ int rlist_command_image(rlist_cdata *data) {
         return !data->strict;
     }
 
-    texmPush(createTex(path, id, scope, cX, cY, mode));
+    texmPush(createTex(path, id, scope, vec(cX, cY), mode));
     return true;
 }
 
@@ -271,5 +271,5 @@ int rlist_command_animation(rlist_cdata* data) {
         free(tmp);
     }
 
-    texmPush(createAnimation(paths, frameCnt, id, scope, cX, cY, mode));
+    texmPush(createAnimation(paths, frameCnt, id, scope, vec(cX, cY), mode));
 }

@@ -26,6 +26,7 @@ typedef struct _gameScene {
     int scope;
     int id;
 
+    void (*onLoad)(struct _gameScene* scene);
 } gameScene;
 
 gameObject** scmGetObjects(int *count);

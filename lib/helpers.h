@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <math.h>
+#include "structs.h"
 
 #define true 1
 #define TRUE 1
@@ -16,8 +17,10 @@
 double randRange(double a, double b);
 int fileExists(const char* filename);
 
-double twoPointsAngle(double x1, double y1, double x2, double y2);
-double distance(double x1, double y1, double x2, double y2);
+double twoPointsAngle(vec_t p1, vec_t p2);
+double distance(vec_t p1, vec_t p2);
+
+
 
 double toRad(double angle);
 double toDeg(double angle);

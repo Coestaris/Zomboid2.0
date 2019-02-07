@@ -16,15 +16,15 @@ void bullet_event_update(gameObject *object, void *data)
     {
         if(objects[i]->texID == TEXID_BOX)
         {
-            double boxX = objects[i]->x;
-            double boxY = objects[i]->y;
+            double boxX = objects[i]->pos.x;
+            double boxY = objects[i]->pos.y;
             double boxW = objects[i]->cachedTex->width * objects[i]->size;
             double boxH = objects[i]->cachedTex->height * objects[i]->size;
 
-            if(object->x > boxX - boxW / 2 &&
-               object->x < boxX + boxW / 2 &&
-               object->y > boxY - boxH / 2 &&
-               object->y < boxY + boxH / 2)
+            if(object->pos.x > boxX - boxW / 2 &&
+               object->pos.x < boxX + boxW / 2 &&
+               object->pos.y > boxY - boxH / 2 &&
+               object->pos.y < boxY + boxH / 2)
             {
                 scmDestroyObject(light, true);
                 scmDestroyObject(object, true);
@@ -40,10 +40,9 @@ void bullet_event_update(gameObject *object, void *data)
     }
     else
     {
-        object->x += bd->xOffset;
-        object->y += bd->yOffset;
-        light->x = object->x;
-        light->y = object->y;
+        object->pos.x += bd->xOffset;
+        object->pos.y += bd->yOffset;
+        light->pos = object->pos;
     }
 }
 
@@ -52,22 +51,22 @@ void bullet_init(gameObject* object)
     evqSubscribeEvent(object, EVT_Update, bullet_event_update);
 }
 
-gameObject* createBullet(double x, double y, double dirx, double diry)
+gameObject* createBullet(vec_t p, vec_t dir)
 {
     gameObject* go = object();
     go->drawable = true;
 
     go->depth = 2;
-    go->x = x;
-    go->y = y;
-    go->angle = twoPointsAngle(x, y, dirx, diry) + toRad(randRange(-50, 50));
+    go->pos = p;
+
+    go->angle = twoPointsAngle(p, dir) + toRad(randRange(-50, 50));
     go->texID = TEXID_BULLET;
     go->size = 1;
     go->onInit = bullet_init;
 
     go->data = malloc(sizeof(bulletData));
 
-    gameObject* light = createLight(x, y, BULLET_LIGHT_SIZE, BULLET_LIGHT_ALPHA);
+    gameObject* light = createLight(p, BULLET_LIGHT_SIZE, BULLET_LIGHT_ALPHA);
     bulletData* bd = go->data;
 
     bd->light = light;

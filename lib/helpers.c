@@ -29,9 +29,9 @@ double randRange(double a, double b)
     return min + scale * ( max - min );
 }
 
-inline double twoPointsAngle(double x1, double y1, double x2, double y2)
+inline double twoPointsAngle(vec_t p1, vec_t p2)
 {
-    return atan2(y1 - y2, x1 - x2) + M_PI;
+    return atan2(p1.y - p2.y, p1.x - p2.x) + M_PI;
 }
 
 double toRad(double angle)
@@ -44,7 +44,7 @@ double toDeg(double angle)
     return (angle / M_2_PI) * 360.0;
 }
 
-double distance(double x1, double y1, double x2, double y2)
+double distance(vec_t p1, vec_t p2)
 {
-    return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+    return sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
 }

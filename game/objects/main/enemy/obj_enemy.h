@@ -25,6 +25,6 @@ typedef struct enemyData {
 
 void enemy_init(gameObject* this);
 void enemy_event_update(gameObject* this, void* data);
-gameObject* createEnemy(gameObject* player, double x, double y);
+gameObject *createEnemy(gameObject* player, vec_t pos);
 
 #endif //ZOMBOID2_OBJ_ENEMY_H

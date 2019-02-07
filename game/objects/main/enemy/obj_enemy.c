@@ -7,20 +7,17 @@
 void enemy_event_update(gameObject *this, void *data)
 {
     enemyData* ed = this->data;
-    this->angle = twoPointsAngle(this->x, this->y, ed->player->x, ed->player->y);
+    this->angle = twoPointsAngle(this->pos, ed->player->pos);
 
     //this->x += cos(this->angle) * ed->speed;
     //this->y += sin(this->angle) * ed->speed;
 
-    double x = this->x, y = this->y;
-    //relativeCoordinates(&x, &y, this);
-
     if(ed->larm) {
-        dqnDrawSprite(ed->larm_tex, 1, 0, x, y, this->angle, this->size);
+        dqnDrawSprite(ed->larm_tex, color(1, 1, 1, 1), 0, this->pos, this->angle, this->size);
     }
 
     if(ed->rarm) {
-        dqnDrawSprite(ed->rarm_tex, 1, 0, x, y, this->angle, this->size);
+        dqnDrawSprite(ed->rarm_tex, color(1, 1, 1, 1), 0, this->pos, this->angle, this->size);
     }
 }
 
@@ -33,15 +30,14 @@ void enemy_init(gameObject* this)
     evqSubscribeEvent(this, EVT_Update, enemy_event_update);
 }
 
-gameObject *createEnemy(gameObject* player, double x, double y) {
+gameObject *createEnemy(gameObject* player, vec_t pos) {
     gameObject* obj = object();
     obj->drawable = 1;
     obj->texID = TEXID_ENEMY;
     obj->frame = (int)randRange(0, texmGetID(obj->texID)->framesCount);
 
     obj->size = 10;
-    obj->x = x;
-    obj->y = y;
+    obj->pos = pos;
 
     obj->onInit = enemy_init;
 

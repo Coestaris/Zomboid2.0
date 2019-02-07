@@ -14,6 +14,6 @@ void srfInit(int wW, int wH);
 void srfClear();
 void srfBind();
 void srfFree();
-void srfDrawTexture(tex2d* tex, int frame, double alpha, int inx, int iny, int flipX, int flipY);
+void srfDrawTexture(tex2d* tex, int frame, double alpha, vec_t pos, int flipX, int flipY);
 
 #endif //ZOMBOID2_SURFACE_H

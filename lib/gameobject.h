@@ -14,8 +14,8 @@ typedef struct _GameObject
     int drawable;
 
     int texID;
-    double x;
-    double y;
+    vec_t pos;
+
     double angle;
     double size;
     double alpha;

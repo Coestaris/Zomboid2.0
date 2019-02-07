@@ -102,6 +102,8 @@ void scmLoadScene(int id, int loadScope, int destroyObjects, int freeObjects)
                 texmLoadScope(scenes[i]->scope);
             }
 
+            currentScene = i;
+
             if(destroyObjects)
             {
                 scmDestroyAllObjects(freeObjects);
@@ -125,9 +127,14 @@ void scmLoadScene(int id, int loadScope, int destroyObjects, int freeObjects)
                 if (scenes[i]->startupObjects[j]->drawable && !scenes[i]->startupObjects[j]->cachedTex)
                     scenes[i]->startupObjects[j]->cachedTex = texmGetID(scenes[i]->startupObjects[j]->texID);
             }
-            currentScene = i;
+
+            if(scenes[i]->onLoad)
+                scenes[i]->onLoad(scenes[i]);
+
+            return;
         }
     }
+    abort();
 }
 
 gameScene* createScene(int id, int scope)
@@ -137,6 +144,7 @@ gameScene* createScene(int id, int scope)
     scene->id = id;
     scene->cachedBack = NULL;
     scene->startupObjectsCount = 0;
+    scene->onLoad = NULL;
     scene->startupObjectsArrLen = 0;
     return scene;
 }

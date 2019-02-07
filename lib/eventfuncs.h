@@ -34,7 +34,7 @@ double getFPS(void);
 
 long long getFrame();
 void getWinSize(int* w, int* h);
-void getMousePos(int* x, int* y);
+vec_t getMousePos();
 char keyPressed(unsigned char key);
 int getMouseState(int button);
 char specKeyPressed(int key);

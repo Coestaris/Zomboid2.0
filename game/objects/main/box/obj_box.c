@@ -9,8 +9,7 @@ gameObject* createBox(int x, int y)
     gameObject* go = object();
     go->drawable = true;
     go->size = 1.5;
-    go->x =x;
-    go->y = y;
+    go->pos = vec(x, y);
     go->texID = TEXID_BOX;
     return go;
 }
