@@ -38,11 +38,14 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
     rlist_init();
 
     if(!fileExists(mainResFile)) {
-        printf("\"%s\" is not exits", mainResFile);
+        printf("\"%s\" is not exists", mainResFile);
         exit(1);
     }
 
-    rlist_load((char*)mainResFile, true);
+    if(!rlist_load((char*)mainResFile, true)) {
+        puts("There were errors while processing RList (strict mode is turned on). Exiting...");
+        exit(1);
+    }
 }
 
 void registerEvents()

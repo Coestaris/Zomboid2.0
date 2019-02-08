@@ -39,11 +39,11 @@ void player_init(gameObject* object)
     evqSubscribeEvent(object, EVT_CharKeyUp, player_event_keyPressed);
 
     playerData* pd = object->data;
-    for(int i = 0; i < PLAYER_FLASHLIGHTS; i++) {
+/*    for(int i = 0; i < PLAYER_FLASHLIGHTS; i++) {
         pd->flashlights[i] = createFlashlight(object, flashlightSizes[i], flashlightAlphas[i]);
         scmPushObject(pd->flashlights[i]);
     }
-
+*/
     scmPushObject(pd->backLight);
 }
 
@@ -143,7 +143,7 @@ void player_event_update(gameObject *object, void *data)
     }
 
     pd->backLight->pos = rel;
-    ((lightTracer_data*)pd->backLight->data)->angle = object->angle;
+    pd->backLight->angle = object->angle + M_PI;
 
     pd->prevAnimationFrame = object->frame;
 }
@@ -167,8 +167,11 @@ gameObject* createPlayer()
     pd->flashLight = false;
 
     pd->backLight =
-            createDirectLT(go->pos, 400, M_PI_4, color(1, 1, 1, 0.4));
-            //createTexturedAreaLT(go->pos, 400, color(1, 1, 1, 0.2), texmGetID(TEXID_LIGHT), 0);
+            createTexturedDirectLT(go->pos, 400, M_PI_4, 500, 40, color(1, 1, 1, 0.7), texmGetID(TEXID_LIGHT_WIDE), 0,
+                    vec(-2, 2));
+            //createDirectLT(go->pos, 400, M_PI_4, 100, 100, color(1, 1, 1, 0.4));
+            //createAreaLT(go->pos, 400, color(1, 1, 0.5, 0.2));
+            //createTexturedAreaLT(go->pos, 500, color(1, 1, 0.5, 0.2), texmGetID(TEXID_LIGHT), 0);
             //createLight(go->pos, PLAYER_BACKLIGHT_SIZE, PLAYER_BACKLIGHT_ALPHA);
 
     go->texID = TEXID_PLAYER;

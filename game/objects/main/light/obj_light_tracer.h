@@ -22,14 +22,16 @@ typedef struct _lightTracer_data {
     color_t color;
 
     double range;
-    double angleRange;
 
-    double angle;
+    double width;
+    double angleRange;
+    vec_t scaleFactor;
 
     int textured;
     tex2d* tex;
     int frame;
 
+    double backOffset;
 } lightTracer_data;
 
 void lightTracer_init(gameObject* this);
@@ -37,7 +39,8 @@ void lightTracer_event_update(gameObject* this, void* data);
 
 gameObject* createAreaLT(vec_t pos, double range, color_t color);
 gameObject* createTexturedAreaLT(vec_t pos, double range, color_t color, tex2d* tex, int frame);
-gameObject* createDirectLT(vec_t pos, double range, double angle, color_t color);
+gameObject* createDirectLT(vec_t pos, double range, double angle, double width, double backOffset, color_t color, vec_t scaleFactor);
+gameObject* createTexturedDirectLT(vec_t pos, double range, double angle, double width, double backOffset, color_t color, tex2d* tex, int frame, vec_t scaleFactor);
 
 void updateEdges(int texId);
 

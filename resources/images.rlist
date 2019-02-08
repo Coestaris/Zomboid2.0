@@ -18,12 +18,17 @@ set TEXID_ENEMY_LARM_D 12
 set TEXID_ENEMY_RARM_D 13
 set TEXID_BACK_CONCRETE 7
 
+set TEXID_LIGHT_WIDE 14
+set TEXID_LIGHT_DUO  15
+
 ; type                  id                  scope                cX   cY   mode         path
 image                   TEXID_BULLET        TEXSCOPE_MAIN        0    0    TM_DEFAULT   images/bullet.png
 image                   TEXID_BOX           TEXSCOPE_MAIN        0    0    TM_DEFAULT   images/box.png
 image                   TEXID_SIMPLE_LIGHT  TEXSCOPE_MAIN        0    0    TM_OVERLAY   images/light/simpleLight.png
 image                   TEXID_LIGHT         TEXSCOPE_MAIN        0    0    TM_OVERLAY   images/light/light.png
 image                   TEXID_FLASHLIGHT    TEXSCOPE_MAIN        110  0    TM_OVERLAY   images/light/flashlight.png
+image                   TEXID_LIGHT_WIDE    TEXSCOPE_MAIN        420  0    TM_OVERLAY   images/light/light_wide1.png
+image                   TEXID_LIGHT_DUO     TEXSCOPE_MAIN       -640  0    TM_OVERLAY   images/light/light_duo1.png
 
 image                   TEXID_BOX           TEXSCOPE_MAIN        0    0    TM_DEFAULT   images/enemy/larm.png
 image                   TEXID_BOX           TEXSCOPE_MAIN        0    0    TM_DEFAULT   images/enemy/rarm.png

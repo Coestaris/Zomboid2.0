@@ -108,7 +108,7 @@ void _ray_to(lightTracer_data* ld, double x1, double y1, double x2, double y2, d
         }
     }
 
-    dqnDrawLine(vec(x1, y1), vec(nearestX, nearestY), ld->color);
+    //adqnDrawLine(vec(x1, y1), vec(nearestX, nearestY), ld->color);
     ld->points[ld->pointsCount].point = vec(nearestX, nearestY);
     ld->points[ld->pointsCount].angle = angle;
     ld->points[ld->pointsCount].distance = dist;
@@ -152,6 +152,7 @@ int compare(const void* a, const void* b)
 void lightTracer_event_update(gameObject* this, void* data)
 {
     lightTracer_data* ld = (lightTracer_data*)this->data;
+
     ld->pointsCount = 0;
 
     if(ld->type == LT_AREA) {
@@ -193,12 +194,29 @@ void lightTracer_event_update(gameObject* this, void* data)
 
     else if(ld->type == LT_SPOT)
     {
+        vec_t v_dir = vec_normalize(vec(cos(this->angle), sin(this->angle)));
+        vec_t v_norm = vec_normalize(vec_normal(v_dir));
+
+        edges[0][1].point = vec( this->pos.x + v_norm.x * ld->width + v_dir.x * ld->backOffset,
+                                 this->pos.y + v_norm.y * ld->width + v_dir.y * ld->backOffset);
+
+        edges[0][2].point = vec( this->pos.x - v_norm.x * ld->width + v_dir.x * ld->backOffset,
+                                 this->pos.y - v_norm.y * ld->width + v_dir.y * ld->backOffset);
+
+        edges[0][0].point = vec( this->pos.x + v_norm.x * ld->width - v_dir.x * ld->range,
+                                 this->pos.y + v_norm.y * ld->width - v_dir.y * ld->range);
+
+        edges[0][3].point = vec( this->pos.x - v_norm.x * ld->width - v_dir.x * ld->range,
+                                 this->pos.y - v_norm.y * ld->width - v_dir.y * ld->range);
+
+
+
         for (int i = 0; i < edgesCount; i++) {
             for (int j = 0; j < 4; j++) {
                 int start = j;
                 int end = (j + 1) % 4;
 
-                dqnDrawLine(edges[i][start].point, edges[i][end].point, ld->color);
+                //dqnDrawLine(edges[i][start].point, edges[i][end].point, ld->color);
 
                 if (i == 0) {
                     ray_to(
@@ -207,7 +225,7 @@ void lightTracer_event_update(gameObject* this, void* data)
                             this->pos.y,
                             edges[i][start].point.x,
                             edges[i][start].point.y,
-                            ld->range / 2 * M_SQRT2 + 0.001);
+                            100000);
                     continue;
                 }
 
@@ -217,7 +235,7 @@ void lightTracer_event_update(gameObject* this, void* data)
                         this->pos.y,
                         edges[i][start].point.x,
                         edges[i][start].point.y,
-                        ld->range / 2 * M_SQRT2 + 0.001,
+                        100000,
                         0.00001);
             }
         }
@@ -226,7 +244,13 @@ void lightTracer_event_update(gameObject* this, void* data)
     qsort(ld->points, (size_t)ld->pointsCount, sizeof(relPoint_t), compare);
 
     if(ld->textured) {
-        dqnDrawTexPolygon(ld->tex, ld->frame, ld->points, ld->pointsCount, this->pos, ld->color, ld->range);
+
+        if(ld->type == LT_AREA)
+            dqnDrawTexPolygon(ld->tex, ld->frame, ld->points, ld->pointsCount, this->pos, ld->color, ld->range);
+        else
+            dqnDrawRotatedTexPolygon(ld->tex, ld->frame, ld->points, ld->pointsCount, this->pos, ld->color,
+                    this->angle, ld->range, vec(ld->backOffset, 0), ld->scaleFactor);
+
     } else {
         dqnDrawPolygon(ld->points, ld->pointsCount, this->pos, ld->color);
     }
@@ -276,7 +300,7 @@ gameObject* createTexturedAreaLT(vec_t pos, double range, color_t color, tex2d* 
     return this;
 }
 
-gameObject* createDirectLT(vec_t pos, double range, double angle, color_t color)
+gameObject* createDirectLT(vec_t pos, double range, double angle, double width, double backoffset, color_t color, vec_t scaleFactor)
 {
     gameObject* this = object();
     this->onInit = lightTracer_init;
@@ -287,11 +311,41 @@ gameObject* createDirectLT(vec_t pos, double range, double angle, color_t color)
 
     ld->points = malloc(sizeof(relPoint_t) * 100);
     ld->pointsCount = 0;
+    ld->backOffset = backoffset;
+    ld->width = width;
 
     ld->textured = false;
     ld->type = LT_SPOT;
 
-    ld->angle = 0;
+    ld->scaleFactor = scaleFactor;
+    ld->angleRange = angle;
+    ld->range = range;
+    ld->color = color;
+
+    return this;
+}
+
+gameObject* createTexturedDirectLT(vec_t pos, double range, double angle, double width, double backOffset, color_t color, tex2d* tex, int frame, vec_t scaleFactor)
+{
+    gameObject* this = object();
+    this->onInit = lightTracer_init;
+    this->pos = pos;
+
+    this->data = malloc(sizeof(lightTracer_data));
+    lightTracer_data* ld = (lightTracer_data*)this->data;
+
+    ld->points = malloc(sizeof(relPoint_t) * 100);
+    ld->pointsCount = 0;
+    ld->backOffset = backOffset;
+    ld->width = width;
+    ld->scaleFactor = scaleFactor;
+
+    ld->textured = true;
+
+    ld->tex = tex;
+    ld->frame = frame;
+    ld->type = LT_SPOT;
+
     ld->angleRange = angle;
     ld->range = range;
     ld->color = color;

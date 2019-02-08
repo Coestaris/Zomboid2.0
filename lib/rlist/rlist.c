@@ -123,6 +123,7 @@ void get_lines(char* str)
             startIndex = endIndex + 1;
         }
     }
+
     if(str[strlen(str)] != '\n') {
         proceed_line(str, startIndex, strlen(str) - 1);
     }
@@ -162,7 +163,7 @@ int rlist_load(char* filename, int strict)
     for(int i = 0; i < myLinesCount; i++)
     {
         char* line = myLines[i];
-        //puts(line);
+        puts(line);
 
         if(!getTokens(line)) {
             printf("Rlist error: Invalid syntax at line %i in \"%s\"\n", lineCounter, filename);
@@ -172,18 +173,17 @@ int rlist_load(char* filename, int strict)
 
         if(tokenCount != 0 && tokens[0][0] != ';')
         {
-            int found = false;
             //current line is not comment
-            for(int i = 0; i < commandsCount; i++) {
-                if(!strcmp(commands[i]->name, tokens[0])) {
+            for(int j = 0; j < commandsCount; j++)
+            {
+                if(!strcmp(commands[j]->name, tokens[0]))
+                {
                     //found command
-                    found = true;
+                    assert(commands[j]->runFunc);
 
-                    assert(commands[i]->runFunc);
-
-
-                    if(commands[i]->argumentCount != ARGC_VARIADIC && tokenCount - 1 != commands[i]->argumentCount) {
-                        printf("Rlist error: Wrong argument count. Expected %i, but got %i, at line %i in \"%s\"\n", commands[i]->argumentCount, tokenCount - 1, lineCounter, filename);
+                    if(commands[j]->argumentCount != ARGC_VARIADIC && tokenCount - 1 != commands[j]->argumentCount) {
+                        printf("Rlist error: Wrong argument count. Expected %i, but got %i, at line %i in \"%s\"\n",
+                                commands[j]->argumentCount, tokenCount - 1, lineCounter, filename);
                         if(strict) return false;
                         else goto end;
                     }
@@ -193,11 +193,11 @@ int rlist_load(char* filename, int strict)
                     data->args = &tokens[1];
                     data->filename = filename;
                     data->lineIndex = lineCounter;
-                    data->command = commands[i];
+                    data->command = commands[j];
                     data->strict = strict;
                     data->fnToAddLines = NULL;
 
-                    if(!commands[i]->runFunc(data)) {
+                    if(!commands[j]->runFunc(data)) {
                         free(data);
                         return false;
                     }
@@ -215,14 +215,13 @@ int rlist_load(char* filename, int strict)
                     }
 
                     free(data);
+                    goto end;
                 }
             }
 
-            if(!found) {
-                printf("Rlist error: Unknown command \"%s\" at line %i in \"%s\"\n", tokens[0], lineCounter, filename);
-                if(strict) return false;
-                else goto end;
-            }
+            printf("Rlist error: Unknown command \"%s\" at line %i in \"%s\"\n", tokens[0], lineCounter, filename);
+            if(strict) return false;
+            else goto end;
         }
 
         end:
@@ -233,4 +232,6 @@ int rlist_load(char* filename, int strict)
 
     free(myLines);
     free(rawInput);
+
+    return true;
 }

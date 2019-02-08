@@ -109,6 +109,78 @@ void dcDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col)
     glPopMatrix();
 }
 
+vec_t rotate_point(double cx, double cy,double angle, vec_t p)
+{
+    double s = sin(angle);
+    double c = cos(angle);
+
+    // translate point back to origin:
+    p.x -= cx;
+    p.y -= cy;
+
+    // rotate point
+    double xnew = p.x * c - p.y * s;
+    double ynew = p.x * s + p.y * c;
+
+    // translate point back:
+    p.x = xnew + cx;
+    p.y = ynew + cy;
+    return p;
+}
+
+void dcDrawRotatedTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
+        double scale, vec_t texOffset, vec_t texScaleFactor)
+{
+    bindTex(tex, frame);
+    glPushMatrix();
+
+    double x = center.x;
+    double y = center.y;
+
+    glColor4d(col.r, col.g, col.b, col.a);
+    glBegin(GL_TRIANGLES);
+
+    double zeroX = (tex->width - tex->center.x  - texOffset.x) / (2.0 * tex->width);
+    double zeroY = (tex->height - tex->center.y - texOffset.y) / (2.0 * tex->height);
+
+    for(int i = 0; i < count; i++) {
+        int c = (i + 1) % count;
+
+        double x1 = points[i].point.x;
+        double x2 = points[c].point.x;
+        double y1 = points[i].point.y;
+        double y2 = points[c].point.y;
+
+        glTexCoord2d(zeroX, zeroY);
+        glVertex2d(x, y);
+
+        vec_t coordP1 = vec(
+                (x1 - x) / scale + zeroX,
+                (y1 - y) / scale + zeroY);
+
+        coordP1 = rotate_point(zeroX, zeroY, - angle, coordP1);
+        glTexCoord2d(
+                (coordP1.x - zeroX) / texScaleFactor.x + zeroX,
+                (coordP1.y - zeroY) / texScaleFactor.y + zeroY);
+        glVertex2d(x1, y1);
+
+        vec_t coordP2 = vec(
+                (x2 - x) / scale + zeroX,
+                (y2 - y) / scale + zeroY);
+
+        coordP2 = rotate_point(zeroX, zeroY, - angle, coordP2);
+        glTexCoord2d(
+                (coordP2.x - zeroX) / texScaleFactor.x + zeroX,
+                (coordP2.y - zeroY) / texScaleFactor.y + zeroY);
+        glVertex2d(x2, y2);
+
+
+    }
+    glEnd();
+
+    glPopMatrix();
+}
+
 void dcDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale)
 {
     bindTex(tex, frame);
@@ -243,6 +315,26 @@ void dqnDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col)
     dp->col = col;
 }
 
+void dqnDrawRotatedTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
+                              double scale, vec_t texOffset, vec_t texScaleFactor)
+{
+    checkDPSize();
+    drawingPrimitive* dp = dpList[dpCount++];
+    dp->type = DPTYPE_POLY_ROTATEDTEX;
+
+    dp->texOffset = texOffset;
+    dp->texScaleFactor = texScaleFactor;
+
+    dp->angle = angle;
+    dp->tex = tex;
+    dp->frame = frame;
+    dp->points = points;
+    dp->count= count;
+    dp->p1 = center;
+    dp->col = col;
+    dp->scale = scale;
+}
+
 void dqnDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale)
 {
     checkDPSize();
@@ -299,6 +391,16 @@ void dcDrawPrimitives()
                         dp->p1, dp->col,
                         dp->scale);
                 break;
+
+            case DPTYPE_POLY_ROTATEDTEX:
+                dcDrawRotatedTexPolygon(
+                        dp->tex, dp->frame,
+                        dp->points, dp->count,
+                        dp->p1, dp->col, dp->angle,
+                        dp->scale, dp->texOffset, dp->texScaleFactor);
+                break;
+
+
             default:
                 break;
         }
