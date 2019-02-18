@@ -171,8 +171,7 @@ gameObject* createPlayer()
     pd->flashLight = false;
 
     pd->backLight =
-            createTexturedDirectLT(go->pos, 400, M_PI_4, 500, 40, color(1, 1, 1, 0.7), texmGetID(TEXID_LIGHT_WIDE), 0,
-                    vec(-2, 2));
+            createTexturedDirectLT(go->pos, 400, M_PI_4, 500, 40, color(1, 1, 1, 0.7), texmGetID(TEXID_LIGHT_WIDE), 0, vec(-2, 2));
             //createDirectLT(go->pos, 400, M_PI_4, 100, 100, color(1, 1, 1, 0.4));
             //createAreaLT(go->pos, 400, color(1, 1, 0.5, 0.2));
             //createTexturedAreaLT(go->pos, 500, color(1, 1, 0.5, 0.2), texmGetID(TEXID_LIGHT), 0);

@@ -16,8 +16,8 @@ gameObject* createBox(int x, int y)
     const double h = 32;
 
     ltracer_pushEdge(
-            vec_add(go->pos, vec_mult(vec(-w, -h), go->size / 2.0 )),
             vec_add(go->pos, vec_mult(vec( w, -h), go->size / 2.0 )),
+            vec_add(go->pos, vec_mult(vec(-w, -h), go->size / 2.0 )),
             vec_add(go->pos, vec_mult(vec(-w,  h), go->size / 2.0 )),
             vec_add(go->pos, vec_mult(vec( w,  h), go->size / 2.0 )));
 

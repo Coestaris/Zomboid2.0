@@ -17,7 +17,7 @@ int ltracer_getIntersection(double rayX1, double rayY1, double rayX2, double ray
 
     double s_px = seg1.x;
     double s_py = seg1.y;
-    double s_dx = seg2.y - seg1.x;
+    double s_dx = seg2.x - seg1.x;
     double s_dy = seg2.y - seg1.y;
 
     double r_mag = sqrt(r_dx * r_dx + r_dy * r_dy);
@@ -41,17 +41,6 @@ int ltracer_getIntersection(double rayX1, double rayY1, double rayX2, double ray
     return true;
 }
 
-#ifdef LTRACER_DRAW_EDGES
-#define trace(p1, p2) \
-    if(ltracer_getIntersection(x1, y1, x2, y2, p1, p2, &intX, &intY, &dist)) { \
-        if(dist < nearest) {\
-            nearest = dist;\
-            nearestX = intX;\
-            nearestY = intY;\
-        }\
-        dqnDrawLine(vec(x1, y1), vec(intX, intY), color(1, 1, 1, 1));\
-    }
-#else
 #define trace(p1, p2) \
     if(ltracer_getIntersection(x1, y1, x2, y2, p1, p2, &intX, &intY, &dist)) { \
         if(dist < nearest) {\
@@ -60,7 +49,6 @@ int ltracer_getIntersection(double rayX1, double rayY1, double rayX2, double ray
             nearestY = intY;\
         }\
     }
-#endif
 
 void ltracer_ray_to(ltracer_data* ld, double x1, double y1, double x2, double y2, double angle)
 {
@@ -71,14 +59,12 @@ void ltracer_ray_to(ltracer_data* ld, double x1, double y1, double x2, double y2
     double dist = 0;
     double intX, intY;
 
-
     for(int i = 0; i < _edgesCount; i++) {
 
         trace(_edges[i]->a, _edges[i]->b);
         trace(_edges[i]->b, _edges[i]->c);
         trace(_edges[i]->c, _edges[i]->d);
         trace(_edges[i]->d, _edges[i]->a);
-
     }
 
 #ifdef LTRACER_DRAW_RAYS
@@ -96,8 +82,8 @@ void ltracer_ray_to(ltracer_data* ld, double x1, double y1, double x2, double y2
 void ltracer_ray_single_to(ltracer_data* ld, vec_t p1, vec_t p2, double mDist)
 {
     if(distance(p1, p2) > mDist) return;
-
     double angle = atan2(p2.y - p1.y, p2.x - p1.x);
+
     ltracer_ray_to(ld, p1.x, p1.y, p2.x, p2.y, angle);
 }
 

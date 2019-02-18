@@ -6,12 +6,18 @@
 
 ltracer_data* lights[100]; //TODO!
 ltracer_edge* edges[300]; //TODO!
-int edgesCount = 0;
+int edgesCount = 1;
 int lightCount = 0;
 int idCounter = 0;
 
 void ltracer_pushLight(ltracer_data *ld)
 {
+    if(!lightCount) {
+        edges[0] = malloc(sizeof(ltracer_edge));
+        edges[0]->id = -1;
+        ltracer_updateEdges(edges, edgesCount);
+    }
+
     lights[lightCount++] = ld;
 }
 
@@ -46,26 +52,29 @@ void ltracer_update()
     {
         ltracer_data* ld = lights[light];
         ld->pointsCount = 0;
-        double mRange = MAXDOUBLE;
+        double mRange = 0;
 
         if (ld->type == LT_AREA) {
-            edges[0]->a = vec(ld->pos.x - ld->range / 2, ld->pos.y - ld->range / 2);
+            edges[0]->a = vec(ld->pos.x + ld->range / 2, ld->pos.y + ld->range / 2);
             edges[0]->b = vec(ld->pos.x + ld->range / 2, ld->pos.y - ld->range / 2);
-            edges[0]->c = vec(ld->pos.x + ld->range / 2, ld->pos.y + ld->range / 2);
+            edges[0]->c = vec(ld->pos.x - ld->range / 2, ld->pos.y - ld->range / 2);
             edges[0]->d = vec(ld->pos.x - ld->range / 2, ld->pos.y + ld->range / 2);
+
             mRange = ld->range / 2 * M_SQRT2 + 0.001;
         }
 
         else if (ld->type == LT_SPOT) {
 
+            mRange = 999999;
+
             vec_t v_dir = vec_normalize(vec(cos(ld->angle), sin(ld->angle)));
             vec_t v_norm = vec_normalize(vec_normal(v_dir));
 
-            edges[0]->a = vec(ld->pos.x + v_norm.x * ld->width + v_dir.x * ld->backOffset,
-                              ld->pos.y + v_norm.y * ld->width + v_dir.y * ld->backOffset);
-
-            edges[0]->b = vec(ld->pos.x - v_norm.x * ld->width + v_dir.x * ld->backOffset,
+            edges[0]->a = vec(ld->pos.x - v_norm.x * ld->width + v_dir.x * ld->backOffset,
                               ld->pos.y - v_norm.y * ld->width + v_dir.y * ld->backOffset);
+
+            edges[0]->b = vec(ld->pos.x + v_norm.x * ld->width + v_dir.x * ld->backOffset,
+                              ld->pos.y + v_norm.y * ld->width + v_dir.y * ld->backOffset);
 
             edges[0]->c = vec(ld->pos.x + v_norm.x * ld->width - v_dir.x * ld->range,
                               ld->pos.y + v_norm.y * ld->width - v_dir.y * ld->range);
@@ -74,6 +83,13 @@ void ltracer_update()
                               ld->pos.y - v_norm.y * ld->width - v_dir.y * ld->range);
         }
 
+
+#ifdef LTRACER_DRAW_EDGES
+        dqnDrawLine(edges[0]->a, edges[0]->b, ld->color);
+        dqnDrawLine(edges[0]->b, edges[0]->c, ld->color);
+        dqnDrawLine(edges[0]->c, edges[0]->d, ld->color);
+        dqnDrawLine(edges[0]->d, edges[0]->a, ld->color);
+#endif
 
         for (int i = 0; i < edgesCount; i++) {
 
@@ -97,9 +113,21 @@ void ltracer_update()
 
 void ltracer_draw()
 {
+
+#ifdef LTRACER_DRAW_EDGES
+    for(int i = 1; i < edgesCount; i++) {
+        dqnDrawLine(edges[i]->a, edges[i]->b, color(1, 0, 1, 1));
+        dqnDrawLine(edges[i]->b, edges[i]->c, color(1, 0, 1, 1));
+        dqnDrawLine(edges[i]->c, edges[i]->d, color(1, 0, 1, 1));
+        dqnDrawLine(edges[i]->d, edges[i]->a, color(1, 0, 1, 1));
+    }
+#endif
+
     for(int light = 0; light < lightCount; light++)
     {
+
         ltracer_data *ld = lights[light];
+
         if (ld->textured) {
 
             if (ld->type == LT_AREA) {
