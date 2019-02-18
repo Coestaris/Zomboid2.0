@@ -6,11 +6,11 @@
 #include "objects/main/light/obj_rotatable_light.h"
 
 void mainScene_onLoad(gameScene* scene) {
-    updateEdges(TEXID_BOX);
 }
 
 void initScenes(void)
 {
+
     gameScene* mainScene = createScene(SCENEID_MAIN, 0);
     mainScene->backgroundTexId = TEXID_BACK_CONCRETE;
     mainScene->onLoad = mainScene_onLoad;

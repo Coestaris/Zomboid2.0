@@ -9,6 +9,7 @@
 #include "../lib/eventQueue.h"
 #include "../lib/helpers.h"
 #include "../lib/eventfuncs.h"
+#include "../lib/ltracer/ltracer.h"
 
 #include "loader.h"
 

@@ -9,31 +9,12 @@
 
 #include "../../../objectInclude.h"
 
-#define LT_AREA 1
-#define LT_SPOT 2
-
 typedef struct _lightTracer_data {
+    ltracer_data* data;
 
-    relPoint_t* points;
-    int pointsCount;
-
-    int type;
-
-    color_t color;
-
-    double range;
-
-    double width;
-    double angleRange;
-    vec_t scaleFactor;
-
-    int textured;
-    tex2d* tex;
-    int frame;
-
-    double backOffset;
 } lightTracer_data;
 
+void lightTracer_destroy(gameObject* this);
 void lightTracer_init(gameObject* this);
 void lightTracer_event_update(gameObject* this, void* data);
 

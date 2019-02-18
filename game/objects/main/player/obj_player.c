@@ -146,6 +146,10 @@ void player_event_update(gameObject *object, void *data)
     pd->backLight->angle = object->angle + M_PI;
 
     pd->prevAnimationFrame = object->frame;
+
+
+    ltracer_update();
+    ltracer_draw();
 }
 
 gameObject* createPlayer()
