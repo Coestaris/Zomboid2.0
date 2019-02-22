@@ -42,8 +42,10 @@ gameObject* createAreaLT(vec_t pos, double range, color_t color)
     ld->data->textured = false;
     ld->data->type = LT_AREA;
     ld->data->range = range;
+    ld->data->disabled = false;
     ld->data->color = color;
-
+    ld->data->pos = this->pos;
+    ld->data->angle = this->angle;
     return this;
 }
 
@@ -64,10 +66,12 @@ gameObject* createTexturedAreaLT(vec_t pos, double range, color_t color, tex2d* 
     ld->data->textured = true;
     ld->data->tex = tex;
     ld->data->type = LT_AREA;
+    ld->data->disabled = false;
     ld->data->frame = frame;
     ld->data->range = range;
     ld->data->color = color;
-
+    ld->data->pos = this->pos;
+    ld->data->angle = this->angle;
     return this;
 }
 
@@ -90,9 +94,11 @@ gameObject* createDirectLT(vec_t pos, double range, double angle, double width, 
     ld->data->type = LT_SPOT;
     ld->data->scaleFactor = scaleFactor;
     ld->data->angleRange = angle;
+    ld->data->disabled = false;
     ld->data->range = range;
     ld->data->color = color;
-
+    ld->data->pos = this->pos;
+    ld->data->angle = this->angle;
     return this;
 }
 
@@ -115,10 +121,12 @@ gameObject* createTexturedDirectLT(vec_t pos, double range, double angle, double
     ld->data->textured = true;
     ld->data->tex = tex;
     ld->data->frame = frame;
+    ld->data->disabled = false;
     ld->data->type = LT_SPOT;
     ld->data->angleRange = angle;
     ld->data->range = range;
     ld->data->color = color;
-
+    ld->data->pos = this->pos;
+    ld->data->angle = this->angle;
     return this;
 }

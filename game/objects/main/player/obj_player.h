@@ -9,6 +9,8 @@
 
 #include "../enemy/obj_enemy.h"
 #include "../bullet/obj_bullet.h"
+#include "../flashlight/obj_flashlight.h"
+#include "../light/obj_light_tracer.h"
 
 #define PLAYER_MOVE_X 2.5
 #define PLAYER_MOVE_Y 2.5
@@ -22,14 +24,10 @@
 #define PLAYER_LIGHT_SIZE_START .5
 #define PLAYER_LIGHT_SIZE_INCREASE 1.85
 
-#define PLAYER_MAXLIGHTS 10
-#define PLAYER_FLASHLIGHTS 3
+#define PLAYER_MAXLIGHTS 3
 
 #define PLAYER_BACKLIGHT_SIZE .5
 #define PLAYER_BACKLIGHT_ALPHA .04
-
-#define PLAYER_FLASHLIGHT_MINDIST 100
-#define PLAYER_FLASHLIGHT_MAXDIST 500
 
 typedef struct _playerData {
 
@@ -45,9 +43,9 @@ typedef struct _playerData {
 
     gameObject* fireLights[PLAYER_MAXLIGHTS];
     gameObject* backLight;
-    gameObject* flashlights[PLAYER_FLASHLIGHTS];
+    gameObject* flashlight;
 
-    int flashLight;
+    int enabledFlashLight;
 
 } playerData;
 

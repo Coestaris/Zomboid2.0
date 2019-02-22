@@ -1,0 +1,21 @@
+set SCENEID_MAIN 0
+
+set OBJECT_PLAYER 0
+set OBJECT_BOX    1
+
+
+;type         scene_id            scope            BACK_ID
+scene         SCENEID_MAIN        TEXSCOPE_MAIN    TEXID_BACK_CONCRETE
+
+; startup object group
+; object      scene_id           x     y
+sog_open      SCENEID_MAIN
+sog_add       OBJECT_BOX         200   200
+sog_add       OBJECT_BOX         300   300
+sog_add       OBJECT_BOX         400   400
+sog_add       OBJECT_BOX         400   100
+sog_add       OBJECT_PLAYER      200   200
+
+; object_ex   scene_id           x     y     angle     size        texid       color      drawable   depth      ani_speed
+sog_add_ex    OBJECT_BOX         200   200   0.2       defaults    defaults    defaults   defaults   defaults   defaults
+

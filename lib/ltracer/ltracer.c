@@ -4,14 +4,19 @@
 
 #include "ltracer.h"
 
-ltracer_data* lights[100]; //TODO!
-ltracer_edge* edges[300]; //TODO!
+#define MAX_LIGHTS 100
+#define MAX_EDGES 300
+
+ltracer_data* lights[MAX_LIGHTS]; //TODO!
+ltracer_edge* edges[MAX_EDGES]; //TODO!
 int edgesCount = 1;
 int lightCount = 0;
 int idCounter = 0;
 
 void ltracer_pushLight(ltracer_data *ld)
 {
+    assert(lightCount <= MAX_LIGHTS);
+
     if(!lightCount) {
         edges[0] = malloc(sizeof(ltracer_edge));
         edges[0]->id = -1;
@@ -21,13 +26,28 @@ void ltracer_pushLight(ltracer_data *ld)
     lights[lightCount++] = ld;
 }
 
+int remove_light(ltracer_data** from, int total, int index) {
+    if((total - index - 1) > 0) {
+        memmove(from + index, from + index + 1, sizeof(ltracer_data*) * (total-index - 1));
+    }
+    return total-1; // return the new array size
+}
+
 void ltracer_removeLight(ltracer_data *ld)
 {
-
+    for(int light = 0; light < lightCount; light++)
+    {
+        if(lights[light] == ld) {
+            free(lights[light]);
+            remove_light(lights, lightCount--, light);
+        }
+    }
 }
 
 int ltracer_pushEdge(vec_t a, vec_t b, vec_t c, vec_t d)
 {
+    assert(edgesCount <= MAX_EDGES);
+
     ltracer_edge* edge = malloc(sizeof(ltracer_edge));
     edge->id = idCounter++;
     edge->a = a;
@@ -52,6 +72,9 @@ void ltracer_update()
     {
         ltracer_data* ld = lights[light];
         ld->pointsCount = 0;
+
+        if(ld->disabled) continue;
+
         double mRange = 0;
 
         if (ld->type == LT_AREA) {
@@ -125,8 +148,9 @@ void ltracer_draw()
 
     for(int light = 0; light < lightCount; light++)
     {
-
         ltracer_data *ld = lights[light];
+
+        if(ld->disabled) continue;
 
         if (ld->textured) {
 

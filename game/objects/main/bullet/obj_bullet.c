@@ -33,7 +33,7 @@ void bullet_event_update(gameObject *object, void *data)
         }
     }
 
-    if(isInWindowRect(object))
+    if(isInWindowExtendedRect(object, BULLET_LIGHT_SIZE, BULLET_LIGHT_SIZE))
     {
         scmDestroyObject(light, true);
         scmDestroyObject(object, true);
@@ -66,7 +66,8 @@ gameObject* createBullet(vec_t p, vec_t dir)
 
     go->data = malloc(sizeof(bulletData));
 
-    gameObject* light = createLight(p, BULLET_LIGHT_SIZE, BULLET_LIGHT_ALPHA);
+    gameObject* light = createTexturedAreaLT(p, BULLET_LIGHT_SIZE,
+            color(randRange(0, 1), randRange(0, 1), randRange(0, 1), BULLET_LIGHT_ALPHA), texmGetID(TEXID_LIGHT), 0);
     bulletData* bd = go->data;
 
     bd->light = light;

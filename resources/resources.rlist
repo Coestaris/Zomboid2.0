@@ -1,5 +1,11 @@
 ; main resource file
 
+inc defines.rlist
+inc scopes.rlist
+
+
 inc images.rlist
-; todo: inc levels.rlist
+inc scenes.rlist
 ; todo: inc sounds.rlist
+
+echo_all_vars

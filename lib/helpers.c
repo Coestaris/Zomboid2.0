@@ -3,7 +3,6 @@
 //
 
 #include "helpers.h"
-#include "eventfuncs.h"
 
 int fileExists(const char* filename)
 {

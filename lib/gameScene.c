@@ -6,10 +6,35 @@
 
 gameScene* scenes[MAXSCENES];
 gameObject* objects[MAXOBJECTS];
+publicObject* publicObjects[MAXOBJECTS];
+
 int scenesCount = 0;
 int objectsCount = 0;
+int publicObjectCount = 0;
 
 int currentScene = -1;
+
+void scmPushPublicObject(int id, gameObject* (*init)())
+{
+    assert(publicObjectCount <= MAXOBJECTS);
+
+    publicObject* po = malloc(sizeof(publicObject));
+    po->id = id;
+    po->init = init;
+    publicObjects[publicObjectCount++] = po;
+}
+
+publicObject* scmGetPublicObject(int id)
+{
+    for(int i = 0; i < publicObjectCount; i++) {
+        if(publicObjects[i]->id == id) {
+            return publicObjects[i];
+        }
+    }
+
+    return NULL;
+}
+
 
 gameScene* scmGetActiveScene()
 {
@@ -87,7 +112,19 @@ void scmDestroyObject(gameObject *object, int free)
 
 void scmPushScene(gameScene *scene)
 {
+    assert(scenesCount <= MAXSCENES);
+
     scenes[scenesCount++] = scene;
+}
+
+gameScene* scmGetScene(int id)
+{
+    for(int i = 0; i < scenesCount; i++) {
+        if(id == scenes[i]->id) {
+            return scenes[i];
+        }
+    }
+    return NULL;
 }
 
 void scmLoadScene(int id, int loadScope, int destroyObjects, int freeObjects)
@@ -134,7 +171,9 @@ void scmLoadScene(int id, int loadScope, int destroyObjects, int freeObjects)
             return;
         }
     }
-    abort();
+
+    puts("You must specify scene with id 0");
+    exit(1);
 }
 
 gameScene* createScene(int id, int scope)

@@ -4,22 +4,25 @@
 
 #include "obj_box.h"
 
-gameObject* createBox(int x, int y)
+void box_init(gameObject* this)
 {
-    gameObject* go = object();
-    go->drawable = true;
-    go->size = 1.5;
-    go->pos = vec(x, y);
-    go->texID = TEXID_BOX;
-
     const double w = 32;
     const double h = 32;
 
     ltracer_pushEdge(
-            vec_add(go->pos, vec_mult(vec( w, -h), go->size / 2.0 )),
-            vec_add(go->pos, vec_mult(vec(-w, -h), go->size / 2.0 )),
-            vec_add(go->pos, vec_mult(vec(-w,  h), go->size / 2.0 )),
-            vec_add(go->pos, vec_mult(vec( w,  h), go->size / 2.0 )));
+            vec_add(this->pos, vec_mult(vec( w, -h), this->size / 2.0 )),
+            vec_add(this->pos, vec_mult(vec(-w, -h), this->size / 2.0 )),
+            vec_add(this->pos, vec_mult(vec(-w,  h), this->size / 2.0 )),
+            vec_add(this->pos, vec_mult(vec( w,  h), this->size / 2.0 )));
+}
+
+gameObject* createBox()
+{
+    gameObject* go = object();
+    go->drawable = true;
+    go->size = 1.5;
+    go->texID = TEXID_BOX;
+    go->onInit = box_init;
 
     return go;
 }

@@ -25,6 +25,11 @@ void initCommands(void)
 
     rlist_register_command(create_command("image", 6, rlist_command_image));
     rlist_register_command(create_command("animation", 7, rlist_command_animation));
+
+    rlist_register_command(create_command("scene", 3, rlist_command_scene));
+    rlist_register_command(create_command("sog_open", 1, rlist_command_sog_open));
+    rlist_register_command(create_command("sog_add", 3, rlist_command_sog_add));
+    rlist_register_command(create_command("sog_add_ex", 10, rlist_command_sog_add_ex));
 }
 
 int rlist_command_echo_v(rlist_cdata *data)
@@ -111,7 +116,7 @@ int rlist_command_set(rlist_cdata *data)
 
     for(int i = 0; i < variablesCount; i++)
         if(!strcmp(data->args[0], variables[i]->name)) {
-            printf("Rlist error: Variable with same name already exists, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+            printf("Rlist error: Variable with same name \"%s\" already exists, at line %i in \"%s\"\n", variables[i]->name, data->lineIndex, data->filename);
             return !data->strict;
         }
 
@@ -273,3 +278,117 @@ int rlist_command_animation(rlist_cdata* data) {
 
     texmPush(createAnimation(paths, frameCnt, id, scope, vec(cX, cY), mode));
 }
+
+gameScene* listeningScene = NULL;
+
+int rlist_command_scene(rlist_cdata *data)
+{
+    int id, scope, back;
+    if (!getIntValue(&id, data->args[0], "id", data)) return !data->strict;
+    if (!getIntValue(&scope, data->args[1], "scope", data)) return !data->strict;
+    if (!getIntValue(&back, data->args[2], "back", data)) return !data->strict;
+
+    gameScene* scene = createScene(id, scope);
+    scene->backgroundTexId = back;
+
+    scmPushScene(scene);
+}
+
+int rlist_command_sog_open(rlist_cdata *data)
+{
+    int id;
+    if (!getIntValue(&id, data->args[0], "id", data)) return !data->strict;
+    listeningScene = scmGetScene(id);
+    if(listeningScene == NULL) {
+        printf("Rlist data error: Unable to find scene with specified id \"%i\", at line %i in \"%s\"\n", id, data->lineIndex, data->filename);
+        return !data->strict;
+    }
+}
+
+int rlist_command_sog_add (rlist_cdata *data)
+{
+    if(listeningScene == NULL) {
+        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        return !data->strict;
+    }
+
+    int id;
+    double x, y;
+    if (!getIntValue   (&id, data->args[0], "id", data)) return !data->strict;
+    if (!getDoubleValue(&x,  data->args[1], "x",  data)) return !data->strict;
+    if (!getDoubleValue(&y,  data->args[2], "y",  data)) return !data->strict;
+
+    publicObject* po = scmGetPublicObject(id);
+    if(po == NULL) {
+        printf("Rlist data error: Unable to find public object with id %i, at line %i in \"%s\"\n", id, data->lineIndex, data->filename);
+        return !data->strict;
+    }
+
+    gameObject* go = po->init();
+    go->pos = vec(x, y);
+    scmAddStartupObject(listeningScene, go);
+}
+
+int rlist_command_sog_add_ex (rlist_cdata *data)
+{
+    if(listeningScene == NULL) {
+        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        return !data->strict;
+    }
+
+    int id, texId, _color, drawable, depth, ani_speed;
+    double x, y, angle, size;
+    if (!getIntValue   (&id,        data->args[0], "id",        data)) return !data->strict;
+    if (!getDoubleValue(&x,         data->args[1], "x",         data)) return !data->strict;
+    if (!getDoubleValue(&y,         data->args[2], "y",         data)) return !data->strict;
+
+    publicObject* po = scmGetPublicObject(id);
+    if(po == NULL) {
+        printf("Rlist data error: Unable to find public object with id %i, at line %i in \"%s\"\n", id, data->lineIndex, data->filename);
+        return !data->strict;
+    }
+
+    gameObject* go = po->init();
+    go->pos = vec(x, y);
+
+    const char* defaults = "defaults"; //TODO
+
+    if(strcmp(data->args[3], defaults) != 0) {
+        if (!getDoubleValue(&angle, data->args[3], "angle", data)) return !data->strict;
+        go->angle = angle;
+    }
+
+    if(strcmp(data->args[4], defaults) != 0) {
+        if (!getDoubleValue(&size, data->args[4], "size", data)) return !data->strict;
+        go->size = size;
+    }
+
+    if(strcmp(data->args[5], defaults) != 0) {
+        if (!getIntValue(&texId, data->args[5], "texid", data)) return !data->strict;
+        go->texID = texId;
+    }
+
+    if(strcmp(data->args[6], defaults) != 0) {
+        if (!getIntValue(&_color, data->args[6], "color", data)) return !data->strict;
+
+    }
+
+    if(strcmp(data->args[7], defaults) != 0) {
+        if (!getIntValue(&drawable, data->args[7], "drawable", data)) return !data->strict;
+        go->drawable = drawable;
+    }
+
+    if(strcmp(data->args[8], defaults) != 0) {
+        if (!getIntValue(&depth, data->args[8], "depth", data)) return !data->strict;
+        go->depth = depth;
+    }
+
+    if(strcmp(data->args[9], defaults) != 0) {
+        if (!getIntValue(&ani_speed, data->args[9], "ani_speed", data)) return !data->strict;
+        go->animationSpeed = ani_speed;
+    }
+
+    scmAddStartupObject(listeningScene, go);
+}
+
+//object_ex   scene_id           x     y     angle     size        texid       color      drawable   depth      ani_speed

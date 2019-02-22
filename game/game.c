@@ -6,11 +6,11 @@
 
 void initGame(int argc, char** argv)
 {
+    initPublicObjects();
     initGraphics(argc, argv, 800, 600, "GAME", true, "../resources/resources.rlist");
-    initScenes();
 }
 
 void runGame(void)
 {
-    runApp(SCENEID_MAIN);
+    runApp(0);
 }

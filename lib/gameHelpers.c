@@ -5,6 +5,22 @@
 #include "gameHelpers.h"
 
 
+int isInWindowExtendedRect(gameObject* object, int exW, int exH)
+{
+    int winW, winH, texW = 0, texH = 0;
+    getWinSize(&winW, &winH);
+
+    if(object->cachedTex) {
+        texW = object->cachedTex->width;
+        texH = object->cachedTex->height;
+    }
+
+    return object->pos.x < - texW * object->size - exW ||
+           object->pos.x >   texW * object->size + exW + winW ||
+           object->pos.y < - texH * object->size - exH ||
+           object->pos.y >   texH * object->size + exH + winH;
+}
+
 int isInWindowRect(gameObject* object)
 {
     int winW, winH, texW = 0, texH = 0;

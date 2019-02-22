@@ -92,7 +92,7 @@ void clearTokens()
 
 void trim(char * s) {
     char * p = s;
-    int l = strlen(p);
+    size_t l = strlen(p);
 
     while(isspace(p[l - 1])) p[--l] = 0;
     while(* p && isspace(* p)) ++p, --l;
@@ -112,7 +112,6 @@ void proceed_line(char* input, int start, int end)
 
 void get_lines(char* str)
 {
-    int a = 0;
     int startIndex = 0;
     int endIndex = 0;
 
@@ -125,7 +124,7 @@ void get_lines(char* str)
     }
 
     if(str[strlen(str)] != '\n') {
-        proceed_line(str, startIndex, strlen(str) - 1);
+        proceed_line(str, startIndex, (int)strlen(str) - 1);
     }
 }
 
@@ -163,7 +162,7 @@ int rlist_load(char* filename, int strict)
     for(int i = 0; i < myLinesCount; i++)
     {
         char* line = myLines[i];
-        puts(line);
+        //puts(line);
 
         if(!getTokens(line)) {
             printf("Rlist error: Invalid syntax at line %i in \"%s\"\n", lineCounter, filename);
@@ -205,8 +204,8 @@ int rlist_load(char* filename, int strict)
                     if(data->fnToAddLines) {
 
                         if(!rlist_load(data->fnToAddLines, strict)) {
-                            if(strict) goto end;
-                            else return false;
+                            if(strict) return false;
+                            else goto end;
                         }
 
                         clearTokens();

@@ -20,5 +20,6 @@ void loadTexture(char* fn, int id, int scope, vec_t center, int mode);
 void loadAnimation(int framesCount, int id, int scope, vec_t center, int mode, ...);
 vec_t relativeCoordinates(gameObject* obj);
 int isInWindowRect(gameObject* obj);
+int isInWindowExtendedRect(gameObject* obj, int exW, int exH);
 
 #endif //ZOMBOID2_GAMEHELPERS_H

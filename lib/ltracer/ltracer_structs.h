@@ -12,6 +12,7 @@ typedef struct _ltracer_data {
 
     vec_t pos;
     double angle;
+    int disabled;
 
     relPoint_t* points;
     int pointsCount;

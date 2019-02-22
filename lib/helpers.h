@@ -7,7 +7,9 @@
 
 #include <stdio.h>
 #include <math.h>
+
 #include "structs.h"
+#include "eventfuncs.h"
 
 #define true 1
 #define TRUE 1
@@ -19,8 +21,6 @@ int fileExists(const char* filename);
 
 double twoPointsAngle(vec_t p1, vec_t p2);
 double distance(vec_t p1, vec_t p2);
-
-
 
 double toRad(double angle);
 double toDeg(double angle);

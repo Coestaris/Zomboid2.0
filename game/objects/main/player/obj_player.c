@@ -4,21 +4,16 @@
 
 #include "obj_player.h"
 
-double flashlightAlphas[PLAYER_FLASHLIGHTS] = { .03, .025, .015 };
-double flashlightSizes [PLAYER_FLASHLIGHTS] = { 1, 1.15, 1.5 };
-
 void player_event_keyPressed(gameObject* this, void* data)
 {
     keyboardEvent* ke = data;
     playerData* pd = this->data;
 
     if(ke->key == 'f') {
-        pd->flashLight = !pd->flashLight;
-        pd->backLight->drawable = pd->flashLight;
+        pd->enabledFlashLight = !pd->enabledFlashLight;
+        ((lightTracer_data*)pd->backLight->data)->data->disabled = !pd->enabledFlashLight;
+        //pd->flashlight->drawable = pd->enabledFlashLight;
 
-        for (int i = 0; i < PLAYER_FLASHLIGHTS; i++) {
-            pd->flashlights[i]->drawable = pd->flashLight;
-        }
     } else if(ke->key == 'e') {
 
         srfDrawTexture(texmGetID(TEXID_BOX), 0, 1, vec(100, 100), 0, 0);
@@ -40,8 +35,8 @@ void player_init(gameObject* object)
 
     playerData* pd = object->data;
 /*    for(int i = 0; i < PLAYER_FLASHLIGHTS; i++) {
-        pd->flashlights[i] = createFlashlight(object, flashlightSizes[i], flashlightAlphas[i]);
-        scmPushObject(pd->flashlights[i]);
+        pd->flashlight[i] = createFlashlight(object, flashlightSizes[i], flashlightAlphas[i]);
+        scmPushObject(pd->flashlight[i]);
     }
 */
     scmPushObject(pd->backLight);
@@ -89,7 +84,7 @@ void player_event_update(gameObject *object, void *data)
     }
 
 
-    object->angle = twoPointsAngle(rel, mpos);
+    object->angle = twoPointsAngle(object->pos, mpos);
 
     if(keyPressed('a') || specKeyPressed(GLUT_KEY_LEFT))  object->pos.x -= PLAYER_MOVE_X;
     if(keyPressed('w') || specKeyPressed(GLUT_KEY_UP))    object->pos.y -= PLAYER_MOVE_Y;
@@ -126,27 +121,13 @@ void player_event_update(gameObject *object, void *data)
 
     double dist = distance(rel, mpos);
 
-    if(dist < PLAYER_FLASHLIGHT_MINDIST) dist = PLAYER_FLASHLIGHT_MINDIST;
-    else if(dist > PLAYER_FLASHLIGHT_MAXDIST) dist = PLAYER_FLASHLIGHT_MAXDIST;
-    if(pd->flashLight) {
-
-        for (int i = 0; i < PLAYER_FLASHLIGHTS; i++) {
-            pd->flashlights[i]->angle = object->angle;
-            pd->flashlights[i]->pos = vec(
-                    rel.x + (pd->flashlights[i]->cachedTex ? pd->flashlights[i]->cachedTex->width / 2.0 : 0),
-                    rel.y);
-
-            flashlightData *fd = pd->flashlights[i]->data;
-            pd->flashlights[i]->size = fd->minSize + (dist - PLAYER_FLASHLIGHT_MINDIST) / (PLAYER_FLASHLIGHT_MAXDIST - PLAYER_FLASHLIGHT_MINDIST);
-        }
-
+    if(pd->enabledFlashLight) {
+        pd->backLight->pos = rel;
+        pd->backLight->angle = object->angle + M_PI;
     }
 
-    pd->backLight->pos = rel;
-    pd->backLight->angle = object->angle + M_PI;
 
     pd->prevAnimationFrame = object->frame;
-
 
     ltracer_update();
     ltracer_draw();
@@ -168,7 +149,7 @@ gameObject* createPlayer()
     pd->lastFireFrame = getFrame();
     pd->currentLightsCount = 0;
     pd->prevAnimationFrame = 0;
-    pd->flashLight = false;
+    pd->enabledFlashLight = false;
 
     pd->backLight =
             createTexturedDirectLT(go->pos, 400, M_PI_4, 500, 40, color(1, 1, 1, 0.7), texmGetID(TEXID_LIGHT_WIDE), 0, vec(-2, 2));

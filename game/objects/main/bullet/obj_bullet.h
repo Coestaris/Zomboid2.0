@@ -5,9 +5,9 @@
 #ifndef ZOMBOID2_OBJ_BULLET_H
 #define ZOMBOID2_OBJ_BULLET_H
 
-#define BULLET_SPEED 25
-#define BULLET_LIGHT_ALPHA .02
-#define BULLET_LIGHT_SIZE 1.3
+#define BULLET_SPEED 15
+#define BULLET_LIGHT_ALPHA .3
+#define BULLET_LIGHT_SIZE 400
 
 #include "../../../objectInclude.h"
 #include "../light/obj_light.h"

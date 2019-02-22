@@ -35,6 +35,11 @@ int rlist_command_echo_all_vars(rlist_cdata *data);
 int rlist_command_image(rlist_cdata* data);
 int rlist_command_animation(rlist_cdata* data);
 
+int rlist_command_scene(rlist_cdata *data);
+int rlist_command_sog_open(rlist_cdata *data);
+int rlist_command_sog_add (rlist_cdata *data);
+int rlist_command_sog_add_ex (rlist_cdata *data);
+
 void initCommands(void);
 rlist_c** rlist_getcommands(int* count);
 
