@@ -38,7 +38,7 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
     rlist_init();
 
     if(!fileExists(mainResFile)) {
-        printf("\"%s\" is not exists", mainResFile);
+        printf("\"%s\" doesn't exist", mainResFile);
         exit(1);
     }
 
