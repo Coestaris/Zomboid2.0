@@ -1,0 +1,8 @@
+//
+// Created by maxim on 2/23/19.
+//
+
+#ifndef SERVER_ACTIONNOTIFIER_H
+#define SERVER_ACTIONNOTIFIER_H
+
+#endif //SERVER_ACTIONNOTIFIER_H

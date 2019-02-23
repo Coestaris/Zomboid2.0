@@ -305,7 +305,7 @@ int rlist_command_sog_open(rlist_cdata *data)
     }
 }
 
-int rlist_command_sog_add (rlist_cdata *data)
+int rlist_command_sog_add(rlist_cdata *data)
 {
     if(listeningScene == NULL) {
         printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
@@ -329,7 +329,7 @@ int rlist_command_sog_add (rlist_cdata *data)
     scmAddStartupObject(listeningScene, go);
 }
 
-int rlist_command_sog_add_ex (rlist_cdata *data)
+int rlist_command_sog_add_ex(rlist_cdata *data)
 {
     if(listeningScene == NULL) {
         printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
