@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #include "sockets.h"
+#include "handlers/baseHandlers.h"
 
 int isInt(char* string) {
     int start = 0;
@@ -24,6 +25,8 @@ int main(int argc, char** argv) {
 
         setPort(atoi(argv[1]));
     }
+
+    initBaseHandlers();
 
     socketInit();
     socketMainloop();

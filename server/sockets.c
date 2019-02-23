@@ -3,6 +3,7 @@
 //
 
 #include "sockets.h"
+#include "actionNotifier.h"
 
 uint16_t port = 1234;
 socket_client* clients[MAX_CLIENTS];
@@ -15,10 +16,10 @@ void setPort(uint16_t _port)
 int socketInit(void)
 {
     for (int i = 0; i < MAX_CLIENTS; i++) {
-        clients[i] = malloc(sizeof(socket_client));
-        clients[i]->sd = 0;
+        clients[i] = createClient();
     }
 
+    notifierSocketInited();
     return 1;
 }
 
@@ -35,13 +36,13 @@ int socketMainloop(void)
     if((master_socket = socket(AF_INET , SOCK_STREAM , 0)) == 0)
     {
         perror("socket failed");
-        exit(EXIT_FAILURE);
+        return 0;
     }
 
     if(setsockopt(master_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0 )
     {
         perror("setsockopt");
-        exit(EXIT_FAILURE);
+        return 0;
     }
 
     address.sin_family = AF_INET;
@@ -54,7 +55,7 @@ int socketMainloop(void)
         exit(EXIT_FAILURE);
     }
 
-    printf("Listener on port %d \n", port);
+    notifierSocketListening(port);
 
     if (listen(master_socket, PENDING_CONNECTIONS) < 0)
     {
@@ -62,8 +63,8 @@ int socketMainloop(void)
         exit(EXIT_FAILURE);
     }
 
+    notifierSocketWaiting();
     addrlen = sizeof(address);
-    puts("Waiting for connections ...");
 
     while(1)
     {
@@ -71,38 +72,40 @@ int socketMainloop(void)
         FD_SET(master_socket, &readfds);
         max_sd = master_socket;
 
-        for (i = 0 ; i < MAX_CLIENTS ; i++)
+        for (i = 0; i < MAX_CLIENTS; i++)
         {
             sd = clients[i]->sd;
-            if(sd > 0) FD_SET(sd , &readfds);
+            if(sd > 0) FD_SET(sd, &readfds);
             if(sd > max_sd) max_sd = sd;
         }
 
 
         activity = select(max_sd + 1 , &readfds , NULL , NULL , NULL);
-        if((activity < 0) && (errno!=EINTR))
+        if((activity < 0) && (errno != EINTR))
         {
-            printf("select error");
+            perror("select error");
+            //return 0;
         }
 
-        if (FD_ISSET(master_socket, &readfds))
+        if(FD_ISSET(master_socket, &readfds))
         {
             if((new_socket = accept(master_socket, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0)
             {
                 perror("accept");
-                exit(EXIT_FAILURE);
+                return 0;
             }
 
-            printf("New connection , socket fd is %d , ip is : %s , port : %d\n" , new_socket,
-                    inet_ntoa(address.sin_addr) , ntohs(address.sin_port));
-
+            notifierSocketNew(new_socket, address);
 
             for(i = 0; i < MAX_CLIENTS; i++)
             {
                 if( clients[i]->sd == 0 )
                 {
                     clients[i]->sd = new_socket;
-                    printf("Adding to list of sockets as %d\n" , i);
+                    clients[i]->info->state = STATE_UNDEFINED;
+
+                    notifierSocketAdded(i);
+                    handleConnection(clients[i]);
                     break;
                 }
             }
@@ -115,10 +118,7 @@ int socketMainloop(void)
             {
                 if ((valread = read(sd , clients[i]->buffer, 1024)) == 0)
                 {
-                    getpeername(sd , (struct sockaddr*)&address , (socklen_t*)&addrlen);
-                    printf("Host disconnected , ip %s , port %d \n", inet_ntoa(address.sin_addr) , ntohs(address.sin_port));
-                    close( sd );
-                    clients[i]->sd = 0;
+                    clientDisconnect(clients[i]);
                 }
                 else
                 {

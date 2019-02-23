@@ -3,4 +3,4 @@ project(server C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(server main.c sockets.c sockets.h logicHandler.c logicHandler.h client.c client.h actionNotifier.c actionNotifier.h)
+add_executable(server main.c sockets.c sockets.h logicHandler.c logicHandler.h client.c client.h actionNotifier.c actionNotifier.h handlers/baseHandlers.c handlers/baseHandlers.h handlers/messageTypes.h)

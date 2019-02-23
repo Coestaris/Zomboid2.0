@@ -2,30 +2,34 @@
 // Created by maxim on 2/23/19.
 //
 
-#include <stdlib.h>
-#include <sys/socket.h>
-#include <stdio.h>
-#include <zconf.h>
-#include <arpa/inet.h>
-
 #ifndef SERVER_CLIENT_H
 #define SERVER_CLIENT_H
 
+#include <stdlib.h>
+#include <memory.h>
+
 #define BUFFER_SIZE 1025
 #define MAX_CLIENTS 30
+
+#define STATE_EMPTY 0
+#define STATE_UNDEFINED 1
+#define STATE_INITED 2
+
+typedef struct _client_info {
+    int state;
+    char* name;
+
+} client_info;
 
 typedef struct _socket_client {
     int sd;
 
     char buffer[BUFFER_SIZE];
     ssize_t buffLen;
+    client_info* info;
 
 } socket_client;
 
-int clientActive(socket_client* client);
-int clientRecData(socket_client* client);
-
-int clientSend(socket_client* client, char* buffer, ssize_t buffLen);
-int clientDisconnect(socket_client* client);
+socket_client* createClient(void);
 
 #endif //SERVER_CLIENT_H
