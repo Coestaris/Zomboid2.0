@@ -1,5 +1,8 @@
 ; scopes
-set TEXSCOPE_MAIN 0
+set TEXSCOPE_MAIN_MENU 0
+set TEXSCOPE_GAME 1
+
+set TEXSCOPE_MM_GEN 2
 
 ; texture IDs
 set TEXID_PLAYER 1

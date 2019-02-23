@@ -9,6 +9,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
+#include <ctype.h>
 
 #include "rlist_c.h"
 #include "rlist_commands.h"

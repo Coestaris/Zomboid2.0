@@ -2,7 +2,6 @@
 // Created by maxim on 1/31/19.
 //
 
-#include <ctype.h>
 #include "rlist.h"
 
 #define MAX_TOKENS 200
@@ -23,8 +22,11 @@ void rlist_init()
 }
 
 
-void proceed_token(char *token, int start, int end)
+int proceed_token(char *token, int start, int end)
 {
+    if(token[start] == ';')
+        return false;
+
     size_t len = (size_t)end - start + 2;
     char* newToken = malloc(len);
     memcpy(newToken, token + start, len - 1);
@@ -36,6 +38,8 @@ void proceed_token(char *token, int start, int end)
             memmove(&newToken[i], &newToken[i + 1], strlen(newToken) - i);
         }
     }
+
+    return true;
 }
 
 int getTokens(char *str)
@@ -60,7 +64,9 @@ int getTokens(char *str)
                 }
 
                 endIndex = i - 1;
-                proceed_token(str, startIndex, endIndex);
+                if(!proceed_token(str, startIndex, endIndex))
+                    return true;
+
                 i++;
 
             } else {
@@ -69,7 +75,8 @@ int getTokens(char *str)
                 }
 
                 endIndex = i - 1;
-                proceed_token(str, startIndex, endIndex);
+                if(!proceed_token(str, startIndex, endIndex))
+                    return true;
             }
         }
         else

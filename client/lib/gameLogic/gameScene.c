@@ -127,23 +127,29 @@ gameScene* scmGetScene(int id)
     return NULL;
 }
 
-void scmLoadScene(int id, int loadScope, int destroyObjects, int freeObjects)
+void scmLoadScene(int id)
 {
     for(int i = 0; i < scenesCount; i++)
     {
         if(scenes[i]->id == id)
         {
-            if(loadScope)
-            {
-                if(currentScene != -1) texmUnloadScope(scenes[currentScene]->scope);
-                texmLoadScope(scenes[i]->scope);
+            if (scenes[i]->scopesToUnloadCount != 0) {
+                for(int j = 0; j < scenes[i]->scopesToUnloadCount; j++) {
+                    texmUnloadScope(scenes[i]->scopesToUnload[j]);
+                }
+            }
+
+            if (scenes[i]->scopesToLoadCount != 0) {
+                for(int j = 0; j < scenes[i]->scopesToLoadCount; j++) {
+                    texmLoadScope(scenes[i]->scopesToLoad[j]);
+                }
             }
 
             currentScene = i;
 
-            if(destroyObjects)
+            if(scenes[i]->destroyObjects)
             {
-                scmDestroyAllObjects(freeObjects);
+                scmDestroyAllObjects(scenes[i]->freeObjects);
                 objectsCount = scenes[i]->startupObjectsCount;
                 memcpy(objects, scenes[i]->startupObjects, sizeof(gameObject*) * objectsCount);
             }
@@ -181,16 +187,30 @@ gameScene* createScene(int id, int scope)
     gameScene* scene = malloc(sizeof(gameScene));
     scene->scope = scope;
     scene->id = id;
+    scene->scopesToLoadCount = 0;
+    scene->scopesToUnloadCount = 0;
     scene->cachedBack = NULL;
     scene->startupObjectsCount = 0;
     scene->onLoad = NULL;
     scene->startupObjectsArrLen = 0;
+    scene->freeObjects = 1;
+    scene->destroyObjects = 1;
     return scene;
 }
 
 int scmGetObjectsCount(void)
 {
     return objectsCount;
+}
+
+void scmAddScopeToLoad(gameScene* scene, int scope)
+{
+    scene->scopesToLoad[scene->scopesToLoadCount++] = scope;
+}
+
+void scmAddScopeToUnload(gameScene* scene, int scope)
+{
+    scene->scopesToUnload[scene->scopesToUnloadCount++] = scope;
 }
 
 void scmAddStartupObject(gameScene *scene, gameObject *object)

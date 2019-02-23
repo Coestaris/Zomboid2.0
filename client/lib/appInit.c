@@ -42,7 +42,7 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
         exit(1);
     }
 
-    if(!rlist_load((char*)mainResFile, true)) {
+    if(!rlist_load(mainResFile, true)) {
         puts("There were errors while processing RList (strict mode is turned on). Exiting...");
         exit(1);
     }
@@ -68,6 +68,6 @@ void registerEvents()
 
 void runApp(int sceneID)
 {
-    scmLoadScene(sceneID, 1, 1, 1);
+    scmLoadScene(sceneID);
     glutMainLoop();
 }

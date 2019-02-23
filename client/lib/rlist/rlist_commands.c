@@ -27,9 +27,16 @@ void initCommands(void)
     rlist_register_command(create_command("animation", 7, rlist_command_animation));
 
     rlist_register_command(create_command("scene", 3, rlist_command_scene));
-    rlist_register_command(create_command("sog_open", 1, rlist_command_sog_open));
-    rlist_register_command(create_command("sog_add", 3, rlist_command_sog_add));
-    rlist_register_command(create_command("sog_add_ex", 10, rlist_command_sog_add_ex));
+    rlist_register_command(create_command("scm_open", 1, rlist_command_sog_open));
+    rlist_register_command(create_command("scm_sog_add", 3, rlist_command_sog_add));
+    rlist_register_command(create_command("scm_sog_add_ex", 10, rlist_command_sog_add_ex));
+
+    rlist_register_command(create_command("scm_close", 0, rlist_command_scm_close));
+
+    rlist_register_command(create_command("scm_sc_load", 1, rlist_command_scm_sc_load));
+    rlist_register_command(create_command("scm_sc_unload", 1, rlist_command_scm_sc_unload));
+    rlist_register_command(create_command("scm_objects_destroy", 1, rlist_command_scm_objects_destroy));
+    rlist_register_command(create_command("scm_objects_free", 1, rlist_command_scm_objects_free));
 }
 
 int rlist_command_echo_v(rlist_cdata *data)
@@ -277,6 +284,7 @@ int rlist_command_animation(rlist_cdata* data) {
     }
 
     texmPush(createAnimation(paths, frameCnt, id, scope, vec(cX, cY), mode));
+    return true;
 }
 
 gameScene* listeningScene = NULL;
@@ -292,6 +300,7 @@ int rlist_command_scene(rlist_cdata *data)
     scene->backgroundTexId = back;
 
     scmPushScene(scene);
+    return true;
 }
 
 int rlist_command_sog_open(rlist_cdata *data)
@@ -327,6 +336,7 @@ int rlist_command_sog_add(rlist_cdata *data)
     gameObject* go = po->init();
     go->pos = vec(x, y);
     scmAddStartupObject(listeningScene, go);
+    return true;
 }
 
 int rlist_command_sog_add_ex(rlist_cdata *data)
@@ -389,6 +399,82 @@ int rlist_command_sog_add_ex(rlist_cdata *data)
     }
 
     scmAddStartupObject(listeningScene, go);
+    return true;
 }
 
-//object_ex   scene_id           x     y     angle     size        texid       color      drawable   depth      ani_speed
+
+int rlist_command_scm_close(rlist_cdata *data) {
+    if(listeningScene == NULL) {
+        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        return !data->strict;
+    }
+    listeningScene = NULL;
+    return true;
+}
+
+int rlist_command_scm_sc_load(rlist_cdata *data)
+{
+    if(listeningScene == NULL) {
+        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        return !data->strict;
+    }
+
+    int scope;
+    if (!getIntValue(&scope, data->args[0], "scope", data)) return !data->strict;
+
+    scmAddScopeToLoad(listeningScene, scope);
+
+    return true;
+
+}
+
+int rlist_command_scm_sc_unload(rlist_cdata *data)
+{
+    if(listeningScene == NULL) {
+        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        return !data->strict;
+    }
+
+    int scope;
+    if (!getIntValue(&scope, data->args[0], "scope", data)) return !data->strict;
+
+    scmAddScopeToUnload(listeningScene, scope);
+
+    return true;
+}
+
+int rlist_command_scm_objects_destroy(rlist_cdata *data)
+{
+    if(listeningScene == NULL) {
+        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        return !data->strict;
+    }
+
+    if(strcmp(data->args[0], "true") == 0) {
+        listeningScene->destroyObjects = true;
+    } else if (strcmp(data->args[0], "false") == 0) {
+        listeningScene->destroyObjects = false;
+    } else {
+        if (!getIntValue(& listeningScene->destroyObjects, data->args[0], "destroyObjects", data)) return !data->strict;
+    }
+
+    return true;
+}
+
+int rlist_command_scm_objects_free(rlist_cdata *data)
+{
+    if(listeningScene == NULL) {
+        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        return !data->strict;
+    }
+
+    if(strcmp(data->args[0], "true") == 0) {
+        listeningScene->freeObjects = true;
+    } else if (strcmp(data->args[0], "false") == 0) {
+        listeningScene->freeObjects = false;
+    } else {
+        if (!getIntValue(& listeningScene->freeObjects, data->args[0], "freeObjects", data)) return !data->strict;
+    }
+
+    return true;
+}

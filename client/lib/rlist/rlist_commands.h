@@ -40,6 +40,13 @@ int rlist_command_sog_open(rlist_cdata *data);
 int rlist_command_sog_add (rlist_cdata *data);
 int rlist_command_sog_add_ex (rlist_cdata *data);
 
+
+int rlist_command_scm_close(rlist_cdata *data);
+int rlist_command_scm_sc_load(rlist_cdata *data);
+int rlist_command_scm_sc_unload(rlist_cdata *data);
+int rlist_command_scm_objects_destroy(rlist_cdata *data);
+int rlist_command_scm_objects_free(rlist_cdata *data);
+
 void initCommands(void);
 rlist_c** rlist_getcommands(int* count);
 
