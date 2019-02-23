@@ -7,7 +7,7 @@
 
 #include <malloc.h>
 
-#include "tex.h"
+#include "../resources/tex.h"
 
 typedef struct _GameObject
 {

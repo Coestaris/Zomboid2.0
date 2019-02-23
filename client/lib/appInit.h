@@ -8,8 +8,8 @@
 #include "GL/freeglut.h"
 #include "GL/gl.h"
 
-#include "eventfuncs.h"
-#include "gameScene.h"
+#include "gameLogic/eventfuncs.h"
+#include "gameLogic/gameScene.h"
 #include "helpers.h"
 #include "rlist/rlist.h"
 

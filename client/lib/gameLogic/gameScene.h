@@ -8,7 +8,7 @@
 #include <memory.h>
 
 #include "gameobject.h"
-#include "texManager.h"
+#include "../resources/texManager.h"
 #include "eventQueue.h"
 
 #define MAXSCENES 256

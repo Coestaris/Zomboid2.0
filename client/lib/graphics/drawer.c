@@ -85,7 +85,7 @@ void dcDrawLine(vec_t p1, vec_t p2, color_t col)
     glEnd();
 }
 
-#include "helpers.h"
+#include "../helpers.h"
 
 void dcDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col)
 {

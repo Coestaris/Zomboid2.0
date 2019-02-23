@@ -1,6 +1,6 @@
 //#include "game/game.h"
 
-#include "sockets.h"
+#include "lib/network/sockets.h"
 
 void handler_init_res(char* data, size_t len)
 {

@@ -12,7 +12,7 @@
 #include <libgen.h>
 #include <zconf.h>
 
-#include "../texManager.h"
+#include "../resources/texManager.h"
 #include "../helpers.h"
 #include "rlist_c.h"
 

@@ -13,7 +13,7 @@
 #include <GL/freeglut.h>
 #include <GL/gl.h>
 #include <SOIL/SOIL.h>
-#include "structs.h"
+#include "../structs.h"
 
 #define TEXMODE_DEFAULT 0
 #define TEXMODE_BACKGROUND 1

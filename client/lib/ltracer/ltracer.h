@@ -5,7 +5,7 @@
 #ifndef ZOMBOID2_LTRACER_H
 #define ZOMBOID2_LTRACER_H
 
-#include "../drawer.h"
+#include "../graphics/drawer.h"
 #include "../structs.h"
 
 #include "ltracer_structs.h"

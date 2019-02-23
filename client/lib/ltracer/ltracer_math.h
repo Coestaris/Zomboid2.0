@@ -10,7 +10,7 @@
 
 #include "ltracer_structs.h"
 
-#include "../drawer.h"
+#include "../graphics/drawer.h"
 #include "../helpers.h"
 
 int ltracer_getIntersection(double rayX1, double rayY1, double rayX2, double rayY2,

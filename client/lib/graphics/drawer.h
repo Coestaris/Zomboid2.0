@@ -11,8 +11,8 @@
 #include <GL/gl.h>
 
 #include "surface.h"
-#include "tex.h"
-#include "structs.h"
+#include "../resources/tex.h"
+#include "../structs.h"
 
 #define BACKGROUND_OFFSET 15
 

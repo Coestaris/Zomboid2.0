@@ -8,7 +8,7 @@
 #include <GL/freeglut.h>
 #include <GL/gl.h>
 
-#include "tex.h"
+#include "../resources/tex.h"
 
 void srfInit(int wW, int wH);
 void srfClear();

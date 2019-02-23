@@ -9,7 +9,7 @@
 #include <math.h>
 
 #include "structs.h"
-#include "eventfuncs.h"
+#include "gameLogic/eventfuncs.h"
 
 #define true 1
 #define TRUE 1

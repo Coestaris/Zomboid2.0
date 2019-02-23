@@ -9,12 +9,12 @@
 #include <math.h>
 
 #include "gameobject.h"
-#include "drawer.h"
-#include "tex.h"
-#include "texManager.h"
+#include "../graphics/drawer.h"
+#include "../resources/tex.h"
+#include "../resources/texManager.h"
 #include "eventfuncs.h"
 
-#include "helpers.h"
+#include "../helpers.h"
 
 void loadTexture(char* fn, int id, int scope, vec_t center, int mode);
 void loadAnimation(int framesCount, int id, int scope, vec_t center, int mode, ...);

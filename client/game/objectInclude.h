@@ -5,11 +5,11 @@
 #ifndef ZOMBOID2_OBJECTINCLUDE_H
 #define ZOMBOID2_OBJECTINCLUDE_H
 
-#include "../lib/gameobject.h"
-#include "../lib/eventQueue.h"
-#include "../lib/helpers.h"
-#include "../lib/eventfuncs.h"
+#include "../lib/gameLogic/gameobject.h"
+#include "../lib/gameLogic/eventQueue.h"
+#include "../lib/gameLogic/eventfuncs.h"
 #include "../lib/ltracer/ltracer.h"
+#include "../lib/helpers.h"
 
 #include "loader.h"
 

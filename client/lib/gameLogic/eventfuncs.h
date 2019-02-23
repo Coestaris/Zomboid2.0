@@ -13,8 +13,8 @@
 #include "GL/freeglut.h"
 #include "GL/gl.h"
 
-#include "drawer.h"
-#include "texManager.h"
+#include "../graphics/drawer.h"
+#include "../resources/texManager.h"
 #include "eventQueue.h"
 #include "gameScene.h"
 

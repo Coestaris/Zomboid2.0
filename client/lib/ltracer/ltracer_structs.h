@@ -5,8 +5,8 @@
 #ifndef ZOMBOID2_LTRACER_STRUCTS_H
 #define ZOMBOID2_LTRACER_STRUCTS_H
 
-#include "../tex.h"
-#include "../drawer.h"
+#include "../resources/tex.h"
+#include "../graphics/drawer.h"
 
 typedef struct _ltracer_data {
 

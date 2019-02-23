@@ -7,9 +7,9 @@
 
 #include <stdarg.h>
 
-#include "../lib/texManager.h"
-#include "../lib/gameHelpers.h"
-#include "../lib/gameScene.h"
+#include "../lib/resources/texManager.h"
+#include "../lib/gameLogic/gameHelpers.h"
+#include "../lib/gameLogic/gameScene.h"
 
 #include "objects/main/player/obj_player.h"
 #include "objects/main/box/obj_box.h"
