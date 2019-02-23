@@ -19,8 +19,8 @@ void handler_init_res(socket_client* client, char* data, size_t dataLen)
 
     client->info->name = nstr;
 
-    printf("Thanks for initing! Your name is %s", client->info->name);
-    clientSend(client, client->info->name, strlen(client->info->name));
+    printf("Thanks for initing! Your name is %s\n", client->info->name);
+    //clientSend(client, client->info->name, strlen(client->info->name));
 }
 
 void initBaseHandlers(void)

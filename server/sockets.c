@@ -116,7 +116,7 @@ int socketMainloop(void)
             sd = clients[i]->sd;
             if (FD_ISSET( sd , &readfds))
             {
-                if ((valread = read(sd , clients[i]->buffer, 1024)) == 0)
+                if ((valread = read(sd , clients[i]->buffer, BUFFER_SIZE)) == 0)
                 {
                     clientDisconnect(clients[i]);
                 }

@@ -28,7 +28,6 @@ int clientRecData(socket_client* client);
 int clientSend(socket_client* client, char* buffer, ssize_t buffLen);
 int clientDisconnect(socket_client* client);
 
-
 void clientSendMessage(socket_client* client, int messageType, char* buffer, ssize_t buffLen);
 void pushHandler(int messageType, void (*func)(socket_client*, char*, size_t));
 
