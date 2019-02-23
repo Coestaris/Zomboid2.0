@@ -104,6 +104,8 @@ void ltracer_update()
 
             edges[0]->d = vec(ld->pos.x - v_norm.x * ld->width - v_dir.x * ld->range,
                               ld->pos.y - v_norm.y * ld->width - v_dir.y * ld->range);
+
+            mRange = fmax(ld->range, ld->width) * M_SQRT2 + 0.001;
         }
 
 

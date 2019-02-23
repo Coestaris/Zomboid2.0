@@ -4,6 +4,18 @@
 
 #include "gameHelpers.h"
 
+int isInObjectRect(gameObject* obj, vec_t point)
+{
+    if(!obj->cachedTex) {
+        return point.x == obj->pos.x && point.y == obj->pos.y;
+    } else {
+
+        return point.x > obj->pos.x &&
+               point.x < obj->pos.x + obj->cachedTex->width &&
+               point.y > obj->pos.y &&
+               point.y < obj->pos.y + obj->cachedTex->height;
+    }
+}
 
 int isInWindowExtendedRect(gameObject* object, int exW, int exH)
 {
