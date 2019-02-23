@@ -51,7 +51,7 @@ void bullet_init(gameObject* object)
     evqSubscribeEvent(object, EVT_Update, bullet_event_update);
 }
 
-gameObject* createBullet(vec_t p, vec_t dir)
+gameObject* createBullet(vec_t p, double angle)
 {
     gameObject* go = object();
     go->drawable = true;
@@ -59,7 +59,7 @@ gameObject* createBullet(vec_t p, vec_t dir)
     go->depth = 2;
     go->pos = p;
 
-    go->angle = twoPointsAngle(p, dir) + toRad(randRange(-50, 50));
+    go->angle = angle + toRad(randRange(-50, 50));
     go->texID = TEXID_BULLET;
     go->size = 1;
     go->onInit = bullet_init;

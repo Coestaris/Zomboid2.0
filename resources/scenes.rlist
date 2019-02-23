@@ -14,8 +14,8 @@ sog_add       OBJECT_BOX         200   200
 sog_add       OBJECT_BOX         300   300
 sog_add       OBJECT_BOX         400   400
 sog_add       OBJECT_BOX         400   100
-sog_add       OBJECT_PLAYER      200   200
+sog_add       OBJECT_PLAYER      200   500
 
 ; object_ex   scene_id           x     y     angle     size        texid       color      drawable   depth      ani_speed
-sog_add_ex    OBJECT_BOX         200   200   0.2       defaults    defaults    defaults   defaults   defaults   defaults
+sog_add_ex    OBJECT_BOX         200   300   0.4       defaults    defaults    defaults   defaults   defaults   defaults
 

@@ -11,8 +11,8 @@ void player_event_keyPressed(gameObject* this, void* data)
 
     if(ke->key == 'f') {
         pd->enabledFlashLight = !pd->enabledFlashLight;
-        ((lightTracer_data*)pd->backLight->data)->data->disabled = !pd->enabledFlashLight;
-        //pd->flashlight->drawable = pd->enabledFlashLight;
+        ((lightTracer_data*)pd->flashlight->data)->data->disabled = !pd->enabledFlashLight;
+        pd->flashlight->pos = this->pos;
 
     } else if(ke->key == 'e') {
 
@@ -34,12 +34,7 @@ void player_init(gameObject* object)
     evqSubscribeEvent(object, EVT_CharKeyUp, player_event_keyPressed);
 
     playerData* pd = object->data;
-/*    for(int i = 0; i < PLAYER_FLASHLIGHTS; i++) {
-        pd->flashlight[i] = createFlashlight(object, flashlightSizes[i], flashlightAlphas[i]);
-        scmPushObject(pd->flashlight[i]);
-    }
-*/
-    scmPushObject(pd->backLight);
+    scmPushObject(pd->flashlight);
 }
 
 #define FIRE_RATE 5
@@ -115,15 +110,13 @@ void player_event_update(gameObject *object, void *data)
                         rel.y + randRange(-5, 5)),
                     (int)random() % 2, (int)random() % 2);
 
-            scmPushObject(createBullet(rel, mpos));
+            scmPushObject(createBullet(rel, object->angle));
         }
     }
 
-    double dist = distance(rel, mpos);
-
     if(pd->enabledFlashLight) {
-        pd->backLight->pos = rel;
-        pd->backLight->angle = object->angle + M_PI;
+        pd->flashlight->angle = object->angle + M_PI;
+        pd->flashlight->pos = rel;
     }
 
 
@@ -149,10 +142,10 @@ gameObject* createPlayer()
     pd->lastFireFrame = getFrame();
     pd->currentLightsCount = 0;
     pd->prevAnimationFrame = 0;
-    pd->enabledFlashLight = false;
+    pd->enabledFlashLight = true;
 
-    pd->backLight =
-            createTexturedDirectLT(go->pos, 400, M_PI_4, 500, 40, color(1, 1, 1, 0.7), texmGetID(TEXID_LIGHT_WIDE), 0, vec(-2, 2));
+    pd->flashlight =
+            createTexturedDirectLT(go->pos, 800, M_PI_4, 500, 40, color(1, 1, 1, 0.5), texmGetID(TEXID_LIGHT_WIDE), 0, vec(-1.5, 1.5));
             //createDirectLT(go->pos, 400, M_PI_4, 100, 100, color(1, 1, 1, 0.4));
             //createAreaLT(go->pos, 400, color(1, 1, 0.5, 0.2));
             //createTexturedAreaLT(go->pos, 500, color(1, 1, 0.5, 0.2), texmGetID(TEXID_LIGHT), 0);
