@@ -5,18 +5,24 @@
 #ifndef ZOMBOID2_TEXLOADER_H
 #define ZOMBOID2_TEXLOADER_H
 
-#include <stdarg.h>
-
 #include "../lib/resources/texManager.h"
 #include "../lib/gameLogic/gameHelpers.h"
 #include "../lib/gameLogic/gameScene.h"
 
+#include "objects/menu/object_menu.h"
 #include "objects/main/player/obj_player.h"
 #include "objects/main/box/obj_box.h"
 
+#define SCENEID_MAIN_MENU 0
+#define SCENEID_GAME 1
 
-#define TEXSCOPE_MAIN 0
 
+#define TEXSCOPE_MAIN_MENU 0
+#define TEXSCOPE_GAME 1
+#define TEXSCOPE_MM_GEN 2
+
+
+// ====== TEXTURE IDS ======
 #define TEXID_PLAYER 1
 #define TEXID_BULLET 2
 #define TEXID_BOX 3
@@ -35,10 +41,14 @@
 
 #define TEXID_BACK_CONCRETE 7
 
-#define SCENEID_MAIN 0
+#define TEXID_MENU_BUTTON_SMALL 16
+#define TEXID_MENU_BUTTON 17
 
-#define OBJECT_BOX    1
+
+// ===== OBJECTS ======
 #define OBJECT_PLAYER 0
+#define OBJECT_BOX    1
+#define OBJECT_MENU   2
 
 void initPublicObjects(void);
 

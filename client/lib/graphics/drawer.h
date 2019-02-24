@@ -61,6 +61,7 @@ void dqnDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col);
 void dqnDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale);
 void dqnDrawRotatedTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
                              double scale, vec_t texOffset, vec_t texScaleFactor);
+void dqnClearQueue(void);
 
 void dcRotateScreen(double angle, double sceneW, double sceneH);
 void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, double hh, vec_t cp, int s1, int s2);

@@ -82,6 +82,9 @@ void scmPushObject(gameObject *object)
 
 void scmDestroyAllObjects(int free)
 {
+    for(int i = 0; i < objectsCount; i++)
+        evqUnsubscribeEvents(objects[i]);
+
     if(free) for(int i = 0; i < objectsCount; i++)
         freeObject(objects[i]);
     memset(objects, 0, sizeof(gameObject*) * MAXOBJECTS);
@@ -170,6 +173,9 @@ void scmLoadScene(int id)
                 if (scenes[i]->startupObjects[j]->drawable && !scenes[i]->startupObjects[j]->cachedTex)
                     scenes[i]->startupObjects[j]->cachedTex = texmGetID(scenes[i]->startupObjects[j]->texID);
             }
+
+            dqnClearQueue();
+            evqResetEvents();
 
             if(scenes[i]->onLoad)
                 scenes[i]->onLoad(scenes[i]);

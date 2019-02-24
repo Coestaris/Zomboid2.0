@@ -8,4 +8,5 @@ void initPublicObjects(void)
 {
     scmPushPublicObject(OBJECT_PLAYER, createPlayer);
     scmPushPublicObject(OBJECT_BOX, createBox);
+    scmPushPublicObject(OBJECT_MENU, createMenu);
 }

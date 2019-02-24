@@ -15,6 +15,8 @@ image                   TEXID_BOX           TEXSCOPE_GAME        0    0    TM_DE
 image                   TEXID_BACK_CONCRETE TEXSCOPE_MM_GEN      0    0    TM_BACK      images/backgrounds/concrete.png
 
 ; type      frameCnt    id                  scope                cX  cY    mode         paths
+animation   2           TEXID_MENU_BTN_SM   TEXSCOPE_MAIN_MENU   0   0     TM_DEFAULT   images/menu/button_small/button%i.png
+animation   2           TEXID_MENU_BTN      TEXSCOPE_MAIN_MENU   0   0     TM_DEFAULT   images/menu/button/button%i.png
 animation   3           TEXID_ENEMY         TEXSCOPE_GAME        0   0     TM_DEFAULT   images/enemy/enemy%i.png
 animation   3           TEXID_PLAYER        TEXSCOPE_GAME       15   0     TM_DEFAULT   images/player_1/image%i.png
 animation   6           TEXID_SHELLCASE     TEXSCOPE_GAME        0   0     TM_DEFAULT   images/shellCase/shellCase%i.png

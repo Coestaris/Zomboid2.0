@@ -22,6 +22,9 @@ void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, dou
 
 void dcDrawText(vec_t pos, color_t col, void *font, const char *string)
 {
+    if(!string)
+        return;
+
     bindTex(NULL, 0);
 
     int j = (int)strlen( string );
@@ -405,6 +408,11 @@ void dcDrawPrimitives()
                 break;
         }
     }
+    dpCount = 0;
+}
+
+void dqnClearQueue(void)
+{
     dpCount = 0;
 }
 
