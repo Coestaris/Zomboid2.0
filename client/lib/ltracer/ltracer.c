@@ -44,7 +44,7 @@ void ltracer_removeLight(ltracer_data *ld)
     }
 }
 
-int ltracer_pushEdge(vec_t a, vec_t b, vec_t c, vec_t d)
+ltracer_edge* ltracer_pushEdge(vec_t a, vec_t b, vec_t c, vec_t d)
 {
     assert(edgesCount <= MAX_EDGES);
 
@@ -58,7 +58,7 @@ int ltracer_pushEdge(vec_t a, vec_t b, vec_t c, vec_t d)
     edges[edgesCount++] = edge;
 
     ltracer_updateEdges(edges, edgesCount);
-    return edge->id;
+    return edge;
 }
 
 void ltracer_removeEdge(int edgeId)

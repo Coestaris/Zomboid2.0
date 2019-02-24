@@ -17,7 +17,7 @@
 void ltracer_pushLight(ltracer_data *ld);
 void ltracer_removeLight(ltracer_data *ld);
 
-int ltracer_pushEdge(vec_t a, vec_t b, vec_t c, vec_t d);
+ltracer_edge* ltracer_pushEdge(vec_t a, vec_t b, vec_t c, vec_t d);
 void ltracer_removeEdge(int edgeId);
 
 void ltracer_update();
