@@ -43,7 +43,8 @@
 
 #define TEXID_MENU_BUTTON_SMALL 16
 #define TEXID_MENU_BUTTON 17
-
+#define TEXID_MENU_INDBL 18
+#define TEXID_MENU_OUT 19
 
 // ===== OBJECTS ======
 #define OBJECT_PLAYER 0

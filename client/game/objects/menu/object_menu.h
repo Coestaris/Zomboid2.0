@@ -7,7 +7,8 @@
 
 #include "../../objectInclude.h"
 
-#include "object_button.h"
+#include "controls/control_composer.h"
+
 
 gameObject* createMenu();
 

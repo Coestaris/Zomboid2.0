@@ -12,6 +12,9 @@ image                   TEXID_BOX           TEXSCOPE_GAME        0    0    TM_DE
 image                   TEXID_BOX           TEXSCOPE_GAME        0    0    TM_DEFAULT   images/enemy/larm_d.png
 image                   TEXID_BOX           TEXSCOPE_GAME        0    0    TM_DEFAULT   images/enemy/rarm_d.png
 
+image                   TEXID_MENU_INDBL    TEXSCOPE_MAIN_MENU   0    0    TM_DEFAULT   images/menu/dialog_input_double.png
+image                   TEXID_MENU_OUT      TEXSCOPE_MAIN_MENU   0    0    TM_DEFAULT   images/menu/dialog_output.png
+
 image                   TEXID_BACK_CONCRETE TEXSCOPE_MM_GEN      0    0    TM_BACK      images/backgrounds/concrete.png
 
 ; type      frameCnt    id                  scope                cX  cY    mode         paths
