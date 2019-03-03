@@ -17,6 +17,7 @@ typedef struct _menu_container_child {
     int isContainer;
 
     void (*setEnable)(struct _menu_container_child*, int state);
+    void (*setFocused)(struct _menu_container_child*, int state);
 
     gameObject* object;
     gameObject* parent;
@@ -35,12 +36,14 @@ typedef struct _menu_container_data {
 
 } menu_container_data;
 
-void menuSetEnabled(gameObject *cont, int mode, int state);
+void menuSetEnabled(gameObject* cont, int mode, int state);
+void menuSetFocused(gameObject* cont, int state);
+
 void menuDestroy(gameObject *cont);
 
-gameObject* menuPushChild(gameObject *cont, menu_container_child *child, int push);
+gameObject* menuPushChild(gameObject* cont, menu_container_child *child, int push);
 
-menu_container_child* menuCreateChild(gameObject *obj);
+menu_container_child* menuCreateChild(gameObject* obj);
 void menuFreeChild(menu_container_child *child, int destroyObject, int freeObject);
 
 gameObject* menuCreate(gameObject* parent);

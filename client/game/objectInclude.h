@@ -8,7 +8,7 @@
 #include "../lib/gameLogic/gameobject.h"
 #include "../lib/gameLogic/eventQueue.h"
 #include "../lib/gameLogic/eventfuncs.h"
-#include "../lib/menu/menu_container.h"
+#include "../lib/menu/composer.h"
 #include "../lib/ltracer/ltracer.h"
 #include "../lib/helpers.h"
 

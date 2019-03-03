@@ -2,7 +2,7 @@
 // Created by maxim on 2/23/19.
 //
 
-#include "object_control_button.h"
+#include "control_button.h"
 
 void button_event_update(gameObject* this, void* data)
 {
@@ -47,7 +47,6 @@ menu_container_child* createButton(vec_t pos, char* string, void* font, color_t 
     this->onInit = button_init;
     this->pos = pos;
     this->texID = tex;
-    
 
     this->data = malloc(sizeof(button_data));
     button_data* bd = this->data;
@@ -59,9 +58,11 @@ menu_container_child* createButton(vec_t pos, char* string, void* font, color_t 
     bd->height = glutBitmapHeight(bd->font);
     bd->width = glutBitmapLength(bd->font, (const unsigned char*)bd->string);
     bd->func = func;
+    bd->wrappedFunc = NULL;
 
     menu_container_child* child = menuCreateChild(this);
     child->setEnable = button_setEnable;
+    child->setFocused = NULL;
     bd->self = child;
 
     return child;

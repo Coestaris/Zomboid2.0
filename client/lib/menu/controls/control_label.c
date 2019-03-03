@@ -2,7 +2,7 @@
 // Created by maxim on 3/2/19.
 //
 
-#include "object_control_label.h"
+#include "control_label.h"
 
 void label_event_update(gameObject* this, void* data) {
     label_data* ld = this->data;
@@ -14,7 +14,7 @@ void label_init(gameObject* this) {
 }
 
 void label_setEnable(menu_container_child* child, int state) {
-    //pass
+    // pass
 }
 
 menu_container_child* createLabel(vec_t pos, char* string, void* font, color_t col)
@@ -32,6 +32,7 @@ menu_container_child* createLabel(vec_t pos, char* string, void* font, color_t c
 
     menu_container_child* child = menuCreateChild(this);
     child->setEnable = label_setEnable;
+    child->setFocused = NULL;
 
     return child;
 }

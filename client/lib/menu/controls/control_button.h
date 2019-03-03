@@ -2,10 +2,13 @@
 // Created by maxim on 2/23/19.
 //
 
-#ifndef ZOMBOID2_OBJECT_CONTROL_BUTTON_H
-#define ZOMBOID2_OBJECT_CONTROL_BUTTON_H
+#ifndef ZOMBOID2_CONTROL_BUTTON_H
+#define ZOMBOID2_CONTROL_BUTTON_H
 
-#include "../../../objectInclude.h"
+#include "../../structs.h"
+#include "../../gameLogic/gameHelpers.h"
+#include "../../gameLogic/gameobject.h"
+#include "../menu_container.h"
 
 typedef struct _button_data {
     char* string;
@@ -19,6 +22,7 @@ typedef struct _button_data {
     menu_container_child* self;
 
     void (*func)(menu_container_child*);
+    void (*wrappedFunc)(void);
 
 } button_data;
 
@@ -29,4 +33,4 @@ void button_setEnable(menu_container_child* child, int state);
 
 menu_container_child* createButton(vec_t pos, char* string, void* font, color_t col, int tex, void (*func)(menu_container_child*));
 
-#endif //ZOMBOID2_OBJECT_CONTROL_BUTTON_H
+#endif //ZOMBOID2_CONTROL_BUTTON_H

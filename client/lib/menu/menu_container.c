@@ -4,13 +4,24 @@
 
 #include "menu_container.h"
 
+void menuSetFocused(gameObject* cont, int state)
+{
+    menu_container_data* cd = cont->data;
+    for (int i = 0; i < cd->childs_count; i++) {
+        if(cd->childs[i]->setFocused)
+            cd->childs[i]->setFocused(cd->childs[i], state);
+    }
+}
+
 void menuSetEnabled(gameObject *cont, int mode, int state)
 {
     menu_container_data* cd = cont->data;
 
     if(mode == SETENABLE_MODE_CURRENT_ELEMENT) {
         for (int i = 0; i < cd->childs_count; i++) {
-            cd->childs[i]->setEnable(cd->childs[i], state);
+            if(cd->childs[i]->setEnable) {
+                cd->childs[i]->setEnable(cd->childs[i], state);
+            }
         }
 
     } else if(mode == SETENABLE_MODE_REC_CHILDS) {
@@ -18,7 +29,9 @@ void menuSetEnabled(gameObject *cont, int mode, int state)
             if (cd->childs[i]->isContainer) {
                 menuSetEnabled(cd->childs[i]->object, mode, state);
             } else {
-                cd->childs[i]->setEnable(cd->childs[i], state);
+                if(cd->childs[i]->setEnable) {
+                    cd->childs[i]->setEnable(cd->childs[i], state);
+                }
             }
         }
     } else if(mode == SETENABLE_MODE_REC_PARENTS) {
@@ -26,7 +39,9 @@ void menuSetEnabled(gameObject *cont, int mode, int state)
             menuSetEnabled(cd->parent, mode, state);
         }
         for (int i = 0; i < cd->childs_count; i++) {
-            cd->childs[i]->setEnable(cd->childs[i], state);
+            if(cd->childs[i]->setEnable) {
+                cd->childs[i]->setEnable(cd->childs[i], state);
+            }
         }
     }
 }
