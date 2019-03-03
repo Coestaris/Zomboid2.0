@@ -47,6 +47,7 @@ menu_container_child* createButton(vec_t pos, char* string, void* font, color_t 
     this->onInit = button_init;
     this->pos = pos;
     this->texID = tex;
+    
 
     this->data = malloc(sizeof(button_data));
     button_data* bd = this->data;
