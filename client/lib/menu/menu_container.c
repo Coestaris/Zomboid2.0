@@ -82,14 +82,14 @@ void onDestroy(gameObject* this) {
     menuDestroy(this);
 }
 
-gameObject* menuCreate()
+gameObject* menuCreate(gameObject* parent)
 {
     gameObject* this = object();
     this->data = malloc(sizeof(menu_container_data));
     menu_container_data* cd = this->data;
 
     //this->onDestroy = onDestroy;
-    cd->parent = NULL;
+    cd->parent = parent;
     cd->data = NULL;
     cd->childs_count = 0;
     cd->childs_len = 0;

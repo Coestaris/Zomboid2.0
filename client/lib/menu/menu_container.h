@@ -43,7 +43,7 @@ gameObject* menuPushChild(gameObject *cont, menu_container_child *child, int pus
 menu_container_child* menuCreateChild(gameObject *obj);
 void menuFreeChild(menu_container_child *child, int destroyObject, int freeObject);
 
-gameObject* menuCreate();
+gameObject* menuCreate(gameObject* parent);
 
 
 #endif //ZOMBOID2_MENU_CONTAINER_H

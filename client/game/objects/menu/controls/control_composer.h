@@ -12,6 +12,7 @@
 
 menu_container_child* composer_messageBox_1btn(gameObject* parent, char* string,
         void* font, color_t fontColor, int tex);
+
 menu_container_child* composer_messageBox_2btn(gameObject* parent, char* string,
         void* font, color_t fontColor, int tex, void (*func1)(void), void (*func2)(void));
 

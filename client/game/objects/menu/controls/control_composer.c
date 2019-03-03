@@ -21,7 +21,7 @@ menu_container_child* composer_messageBox_1btn(gameObject* parent, char* string,
     int strW = glutBitmapLength(font, (unsigned char*)string);
     int strH = glutBitmapHeight(font);
 
-    gameObject* container = menuCreate();
+    gameObject* container = menuCreate(parent);
     container->drawable = 1;
     container->texID = tex;
     container->pos = vec(w / 2.0, h / 2.0);
@@ -45,9 +45,8 @@ menu_container_child* composer_messageBox_1btn(gameObject* parent, char* string,
     child->setEnable = composer_func_dummy_setEnabled;
     container->depth = parent->depth + 2;
 
-    menuPushChild(parent, child, true);
-
     menuSetEnabled(parent, SETENABLE_MODE_REC_PARENTS, 0);
+    menuPushChild(parent, child, true);
 
     return child;
 }

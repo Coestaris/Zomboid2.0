@@ -36,7 +36,7 @@ void menu_init(gameObject* this)
     double hStart = 120;
     double hStep = 100;
 
-    main_container = menuCreate();
+    main_container = menuCreate(NULL);
     scmPushObject(main_container);
 
     menuPushChild(
@@ -67,6 +67,9 @@ void menu_init(gameObject* this)
                     vec(w / 2.0, hStart + 3 * hStep), "EXIT", GLUT_BITMAP_TIMES_ROMAN_24,
                     color(0.8, 0.8, 0.8, 1), TEXID_MENU_BUTTON, menu_button_close),
             true);
+
+    //Doesn't need it anymore
+    scmDestroyObject(this, true);
 }
 
 gameObject* createMenu()

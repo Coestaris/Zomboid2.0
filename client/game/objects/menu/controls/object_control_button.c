@@ -35,8 +35,9 @@ void button_init(gameObject* this)
     evqSubscribeEvent(this, EVT_MouseClick, button_event_mouseClick);
 }
 
-void button_setEnable(menu_container_child* child, int state) {
-    ((button_data*)child->object)->enabled = state;
+void button_setEnable(menu_container_child* child, int state)
+{
+    ((button_data*)child->object->data)->enabled = state;
 }
 
 menu_container_child* createButton(vec_t pos, char* string, void* font, color_t col, int tex, void (*func)(menu_container_child*))
