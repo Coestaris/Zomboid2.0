@@ -7,13 +7,13 @@
 void lightTracer_destroy(gameObject* this)
 {
     ltracer_data* ld = ((lightTracer_data*)this->data)->data;
-    ltracer_removeLight(ld);
+    ltracerRemoveLight(ld);
 }
 
 void lightTracer_init(gameObject* this)
 {
     ltracer_data* ld = ((lightTracer_data*)this->data)->data;
-    ltracer_pushLight(ld);
+    ltracerPushLight(ld);
 
     evqSubscribeEvent(this, EVT_Update, lightTracer_event_update);
 }

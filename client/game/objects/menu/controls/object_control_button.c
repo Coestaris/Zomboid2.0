@@ -15,7 +15,7 @@ void button_event_update(gameObject* this, void* data)
             this->frame = 0;
         }
     }
-    dqnDrawText(vec_sub(this->pos, vec(bd->width / 2.0, -bd->height / 3.0)), bd->col, bd->font, bd->string);
+    dqnDrawText(vec_sub(this->pos, vec(bd->width / 2.0, -bd->height / 3.0)), bd->col, bd->font, bd->string, this->depth + 1);
 }
 
 void button_event_mouseClick(gameObject* this, void* data)

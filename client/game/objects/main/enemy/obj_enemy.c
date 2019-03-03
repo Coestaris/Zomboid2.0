@@ -13,11 +13,11 @@ void enemy_event_update(gameObject *this, void *data)
     //this->y += sin(this->angle) * ed->speed;
 
     if(ed->larm) {
-        dqnDrawSprite(ed->larm_tex, color(1, 1, 1, 1), 0, this->pos, this->angle, this->size);
+        dqnDrawSprite(ed->larm_tex, color(1, 1, 1, 1), 0, this->pos, this->angle, this->size, 0);
     }
 
     if(ed->rarm) {
-        dqnDrawSprite(ed->rarm_tex, color(1, 1, 1, 1), 0, this->pos, this->angle, this->size);
+        dqnDrawSprite(ed->rarm_tex, color(1, 1, 1, 1), 0, this->pos, this->angle, this->size, 0);
     }
 }
 

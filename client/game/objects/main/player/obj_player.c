@@ -122,8 +122,8 @@ void player_event_update(gameObject *object, void *data)
 
     pd->prevAnimationFrame = object->frame;
 
-    ltracer_update();
-    ltracer_draw();
+    ltracerUpdate();
+    ltracerDraw(1);
 }
 
 gameObject* createPlayer()

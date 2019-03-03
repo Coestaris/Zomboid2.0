@@ -99,8 +99,8 @@ void dfDrawObjects(void)
                     }
                 }
 
-                dcDrawTexture(obj[i]->cachedTex, color(1, 1, 1, obj[i]->alpha),
-                        obj[i]->frame, obj[i]->pos, obj[i]->angle, obj[i]->size);
+                dqnDrawSprite(obj[i]->cachedTex, color(1, 1, 1, obj[i]->alpha),
+                        obj[i]->frame, obj[i]->pos, obj[i]->angle, obj[i]->size, obj[i]->depth);
             }
         }
     }
@@ -114,10 +114,11 @@ void mainDF(void)
     dfDrawBackground();
     dcDrawSurface(fixedW, fixedH);
 
-
+    //Adding all object to the queue and processing animations
     dfDrawObjects();
-    dcDrawPrimitives();
 
+    //Drawing the queue
+    dcDrawPrimitives();
 
     dcEndDraw();
 }

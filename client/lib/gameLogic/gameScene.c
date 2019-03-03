@@ -66,7 +66,8 @@ void scmPushObject(gameObject *object)
         object->onInit(object);
     }
 
-    for(int i = 0; i < objectsCount; i++)
+    //Order now doesnt matters
+    /*for(int i = 0; i < objectsCount; i++)
     {
         if(objects[i]->depth <= object->depth)
         {
@@ -75,7 +76,7 @@ void scmPushObject(gameObject *object)
             objectsCount++;
             return;
         }
-    }
+    }*/
 
     objects[objectsCount++] = object;
 }

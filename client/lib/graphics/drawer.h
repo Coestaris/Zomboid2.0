@@ -17,6 +17,7 @@
 #define BACKGROUND_OFFSET 15
 
 #define MAXDP_START 2000
+#define MAX_DP_LEVELS 20
 #define SIZE_INCREASE 1.2
 
 #define DPTYPE_TEXT 0
@@ -54,13 +55,13 @@ typedef struct _drawingPrimitive {
 
 } drawingPrimitive;
 
-void dqnDrawText(vec_t pos, color_t col, void *font, char *string);
-void dqnDrawSprite(tex2d *tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor);
-void dqnDrawLine(vec_t p1, vec_t p2, color_t col);
-void dqnDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col);
-void dqnDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale);
+void dqnDrawText(vec_t pos, color_t col, void *font, char *string, int depth);
+void dqnDrawSprite(tex2d *tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor, int depth);
+void dqnDrawLine(vec_t p1, vec_t p2, color_t col, int depth);
+void dqnDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col, int depth);
+void dqnDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale, int depth);
 void dqnDrawRotatedTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
-                             double scale, vec_t texOffset, vec_t texScaleFactor);
+                             double scale, vec_t texOffset, vec_t texScaleFactor, int depth);
 void dqnClearQueue(void);
 
 void dcRotateScreen(double angle, double sceneW, double sceneH);

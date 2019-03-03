@@ -6,7 +6,7 @@
 
 void label_event_update(gameObject* this, void* data) {
     label_data* ld = this->data;
-    dqnDrawText(this->pos, ld->col, ld->font, ld->string);
+    dqnDrawText(this->pos, ld->col, ld->font, ld->string, this->depth + 1);
 }
 
 void label_init(gameObject* this) {

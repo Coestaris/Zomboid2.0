@@ -13,7 +13,7 @@ int edgesCount = 1;
 int lightCount = 0;
 int idCounter = 0;
 
-void ltracer_pushLight(ltracer_data *ld)
+void ltracerPushLight(ltracer_data *ld)
 {
     assert(lightCount <= MAX_LIGHTS);
 
@@ -33,7 +33,7 @@ int remove_light(ltracer_data** from, int total, int index) {
     return total-1; // return the new array size
 }
 
-void ltracer_removeLight(ltracer_data *ld)
+void ltracerRemoveLight(ltracer_data *ld)
 {
     for(int light = 0; light < lightCount; light++)
     {
@@ -44,7 +44,7 @@ void ltracer_removeLight(ltracer_data *ld)
     }
 }
 
-ltracer_edge* ltracer_pushEdge(vec_t a, vec_t b, vec_t c, vec_t d)
+ltracer_edge* ltracerPushEdge(vec_t a, vec_t b, vec_t c, vec_t d)
 {
     assert(edgesCount <= MAX_EDGES);
 
@@ -61,12 +61,12 @@ ltracer_edge* ltracer_pushEdge(vec_t a, vec_t b, vec_t c, vec_t d)
     return edge;
 }
 
-void ltracer_removeEdge(int edgeId)
+void ltracerRemoveEdge(int edgeId)
 {
     ltracer_updateEdges(edges, edgesCount);
 }
 
-void ltracer_update()
+void ltracerUpdate()
 {
     for(int light = 0; light < lightCount; light++)
     {
@@ -136,7 +136,7 @@ void ltracer_update()
 
 }
 
-void ltracer_draw()
+void ltracerDraw(int depth)
 {
 
 #ifdef LTRACER_DRAW_EDGES
@@ -157,14 +157,15 @@ void ltracer_draw()
         if (ld->textured) {
 
             if (ld->type == LT_AREA) {
-                dqnDrawTexPolygon(ld->tex, ld->frame, ld->points, ld->pointsCount, ld->pos, ld->color, ld->range);
+                dqnDrawTexPolygon(ld->tex, ld->frame, ld->points, ld->pointsCount, ld->pos, ld->color, ld->range, depth);
             }
             else {
-                dqnDrawRotatedTexPolygon(ld->tex, ld->frame, ld->points, ld->pointsCount, ld->pos, ld->color, ld->angle, ld->range, vec(ld->backOffset, 0), ld->scaleFactor);
+                dqnDrawRotatedTexPolygon(ld->tex, ld->frame, ld->points, ld->pointsCount, ld->pos,
+                        ld->color, ld->angle, ld->range, vec(ld->backOffset, 0), ld->scaleFactor, depth);
             }
 
         } else {
-            dqnDrawPolygon(ld->points, ld->pointsCount, ld->pos, ld->color);
+            dqnDrawPolygon(ld->points, ld->pointsCount, ld->pos, ld->color, depth);
         }
     }
 }

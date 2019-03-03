@@ -14,13 +14,13 @@
 #define LT_AREA 1
 #define LT_SPOT 2
 
-void ltracer_pushLight(ltracer_data *ld);
-void ltracer_removeLight(ltracer_data *ld);
+void ltracerPushLight(ltracer_data *ld);
+void ltracerRemoveLight(ltracer_data *ld);
 
-ltracer_edge* ltracer_pushEdge(vec_t a, vec_t b, vec_t c, vec_t d);
-void ltracer_removeEdge(int edgeId);
+ltracer_edge* ltracerPushEdge(vec_t a, vec_t b, vec_t c, vec_t d);
+void ltracerRemoveEdge(int edgeId);
 
-void ltracer_update();
-void ltracer_draw();
+void ltracerUpdate();
+void ltracerDraw(int depth);
 
 #endif //ZOMBOID2_LTRACER_H

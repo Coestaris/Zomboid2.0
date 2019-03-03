@@ -29,12 +29,12 @@ menu_container_child* composer_messageBox_1btn(gameObject* parent, char* string,
     menu_container_child* label = createLabel(
             vec_sub(vec(w / 2.0, h / 2.0 - 50), vec(strW / 2.0, - strH / 3.0)),
             string, font, fontColor);
-    label->object->depth = parent->depth - 2;
+    label->object->depth = parent->depth + 3;
 
     menu_container_child* button = createButton(
             vec_add(vec(w / 2.0, h / 2.0), vec(0, 80)), "Close", font, fontColor, TEXID_MENU_BUTTON,
             composer_func_closeContainer);
-    button->object->depth = parent->depth - 2;
+    button->object->depth = parent->depth + 3;
 
 
     menuPushChild(container, label, true);
@@ -43,7 +43,7 @@ menu_container_child* composer_messageBox_1btn(gameObject* parent, char* string,
     menu_container_child* child = menuCreateChild(container);
     child->isContainer = true;
     child->setEnable = composer_func_dummy_setEnabled;
-    container->depth = parent->depth - 1;
+    container->depth = parent->depth + 2;
 
     menuPushChild(parent, child, true);
 
