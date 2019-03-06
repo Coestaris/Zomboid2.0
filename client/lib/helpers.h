@@ -17,6 +17,8 @@
 #define FALSE 0
 
 double randRange(double a, double b);
+color_t randColor(double alpha);
+
 int fileExists(const char* filename);
 
 double twoPointsAngle(vec_t p1, vec_t p2);

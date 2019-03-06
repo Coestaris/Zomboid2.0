@@ -26,11 +26,12 @@
 #define KEY_BUFFER_SIZE 256
 #define SPEC_KEY_BUFFER_SIZE 256
 
+#define PRINT_FPS
+
 void initEventFuncs(void);
 
 double getMillis(void);
 double getFPS(void);
-
 
 long long getFrame();
 void getWinSize(int* w, int* h);

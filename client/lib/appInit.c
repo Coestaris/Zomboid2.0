@@ -29,6 +29,8 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
+    printf("Using OpenGL Version: %s\n=========\n", (char*)glGetString(GL_VERSION));
+
     srfInit(w, h);
     initEventFuncs();
     registerEvents();

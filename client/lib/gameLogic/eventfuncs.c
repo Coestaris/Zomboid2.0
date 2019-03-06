@@ -139,7 +139,7 @@ void mainEventLoop()
     evqPushEvent(EVT_Update, NULL);
 
     pumpEvents();
-    mainDF();
+    //mainDF();
 
     double diff = getMillis() - tickStart;
     counter++;
@@ -158,7 +158,10 @@ void mainEventLoop()
         counter = 0;
         elapsed = 0;
 
+#ifdef PRINT_FPS
         printf("FPS: %lf (objects %i, listeners: %i)\n", fps, scmGetObjectsCount(), evqGetListenersCount());
+#endif
+
     }
 }
 

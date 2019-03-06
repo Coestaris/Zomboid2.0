@@ -142,7 +142,6 @@ int rlist_load(char* filename, int strict)
     FILE* f = fopen(filename, "r");
     if(!f) return false;
 
-
     fseek(f, 0, SEEK_END);
 
     size_t size = (size_t)ftell(f);

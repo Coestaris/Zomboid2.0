@@ -110,10 +110,10 @@ void ltracerUpdate()
 
 
 #ifdef LTRACER_DRAW_EDGES
-        dqnDrawLine(edges[0]->a, edges[0]->b, ld->color);
-        dqnDrawLine(edges[0]->b, edges[0]->c, ld->color);
-        dqnDrawLine(edges[0]->c, edges[0]->d, ld->color);
-        dqnDrawLine(edges[0]->d, edges[0]->a, ld->color);
+        dqnDrawLine(edges[0]->a, edges[0]->b, ld->color, 0);
+        dqnDrawLine(edges[0]->b, edges[0]->c, ld->color, 0);
+        dqnDrawLine(edges[0]->c, edges[0]->d, ld->color, 0);
+        dqnDrawLine(edges[0]->d, edges[0]->a, ld->color, 0);
 #endif
 
         for (int i = 0; i < edgesCount; i++) {
@@ -141,10 +141,10 @@ void ltracerDraw(int depth)
 
 #ifdef LTRACER_DRAW_EDGES
     for(int i = 1; i < edgesCount; i++) {
-        dqnDrawLine(edges[i]->a, edges[i]->b, color(1, 0, 1, 1));
-        dqnDrawLine(edges[i]->b, edges[i]->c, color(1, 0, 1, 1));
-        dqnDrawLine(edges[i]->c, edges[i]->d, color(1, 0, 1, 1));
-        dqnDrawLine(edges[i]->d, edges[i]->a, color(1, 0, 1, 1));
+        dqnDrawLine(edges[i]->a, edges[i]->b, color(1, 0, 1, 1), 0);
+        dqnDrawLine(edges[i]->b, edges[i]->c, color(1, 0, 1, 1), 0);
+        dqnDrawLine(edges[i]->c, edges[i]->d, color(1, 0, 1, 1), 0);
+        dqnDrawLine(edges[i]->d, edges[i]->a, color(1, 0, 1, 1), 0);
     }
 #endif
 

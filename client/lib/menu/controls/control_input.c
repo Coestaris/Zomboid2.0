@@ -75,7 +75,15 @@ void input_event_update(gameObject* this, void* data)
         id->firstPressed = false;
     }
 
-    dqnDrawLine(start, end, id->color, this->depth);
+    if(frame - id->flashStarted > FRAMES_BETWEEN_FLASH) {
+        id->flashStarted = frame;
+        id->flash = !id->flash;
+        id->col = randColor(1);
+    }
+
+    if(id->flash) {
+        dqnDrawLine(start, end, id->col, this->depth);
+    }
 }
 
 void input_init(gameObject* this)
@@ -105,6 +113,8 @@ menu_container_child* createInput(vec_t pos, color_t color, void* font, char* de
 
     id->font = font;
     id->color = color;
+    id->flash = false;
+    id->flashStarted = 0;
     id->firstPressed = false;
     id->str = malloc(MAX_INPUT_LEN * sizeof(char));
     strcpy(id->str, defstr);

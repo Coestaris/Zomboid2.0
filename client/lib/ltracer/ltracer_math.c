@@ -68,7 +68,7 @@ void ltracer_ray_to(ltracer_data* ld, double x1, double y1, double x2, double y2
     }
 
 #ifdef LTRACER_DRAW_RAYS
-    dqnDrawLine(vec(x1, y1), vec(nearestX, nearestY), ld->color);
+    dqnDrawLine(vec(x1, y1), vec(nearestX, nearestY), ld->color, 0);
 #endif
 
     ld->points[ld->pointsCount].point = vec(nearestX, nearestY);

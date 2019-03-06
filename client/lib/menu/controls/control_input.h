@@ -13,6 +13,7 @@
 
 #define MAX_INPUT_LEN 256
 #define FRAMES_BETWEEN_DELETING 5
+#define FRAMES_BETWEEN_FLASH 30
 
 typedef struct _input_data {
 
@@ -25,6 +26,11 @@ typedef struct _input_data {
     int firstPressed;
 
     int enabled;
+
+    long long flashStarted;
+    int flash;
+
+    color_t col;
 
     long long prevDeleted;
 

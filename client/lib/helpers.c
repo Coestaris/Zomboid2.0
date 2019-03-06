@@ -16,6 +16,10 @@ int fileExists(const char* filename)
     return 1;
 }
 
+color_t randColor(double alpha) {
+    return color(randRange(0, 1), randRange(0, 1), randRange(0, 1), alpha);
+}
+
 double randRange(double a, double b)
 {
     if(a == b) return a;
