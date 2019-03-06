@@ -10,7 +10,7 @@ char** tokens;
 int linesCount;
 int tokenCount;
 
-void rlist_init()
+void rlistInit()
 {
     linesCount = 0;
     tokenCount = 0;
@@ -135,7 +135,7 @@ void get_lines(char* str)
     }
 }
 
-int rlist_load(char* filename, int strict)
+int rlistLoad(char *filename, int strict)
 {
     clearTokens();
 
@@ -209,7 +209,7 @@ int rlist_load(char* filename, int strict)
 
                     if(data->fnToAddLines) {
 
-                        if(!rlist_load(data->fnToAddLines, strict)) {
+                        if(!rlistLoad(data->fnToAddLines, strict)) {
                             if(strict) return false;
                             else goto end;
                         }

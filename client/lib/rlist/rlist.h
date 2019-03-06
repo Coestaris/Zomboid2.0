@@ -16,7 +16,7 @@
 
 #include "../helpers.h"
 
-void rlist_init(void);
-int rlist_load(char* filename, int strict);
+void rlistInit(void);
+int rlistLoad(char *filename, int strict);
 
 #endif //ZOMBOID2_RLIST_H

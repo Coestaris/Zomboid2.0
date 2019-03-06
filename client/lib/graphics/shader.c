@@ -64,14 +64,12 @@ int loadShader(shader* sh)
         printf("Error: Unable to create shaders\n");
         return false;
     }
+
     if(!loadShaderFile(sh->fragmentPath, fragmentShader)) {
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
         printf("Error: The fragment shader at %s could not be found.\n", sh->fragmentPath);
         return false;
-    }
-    else {
-        printf("Fragment Shader was loaded successfully\n");
     }
 
     if(!loadShaderFile(sh->vertexPath, vertexShader)) {
@@ -79,9 +77,6 @@ int loadShader(shader* sh)
         glDeleteShader(fragmentShader);
         printf("Error: The vertex shader at %s could not be found.\n", sh->vertexPath);
         return false;
-    }
-    else {
-        printf("Vertex Shader was loaded successfully\n");
     }
 
     glCompileShader(vertexShader);
@@ -98,9 +93,6 @@ int loadShader(shader* sh)
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
         return false;
-
-    } else {
-        printf("Vertex Shader compiled successfully\n");
     }
 
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &testVal);
@@ -112,9 +104,6 @@ int loadShader(shader* sh)
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
         return false;
-
-    } else {
-        printf("Fragment Shader compiled successfully\n");
     }
 
     sh->progID = glCreateProgram();
@@ -134,8 +123,6 @@ int loadShader(shader* sh)
         glDeleteProgram(sh->progID);
         return false;
 
-    } else {
-        fprintf(stderr,"Shaders linked successfully\n");
     }
 
     glDeleteShader(vertexShader);
@@ -143,5 +130,3 @@ int loadShader(shader* sh)
 
     return true;
 }
-
-#pragma clang diagnostic pop

@@ -6,6 +6,9 @@
 
 void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize, char* mainResFile)
 {
+    glutInitContextVersion(4, 2);
+    glutInitContextProfile(GLUT_CORE_PROFILE);
+
     glutInit(&argc, argv);
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA);
@@ -37,14 +40,14 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
     dcInit();
     evqInit();
     texmInit();
-    rlist_init();
+    rlistInit();
 
     if(!fileExists(mainResFile)) {
         printf("\"%s\" doesn't exist", mainResFile);
         exit(1);
     }
 
-    if(!rlist_load(mainResFile, true)) {
+    if(!rlistLoad(mainResFile, true)) {
         puts("There were errors while processing RList (strict mode is turned on). Exiting...");
         exit(1);
     }
