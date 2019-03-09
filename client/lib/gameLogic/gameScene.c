@@ -35,6 +35,15 @@ publicObject* scmGetPublicObject(int id)
     return NULL;
 }
 
+int scmHasScene(int id)
+{
+    for(int i = 0; i < scenesCount; i++) {
+        if(scenes[i]->id == id) {
+            return 1;
+        }
+    }
+    return 0;
+}
 
 gameScene* scmGetActiveScene()
 {
@@ -133,6 +142,7 @@ gameScene* scmGetScene(int id)
 
 void scmLoadScene(int id)
 {
+    printf("Loading scene %i\n", id);
     for(int i = 0; i < scenesCount; i++)
     {
         if(scenes[i]->id == id)
@@ -185,14 +195,13 @@ void scmLoadScene(int id)
         }
     }
 
-    puts("You must specify scene with id 0");
+    printf("Unable to find scene with id %i", id);
     exit(1);
 }
 
 gameScene* createScene(int id, int scope)
 {
     gameScene* scene = malloc(sizeof(gameScene));
-    scene->scope = scope;
     scene->id = id;
     scene->scopesToLoadCount = 0;
     scene->scopesToUnloadCount = 0;
@@ -202,6 +211,9 @@ gameScene* createScene(int id, int scope)
     scene->startupObjectsArrLen = 0;
     scene->freeObjects = 1;
     scene->destroyObjects = 1;
+
+    scmAddScopeToLoad(scene, scope);
+
     return scene;
 }
 

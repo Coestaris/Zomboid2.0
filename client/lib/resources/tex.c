@@ -9,7 +9,7 @@ tex2d* createTex(char *fn, int uid, int scope, vec_t center, int mode)
 {
     tex2d* tex = malloc(sizeof(tex2d));
 
-    tex->textureIds = malloc(sizeof(GLuint));
+    tex->textureIds = malloc(sizeof(GLuint) * 1);
     tex->textureIds[0] = 0;
     tex->mode = mode;
 

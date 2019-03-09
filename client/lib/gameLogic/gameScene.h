@@ -28,7 +28,6 @@ typedef struct _gameScene {
     int startupObjectsArrLen;
     int startupObjectsCount;
 
-    int scope;
     int id;
 
     int scopesToLoad  [MAX_SCOPES_TO_LOAD  ];
@@ -59,12 +58,12 @@ void scmPushObject(gameObject *object);
 void scmDestroyObject(gameObject *object, int free);
 void scmDestroyAllObjects(int free);
 
-
 void scmPushPublicObject(int id, gameObject* (*init)());
 void scmPushScene(gameScene *scene);
 void scmLoadScene(int id);
 gameScene* scmGetScene(int id);
 publicObject* scmGetPublicObject(int id);
+int scmHasScene(int id);
 
 gameScene* createScene(int id, int scope);
 

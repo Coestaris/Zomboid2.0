@@ -12,8 +12,7 @@ int main(int argc, char** argv)
 
     if(!loadShader(sh)) {
         exit(0);
-    }
-*/
+    }*/
 
     runGame();
 

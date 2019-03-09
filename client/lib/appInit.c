@@ -6,8 +6,12 @@
 
 void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize, char* mainResFile)
 {
-    glutInitContextVersion(4, 2);
+#ifdef OVERRIDE_GL_VERSION
+    puts("Overriding default OpenGL version...");
+
+    glutInitContextVersion(MAJOR_GL_VERSION, MINOR_GL_VERSION);
     glutInitContextProfile(GLUT_CORE_PROFILE);
+#endif
 
     glutInit(&argc, argv);
 
@@ -30,7 +34,6 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
     glShadeModel(GL_SMOOTH);
     glEnable( GL_ALPHA_TEST );
     glEnable( GL_BLEND );
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
     printf("Using OpenGL Version: %s\n=========\n", (char*)glGetString(GL_VERSION));
 
@@ -49,6 +52,11 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
 
     if(!rlistLoad(mainResFile, true)) {
         puts("There were errors while processing RList (strict mode is turned on). Exiting...");
+        exit(1);
+    }
+
+    if(!scmHasScene(0)) {
+        puts("You must specify scene with id 0");
         exit(1);
     }
 }

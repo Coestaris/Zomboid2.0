@@ -130,3 +130,7 @@ int loadShader(shader* sh)
 
     return true;
 }
+
+void useShader(shader* sh) {
+    glUseProgram(sh->progID);
+}

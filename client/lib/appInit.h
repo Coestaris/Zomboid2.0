@@ -13,6 +13,13 @@
 #include "helpers.h"
 #include "rlist/rlist.h"
 
+#define OVERRIDE_GL_VERSION
+
+#ifdef OVERRIDE_GL_VERSION
+    #define MAJOR_GL_VERSION 4
+    #define MINOR_GL_VERSION 2
+#endif
+
 void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize, char* mainResFile);
 void registerEvents();
 void runApp(int sceneID);
