@@ -13,7 +13,7 @@
 #include "helpers.h"
 #include "rlist/rlist.h"
 
-#define OVERRIDE_GL_VERSION
+//#define OVERRIDE_GL_VERSION
 
 #ifdef OVERRIDE_GL_VERSION
     #define MAJOR_GL_VERSION 4
