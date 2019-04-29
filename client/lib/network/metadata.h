@@ -6,6 +6,7 @@
 #define ZOMBOID2_METADATA_H
 
 #include "../structs.h"
+#include <inttypes.h>
 
 #define METADATA_LENGTH 24
 
@@ -14,7 +15,7 @@ typedef struct  {
     double angle;
 } player_meta_t;
 
-void serialize(unsigned char *data, player_meta_t meta);
-void deserialize(player_meta_t *meta, unsigned char *data);
+void serialize(uint8_t *data, player_meta_t meta);
+void deserialize(player_meta_t *meta, uint8_t *data);
 
 #endif //ZOMBOID2_METADATA_H

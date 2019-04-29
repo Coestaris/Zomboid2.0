@@ -7,14 +7,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include <sys/select.h>
 #include <errno.h>
 #include <string.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <unistd.h>
 
 #include "messageTypes.h"
 
@@ -28,6 +28,8 @@ typedef struct _network_handler {
 } network_handler;
 
 int socketCreate(char *addr, char *port);
+int socketWrite(int socketfd, uint8_t *data, int *len);
+int socketReadAttempt(int sockfd, struct timeval * timeout, uint8_t * res);
 
 int socketsOpen(void);
 int socketsGetUpdates();
@@ -35,7 +37,6 @@ int socketsGetUpdates();
 void pushHandler(int messageType, void (*func)(char*, size_t));
 
 int socketsSend(char* buffer, size_t buffLen);
-int socketReadAttempt(int sockfd, int usec, const unsigned char * res);
 int socketsSendMessage(int msgType, char* buffer, size_t buffLen);
 
 #endif //ZOMBOID2_SOCKETS_H

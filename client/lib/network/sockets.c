@@ -2,6 +2,7 @@
 // Created by maxim on 2/23/19.
 //
 
+#include <fcntl.h>
 #include "sockets.h"
 #include "messageTypes.h"
 #include "metadata.h"
@@ -10,8 +11,6 @@
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCDFAInspection"
-
-struct addrinfo hints, *servinfo, *p;
 
 ssize_t buffLen = 0;
 char buffer[BUFFER_SIZE];
@@ -27,6 +26,8 @@ int socketCreate(char *_addr, char *port) {
      * This function returns new socket fd
      */
 
+    struct addrinfo hints, *servinfo, *p;
+
     int rv;
     int sockfd = -1;
 
@@ -40,11 +41,6 @@ int socketCreate(char *_addr, char *port) {
         exit(1);
     }
 
-    if (connect(sockfd, (const struct sockaddr *) &servinfo, sizeof servinfo) == -1) {
-        perror("connect");
-        exit(1);
-    }
-
     for(p = servinfo; p != NULL; p = p->ai_next) {
         if ((sockfd = socket(p->ai_family, p->ai_socktype,
                              p->ai_protocol)) == -1) {
@@ -55,6 +51,14 @@ int socketCreate(char *_addr, char *port) {
         break;
     }
 
+    if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
+        perror("connect");
+        exit(1);
+    }
+
+    fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFL) | O_NONBLOCK);
+    freeaddrinfo(servinfo);
+
     if (p == NULL) {
         fprintf(stderr, "No serverinfo error - can't create socket\n");
         exit(2);
@@ -62,9 +66,9 @@ int socketCreate(char *_addr, char *port) {
     return sockfd;
 }
 
-int socketWrite(int socketfd, const unsigned char *data, int *len) {
+int socketWrite(int socketfd, uint8_t *data, int *len) {
     int total = 0;
-    size_t bytesleft = (size_t) &len;
+    size_t bytesleft = (size_t) *len;
     ssize_t n = -1;
 
     while(total < bytesleft) {
@@ -79,16 +83,13 @@ int socketWrite(int socketfd, const unsigned char *data, int *len) {
     return n == -1 ? -1 : 0;
 }
 
-int socketReadAttempt(int sockfd, int usec, const unsigned char * res) {
+int socketReadAttempt(int sockfd, struct timeval * timeout, uint8_t * res) {
     fd_set readfds;
     int numbytes;
-
     FD_ZERO(&readfds);
     FD_SET(sockfd, &readfds);
 
-    struct timeval tv = {usec / 1000000, usec % 1000000};
-
-    if (select(sockfd + 1, &readfds, NULL, NULL, &tv) == -1) {
+    if (select(sockfd + 1, &readfds, NULL, NULL, timeout) == -1) {
         perror("select");
         exit(1);
     }
