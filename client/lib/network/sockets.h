@@ -35,6 +35,7 @@ int socketsGetUpdates();
 void pushHandler(int messageType, void (*func)(char*, size_t));
 
 int socketsSend(char* buffer, size_t buffLen);
+int socketReadAttempt(int sockfd, int usec, const unsigned char * res);
 int socketsSendMessage(int msgType, char* buffer, size_t buffLen);
 
 #endif //ZOMBOID2_SOCKETS_H

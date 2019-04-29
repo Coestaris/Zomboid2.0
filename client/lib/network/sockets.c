@@ -6,6 +6,11 @@
 #include "messageTypes.h"
 #include "metadata.h"
 
+// CLion for some reason thinks that recv can't return 0, so
+
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCDFAInspection"
+
 struct addrinfo hints, *servinfo, *p;
 
 ssize_t buffLen = 0;
@@ -19,6 +24,7 @@ int handlersCount = 0;
 int socketCreate(char *_addr, char *port) {
     /*
      * We use connect() and bind() for UDP packet's to increase performance
+     * This function returns new socket fd
      */
 
     int rv;
@@ -56,30 +62,60 @@ int socketCreate(char *_addr, char *port) {
     return sockfd;
 }
 
-int socketWrite(int socketfd, player_meta_t player_meta) {
+int socketWrite(int socketfd, const unsigned char *data, int *len) {
     int total = 0;
-    int byteleft = sizeof player_meta;
-}
+    size_t bytesleft = (size_t) &len;
+    ssize_t n = -1;
 
-int socketRead(int sockfd) {
-    fd_set readfs;
-    int newfd;
-
-    FD_ZERO(&readfs);
-    FD_SET(sockfd, &readfs);
-
-    if(select(sockfd + 1, &readfs, NULL, NULL, NULL) == -1) {
-        perror("select");
-        exit(-1);
+    while(total < bytesleft) {
+        n = send(socketfd, data + total, bytesleft, 0);
+        if (n == -1) break;
+        total += n;
+        bytesleft -= n;
     }
 
-    newfd = accept(sockfd, )
+    *len = total;
 
+    return n == -1 ? -1 : 0;
 }
 
-int socketsGetUpdates()
+int socketReadAttempt(int sockfd, int usec, const unsigned char * res) {
+    fd_set readfds;
+    int numbytes;
+
+    FD_ZERO(&readfds);
+    FD_SET(sockfd, &readfds);
+
+    struct timeval tv = {usec / 1000000, usec % 1000000};
+
+    if (select(sockfd + 1, &readfds, NULL, NULL, &tv) == -1) {
+        perror("select");
+        exit(1);
+    }
+
+    // looking for data
+
+    if(FD_ISSET(sockfd, &readfds)) {
+        if ((numbytes = recv(sockfd, res, sizeof(res), 0) <= 0)) {
+            if (numbytes == 0) {
+                perror("connection closed");
+                exit(1);
+            } else {
+                perror("recv");
+                exit(1);
+            }
+            close(sockfd);
+        } else {
+            //got info
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/*int socketsGetUpdates()
 {
-    buffLen = read(fd, buffer, BUFFER_SIZE);
+    //buffLen = read(fd, buffer, BUFFER_SIZE);
     if(buffLen < 0) {
         return 0;
     }
@@ -129,4 +165,6 @@ int socketsSendMessage(int messageType, char* buffer, size_t buffLen)
     memcpy(send_buffer, &messageType, sizeof(int));
     if(buffer) memcpy(send_buffer + sizeof(int), buffer, (size_t)buffLen);
     return socketsSend(send_buffer, (size_t)buffLen + sizeof(int));
-}
+}*/
+
+#pragma clang diagnostic pop
