@@ -13,7 +13,7 @@
 
 #include <GL/freeglut.h>
 #include <GL/gl.h>
-#include <SOIL/SOIL.h>
+#include "../../../lib/oil/oil.h"
 
 #include "../structs.h"
 
