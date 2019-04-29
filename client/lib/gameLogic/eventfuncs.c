@@ -161,7 +161,7 @@ void mainEventLoop()
         elapsed = 0;
 
 #ifdef PRINT_FPS
-        printf("FPS: %lf (objects %i, listeners: %i)\n", fps, scmGetObjectsCount(), evqGetListenersCount());
+        printf("[eventFuncs.c]: FPS: %lf (objects %i, listeners: %i)\n", fps, scmGetObjectsCount(), evqGetListenersCount());
 #endif
 
     }

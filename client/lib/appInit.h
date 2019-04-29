@@ -8,10 +8,11 @@
 #include "GL/freeglut.h"
 #include "GL/gl.h"
 
+#include "shaders/shaderManager.h"
 #include "gameLogic/eventfuncs.h"
 #include "gameLogic/gameScene.h"
-#include "helpers.h"
 #include "rlist/rlist.h"
+#include "helpers.h"
 
 #define OVERRIDE_GL_VERSION
 

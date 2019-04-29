@@ -10,7 +10,6 @@ size_t DPLEVELS = MAX_DP_LEVELS;
 size_t* dpCounts;
 drawingPrimitive*** dpList;
 
-
 void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, double hh, vec_t cp, int s1, int s2)
 {
     inp.x += hw * s1;
@@ -219,36 +218,66 @@ void dcDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_
     glPopMatrix();
 }
 
+float vertices[] = {
+        // positions          // colors           // texture coords
+        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 0.0f,   // top right
+        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 1.0f,   // bottom right
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,   // bottom left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 0.0f    // top left
+};
+
+unsigned int VBO, VAO, EBO;
+unsigned int indices[] = {
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
+};
+
+int inited = 0;
+void setupDrawing()
+{
+    shader* sh = shmGetShader(SHADER_IMAGE);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    // texture coord attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    glUseProgram(sh->progID);
+    shaderSetInt(sh, "texture1", 0);
+}
 
 void dcDrawTexture(tex2d *tex, color_t col, int frame, vec_t pos, double angle, double scaleFactor)
 {
-    bindTex(tex, frame);
+    if(!inited) {
+        setupDrawing();
+        inited = 1;
+    }
+    shader* sh = shmGetShader(SHADER_IMAGE);
 
-    glPushMatrix();
-
-    const double hw = tex->width / 2.0;
-    const double hh = tex->height / 2.0;
-
-    const double acos = cos(angle) * scaleFactor;
-    const double asin = sin(angle) * scaleFactor;
-
-    vec_t p1, p2, p3, p4;
-
-    dcCreatePoint(&p1, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), -1, -1);
-    dcCreatePoint(&p2, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), -1,  1);
-    dcCreatePoint(&p3, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y),  1, -1);
-    dcCreatePoint(&p4, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y),  1,  1);
-
-    glColor4d(col.r, col.g, col.b, col.a);
-
-    glBegin(GL_QUAD_STRIP);
-        glTexCoord2f(0, 1); glVertex3d(p1.x, p1.y, 1);
-        glTexCoord2f(0, 0); glVertex3d(p2.x, p2.y, 1);
-        glTexCoord2f(1, 1); glVertex3d(p3.x, p3.y, 1);
-        glTexCoord2f(1, 0); glVertex3d(p4.x, p4.y, 1);
-    glEnd();
-
-    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, tex->id);
+    glUseProgram(sh->progID);
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void dcBeginDraw(void)

@@ -124,33 +124,26 @@ void loadTex(tex2d* tex)
 
     for(int i = 0; i < tex->framesCount; i++)
     {
-        GLuint id = oilTextureFromFile(tex->fns[i], GL_RGBA, GL_UNSIGNED_BYTE);
+        texData data;
+        data.wrappingMode = tex->mode == TEXMODE_BACKGROUND ? GL_REPEAT : GL_CLAMP_TO_EDGE;
+
+        GLuint id = oilTextureFromPngFile(tex->fns[i], GL_RGBA, OIL_TEX_WRAPPING, data);
         if(!id)
         {
-            printf("Unable to load texture %s\n", tex->fns[i]);
+            printf("[tex.c][ERROR]: Unable to load texture %s\n", tex->fns[i]);
             oilPrintError();
             exit(EXIT_FAILURE);
         }
 
         if(tex->framesCount == 1)
         {
-            printf("Loaded texture \"%s\". W: %i, H: %i, OGlID: %i\n", tex->fns[i], w, h, id);
+            printf("[tex.c]: Loaded texture \"%s\". W: %i, H: %i, OGlID: %i\n", tex->fns[i], w, h, id);
         }
         else
         {
-            printf("Loaded frame (%i/%i) \"%s\". W: %i, H: %i OGlID: %i\n", i + 1, tex->framesCount, tex->fns[i], w, h, id);
+            printf("[tex.c]: Loaded frame (%i/%i) \"%s\". W: %i, H: %i OGlID: %i\n", i + 1, tex->framesCount, tex->fns[i], w, h, id);
         }
         tex->textureIds[i] = id;
-
-        glBindTexture(GL_TEXTURE_2D, id);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        if(tex->mode == TEXMODE_BACKGROUND)
-        {
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        }
     }
     tex->width = w;
     tex->height = h;

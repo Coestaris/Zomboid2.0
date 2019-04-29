@@ -65,13 +65,13 @@ void texmPrintNode(texmNode *node)
             {
                 if(node->value->framesCount == 1)
                 {
-                    printf("Texture[UID: %i, Scope %i, FN: \"%s\", Loaded: true, W: %i, H: %i, OGLId: %i]\n",
+                    printf("[texm.c]: Texture[UID: %i, Scope %i, FN: \"%s\", Loaded: true, W: %i, H: %i, OGLId: %i]\n",
                            node->value->id, node->value->scope,
                            node->value->fns[0], node->value->width, node->value->height, node->value->textureIds[0]);
                 }
                 else
                 {
-                    printf("Animation[UID: %i, Scope %i, Loaded: true, W: %i, H: %i, OGLIds: [",
+                    printf("[texm.c]: Animation[UID: %i, Scope %i, Loaded: true, W: %i, H: %i, OGLIds: [",
                             node->value->id, node->value->scope, node->value->width, node->value->height);
                     for(int i = 0; i < node->value->framesCount; i++) {
                         printf("%i%c", node->value->textureIds[i], (i == node->value->framesCount - 1) ? ']' : ',');
@@ -83,11 +83,11 @@ void texmPrintNode(texmNode *node)
             {
                 if(node->value->framesCount == 1)
                 {
-                    printf("Texture[UID: %i, FN: \"%s\", Scope %i, Loaded: false]\n", node->value->id, node->value->fns[0], node->value->scope);
+                    printf("[texm.c]: Texture[UID: %i, FN: \"%s\", Scope %i, Loaded: false]\n", node->value->id, node->value->fns[0], node->value->scope);
                 }
                 else
                 {
-                    printf("Animation[UID: %i, Scope %i, Loaded: false]\n", node->value->id, node->value->scope);
+                    printf("[texm.c]: Animation[UID: %i, Scope %i, Loaded: false]\n", node->value->id, node->value->scope);
                 }
             }
         }

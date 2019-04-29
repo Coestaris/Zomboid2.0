@@ -142,7 +142,7 @@ gameScene* scmGetScene(int id)
 
 void scmLoadScene(int id)
 {
-    printf("Loading scene %i\n", id);
+    printf("[gameScene.c]: Loading scene %i\n", id);
     for(int i = 0; i < scenesCount; i++)
     {
         if(scenes[i]->id == id)
@@ -195,7 +195,7 @@ void scmLoadScene(int id)
         }
     }
 
-    printf("Unable to find scene with id %i", id);
+    printf("[gameScene.c][ERROR]: Unable to find scene with id %i", id);
     exit(1);
 }
 

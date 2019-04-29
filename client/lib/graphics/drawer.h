@@ -11,6 +11,7 @@
 #include <GL/gl.h>
 
 #include "surface.h"
+#include "../shaders/shaderManager.h"
 #include "../resources/tex.h"
 #include "../structs.h"
 

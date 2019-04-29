@@ -43,21 +43,21 @@ int rlist_command_echo_v(rlist_cdata *data)
 {
     for(int i = 0; i < variablesCount; i++) {
         if(!strcmp(data->args[0], variables[i]->name)) {
-            printf("Rlist: Value of \"%s\" is \"%s\"\n", data->args[0], variables[i]->value);
+            printf("[rlist_commands.c]: Value of \"%s\" is \"%s\"\n", data->args[0], variables[i]->value);
             return true;
         }
     }
 
-    printf("Rlist: Unable to find variable \"%s\"\n", data->args[0]);
+    printf("[rlist_commands.c][ERROR]: Unable to find variable \"%s\"\n", data->args[0]);
     return true;
 }
 
 int rlist_command_echo_all_vars(rlist_cdata *data)
 {
     if(variablesCount == 0) {
-        printf("Rlist: No variables registered\n");
+        printf("[rlist_commands.c]: No variables registered\n");
     } else {
-        printf("Rlist: Registered %i variables: \n", variablesCount);
+        printf("[rlist_commands.c]: Registered %i variables: \n", variablesCount);
         for(int i = 0; i < variablesCount; i++) {
             printf("  - %15s set as \"%s\"\n", variables[i]->name, variables[i]->value);
         }
@@ -106,7 +106,7 @@ int rlist_command_inc(rlist_cdata* data)
     char* filename = getFilename(data->filename, data->args[0]);
 
     if(!fileExists(filename)) {
-        printf("Rlist error: Unable to reach specified include file \"%s\", at line %i in \"%s\"\n", filename, data->lineIndex, data->filename);
+        printf("[rlist_commands.c][ERROR]: Unable to reach specified include file \"%s\", at line %i in \"%s\"\n", filename, data->lineIndex, data->filename);
 
         free(filename);
         if(data->strict) return false;
@@ -123,7 +123,7 @@ int rlist_command_set(rlist_cdata *data)
 
     for(int i = 0; i < variablesCount; i++)
         if(!strcmp(data->args[0], variables[i]->name)) {
-            printf("Rlist error: Variable with same name \"%s\" already exists, at line %i in \"%s\"\n", variables[i]->name, data->lineIndex, data->filename);
+            printf("[rlist_commands.c][ERROR]: Variable with same name \"%s\" already exists, at line %i in \"%s\"\n", variables[i]->name, data->lineIndex, data->filename);
             return !data->strict;
         }
 
@@ -140,7 +140,7 @@ int rlist_command_set(rlist_cdata *data)
 
 int rlist_command_echo(rlist_cdata *data)
 {
-    printf("Rlist: %s\n", data->args[0]);
+    printf("[rlist_commands.c]: %s\n", data->args[0]);
     return true;
 }
 
@@ -186,13 +186,13 @@ int getDoubleValue(double * res, char* str, const char* pname, rlist_cdata *data
     if(!isDouble(str, res)) {
         if((var = getVar(str))) {
             if(!isDouble(var->value, res)) {
-                printf("Rlist data error: specified variable for %s should be correct float-point number value, but got %s, at line %i in \"%s\"\n",
+                printf("[rlist_commands.c][DATA ERROR]: specified variable for %s should be correct float-point number value, but got %s, at line %i in \"%s\"\n",
                        pname, var->value, data->lineIndex, data->filename);
                 return false;
             }
         } else {
 
-            printf("Rlist data error: %s should be correct float-point number value or variable name, but got \"%s\", at line %i in \"%s\"\n",
+            printf("[rlist_commands.c][DATA ERROR]: %s should be correct float-point number value or variable name, but got \"%s\", at line %i in \"%s\"\n",
                    pname, str, data->lineIndex, data->filename);
             return false;
         }
@@ -213,13 +213,13 @@ int getIntValue(int* res, char* str, const char* pname, rlist_cdata *data)
     {
 
         if(!isInt(var->value)) {
-            printf("Rlist data error: specified variable for %s should be correct integer value, but got %s, at line %i in \"%s\"\n",
+            printf("[rlist_commands.c][DATA ERROR]: specified variable for %s should be correct integer value, but got %s, at line %i in \"%s\"\n",
                     pname, var->value, data->lineIndex, data->filename);
             return false;
         }
         *res = atoi(var->value);
     } else {
-        printf("Rlist data error: %s should be correct integer value or variable name, but got \"%s\", at line %i in \"%s\"\n",
+        printf("[rlist_commands.c][DATA ERROR]: %s should be correct integer value or variable name, but got \"%s\", at line %i in \"%s\"\n",
                 pname, str, data->lineIndex, data->filename);
         return false;
     }
@@ -242,7 +242,7 @@ int rlist_command_image(rlist_cdata *data) {
     path = getFilename(data->filename, data->args[5]);
 
     if(!fileExists(path)) {
-        printf("Rlist data error: Specified image path \"%s\" is not exists, at line %i in \"%s\"\n", path, data->lineIndex, data->filename);
+        printf("[rlist_commands.c][DATA ERROR]: Specified image path \"%s\" is not exists, at line %i in \"%s\"\n", path, data->lineIndex, data->filename);
         return !data->strict;
     }
 
@@ -276,7 +276,7 @@ int rlist_command_animation(rlist_cdata* data) {
         paths[i] = getFilename(data->filename, tmp);
 
         if(!fileExists(paths[i])) {
-            printf("Rlist data error: Specified image path \"%s\" is not exists, at line %i in \"%s\"\n", paths[i], data->lineIndex, data->filename);
+            printf("[rlist_commands.c][DATA ERROR]: Specified image path \"%s\" is not exists, at line %i in \"%s\"\n", paths[i], data->lineIndex, data->filename);
             return !data->strict;
         }
 
@@ -309,7 +309,7 @@ int rlist_command_sog_open(rlist_cdata *data)
     if (!getIntValue(&id, data->args[0], "id", data)) return !data->strict;
     listeningScene = scmGetScene(id);
     if(listeningScene == NULL) {
-        printf("Rlist data error: Unable to find scene with specified id \"%i\", at line %i in \"%s\"\n", id, data->lineIndex, data->filename);
+        printf("[rlist_commands.c][DATA ERROR]: Unable to find scene with specified id \"%i\", at line %i in \"%s\"\n", id, data->lineIndex, data->filename);
         return !data->strict;
     }
 }
@@ -317,7 +317,7 @@ int rlist_command_sog_open(rlist_cdata *data)
 int rlist_command_sog_add(rlist_cdata *data)
 {
     if(listeningScene == NULL) {
-        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
         return !data->strict;
     }
 
@@ -329,7 +329,7 @@ int rlist_command_sog_add(rlist_cdata *data)
 
     publicObject* po = scmGetPublicObject(id);
     if(po == NULL) {
-        printf("Rlist data error: Unable to find public object with id %i, at line %i in \"%s\"\n", id, data->lineIndex, data->filename);
+        printf("[rlist_commands.c][DATA ERROR]: Unable to find public object with id %i, at line %i in \"%s\"\n", id, data->lineIndex, data->filename);
         return !data->strict;
     }
 
@@ -342,7 +342,7 @@ int rlist_command_sog_add(rlist_cdata *data)
 int rlist_command_sog_add_ex(rlist_cdata *data)
 {
     if(listeningScene == NULL) {
-        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
         return !data->strict;
     }
 
@@ -354,7 +354,7 @@ int rlist_command_sog_add_ex(rlist_cdata *data)
 
     publicObject* po = scmGetPublicObject(id);
     if(po == NULL) {
-        printf("Rlist data error: Unable to find public object with id %i, at line %i in \"%s\"\n", id, data->lineIndex, data->filename);
+        printf("[rlist_commands.c][DATA ERROR]: Unable to find public object with id %i, at line %i in \"%s\"\n", id, data->lineIndex, data->filename);
         return !data->strict;
     }
 
@@ -405,7 +405,7 @@ int rlist_command_sog_add_ex(rlist_cdata *data)
 
 int rlist_command_scm_close(rlist_cdata *data) {
     if(listeningScene == NULL) {
-        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
         return !data->strict;
     }
     listeningScene = NULL;
@@ -415,7 +415,7 @@ int rlist_command_scm_close(rlist_cdata *data) {
 int rlist_command_scm_sc_load(rlist_cdata *data)
 {
     if(listeningScene == NULL) {
-        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
         return !data->strict;
     }
 
@@ -431,7 +431,7 @@ int rlist_command_scm_sc_load(rlist_cdata *data)
 int rlist_command_scm_sc_unload(rlist_cdata *data)
 {
     if(listeningScene == NULL) {
-        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
         return !data->strict;
     }
 
@@ -446,7 +446,7 @@ int rlist_command_scm_sc_unload(rlist_cdata *data)
 int rlist_command_scm_objects_destroy(rlist_cdata *data)
 {
     if(listeningScene == NULL) {
-        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
         return !data->strict;
     }
 
@@ -464,7 +464,7 @@ int rlist_command_scm_objects_destroy(rlist_cdata *data)
 int rlist_command_scm_objects_free(rlist_cdata *data)
 {
     if(listeningScene == NULL) {
-        printf("Rlist data error: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
         return !data->strict;
     }
 

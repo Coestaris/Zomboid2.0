@@ -4,19 +4,21 @@
 
 #include "shader.h"
 
-//#pragma clang diagnostic push
-//#pragma clang diagnostic ignored "-Wimplicit-function-declaration"
-
-shader* createShader(char* vertexPath, char* fragmentPath)
+shader* shaderCreate(char* vertexPath, char* fragmentPath)
 {
     shader* sh = malloc(sizeof(shader));
     sh->fragmentPath = fragmentPath;
     sh->vertexPath = vertexPath;
     sh->progID = 0;
+
+    if(!shaderLoad(sh)) return NULL;
+
+    printf("[shader.c]: Loaded shader. vertex path: %s, fragment path: %s\n", vertexPath, fragmentPath);
+
     return sh;
 }
 
-void freeShader(shader* sh)
+void shaderFree(shader* sh)
 {
     free(sh);
 }
@@ -32,7 +34,7 @@ void loadShaderSrc(const char *szShaderSrc, GLuint shader)
 int loadShaderFile(const char *szFile, GLuint shader)
 {
     FILE* f = fopen(szFile, "r");
-    if(!f) return false;
+    if(!f) return 0;
 
     fseek(f, 0, SEEK_END);
 
@@ -49,10 +51,10 @@ int loadShaderFile(const char *szFile, GLuint shader)
 
     free(rawInput);
 
-    return true;
+    return 1;
 }
 
-int loadShader(shader* sh)
+int shaderLoad(shader* sh)
 {
     GLuint vertexShader;
     GLuint fragmentShader;
@@ -62,21 +64,21 @@ int loadShader(shader* sh)
 
     if(vertexShader == 0 || fragmentShader == 0) {
         printf("Error: Unable to create shaders\n");
-        return false;
+        return 0;
     }
 
     if(!loadShaderFile(sh->fragmentPath, fragmentShader)) {
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
-        printf("Error: The fragment shader at %s could not be found.\n", sh->fragmentPath);
-        return false;
+        printf("[shader.c][ERROR]: The fragment shader at %s could not be found.\n", sh->fragmentPath);
+        return 0;
     }
 
     if(!loadShaderFile(sh->vertexPath, vertexShader)) {
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
-        printf("Error: The vertex shader at %s could not be found.\n", sh->vertexPath);
-        return false;
+        printf("[shader.c][ERROR]: The vertex shader at %s could not be found.\n", sh->vertexPath);
+        return 0;
     }
 
     glCompileShader(vertexShader);
@@ -89,10 +91,10 @@ int loadShader(shader* sh)
     {
         char infoLog[1024];
         glGetShaderInfoLog(vertexShader, 1024, NULL, infoLog);
-        printf("Error: The vertex shader at %s failed to compile with the following error:\n%s\n", sh->vertexPath, infoLog);
+        printf("[shader.c][ERROR]: The vertex shader at %s failed to compile with the following error:\n%s\n", sh->vertexPath, infoLog);
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
-        return false;
+        return 0;
     }
 
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &testVal);
@@ -100,10 +102,10 @@ int loadShader(shader* sh)
     {
         char infoLog[1024];
         glGetShaderInfoLog(fragmentShader, 1024, NULL, infoLog);
-        printf("The fragment shader at %s failed to compile with the following error:\n%s\n", sh->fragmentPath, infoLog);
+        printf("[shader.c][ERROR]: The fragment shader at %s failed to compile with the following error:\n%s\n", sh->fragmentPath, infoLog);
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
-        return false;
+        return 0;
     }
 
     sh->progID = glCreateProgram();
@@ -118,19 +120,30 @@ int loadShader(shader* sh)
     {
         char infoLog[1024];
         glGetProgramInfoLog(sh->progID, 1024, NULL, infoLog);
-        printf("The programs %s and %s failed to link with the following errors:\n%s\n",
-                sh->vertexPath, sh->fragmentPath, infoLog);
+        printf("[shader.c][ERROR]: The programs %s and %s failed to link with the following errors:\n%s\n",
+               sh->vertexPath, sh->fragmentPath, infoLog);
         glDeleteProgram(sh->progID);
-        return false;
+        return 0;
 
     }
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    return true;
+    return 1;
 }
 
-void useShader(shader* sh) {
+void shaderUse(shader* sh)
+{
     glUseProgram(sh->progID);
+}
+
+void shaderSetInt(shader* sh, const char* name, int value)
+{
+    glUniform1i(glGetUniformLocation(sh->progID, name), value);
+}
+
+void shaderSetFloat(shader* sh, const char* name, float value)
+{
+    glUniform1f(glGetUniformLocation(sh->progID, name), value);
 }

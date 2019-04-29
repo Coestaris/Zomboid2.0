@@ -171,7 +171,7 @@ int rlistLoad(char *filename, int strict)
         //puts(line);
 
         if(!getTokens(line)) {
-            printf("Rlist error: Invalid syntax at line %i in \"%s\"\n", lineCounter, filename);
+            printf("[rlist.c][ERROR]: Invalid syntax at line %i in \"%s\"\n", lineCounter, filename);
             if(strict) return false;
             else goto end;
         }
@@ -187,7 +187,7 @@ int rlistLoad(char *filename, int strict)
                     assert(commands[j]->runFunc);
 
                     if(commands[j]->argumentCount != ARGC_VARIADIC && tokenCount - 1 != commands[j]->argumentCount) {
-                        printf("Rlist error: Wrong argument count. Expected %i, but got %i, at line %i in \"%s\"\n",
+                        printf("[rlist.c][ERROR]: Wrong argument count. Expected %i, but got %i, at line %i in \"%s\"\n",
                                 commands[j]->argumentCount, tokenCount - 1, lineCounter, filename);
                         if(strict) return false;
                         else goto end;
@@ -224,7 +224,7 @@ int rlistLoad(char *filename, int strict)
                 }
             }
 
-            printf("Rlist error: Unknown command \"%s\" at line %i in \"%s\"\n", tokens[0], lineCounter, filename);
+            printf("[rlist.c][ERROR]: Unknown command \"%s\" at line %i in \"%s\"\n", tokens[0], lineCounter, filename);
             if(strict) return false;
             else goto end;
         }

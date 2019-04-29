@@ -75,14 +75,14 @@ vec_t relativeCoordinates(gameObject* obj)
 void loadTexture(char* fn, int id, int scope, vec_t pos, int mode)
 {
     if(texmGetID(id)) {
-        printf("Error while loading texture %i. Texture with same ID alreay exists", id);
+        printf("[gameHelpers.c][ERROR]: Error while loading texture %i. Texture with same ID alreay exists", id);
         exit(1);
     }
 
     if(fileExists(fn)) {
         texmPush(createTex(fn, id, scope, pos, mode));
     } else {
-        printf("Error while loading texture %i. Unable to reach file \"%s\"", id, fn);
+        printf("[gameHelpers.c][ERROR]: Error while loading texture %i. Unable to reach file \"%s\"", id, fn);
         exit(1);
     }
 }
@@ -90,7 +90,7 @@ void loadTexture(char* fn, int id, int scope, vec_t pos, int mode)
 void loadAnimation(int framesCount, int id, int scope, vec_t pos, int mode, ...)
 {
     if(texmGetID(id)) {
-        printf("Error while loading animation %i. Texture with same ID alreay exists", id);
+        printf("[gameHelpers.c][ERROR]: Error while loading animation %i. Texture with same ID alreay exists", id);
         exit(1);
     }
 
@@ -102,7 +102,7 @@ void loadAnimation(int framesCount, int id, int scope, vec_t pos, int mode, ...)
         char* fn = va_arg(args, char* );
         if(!fileExists(fn))
         {
-            printf("Error while loading animation %i (frame %i of %i). Unable to reach file \"%s\"",
+            printf("[gameHelpers.c][ERROR]: Error while loading animation %i (frame %i of %i). Unable to reach file \"%s\"",
                    id, i + 1, framesCount, fn);
             exit(1);
         }

@@ -32,7 +32,8 @@ scm_close ;SCENEID_GAME
 ; ======== SCENEID_MAIN_MENU =========
 scm_open  SCENEID_MAIN_MENU
 
-    scm_sog_add OBJECT_BUTTON 400 300
+    ; scm_sog_add OBJECT_BUTTON 400 300
+    scm_sog_add       OBJECT_BOX         400   400
 
     scm_sc_load TEXSCOPE_MAIN_MENU
     scm_sc_load TEXSCOPE_MM_GEN
