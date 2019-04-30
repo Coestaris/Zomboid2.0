@@ -27,16 +27,21 @@ typedef struct _network_handler {
 
 } network_handler;
 
+typedef struct {
+    int sockfd;
+    struct addrinfo servinfo;
+} serv_sock_t;
+
 int socketCreate(char *addr, char *port);
-int socketWrite(int socketfd, uint8_t *data, int *len);
-int socketReadAttempt(int sockfd, struct timeval * timeout, uint8_t * res);
+int socketWrite(int socketfd, uint8_t *data, size_t *len);
+int socketRead(int socketfd, uint8_t *res, size_t len);
 
 int socketsOpen(void);
 int socketsGetUpdates();
 
 void pushHandler(int messageType, void (*func)(char*, size_t));
 
-int socketsSend(char* buffer, size_t buffLen);
-int socketsSendMessage(int msgType, char* buffer, size_t buffLen);
+int socketsSend(char *buffer, size_t buffLen);
+int socketsSendMessage(int msgType, char *buffer, size_t buffLen);
 
 #endif //ZOMBOID2_SOCKETS_H

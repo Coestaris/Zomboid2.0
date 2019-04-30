@@ -4,6 +4,7 @@
 
 #include "metadata.h"
 #include <inttypes.h>
+
 void serialize(uint8_t *data, player_meta_t meta) {
     union {
         uint64_t d;
@@ -39,19 +40,19 @@ void deserialize(player_meta_t *meta, uint8_t *data) {
     int8_t cursor = 0;
 
     holder.d = 0;
-    for(int8_t i = 0; cursor < 8; cursor++, i++) {
+    for (int8_t i = 0; cursor < 8; cursor++, i++) {
         holder.d |= data[cursor] << i * 8;
     }
     meta->pos.x = holder.lf;
 
     holder.d = 0;
-    for(int8_t i = 0; cursor < 16; cursor++, i++) {
+    for (int8_t i = 0; cursor < 16; cursor++, i++) {
         holder.d |= data[cursor] << i * 8;
     }
     meta->pos.x = holder.lf;
 
     holder.d = 0;
-    for(int8_t i = 0; cursor < 24; cursor++, i++) {
+    for (int8_t i = 0; cursor < 24; cursor++, i++) {
         holder.d |= data[cursor] << i * 8;
     }
     meta->angle = holder.lf;
