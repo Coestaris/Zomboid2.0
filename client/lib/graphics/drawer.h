@@ -69,7 +69,7 @@ void dqnClearQueue(void);
 void dcRotateScreen(double angle, double sceneW, double sceneH);
 void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, double hh, vec_t cp, int s1, int s2);
 void dcDrawText(vec_t pos, color_t col, void *font, const char *string);
-void dcDrawBackground(tex2d *tex, int frame, int windowW, int windowH);
+void dcDrawBackground(tex2d *tex, int frame);
 void dcDrawTexture(tex2d *tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor);
 void dcDrawLine(vec_t p1, vec_t p2, color_t col);
 void dcDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col);

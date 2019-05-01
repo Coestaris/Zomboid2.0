@@ -37,8 +37,6 @@ void player_init(gameObject* object)
     scmPushObject(pd->flashlight);
 }
 
-#define FIRE_RATE 5
-
 void addFireLight(playerData* pd, vec_t pos)
 {
     gameObject* light = createLight(pos ,pd->currLightSize, pd->currLightAlpha);
@@ -88,7 +86,7 @@ void player_event_update(gameObject *object, void *data)
 
     if(getMouseState(MB_LEFT) == MS_PRESSED)
     {
-        if(frame - pd->lastFireFrame > FIRE_RATE)
+        if(frame - pd->lastFireFrame > PLAYER_FIRE_RATE)
         {
             pd->lastFireFrame = frame;
 
@@ -137,6 +135,7 @@ gameObject* createPlayer()
     int w, h;
     getWinSize(&w,  &h);
 
+    go->depth = 2;
     go->pos = vec(w / 2.0, h / 2.0);
 
     pd->lastFireFrame = getFrame();

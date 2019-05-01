@@ -17,6 +17,6 @@ target_link_libraries(Zomboid2 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
 target_compile_options(Zomboid2 PRIVATE "-Wno-implicit-function-declaration")
 
 add_custom_command(
-        TARGET Zomboid2 POST_BUILD
+        TARGET Zomboid2
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/lib/shaders/shaders/* ${CMAKE_CURRENT_BINARY_DIR}/shaders
         COMMENT "Copying shaders to output directory")

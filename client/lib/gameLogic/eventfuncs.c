@@ -63,7 +63,7 @@ void dfDrawBackground(void)
             assert(scene->cachedBack->textureIds[0] != 0);
         }
 
-        dcDrawBackground(scene->cachedBack, 0, fixedW, fixedH);
+        dcDrawBackground(scene->cachedBack, 0);
     }
 }
 
@@ -112,7 +112,7 @@ void mainDF(void)
     dcBeginDraw();
 
     //dcRotateScreen(sceneAngle, fixedW, fixedH);
-    //dfDrawBackground();
+    dfDrawBackground();
     //dcDrawSurface(fixedW, fixedH);
 
     //Adding all object to the queue and processing animations

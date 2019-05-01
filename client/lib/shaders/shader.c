@@ -63,7 +63,7 @@ int shaderLoad(shader* sh)
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
     if(vertexShader == 0 || fragmentShader == 0) {
-        printf("Error: Unable to create shaders\n");
+        printf("[shader.c]: Unable to create shaders\n");
         return 0;
     }
 

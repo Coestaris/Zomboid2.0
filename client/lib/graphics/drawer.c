@@ -4,24 +4,32 @@
 
 #include "drawer.h"
 
-float vertices[] = {
-        // positions          // texture coords
-        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, // top right
-        0.5f, -0.5f, 0.0f,   1.0f, 1.0f, // bottom right
-        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, // bottom left
-        -0.5f,  0.5f, 0.0f,  0.0f, 0.0f  // top left
+GLfloat imageVertices[] = {
+     0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+     0.5f, -0.5f,  0.0f,  1.0f,  1.0f,
+    -0.5f, -0.5f,  0.0f,  0.0f,  1.0f,
+    -0.5f,  0.5f,  0.0f,  0.0f,  0.0f
 };
 
-unsigned int VAO;
+GLint indices[] = {
+    0, 1, 3,
+    1, 2, 3
+};
+
+size_t winW, winH;
+
+GLint ImageVAO;
+
 shader* imageShader;
-unsigned int indices[] = {
-        0, 1, 3, // first triangle
-        1, 2, 3  // second triangle
-};
+shader* backgroundShader;
 
+//Image Rotate matrix
 mat4 rm;
+//Image Transform matrix
 mat4 tm;
+//Image Scale matrix
 mat4 sm;
+//Result image matrix
 mat4 m;
 
 size_t MAXDP = MAXDP_START;
@@ -42,7 +50,7 @@ void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, dou
 
 void dcDrawText(vec_t pos, color_t col, void *font, const char *string)
 {
-    if(!string)
+   /* if(!string)
         return;
 
     bindTex(NULL, 0);
@@ -55,11 +63,12 @@ void dcDrawText(vec_t pos, color_t col, void *font, const char *string)
     for( int i = 0; i < j; i++ ) {
         glutBitmapCharacter(font, string[i]);
         //glutStrokeCharacter(font, string[i]);
-    }
+    }*/
 }
 
 void dcDrawSurface(int winW, int winH)
 {
+    /*
     srfBind();
 
     glBegin( GL_QUADS );
@@ -67,38 +76,20 @@ void dcDrawSurface(int winW, int winH)
         glTexCoord2f(1.0, 0.0); glVertex2f(winW,  0.0);
         glTexCoord2f(1.0, 1.0); glVertex2f(winW, winH);
         glTexCoord2f(0.0, 1.0); glVertex2f(0.0,  winH);
-    glEnd();
+    glEnd();*/
 }
 
-void dcDrawBackground(tex2d *tex, int frame, int windowW, int windowH)
+void dcDrawBackground(tex2d *tex, int frame)
 {
     bindTex(tex, frame);
-
-    glPushMatrix();
-
-    double texW = (double)windowW / tex->width;
-    double texH = (double)windowH / tex->height;
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-    glBegin(GL_QUAD_STRIP);
-        glTexCoord2f(0,             (GLfloat)texH);
-        glVertex2f((GLfloat) - BACKGROUND_OFFSET,        (GLfloat)        - BACKGROUND_OFFSET);
-
-        glTexCoord2f(0,                         0);
-        glVertex2f((GLfloat) - BACKGROUND_OFFSET,        (GLfloat)windowH + BACKGROUND_OFFSET);
-
-        glTexCoord2f((GLfloat)texW, (GLfloat)texH);
-        glVertex2f((GLfloat)windowW + BACKGROUND_OFFSET, (GLfloat)        - BACKGROUND_OFFSET);
-
-        glTexCoord2f((GLfloat)texW,             0);
-        glVertex2f((GLfloat)windowW + BACKGROUND_OFFSET, (GLfloat)windowH + BACKGROUND_OFFSET);
-    glEnd();
-
-    glPopMatrix();
+    glUseProgram(backgroundShader->progID);
+    glBindVertexArray(tex->VAO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void dcDrawLine(vec_t p1, vec_t p2, color_t col)
 {
+    /*
     bindTex(NULL, 0);
 
     glColor4d(col.r, col.g, col.b, col.a);
@@ -106,12 +97,14 @@ void dcDrawLine(vec_t p1, vec_t p2, color_t col)
         glVertex3d(p1.x, p1.y, 0);
         glVertex3d(p2.x, p2.y, 0);
     glEnd();
+     */
 }
 
 #include "../helpers.h"
 
 void dcDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col)
 {
+    /*
     bindTex(NULL, 0);
 
     glPushMatrix();
@@ -130,6 +123,7 @@ void dcDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col)
     glEnd();
 
     glPopMatrix();
+     */
 }
 
 vec_t rotate_point(double cx, double cy,double angle, vec_t p)
@@ -154,6 +148,7 @@ vec_t rotate_point(double cx, double cy,double angle, vec_t p)
 void dcDrawRotatedTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
         double scale, vec_t texOffset, vec_t texScaleFactor)
 {
+    /*
     bindTex(tex, frame);
     glPushMatrix();
 
@@ -202,10 +197,12 @@ void dcDrawRotatedTexPolygon(tex2d* tex, int frame, relPoint_t *points, int coun
     glEnd();
 
     glPopMatrix();
+     */
 }
 
 void dcDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale)
 {
+    /*
     bindTex(tex, frame);
     glPushMatrix();
 
@@ -236,33 +233,43 @@ void dcDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_
     glEnd();
 
     glPopMatrix();
+     */
 }
 
 void dcDrawTexture(tex2d *tex, color_t col, int frame, vec_t pos, double angle, double scaleFactor)
 {
-    glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
-
-    int w, h;
-    getWinSize(&w, &h);
+    bindTex(tex, frame);
 
     identityMat(m);
-    identityMat(rm);
-    identityMat(tm);
-    identityMat(sm);
 
-    rotateMat4Z(rm, angle);
-    translateMat(tm, pos.x / (float)(w / 2.0) - 1.0f, pos.y / (float)(h / 2.0) - 1.0f, 0);
-    scaleMat(sm, tex->width / (float)w * scaleFactor, tex->height / (float)h * scaleFactor, 1);
+    float k = (float)winW / winH;
+
+    identityMat(rm);
+    rotateMat4Z(rm, -angle);
+
+    identityMat(sm);
+    scaleMat(sm, tex->width / (float)winW * (scaleFactor + 1), tex->height / (float)winH * (scaleFactor + 1) / k, 1);
+
+    identityMat(tm);
+    translateMat(tm, pos.x / (float)(winW / 2.0) - 1.0f, (winH - pos.y) / (float)(winH / 2.0) - 1.0f, 0);
 
     mat4_mulm(m, tm);
     mat4_mulm(m, rm);
     mat4_mulm(m, sm);
 
-    glUseProgram(imageShader->progID);
-    unsigned int transformLoc = glGetUniformLocation(imageShader->progID, "transform");
-    glUniformMatrix4fv(transformLoc, 1, GL_TRUE, m);
+    identityMat(tm);
+    translateMat(tm, tex->center.x / tex->width, tex->center.y / tex->width, 0);
+    mat4_mulm(m, tm);
 
-    glBindVertexArray(VAO);
+    glUseProgram(imageShader->progID);
+
+    GLint transformLoc = glGetUniformLocation(imageShader->progID, "transform");
+    GLint colorLoc = glGetUniformLocation(imageShader->progID, "color");
+
+    glUniformMatrix4fv(transformLoc, 1, GL_TRUE, m);
+    glUniform4f(colorLoc, col.r, col.g, col.b, col.a);
+
+    glBindVertexArray(ImageVAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
@@ -278,10 +285,12 @@ void dcEndDraw(void)
 
 void dcRotateScreen(double angle, double sceneW, double sceneH)
 {
+    /*
     glLoadIdentity ();
     glTranslatef((GLfloat)(sceneW / 2.0), (GLfloat)(sceneH / 2.0), 0);
     glRotatef((GLfloat)angle, 0, 0, 1);
     glTranslatef(- (GLfloat)(sceneW / 2.0), - (GLfloat)(sceneH / 2.0), 0);
+     */
 
 }
 
@@ -446,20 +455,21 @@ void dcInit()
     m = cmat4();
 
     imageShader = shmGetShader(SHADER_IMAGE);
+    backgroundShader = shmGetShader(SHADER_BACKGROUND);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    unsigned int VBO, EBO;
+    GLint VBO, EBO;
 
-    glGenVertexArrays(1, &VAO);
+    glGenVertexArrays(1, &ImageVAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
 
-    glBindVertexArray(VAO);
+    glBindVertexArray(ImageVAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(imageVertices), imageVertices, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -473,6 +483,9 @@ void dcInit()
 
     glUseProgram(imageShader->progID);
     shaderSetInt(imageShader, "texture1", 0);
+
+    glUseProgram(backgroundShader->progID);
+    shaderSetInt(backgroundShader, "texture1", 0);
 
     dpList = malloc(sizeof(drawingPrimitive**) * DPLEVELS);
     dpCounts = malloc(sizeof(size_t) * DPLEVELS);

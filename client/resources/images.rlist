@@ -1,6 +1,6 @@
 ; type                  id                  scope                cX   cY   mode         path
 image                   TEXID_BULLET        TEXSCOPE_GAME        0    0    TM_DEFAULT   images/bullet.png
-image                   TEXID_BOX           TEXSCOPE_MAIN_MENU   0    0    TM_DEFAULT   images/box.png
+image                   TEXID_BOX           TEXSCOPE_GAME        0    0    TM_DEFAULT   images/box.png
 image                   TEXID_SIMPLE_LIGHT  TEXSCOPE_GAME        0    0    TM_OVERLAY   images/light/simpleLight.png
 image                   TEXID_LIGHT         TEXSCOPE_GAME        0    0    TM_OVERLAY   images/light/light.png
 image                   TEXID_FLASHLIGHT    TEXSCOPE_GAME        110  0    TM_OVERLAY   images/light/flashlight.png

@@ -63,7 +63,7 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
         exit(1);
     }
 
-    texmPrintNodes();
+    //texmPrintNodes();
 
     if(!scmHasScene(0)) {
         puts("[appInit.c][ERROR]: You must specify scene with id 0");

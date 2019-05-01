@@ -1,5 +1,5 @@
-set SCENEID_MAIN_MENU 0
-set SCENEID_GAME 1
+set SCENEID_MAIN_MENU 1
+set SCENEID_GAME 0
 
 set OBJECT_PLAYER 0
 set OBJECT_BOX    1
@@ -21,7 +21,7 @@ scm_open  SCENEID_GAME
     ; object_ex       scene_id           x     y     angle     size        texid       color      drawable   depth      ani_speed
     scm_sog_add_ex    OBJECT_BOX         200   300   0.4       defaults    defaults    defaults   defaults   defaults   defaults
 
-    scm_sc_load TEXSCOPE_GAME
+    scm_sc_load TEXSCOPE_MM_GEN
     scm_sc_unload TEXSCOPE_MAIN_MENU
     scm_objects_destroy true
     scm_objects_free true
@@ -35,7 +35,6 @@ scm_open  SCENEID_MAIN_MENU
     ; scm_sog_add OBJECT_BUTTON 400 300
     scm_sog_add       OBJECT_BOX         400   400
 
-    scm_sc_load TEXSCOPE_MAIN_MENU
     scm_sc_load TEXSCOPE_MM_GEN
     scm_objects_destroy true
     scm_objects_free true

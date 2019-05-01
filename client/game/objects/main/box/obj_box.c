@@ -26,7 +26,7 @@ gameObject* createBox()
 {
     gameObject* go = object();
     go->drawable = true;
-    go->size = 1.5;
+    go->size = 2;
     go->texID = TEXID_BOX;
     go->onInit = box_init;
 

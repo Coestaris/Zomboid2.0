@@ -12,6 +12,8 @@
 #include "../flashlight/obj_flashlight.h"
 #include "../light/obj_light_tracer.h"
 
+#define PLAYER_FIRE_RATE 5
+
 #define PLAYER_MOVE_X 2.5
 #define PLAYER_MOVE_Y 2.5
 

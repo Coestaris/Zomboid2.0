@@ -36,6 +36,9 @@ typedef struct _tex2d {
 
     int width;
     int height;
+
+    GLint VAO;
+
 } tex2d;
 
 tex2d* createTex(char *fn, int uid, int scope, vec_t center, int mode);
