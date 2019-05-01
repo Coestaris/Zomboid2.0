@@ -1,14 +1,14 @@
 # Zomboid 2.0
 A small game on self-written GLUT-based game engine. Developing it just for fun...
 
-*Zomboid 1.0 is [previous](https://github.com/Coestaris/Zomboid) c++ based version*
+*Zomboid 1.0 is an [previous](https://github.com/Coestaris/Zomboid) abandoned c++-written version*
 
 
 Setup
 ```bash
-git clone https://github.com/Coestaris/Zomboid2.0
+git clone --recurse-submodules https://github.com/Coestaris/Zomboid2.0
 cd Zomboid2.0
-sudo apt install libsoil-dev mesa-utils freeglut3-dev 
+sudo apt install mesa-utils freeglut3-dev 
 sudo apt install cmake # If needed
 ```
 
