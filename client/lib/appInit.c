@@ -19,20 +19,20 @@ void initGraphics(int argc, char **argv, int w, int h, const char *title, int is
     glutInitWindowSize(w, h);
     glutCreateWindow(title);
 
-   /* glViewport(0, 0, w, h);
+    glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, w, h, 0, -1, 1);
-    glMatrixMode(GL_MODELVIEW);*/
+    glMatrixMode(GL_MODELVIEW);
 
     if(isFixedSize) {
         setFixedSize(w, h);
     }
 
-/*    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
-    glEnable( GL_ALPHA_TEST );*/
+    glEnable( GL_ALPHA_TEST );
 
     glEnable( GL_BLEND );
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

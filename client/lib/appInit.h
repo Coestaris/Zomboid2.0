@@ -17,8 +17,8 @@
 #define OVERRIDE_GL_VERSION
 
 #ifdef OVERRIDE_GL_VERSION
-    #define MAJOR_GL_VERSION 4
-    #define MINOR_GL_VERSION 2
+    #define MAJOR_GL_VERSION 3
+    #define MINOR_GL_VERSION 0
 #endif
 
 void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize, char* mainResFile);

@@ -25,8 +25,8 @@ void shmPush(shader* shader, int id)
 
 void shmPushBuiltInShaders()
 {
-    shmPush(shaderCreate("shaders/image.vsh", "shaders/image.fsh"), SHADER_IMAGE);
-    shmPush(shaderCreate("shaders/background.vsh", "shaders/background.fsh"), SHADER_BACKGROUND);
+    //shmPush(shaderCreate("shaders/image.vsh", "shaders/image.fsh"), SHADER_IMAGE);
+    //shmPush(shaderCreate("shaders/background.vsh", "shaders/background.fsh"), SHADER_BACKGROUND);
 }
 
 void shmInit()
