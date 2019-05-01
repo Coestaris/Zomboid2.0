@@ -45,7 +45,6 @@ void freeOGlTex(tex2d* tex);
 void freeTex(tex2d* tex);
 void bindTex(tex2d* tex, int frame);
 
-int texSize(char* filename, int* w, int* h);
 void loadTex(tex2d* tex);
 
 #endif //ZOMBOID2_TEX_H

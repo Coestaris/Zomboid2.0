@@ -14,7 +14,6 @@
 typedef float* mat4;
 typedef float* vec4;
 
-float toRad(float deg);
 vec4 cvec4(double x, double y, double z, double l);
 void freeVec4(vec4 vec);
 mat4 cmat4();

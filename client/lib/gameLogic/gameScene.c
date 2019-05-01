@@ -177,12 +177,21 @@ void scmLoadScene(int id)
                 objectsCount += scenes[i]->startupObjectsCount;
             }
 
-            for(int j = 0; j < scenes[i]->startupObjectsCount; j++) {
-                if (scenes[i]->startupObjects[j]->onInit) {
+            for(int j = 0; j < scenes[i]->startupObjectsCount; j++)
+            {
+                if (scenes[i]->startupObjects[j]->onInit)
+                {
                     scenes[i]->startupObjects[j]->onInit(scenes[i]->startupObjects[j]);
                 }
+
                 if (scenes[i]->startupObjects[j]->drawable && !scenes[i]->startupObjects[j]->cachedTex)
+                {
                     scenes[i]->startupObjects[j]->cachedTex = texmGetID(scenes[i]->startupObjects[j]->texID);
+                    assert(scenes[i]->startupObjects[j]->cachedTex != NULL);
+
+                    for(int f = 0; f < scenes[i]->startupObjects[j]->cachedTex->framesCount; f++)
+                        assert(scenes[i]->startupObjects[j]->cachedTex->textureIds[f] != 0);
+                }
             }
 
             dqnClearQueue();

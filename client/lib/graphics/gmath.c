@@ -164,11 +164,6 @@ void scaleMat(mat4 m, float x, float y, float z)
     m[10] *= z;
 }
 
-float toRad(float deg)
-{
-    return deg * (M_PI / 180.0f);
-}
-
 void rotateMat4Z(mat4 m, float angle)
 {
     float c = cosf(angle);

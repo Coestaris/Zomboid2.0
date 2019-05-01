@@ -80,7 +80,6 @@ void dfDrawObjects(void)
                 if(!obj[i]->cachedTex)
                 {
                     obj[i]->cachedTex = texmGetID(obj[i]->texID);
-
                     assert(obj[i]->cachedTex != NULL);
 
                     for(int j = 0; j < obj[i]->cachedTex->framesCount; j++)
@@ -112,9 +111,9 @@ void mainDF(void)
 {
     dcBeginDraw();
 
-    dcRotateScreen(sceneAngle, fixedW, fixedH);
-    dfDrawBackground();
-    dcDrawSurface(fixedW, fixedH);
+    //dcRotateScreen(sceneAngle, fixedW, fixedH);
+    //dfDrawBackground();
+    //dcDrawSurface(fixedW, fixedH);
 
     //Adding all object to the queue and processing animations
     dfDrawObjects();

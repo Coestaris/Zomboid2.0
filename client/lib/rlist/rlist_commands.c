@@ -59,7 +59,7 @@ int rlist_command_echo_all_vars(rlist_cdata *data)
     } else {
         printf("[rlist_commands.c]: Registered %i variables: \n", variablesCount);
         for(int i = 0; i < variablesCount; i++) {
-            printf("  - %15s set as \"%s\"\n", variables[i]->name, variables[i]->value);
+            printf("[rlist_commands.c]:  - %15s set as \"%s\"\n", variables[i]->name, variables[i]->value);
         }
     }
     return true;

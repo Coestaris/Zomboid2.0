@@ -10,6 +10,7 @@
 #include <GL/freeglut.h>
 #include <GL/gl.h>
 
+#include "gmath.h"
 #include "surface.h"
 #include "../shaders/shaderManager.h"
 #include "../resources/tex.h"
