@@ -19,13 +19,14 @@
 #include <sys/time.h>
 #include <asm/errno.h>
 
-#include "client.h"
-#include "logicHandler.h"
+#include "../../client.h"
+#include "../../logicHandler.h"
 
 #define PENDING_CONNECTIONS 3
 
 void setPort(uint16_t port);
+int socketServerCreate(char *port);
 int socketInit(void);
-int socketMainloop(void);
+int socketMainloop(int listener);
 
 #endif //SERVER_SOCKETS_H

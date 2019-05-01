@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "sockets.h"
+#include "lib/network/sockets.h"
 #include "handlers/baseHandlers.h"
 
 int isInt(char* string) {
@@ -17,19 +17,7 @@ int isInt(char* string) {
 }
 
 int main(int argc, char** argv) {
-
-    if(argc != 1) {
-        if(!isInt(argv[1])) {
-            perror("parsing port");
-        }
-
-        setPort(atoi(argv[1]));
-    }
-
-    initBaseHandlers();
-
-    socketInit();
-    socketMainloop();
-
+    int listener = socketServerCreate("9305");
+    socketMainloop(listener);
     return 0;
 }

@@ -6,37 +6,22 @@
 #include "sockets.h"
 #include "messageTypes.h"
 #include "metadata.h"
-
-// CLion for some reason thinks that recv can't return 0, so
-
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "OCDFAInspection"
-
-
-ssize_t buffLen = 0;
-char buffer[BUFFER_SIZE];
-char send_buffer[BUFFER_SIZE + sizeof(int) + 1];
+#include "../../../lib/netconf.h"
 
 network_handler *handlers[MAX_HANDLERS];
 int handlersCount = 0;
 
-void *get_in_addr(struct sockaddr *sa) {
-    if (sa->sa_family == AF_INET) {
-        return &(((struct sockaddr_in *) sa)->sin_addr);
-    }
-    return &(((struct sockaddr_in6 *) sa)->sin6_addr);
-}
-
-int socketCreate(char *_addr, char *port) {
+r_info socketCreate(char *_addr, char *port) {
     /*
      * We use connect() for UDP packet's to increase performance
      * This function returns new socket fd
      */
+    addrinfo_t hints, *servinfo, *p;
 
-    struct addrinfo hints, *servinfo, *p;
+    r_info res;
 
     int rv;
-    int sockfd = -1;
+    int sockfd;
 
     // look up for an remote address and open a socket
     memset(&hints, 0, sizeof hints);
@@ -57,7 +42,6 @@ int socketCreate(char *_addr, char *port) {
             continue;
         }
 
-
         int yes = 1;
         setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
 
@@ -69,29 +53,28 @@ int socketCreate(char *_addr, char *port) {
         exit(1);
     }
 
-    if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
-        perror("Socket connection error");
-        exit(1);
-    }
-    char s[256];
+    // output buffer
+    char output_buf[256];
 
     printf("Connected to local %s:%s\n",
-           inet_ntop(p->ai_family, get_in_addr(p->ai_addr), s, sizeof(s)), port);
-    // servinfo no longer needed
+           inet_ntop(p->ai_family, (sockaddr_in_t *) p->ai_addr, output_buf, sizeof(output_buf)), port);
+    res.addr = *p->ai_addr;
+    res.sockfd = sockfd;
+    // addr no longer needed
     freeaddrinfo(servinfo);
     // setting socket to non-blocking
     fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFL) | O_NONBLOCK);
 
-    return sockfd;
+    return res;
 }
 
-int socketWrite(int socketfd, uint8_t *data, size_t *len) {
+int socketWrite(r_info serv_info, uint8_t *data, size_t *len) {
     size_t total = 0;
     ssize_t n = -1;
     size_t left = *len;
 
     while (total < *len) {
-        n = send(socketfd, data + total, left, 0);
+        n = sendto(serv_info.sockfd, data + total, left, 0, &serv_info.addr, sizeof (serv_info.addr));
         if (n == -1) break;
         total += n;
         left -= n;
@@ -105,6 +88,7 @@ int socketWrite(int socketfd, uint8_t *data, size_t *len) {
 int socketRead(int socketfd, uint8_t *res, size_t reslen) {
     ssize_t numbytes;
     // looking for data
+    // actually recv - the same recvfrom but with no remote address needed
     if ((numbytes = recv(socketfd, res, reslen, 0)) <= 0) {
         if (numbytes == 0) {
             perror("connection closed");
@@ -119,6 +103,10 @@ int socketRead(int socketfd, uint8_t *res, size_t reslen) {
         printf("Got info!");
         return 1;
     }
+}
+
+int socketClose(int sockfd) {
+    return close(sockfd);
 }
 
 /*int socketsGetUpdates()
@@ -174,5 +162,3 @@ int socketsSendMessage(int messageType, char* buffer, size_t buffLen)
     if(buffer) memcpy(send_buffer + sizeof(int), buffer, (size_t)buffLen);
     return socketsSend(send_buffer, (size_t)buffLen + sizeof(int));
 }*/
-
-#pragma clang diagnostic pop

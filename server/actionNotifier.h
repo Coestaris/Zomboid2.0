@@ -12,7 +12,7 @@
 #include "client.h"
 
 void notifierSocketInited(void);
-void notifierSocketListening(int port);
+void notifierSocketListening(char * port);
 void notifierSocketWaiting(void);
 void notifierSocketNew(int socket, struct sockaddr_in addr);
 void notifierSocketAdded(int index);

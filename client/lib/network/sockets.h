@@ -18,7 +18,6 @@
 
 #include "messageTypes.h"
 
-#define BUFFER_SIZE 1024
 #define MAX_HANDLERS 100
 
 typedef struct _network_handler {
@@ -29,12 +28,13 @@ typedef struct _network_handler {
 
 typedef struct {
     int sockfd;
-    struct addrinfo servinfo;
-} serv_sock_t;
+    struct sockaddr addr;
+} r_info;
 
-int socketCreate(char *addr, char *port);
-int socketWrite(int socketfd, uint8_t *data, size_t *len);
+r_info socketCreate(char *addr, char *port);
+int socketWrite(r_info serv_info, uint8_t *data, size_t *len);
 int socketRead(int socketfd, uint8_t *res, size_t len);
+int socketClose(int socketfd);
 
 int socketsOpen(void);
 int socketsGetUpdates();
