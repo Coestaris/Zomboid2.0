@@ -8,18 +8,24 @@ FT_Library ft;
 
 #define glCheck(s) if((glerror = glGetError()) != GL_NO_ERROR) { printf("[font.c][ERROR]: "s".Gl error: %i\n", glerror); return NULL; }
 
-font_t* fontLoad(char* filename, int penSize, char startIndex, char endIndex)
+font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endIndex)
 {
     GLint glerror;
     FT_Face face;
+
+    if(!fileExists(filename)) {
+        printf("[font.c][ERROR]: Unable to find file %s", filename);
+        return NULL;
+    }
+
     if (FT_New_Face(ft, filename, 0, &face)) {
-        puts("[font_t.c][ERROR]: Failed to load font_t");
+        puts("[font.c][ERROR]: Failed to load font");
         return NULL;
     }
 
 
     if(FT_Set_Pixel_Sizes(face, penSize, 0)) {
-        puts("[font_t.c][ERROR]: Failed set pixel sizes");
+        puts("[font.c][ERROR]: Failed set pixel sizes");
         return NULL;
     }
 
@@ -37,7 +43,7 @@ font_t* fontLoad(char* filename, int penSize, char startIndex, char endIndex)
         int errorCode = FT_Load_Char(face, c, FT_LOAD_RENDER);
         if (errorCode)
         {
-            printf("[font_t.c][ERROR]: Failed to load %i Glyph. Error code: %i\n", c, errorCode);
+            printf("[font.c][ERROR]: Failed to load %i Glyph. Error code: %i\n", c, errorCode);
             return NULL;
         }
 
@@ -84,6 +90,35 @@ font_t* fontLoad(char* filename, int penSize, char startIndex, char endIndex)
         f->chars[c - startIndex] = ch;
     }
 
+    glGenVertexArrays(1, &f->VAO);
+    glCheck("Unable to generate vertex arrays")
+
+    glGenBuffers(1, &f->VBO);
+    glCheck("Unable to generate vertex buffer")
+
+    glBindVertexArray(f->VAO);
+    glCheck("Unable to bind vertex array")
+
+    glBindBuffer(GL_ARRAY_BUFFER, f->VBO);
+    glCheck("Unable to bind buffer")
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+    glCheck("Unable to bind fill buffer data")
+
+    glEnableVertexAttribArray(0);
+    glCheck("Unable to enable vertex attribute")
+
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+    glCheck("Unable to set vertex attribute")
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glCheck("Unable to unbind VBO")
+
+    glBindVertexArray(0);
+    glCheck("Unable to unbind VAO")
+
+    printf("[font.c]: Loaded font. Font path: %s. In total %i symbols\n", filename, endIndex - startIndex + 1);
+
     return f;
 }
 
@@ -96,7 +131,7 @@ void fontFree(font_t* f)
 void fontsInit(void)
 {
     if (FT_Init_FreeType(&ft)) {
-        puts("[font_t.c][ERROR]: Could not init FreeType Library");
+        puts("[font.c][ERROR]: Could not init FreeType Library");
         exit(1);
     }
 }

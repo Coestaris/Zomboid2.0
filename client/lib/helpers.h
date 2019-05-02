@@ -7,9 +7,9 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 
-#include "structs.h"
-#include "gameLogic/eventfuncs.h"
+#include  "structs.h"
 
 #define true 1
 #define TRUE 1

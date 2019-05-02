@@ -10,7 +10,7 @@ size_t DPLEVELS = MAX_DP_LEVELS;
 
 size_t* dpCounts;
 drawingPrimitive_t*** dpList;
-
+shader_t* textShader;
 
 void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, double hh, vec_t cp, int s1, int s2)
 {
@@ -21,26 +21,55 @@ void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, dou
     p->y = inp.x * vsin + inp.y * vcos - cp.y * (vcos - 1) - cp.x * vsin;
 }
 
-
-void dcDrawText(vec_t pos, color_t col, font_t *font, const char *string)
+int winW, winH;
+void dcDrawText(vec_t pos, color_t col, font_t *font, const char *string, double scale)
 {
-    if(!string)
-        return;
+    if(!string) return;
 
-    bindTex(NULL, 0);
+    glUseProgram(textShader->progID);
 
-    int j = (int)strlen( string );
-    glColor4d(col.r, col.g, col.b, col.a);
+    GLint loc = glGetUniformLocation(textShader->progID, "texcolor");
+    glUniform3f(loc, col.r, col.g, col.b);
 
-    glRasterPos2d(pos.x, pos.y);
+    glActiveTexture(GL_TEXTURE0);
+    glBindVertexArray(font->VAO);
 
-    for( int i = 0; i < j; i++ ) {
-        glutBitmapCharacter(font, string[i]);
-        //glutStrokeCharacter(font_t, string[i]);
+    for (int c = 0; c < strlen(string); c++)
+    {
+        font_character_t ch = font->chars[string[c] - font->startIndex];
+
+        GLfloat xpos = pos.x + ch.bearing.x * scale;
+        GLfloat ypos = pos.y - (ch.size.y - ch.bearing.y) * scale;
+
+        GLfloat w = ch.size.x * scale;
+        GLfloat h = ch.size.y * scale;
+
+        GLfloat vertices[6][4] = {
+                { xpos       / winW - 1, (ypos + h) / winH - 1, 0.0, 0.0 },
+                { xpos       / winW - 1, ypos 		/ winH - 1, 0.0, 1.0 },
+                { (xpos + w) / winW - 1, ypos       / winH - 1, 1.0, 1.0 },
+
+                { xpos       / winW - 1, (ypos + h) / winH - 1, 0.0, 0.0 },
+                { (xpos + w) / winW - 1, ypos       / winH - 1, 1.0, 1.0 },
+                { (xpos + w) / winW - 1, (ypos + h) / winH - 1, 1.0, 0.0 }
+        };
+
+        glBindTexture(GL_TEXTURE_2D, ch.textureID);
+
+        glBindBuffer(GL_ARRAY_BUFFER, font->VBO);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        pos.x += (ch.advance >> 6) * scale;
     }
+
+    glUseProgram(0);
 }
 
-void dcDrawSurface(int winW, int winH)
+void dcDrawSurface()
 {
     srfBind();
 
@@ -277,7 +306,7 @@ void checkDPSize(int depth)
     assert(dpCounts[depth] < MAXDP);
 }
 
-void dqnDrawText(vec_t pos, color_t col, void *font, char *string, int depth)
+void dqnDrawText(vec_t pos, color_t col, font_t* font, char* string, double size, int depth)
 {
     checkDPSize(depth);
 
@@ -288,6 +317,7 @@ void dqnDrawText(vec_t pos, color_t col, void *font, char *string, int depth)
     dp->col = col;
     dp->font = font;
     dp->string = string;
+    dp->scale = size;
 }
 
 void dqnDrawSprite(tex_t *tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor, int depth)
@@ -374,7 +404,7 @@ void dcDrawPrimitives()
             drawingPrimitive_t *dp = dpList[level][i];
             switch (dp->type) {
                 case DPTYPE_TEXT:
-                    dcDrawText(dp->p1, dp->col, dp->font, dp->string);
+                    dcDrawText(dp->p1, dp->col, dp->font, dp->string, dp->scale);
                     break;
 
                 case DPTYPE_SPRITE:
@@ -425,6 +455,18 @@ void dqnClearQueue(void)
 
 void dcInit()
 {
+    textShader = shmGetShader(SHADER_TEXT);
+    int loc = glGetUniformLocation(textShader->progID, "text");
+    if(loc == -1 || loc == 0)
+    {
+        puts("[drawer.c][ERROR]: Unable to get font shader uniform location");
+        //exit(1);
+    }
+    else
+    {
+        glUniform1i(textShader + loc, 0);
+    }
+
     dpList = malloc(sizeof(drawingPrimitive_t**) * DPLEVELS);
     dpCounts = malloc(sizeof(size_t) * DPLEVELS);
 

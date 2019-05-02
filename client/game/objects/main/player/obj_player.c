@@ -44,7 +44,7 @@ void addFireLight(playerData_t* pd, vec_t pos)
     scmPushObject(light);
 }
 
-void player_event_update(gameObject_t *object, void *data)
+void player_event_update(gameObject_t* object, void* data)
 {
     long long frame = getFrame();
 
@@ -122,6 +122,8 @@ void player_event_update(gameObject_t *object, void *data)
 
     ltracerUpdate();
     ltracerDraw(1);
+
+    dqnDrawText(vec(0, 0), color(1, 1, 1, 1), mainFont, "HELLO", 1000, 10);
 }
 
 gameObject_t* createPlayer()

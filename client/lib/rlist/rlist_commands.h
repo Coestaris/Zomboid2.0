@@ -13,6 +13,7 @@
 #include <zconf.h>
 
 #include "../resources/texManager.h"
+#include "../gameLogic/gameScene.h"
 #include "../helpers.h"
 #include "rlist_c.h"
 

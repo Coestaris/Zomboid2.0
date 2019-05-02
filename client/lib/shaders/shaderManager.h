@@ -10,6 +10,7 @@
 
 #define SHADER_IMAGE 0
 #define SHADER_BACKGROUND 1
+#define SHADER_TEXT 2
 
 #define SHM_MAX_SHADERS 256
 

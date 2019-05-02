@@ -5,6 +5,9 @@
 #ifndef ZOMBOID2_TEXLOADER_H
 #define ZOMBOID2_TEXLOADER_H
 
+#include <stdlib.h>
+
+#include "../lib/resources/font.h"
 #include "../lib/resources/texManager.h"
 #include "../lib/gameLogic/gameHelpers.h"
 #include "../lib/gameLogic/gameScene.h"
@@ -51,6 +54,9 @@
 #define OBJECT_BOX    1
 #define OBJECT_MENU   2
 
+extern font_t* mainFont;
+
 void initPublicObjects(void);
+void loadResources();
 
 #endif //ZOMBOID2_TEXLOADER_H

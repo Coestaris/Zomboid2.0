@@ -10,6 +10,7 @@
 #include FT_FREETYPE_H
 #include <malloc.h>
 
+#include "../helpers.h"
 #include "../structs.h"
 
 typedef struct _fontCharacter {
@@ -30,12 +31,15 @@ typedef struct _fontCharacter {
 
 typedef struct _font {
     char* filename;
-    char startIndex;
-    char endIndex;
+    uint8_t startIndex;
+    uint8_t endIndex;
     font_character_t* chars;
+
+    GLint VAO, VBO;
+
 } font_t;
 
-font_t* fontLoad(char* filename, int penSize, char startIndex, char endIndex);
+font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endIndex);
 void fontFree(font_t* f);
 
 void fontsInit(void);
