@@ -123,7 +123,7 @@ void player_event_update(gameObject_t* object, void* data)
     ltracerUpdate();
     ltracerDraw(1);
 
-    dqnDrawText(vec(0, 0), color(1, 1, 1, 1), mainFont, "HELLO", 1000, 10);
+    dqnDrawText(vec(100, 400), color(1, 0, 1, 1), mainFont, "Hello gay", 1.5, 10);
 }
 
 gameObject_t* createPlayer()
@@ -146,7 +146,7 @@ gameObject_t* createPlayer()
     pd->enabledFlashLight = true;
 
     pd->flashlight =
-            createTexturedDirectLT(go->pos, 800, M_PI_4, 500, 40, color(1, 1, 1, 0.5), texmGetID(TEXID_LIGHT_WIDE), 0, vec(-1.5, 1.5));
+            createTexturedDirectLT(go->pos, 800, M_PI_4, 500, 40, color(1, 1, 1, 0.5), texmGetID(TEXID_LIGHT_WIDE), 0, vec(-1, 1));
             //createDirectLT(go->pos, 400, M_PI_4, 100, 100, color(1, 1, 1, 0.4));
             //createAreaLT(go->pos, 400, color(1, 1, 0.5, 0.2));
             //createTexturedAreaLT(go->pos, 500, color(1, 1, 0.5, 0.2), texmGetID(TEXID_LIGHT), 0);

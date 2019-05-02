@@ -78,7 +78,7 @@ void dcDrawTexPolygon(tex_t* tex, int frame, relPoint_t *points, int count, vec_
 void dcDrawRotatedTexPolygon(tex_t* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
                              double scale, vec_t texOffset, vec_t texScaleFactor);
 
-void dcDrawSurface(int winW, int winH);
+void dcDrawSurface();
 void dcDrawPrimitives(void);
 void dcBeginDraw(void);
 void dcEndDraw(void);

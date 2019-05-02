@@ -26,9 +26,14 @@ void dcDrawText(vec_t pos, color_t col, font_t *font, const char *string, double
 {
     if(!string) return;
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+/*
     glUseProgram(textShader->progID);
+    GLint loc = glGetUniformLocation(textShader->progID, "text");
+    glUniform1i(loc, 0);
 
-    GLint loc = glGetUniformLocation(textShader->progID, "texcolor");
+    loc = glGetUniformLocation(textShader->progID, "texcolor");
     glUniform3f(loc, col.r, col.g, col.b);
 
     glActiveTexture(GL_TEXTURE0);
@@ -67,6 +72,48 @@ void dcDrawText(vec_t pos, color_t col, font_t *font, const char *string, double
     }
 
     glUseProgram(0);
+
+    //glColor3d(0, 1, 0);
+*/
+
+    for (int i = 0; i < strlen(string); i++)
+    {
+        font_character_t ch = font->chars[string[i] - font->startIndex];
+        /*for(int j = 0; j < 129; j++) {
+            if(font[j].c == s[i]) {
+                ch = font[j].info;
+                break;
+            }
+        }
+*/
+        GLfloat xpos = pos.x + ch.bearing.x * scale;
+        GLfloat ypos = pos.y - (ch.size.y + ch.bearing.y) * scale;
+
+        GLfloat w = ch.size.x * scale;
+        GLfloat h = ch.size.y * scale;
+
+        glBindTexture(GL_TEXTURE_2D, ch.textureID);
+        glColor3f(col.r, col.g, col.b);
+
+        glBegin(GL_TRIANGLE_STRIP);
+            /*glTexCoord2i(1, 1); glVertex2f(xpos + w, ypos);
+            glTexCoord2i(1, 0); glVertex2f(xpos + w, ypos + h);
+            glTexCoord2i(0, 0); glVertex2f(xpos, ypos + h);
+            glTexCoord2i(0, 1); glVertex2f(xpos, ypos);*/
+
+        glTexCoord2f(0, 1); glVertex3d(xpos, ypos + h, 1);
+        glTexCoord2f(0, 0); glVertex3d(xpos, ypos, 1);
+        glTexCoord2f(1, 1); glVertex3d(xpos + w, ypos + h, 1);
+        glTexCoord2f(1, 0); glVertex3d(xpos + w, ypos, 1);
+
+        glEnd();
+
+
+        pos.x += (ch.advance >> 6) * scale;
+    }
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    //glUseProgram(0);
 }
 
 void dcDrawSurface()
@@ -464,7 +511,7 @@ void dcInit()
     }
     else
     {
-        glUniform1i(textShader + loc, 0);
+        glUniform1i(loc, 0);
     }
 
     dpList = malloc(sizeof(drawingPrimitive_t**) * DPLEVELS);

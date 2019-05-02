@@ -40,7 +40,7 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
 
     for (GLubyte c = startIndex; c < endIndex; c++)
     {
-        int errorCode = FT_Load_Char(face, c, FT_LOAD_RENDER);
+        int errorCode = FT_Load_Char(face, c, FT_LOAD_RENDER | FT_LOAD_COLOR);
         if (errorCode)
         {
             printf("[font.c][ERROR]: Failed to load %i Glyph. Error code: %i\n", c, errorCode);
@@ -58,11 +58,11 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
         glTexImage2D(
             GL_TEXTURE_2D,
             0,
-            GL_RED,
+            GL_ALPHA,
             face->glyph->bitmap.width,
             face->glyph->bitmap.rows,
             0,
-            GL_RED,
+            GL_ALPHA,
             GL_UNSIGNED_BYTE,
             face->glyph->bitmap.buffer
         );
@@ -82,14 +82,16 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
 
         font_character_t ch =
         {
+                c,
                 texture,
                 { face->glyph->bitmap.width, face->glyph->bitmap.rows },
-                { face->glyph->bitmap_left, face->glyph->bitmap_top },
+                { face->glyph->metrics.horiBearingX / 26.6 , face->glyph->metrics.vertBearingY / 26.6},
                 face->glyph->advance.x
         };
         f->chars[c - startIndex] = ch;
     }
 
+    /*
     glGenVertexArrays(1, &f->VAO);
     glCheck("Unable to generate vertex arrays")
 
@@ -115,7 +117,7 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
     glCheck("Unable to unbind VBO")
 
     glBindVertexArray(0);
-    glCheck("Unable to unbind VAO")
+    glCheck("Unable to unbind VAO")*/
 
     printf("[font.c]: Loaded font. Font path: %s. In total %i symbols\n", filename, endIndex - startIndex + 1);
 

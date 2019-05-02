@@ -4,7 +4,7 @@ image                   TEXID_BOX           TEXSCOPE_GAME        0    0    TM_DE
 image                   TEXID_SIMPLE_LIGHT  TEXSCOPE_GAME        0    0    TM_OVERLAY   images/light/simpleLight.png
 image                   TEXID_LIGHT         TEXSCOPE_GAME        0    0    TM_OVERLAY   images/light/light.png
 image                   TEXID_FLASHLIGHT    TEXSCOPE_GAME        110  0    TM_OVERLAY   images/light/flashlight.png
-image                   TEXID_LIGHT_WIDE    TEXSCOPE_GAME        420  0    TM_OVERLAY   images/light/light_wide1.png
+image                   TEXID_LIGHT_WIDE    TEXSCOPE_GAME        450  0    TM_OVERLAY   images/light/light_wide1.png
 image                   TEXID_LIGHT_DUO     TEXSCOPE_GAME       -640  0    TM_OVERLAY   images/light/light_duo1.png
 
 image                   TEXID_ENEMY_LARM    TEXSCOPE_GAME        0    0    TM_DEFAULT   images/enemy/larm.png

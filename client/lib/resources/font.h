@@ -15,6 +15,8 @@
 
 typedef struct _fontCharacter {
 
+    char c;
+
     // ID handle of the glyph texture
     GLuint textureID;
 

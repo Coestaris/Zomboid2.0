@@ -43,7 +43,7 @@ typedef struct _ltracer_edge {
 } ltracer_edge_t;
 
 
-#define LTRACER_DRAW_RAYS
-#define LTRACER_DRAW_EDGES
+//#define LTRACER_DRAW_RAYS
+//#define LTRACER_DRAW_EDGES
 
 #endif //ZOMBOID2_LTRACER_STRUCTS_H
