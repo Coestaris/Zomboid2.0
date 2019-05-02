@@ -4,14 +4,14 @@
 
 #include "obj_player.h"
 
-void player_event_keyPressed(gameObject* this, void* data)
+void player_event_keyPressed(gameObject_t* this, void* data)
 {
-    keyboardEvent* ke = data;
-    playerData* pd = this->data;
+    keyboardEvent_t* ke = data;
+    playerData_t* pd = this->data;
 
     if(ke->key == 'f') {
         pd->enabledFlashLight = !pd->enabledFlashLight;
-        ((lightTracer_data*)pd->flashlight->data)->data->disabled = !pd->enabledFlashLight;
+        ((lightTracer_data_t*)pd->flashlight->data)->data->disabled = !pd->enabledFlashLight;
         pd->flashlight->pos = this->pos;
 
     } else if(ke->key == 'e') {
@@ -28,27 +28,27 @@ void player_event_keyPressed(gameObject* this, void* data)
     }
 }
 
-void player_init(gameObject* object)
+void player_init(gameObject_t* object)
 {
     evqSubscribeEvent(object, EVT_Update, player_event_update);
     evqSubscribeEvent(object, EVT_CharKeyUp, player_event_keyPressed);
 
-    playerData* pd = object->data;
+    playerData_t* pd = object->data;
     scmPushObject(pd->flashlight);
 }
 
-void addFireLight(playerData* pd, vec_t pos)
+void addFireLight(playerData_t* pd, vec_t pos)
 {
-    gameObject* light = createLight(pos ,pd->currLightSize, pd->currLightAlpha);
+    gameObject_t* light = createLight(pos ,pd->currLightSize, pd->currLightAlpha);
     pd->fireLights[pd->currentLightsCount++] = light;
     scmPushObject(light);
 }
 
-void player_event_update(gameObject *object, void *data)
+void player_event_update(gameObject_t *object, void *data)
 {
     long long frame = getFrame();
 
-    playerData* pd = object->data;
+    playerData_t* pd = object->data;
 
     vec_t rel = relativeCoordinates(object);
     vec_t mpos = getMousePos();
@@ -124,13 +124,13 @@ void player_event_update(gameObject *object, void *data)
     ltracerDraw(1);
 }
 
-gameObject* createPlayer()
+gameObject_t* createPlayer()
 {
-    gameObject* go = object();
-    go->data = malloc(sizeof(playerData));
+    gameObject_t* go = object();
+    go->data = malloc(sizeof(playerData_t));
     go->drawable = true;
 
-    playerData* pd = go->data;
+    playerData_t* pd = go->data;
 
     int w, h;
     getWinSize(&w,  &h);

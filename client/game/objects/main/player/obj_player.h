@@ -43,17 +43,17 @@ typedef struct _playerData {
 
     int currentLightsCount;
 
-    gameObject* fireLights[PLAYER_MAXLIGHTS];
-    gameObject* backLight;
-    gameObject* flashlight;
+    gameObject_t* fireLights[PLAYER_MAXLIGHTS];
+    gameObject_t* backLight;
+    gameObject_t* flashlight;
 
     int enabledFlashLight;
 
-} playerData;
+} playerData_t;
 
-void player_event_keyPressed(gameObject* this, void* data);
-void player_init(gameObject* object);
-void player_event_update(gameObject *object, void *data);
-gameObject* createPlayer();
+void player_event_keyPressed(gameObject_t* this, void* data);
+void player_init(gameObject_t* object);
+void player_event_update(gameObject_t *object, void *data);
+gameObject_t* createPlayer();
 
 #endif //ZOMBOID2_OBJ_TEST_H

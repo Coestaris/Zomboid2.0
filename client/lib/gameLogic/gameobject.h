@@ -26,16 +26,16 @@ typedef struct _GameObject
     int animationSpeed;
     int animationCounter;
 
-    tex2d* cachedTex;
+    tex_t* cachedTex;
 
     void* data;
 
     void (*onInit)(struct _GameObject* object);
     void (*onDestroy)(struct _GameObject* object);
 
-} gameObject;
+} gameObject_t;
 
-gameObject* object();
-void freeObject(gameObject* object);
+gameObject_t* object();
+void freeObject(gameObject_t* object);
 
 #endif //ZOMBOID2_GAMEOBJECT_H

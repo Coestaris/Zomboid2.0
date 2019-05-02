@@ -5,7 +5,7 @@
 #include "ltracer_math.h"
 
 int _edgesCount = 0;
-ltracer_edge** _edges;
+ltracer_edge_t** _edges;
 
 int ltracer_getIntersection(double rayX1, double rayY1, double rayX2, double rayY2, vec_t seg1, vec_t seg2,
         double* rx, double* ry, double* dist)
@@ -50,7 +50,7 @@ int ltracer_getIntersection(double rayX1, double rayY1, double rayX2, double ray
         }\
     }
 
-void ltracer_ray_to(ltracer_data* ld, double x1, double y1, double x2, double y2, double angle)
+void ltracer_ray_to(ltracer_data_t* ld, double x1, double y1, double x2, double y2, double angle)
 {
     double nearest = MAXDOUBLE;
     double nearestX = x1;
@@ -79,7 +79,7 @@ void ltracer_ray_to(ltracer_data* ld, double x1, double y1, double x2, double y2
 }
 
 
-void ltracer_ray_single_to(ltracer_data* ld, vec_t p1, vec_t p2, double mDist)
+void ltracer_ray_single_to(ltracer_data_t* ld, vec_t p1, vec_t p2, double mDist)
 {
     if(distance(p1, p2) > mDist) return;
     double angle = atan2(p2.y - p1.y, p2.x - p1.x);
@@ -87,7 +87,7 @@ void ltracer_ray_single_to(ltracer_data* ld, vec_t p1, vec_t p2, double mDist)
     ltracer_ray_to(ld, p1.x, p1.y, p2.x, p2.y, angle);
 }
 
-void ltracer_ray_twice_to(ltracer_data* ld, vec_t p1, vec_t p2, double mDist, double delta)
+void ltracer_ray_twice_to(ltracer_data_t* ld, vec_t p1, vec_t p2, double mDist, double delta)
 {
     if(distance(p1, p2) > mDist) return;
 
@@ -112,12 +112,12 @@ int ltracer_compare(const void* a, const void* b)
     else return 1;
 }
 
-void ltracer_sortPoints(ltracer_data* ld)
+void ltracer_sortPoints(ltracer_data_t* ld)
 {
     qsort(ld->points, (size_t)ld->pointsCount, sizeof(relPoint_t), ltracer_compare);
 }
 
-void ltracer_updateEdges(ltracer_edge** edges, int count)
+void ltracer_updateEdges(ltracer_edge_t** edges, int count)
 {
     _edges = edges;
     _edgesCount = count;

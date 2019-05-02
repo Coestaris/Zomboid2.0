@@ -4,9 +4,9 @@
 
 #include "object_menu.h"
 
-gameObject* main_container;
+gameObject_t* main_container;
 
-void menu_button_single(menu_container_child* button)
+void menu_button_single(menu_container_child_t* button)
 {
     menuDestroy(main_container);
     scmLoadScene(SCENEID_GAME);
@@ -24,24 +24,24 @@ void menu_button_gay_no() {
 }
 */
 
-void menu_button_multi(menu_container_child* button)
+void menu_button_multi(menu_container_child_t* button)
 {
     composer_input_double(main_container, "IP address", "Port", "OK", "Cancel", "127.0.0.1", "1234",
             TEXID_MENU_BUTTON_SMALL, GLUT_BITMAP_TIMES_ROMAN_24, color(0.8, 0.8, 0.8, 1), TEXID_MENU_INDBL,
             NULL, NULL);
 }
 
-void menu_button_settings(menu_container_child* button)
+void menu_button_settings(menu_container_child_t* button)
 {
     menuDestroy(main_container);
 }
 
-void menu_button_close(menu_container_child* button)
+void menu_button_close(menu_container_child_t* button)
 {
     exit(0);
 }
 
-void menu_init(gameObject* this)
+void menu_init(gameObject_t* this)
 {
     int w, h;
     getWinSize(&w, &h);
@@ -85,9 +85,9 @@ void menu_init(gameObject* this)
     scmDestroyObject(this, true);
 }
 
-gameObject* createMenu()
+gameObject_t* createMenu()
 {
-    gameObject* this = object();
+    gameObject_t* this = object();
     this->onInit = menu_init;
     return this;
 }

@@ -154,7 +154,7 @@ int rlistLoad(char *filename, int strict)
     fclose(f);
 
     int commandsCount = 0;
-    rlist_c** commands = rlist_getcommands(&commandsCount);
+    rlist_c_t** commands = rlist_getcommands(&commandsCount);
     int lineCounter = 0;
 
     get_lines(rawInput);
@@ -194,7 +194,7 @@ int rlistLoad(char *filename, int strict)
                     }
 
                     //skipping one token - command
-                    rlist_cdata* data = malloc(sizeof(rlist_cdata));
+                    rlist_cdata_t* data = malloc(sizeof(rlist_cdata_t));
                     data->args = &tokens[1];
                     data->filename = filename;
                     data->lineIndex = lineCounter;

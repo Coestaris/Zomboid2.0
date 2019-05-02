@@ -4,18 +4,18 @@
 
 #include "menu_container.h"
 
-void menuSetFocused(gameObject* cont, int state)
+void menuSetFocused(gameObject_t* cont, int state)
 {
-    menu_container_data* cd = cont->data;
+    menu_container_data_t* cd = cont->data;
     for (int i = 0; i < cd->childs_count; i++) {
         if(cd->childs[i]->setFocused)
             cd->childs[i]->setFocused(cd->childs[i], state);
     }
 }
 
-void menuSetEnabled(gameObject *cont, int mode, int state)
+void menuSetEnabled(gameObject_t *cont, int mode, int state)
 {
-    menu_container_data* cd = cont->data;
+    menu_container_data_t* cd = cont->data;
 
     if(mode == SETENABLE_MODE_CURRENT_ELEMENT) {
         for (int i = 0; i < cd->childs_count; i++) {
@@ -46,9 +46,9 @@ void menuSetEnabled(gameObject *cont, int mode, int state)
     }
 }
 
-void menuDestroy(gameObject *cont)
+void menuDestroy(gameObject_t *cont)
 {
-    menu_container_data* cd = cont->data;
+    menu_container_data_t* cd = cont->data;
     for (int i = 0; i < cd->childs_count; i++) {
         if (cd->childs[i]->isContainer) {
             menuDestroy(cd->childs[i]->object);
@@ -59,33 +59,33 @@ void menuDestroy(gameObject *cont)
     scmDestroyObject(cont, true);
 }
 
-menu_container_child* menuCreateChild(gameObject *obj)
+menu_container_child_t* menuCreateChild(gameObject_t *obj)
 {
-    menu_container_child* child = malloc(sizeof(menu_container_child));
+    menu_container_child_t* child = malloc(sizeof(menu_container_child_t));
     child->object = obj;
     child->isContainer = false;
     child->setEnable = NULL;
     return child;
 }
 
-void menuFreeChild(menu_container_child *child, int destroyObject, int freeObject)
+void menuFreeChild(menu_container_child_t *child, int destroyObject, int freeObject)
 {
     if(destroyObject) scmDestroyObject(child->object, freeObject);
     free(child);
 }
 
-gameObject* menuPushChild(gameObject *cont, menu_container_child *child, int push)
+gameObject_t* menuPushChild(gameObject_t *cont, menu_container_child_t *child, int push)
 {
-    menu_container_data* cd = cont->data;
+    menu_container_data_t* cd = cont->data;
     if(cd->childs_len == 0)
     {
         cd->childs_len = 5;
-        cd->childs = malloc(sizeof(menu_container_child) * cd->childs_len);
+        cd->childs = malloc(sizeof(menu_container_child_t) * cd->childs_len);
     }
     else if(cd->childs_count == cd->childs_len - 1)
     {
         cd->childs_len *= 2;
-        cd->childs = realloc(cd->childs, sizeof(menu_container_child) * cd->childs_len);
+        cd->childs = realloc(cd->childs, sizeof(menu_container_child_t) * cd->childs_len);
     }
 
     cd->childs[cd->childs_count++] = child;
@@ -93,15 +93,15 @@ gameObject* menuPushChild(gameObject *cont, menu_container_child *child, int pus
     child->parent = cont;
 }
 
-void onDestroy(gameObject* this) {
+void onDestroy(gameObject_t* this) {
     menuDestroy(this);
 }
 
-gameObject* menuCreate(gameObject* parent)
+gameObject_t* menuCreate(gameObject_t* parent)
 {
-    gameObject* this = object();
-    this->data = malloc(sizeof(menu_container_data));
-    menu_container_data* cd = this->data;
+    gameObject_t* this = object();
+    this->data = malloc(sizeof(menu_container_data_t));
+    menu_container_data_t* cd = this->data;
 
     //this->onDestroy = onDestroy;
     cd->parent = parent;

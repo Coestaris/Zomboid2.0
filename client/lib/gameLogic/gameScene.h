@@ -22,9 +22,9 @@
 typedef struct _gameScene {
 
     int backgroundTexId;
-    tex2d* cachedBack;
+    tex_t* cachedBack;
 
-    gameObject** startupObjects;
+    gameObject_t** startupObjects;
     int startupObjectsArrLen;
     int startupObjectsCount;
 
@@ -41,34 +41,34 @@ typedef struct _gameScene {
     int destroyObjects;
     int freeObjects;
 
-} gameScene;
+} gameScene_t;
 
 typedef struct _publicObject {
     int id;
-    gameObject* (*init)();
+    gameObject_t* (*init)();
 
-} publicObject;
+} publicObject_t;
 
-gameObject** scmGetObjects(int *count);
-gameScene* scmGetActiveScene();
+gameObject_t** scmGetObjects(int *count);
+gameScene_t* scmGetActiveScene();
 int scmGetObjectsCount(void);
 
-int scmHasObject(gameObject *object);
-void scmPushObject(gameObject *object);
-void scmDestroyObject(gameObject *object, int free);
+int scmHasObject(gameObject_t *object);
+void scmPushObject(gameObject_t *object);
+void scmDestroyObject(gameObject_t *object, int free);
 void scmDestroyAllObjects(int free);
 
-void scmPushPublicObject(int id, gameObject* (*init)());
-void scmPushScene(gameScene *scene);
+void scmPushPublicObject(int id, gameObject_t* (*init)());
+void scmPushScene(gameScene_t *scene);
 void scmLoadScene(int id);
-gameScene* scmGetScene(int id);
-publicObject* scmGetPublicObject(int id);
+gameScene_t* scmGetScene(int id);
+publicObject_t* scmGetPublicObject(int id);
 int scmHasScene(int id);
 
-gameScene* createScene(int id, int scope);
+gameScene_t* createScene(int id, int scope);
 
-void scmAddScopeToLoad(gameScene* scene, int scope);
-void scmAddScopeToUnload(gameScene* scene, int scope);
-void scmAddStartupObject(gameScene *scene, gameObject *object);
+void scmAddScopeToLoad(gameScene_t* scene, int scope);
+void scmAddScopeToUnload(gameScene_t* scene, int scope);
+void scmAddStartupObject(gameScene_t *scene, gameObject_t *object);
 
 #endif //ZOMBOID2_GAMESCENE_H

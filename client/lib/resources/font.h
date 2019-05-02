@@ -6,9 +6,9 @@
 #define ZOMBOID2_FONT_H
 
 #include <GL/gl.h>
-
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include <malloc.h>
 
 #include "../structs.h"
 
@@ -26,17 +26,17 @@ typedef struct _fontCharacter {
     // Offset to advance to next glyph
     GLuint advance;
 
-} fontCharacter;
+} font_character_t;
 
 typedef struct _font {
     char* filename;
     char startIndex;
     char endIndex;
-    fontCharacter* chars;
-} font;
+    font_character_t* chars;
+} font_t;
 
-font* fontLoad(char* filename, int penSize, char startIndex, char endIndex);
-void fontFree(void);
+font_t* fontLoad(char* filename, int penSize, char startIndex, char endIndex);
+void fontFree(font_t* f);
 
 void fontsInit(void);
 

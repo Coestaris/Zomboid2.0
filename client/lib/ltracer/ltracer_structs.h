@@ -28,18 +28,19 @@ typedef struct _ltracer_data {
     vec_t scaleFactor;
 
     int textured;
-    tex2d* tex;
+    tex_t* tex;
     int frame;
 
     double backOffset;
 
-} ltracer_data;
+} ltracer_data_t;
 
 
 typedef struct _ltracer_edge {
     int id;
     vec_t a, b, c, d;
-} ltracer_edge;
+
+} ltracer_edge_t;
 
 
 #define LTRACER_DRAW_RAYS

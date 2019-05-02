@@ -6,9 +6,9 @@
 #include "../../../lib/oil/oil.h"
 
 int winW, winH;
-tex2d* createTex(char *fn, int uid, int scope, vec_t center, int mode)
+tex_t* createTex(char *fn, int uid, int scope, vec_t center, int mode)
 {
-    tex2d* tex = malloc(sizeof(tex2d));
+    tex_t* tex = malloc(sizeof(tex_t));
 
     tex->textureIds = malloc(sizeof(GLuint) * 1);
     tex->textureIds[0] = 0;
@@ -25,9 +25,9 @@ tex2d* createTex(char *fn, int uid, int scope, vec_t center, int mode)
     tex->VAO = 0;
 }
 
-tex2d* createAnimation(char **fileNames, int framesCount, int uid, int scope, vec_t center, int mode)
+tex_t* createAnimation(char **fileNames, int framesCount, int uid, int scope, vec_t center, int mode)
 {
-    tex2d* tex = malloc(sizeof(tex2d));
+    tex_t* tex = malloc(sizeof(tex_t));
     tex->mode = mode;
 
     tex->textureIds = malloc(sizeof(GLuint) * framesCount);
@@ -43,21 +43,21 @@ tex2d* createAnimation(char **fileNames, int framesCount, int uid, int scope, ve
     tex->VAO = 0;
 }
 
-void freeOGlTex(tex2d* tex)
+void freeOGlTex(tex_t* tex)
 {
     for(int i = 0; i < tex->framesCount; i++)
         if(tex->textureIds[i]) glDeleteTextures(1, &tex->textureIds[i]);
     memset(tex->textureIds, 0, sizeof(GLuint) * tex->framesCount);
 }
 
-void freeTex(tex2d* tex)
+void freeTex(tex_t* tex)
 {
     free(tex->textureIds);
     free(tex->fns);
     free(tex);
 }
 
-void loadTex(tex2d* tex)
+void loadTex(tex_t* tex)
 {
     int w, h;
     for(int i = 0; i < tex->framesCount; i++)
@@ -130,7 +130,7 @@ void loadTex(tex2d* tex)
     tex->height = h;
 }
 
-void bindTex(tex2d* tex, int frame)
+void bindTex(tex_t* tex, int frame)
 {
     if(!tex)
     {

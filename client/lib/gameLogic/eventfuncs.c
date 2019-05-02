@@ -39,7 +39,7 @@ int getMouseState(int button)
 
 double getMillis(void)
 {
-    struct timeval  tv;
+    struct timeval tv;
     gettimeofday(&tv, NULL);
 
     return (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000.0 ;
@@ -52,7 +52,7 @@ void rotateScene(double angle)
 
 void dfDrawBackground(void)
 {
-    gameScene* scene = scmGetActiveScene();
+    gameScene_t* scene = scmGetActiveScene();
     if(scene->backgroundTexId)
     {
         if(!scene->cachedBack)
@@ -70,7 +70,7 @@ void dfDrawBackground(void)
 void dfDrawObjects(void)
 {
     int count = 0;
-    gameObject** obj = scmGetObjects(&count);
+    gameObject_t** obj = scmGetObjects(&count);
     if(obj != NULL)
     {
         for (int i = 0; i < count; i++)
@@ -126,7 +126,7 @@ void mainDF(void)
 
 void pumpEvents()
 {
-    event* ev;
+    event_t* ev;
     while ((ev = evqNextEvent()))
     {
         freeEvent(ev);

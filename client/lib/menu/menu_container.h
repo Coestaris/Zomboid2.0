@@ -19,34 +19,34 @@ typedef struct _menu_container_child {
     void (*setEnable)(struct _menu_container_child*, int state);
     void (*setFocused)(struct _menu_container_child*, int state);
 
-    gameObject* object;
-    gameObject* parent;
+    gameObject_t* object;
+    gameObject_t* parent;
 
-} menu_container_child;
+} menu_container_child_t;
 
 typedef struct _menu_container_data {
 
-    menu_container_child** childs;
-    gameObject* parent;
+    menu_container_child_t** childs;
+    gameObject_t* parent;
 
     int childs_count;
     int childs_len;
 
     void* data;
 
-} menu_container_data;
+} menu_container_data_t;
 
-void menuSetEnabled(gameObject* cont, int mode, int state);
-void menuSetFocused(gameObject* cont, int state);
+void menuSetEnabled(gameObject_t* cont, int mode, int state);
+void menuSetFocused(gameObject_t* cont, int state);
 
-void menuDestroy(gameObject *cont);
+void menuDestroy(gameObject_t *cont);
 
-gameObject* menuPushChild(gameObject* cont, menu_container_child *child, int push);
+gameObject_t* menuPushChild(gameObject_t* cont, menu_container_child_t *child, int push);
 
-menu_container_child* menuCreateChild(gameObject* obj);
-void menuFreeChild(menu_container_child *child, int destroyObject, int freeObject);
+menu_container_child_t* menuCreateChild(gameObject_t* obj);
+void menuFreeChild(menu_container_child_t *child, int destroyObject, int freeObject);
 
-gameObject* menuCreate(gameObject* parent);
+gameObject_t* menuCreate(gameObject_t* parent);
 
 
 #endif //ZOMBOID2_MENU_CONTAINER_H

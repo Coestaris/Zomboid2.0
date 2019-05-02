@@ -13,6 +13,7 @@
 #include "gmath.h"
 #include "surface.h"
 #include "../shaders/shaderManager.h"
+#include "../resources/font.h
 #include "../resources/tex.h"
 #include "../structs.h"
 
@@ -29,7 +30,7 @@
 #define DPTYPE_POLY_TEX 4
 #define DPTYPE_POLY_ROTATEDTEX 5
 
-typedef struct {
+typedef struct _relPoint {
     vec_t point;
     double angle;
     double distance;
@@ -49,32 +50,32 @@ typedef struct _drawingPrimitive {
     void* font;
     char* string;
     int count;
-    tex2d* tex;
+    tex_t* tex;
     relPoint_t* points;
 
     vec_t texOffset;
     vec_t texScaleFactor;
 
-} drawingPrimitive;
+} drawingPrimitive_t;
 
 void dqnDrawText(vec_t pos, color_t col, void *font, char *string, int depth);
-void dqnDrawSprite(tex2d *tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor, int depth);
+void dqnDrawSprite(tex_t *tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor, int depth);
 void dqnDrawLine(vec_t p1, vec_t p2, color_t col, int depth);
 void dqnDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col, int depth);
-void dqnDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale, int depth);
-void dqnDrawRotatedTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
+void dqnDrawTexPolygon(tex_t* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale, int depth);
+void dqnDrawRotatedTexPolygon(tex_t* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
                              double scale, vec_t texOffset, vec_t texScaleFactor, int depth);
 void dqnClearQueue(void);
 
 void dcRotateScreen(double angle, double sceneW, double sceneH);
 void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, double hh, vec_t cp, int s1, int s2);
-void dcDrawText(vec_t pos, color_t col, void *font, const char *string);
-void dcDrawBackground(tex2d *tex, int frame, int windowW, int windowH);
-void dcDrawTexture(tex2d *tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor);
+void dcDrawText(vec_t pos, color_t col, font_t* font, const char* string);
+void dcDrawBackground(tex_t *tex, int frame, int windowW, int windowH);
+void dcDrawTexture(tex_t *tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor);
 void dcDrawLine(vec_t p1, vec_t p2, color_t col);
 void dcDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col);
-void dcDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale);
-void dcDrawRotatedTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
+void dcDrawTexPolygon(tex_t* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale);
+void dcDrawRotatedTexPolygon(tex_t* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
                              double scale, vec_t texOffset, vec_t texScaleFactor);
 
 void dcDrawSurface(int winW, int winH);

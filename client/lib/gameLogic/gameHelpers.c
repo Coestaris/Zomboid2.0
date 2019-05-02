@@ -4,7 +4,7 @@
 
 #include "gameHelpers.h"
 
-int isInObjectRect(gameObject* obj, vec_t point)
+int isInObjectRect(gameObject_t* obj, vec_t point)
 {
     if(!obj->cachedTex) {
         return point.x == obj->pos.x && point.y == obj->pos.y;
@@ -17,7 +17,7 @@ int isInObjectRect(gameObject* obj, vec_t point)
     }
 }
 
-int isInWindowExtendedRect(gameObject* object, int exW, int exH)
+int isInWindowExtendedRect(gameObject_t* object, int exW, int exH)
 {
     int winW, winH, texW = 0, texH = 0;
     getWinSize(&winW, &winH);
@@ -33,7 +33,7 @@ int isInWindowExtendedRect(gameObject* object, int exW, int exH)
            object->pos.y >   texH * object->size + exH + winH;
 }
 
-int isInWindowRect(gameObject* object)
+int isInWindowRect(gameObject_t* object)
 {
     int winW, winH, texW = 0, texH = 0;
     getWinSize(&winW, &winH);
@@ -49,7 +49,7 @@ int isInWindowRect(gameObject* object)
            object->pos.y >   texH * object->size + winH;
 }
 
-vec_t relativeCoordinates(gameObject* obj)
+vec_t relativeCoordinates(gameObject_t* obj)
 {
     if(!obj->cachedTex) {
         return obj->pos;

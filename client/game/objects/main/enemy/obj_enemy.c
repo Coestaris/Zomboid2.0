@@ -4,9 +4,9 @@
 
 #include "obj_enemy.h"
 
-void enemy_event_update(gameObject *this, void *data)
+void enemy_event_update(gameObject_t *this, void *data)
 {
-    enemyData* ed = this->data;
+    enemyData_t* ed = this->data;
     this->angle = twoPointsAngle(this->pos, ed->player->pos);
 
     //this->x += cos(this->angle) * ed->speed;
@@ -21,17 +21,17 @@ void enemy_event_update(gameObject *this, void *data)
     }
 }
 
-void enemy_init(gameObject* this)
+void enemy_init(gameObject_t* this)
 {
-    enemyData* ed = this->data;
+    enemyData_t* ed = this->data;
     ed->larm_tex = texmGetID(TEXID_ENEMY_LARM);
     ed->rarm_tex = texmGetID(TEXID_ENEMY_RARM);
 
     evqSubscribeEvent(this, EVT_Update, enemy_event_update);
 }
 
-gameObject *createEnemy(gameObject* player, vec_t pos) {
-    gameObject* obj = object();
+gameObject_t *createEnemy(gameObject_t* player, vec_t pos) {
+    gameObject_t* obj = object();
     obj->drawable = 1;
     obj->texID = TEXID_ENEMY;
     obj->frame = (int)randRange(0, texmGetID(obj->texID)->framesCount);
@@ -41,8 +41,8 @@ gameObject *createEnemy(gameObject* player, vec_t pos) {
 
     obj->onInit = enemy_init;
 
-    obj->data = malloc(sizeof(enemyData));
-    enemyData* ed = obj->data;
+    obj->data = malloc(sizeof(enemyData_t));
+    enemyData_t* ed = obj->data;
     ed->player = player;
     ed->speed = randRange(ENEMY_SPEED_MIN, ENEMY_SPEED_MAX);
 

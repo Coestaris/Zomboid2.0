@@ -4,12 +4,12 @@
 
 #include "rlist_commands.h"
 
-rlist_c* commands[MAX_COMMANDS_COUNT];
-rlist_variable* variables[MAX_VARIABLES_COUNT];
+rlist_c_t* commands[MAX_COMMANDS_COUNT];
+rlist_variable_t* variables[MAX_VARIABLES_COUNT];
 int variablesCount = 0;
 int commandsCount = 0;
 
-void rlist_register_command(rlist_c* command)
+void rlist_register_command(rlist_c_t* command)
 {
     commands[commandsCount++] = command;
 }
@@ -39,7 +39,7 @@ void initCommands(void)
     rlist_register_command(create_command("scm_objects_free", 1, rlist_command_scm_objects_free));
 }
 
-int rlist_command_echo_v(rlist_cdata *data)
+int rlist_command_echo_v(rlist_cdata_t *data)
 {
     for(int i = 0; i < variablesCount; i++) {
         if(!strcmp(data->args[0], variables[i]->name)) {
@@ -52,7 +52,7 @@ int rlist_command_echo_v(rlist_cdata *data)
     return true;
 }
 
-int rlist_command_echo_all_vars(rlist_cdata *data)
+int rlist_command_echo_all_vars(rlist_cdata_t *data)
 {
     if(variablesCount == 0) {
         printf("[rlist_commands.c]: No variables registered\n");
@@ -101,7 +101,7 @@ char* getFilename(char* scriptFn, char* filename)
     return fullPath;
 }
 
-int rlist_command_inc(rlist_cdata* data)
+int rlist_command_inc(rlist_cdata_t* data)
 {
     char* filename = getFilename(data->filename, data->args[0]);
 
@@ -117,9 +117,9 @@ int rlist_command_inc(rlist_cdata* data)
     return true;
 }
 
-int rlist_command_set(rlist_cdata *data)
+int rlist_command_set(rlist_cdata_t *data)
 {
-    rlist_variable* var = malloc(sizeof(rlist_variable));
+    rlist_variable_t* var = malloc(sizeof(rlist_variable_t));
 
     for(int i = 0; i < variablesCount; i++)
         if(!strcmp(data->args[0], variables[i]->name)) {
@@ -138,13 +138,13 @@ int rlist_command_set(rlist_cdata *data)
     return true;
 }
 
-int rlist_command_echo(rlist_cdata *data)
+int rlist_command_echo(rlist_cdata_t *data)
 {
     printf("[rlist_commands.c]: %s\n", data->args[0]);
     return true;
 }
 
-rlist_c **rlist_getcommands(int *count)
+rlist_c_t **rlist_getcommands(int *count)
 {
     *count = commandsCount;
     return commands;
@@ -172,16 +172,16 @@ int isDouble(const char *s, double *dest) {
     return *endptr == '\0';
 }
 
-rlist_variable* getVar(char* name) {
+rlist_variable_t* getVar(char* name) {
     for(int i = 0; i < variablesCount; i++)
         if(!strcmp(variables[i]->name, name))
             return variables[i];
     return NULL;
 }
 
-int getDoubleValue(double * res, char* str, const char* pname, rlist_cdata *data)
+int getDoubleValue(double * res, char* str, const char* pname, rlist_cdata_t *data)
 {
-    rlist_variable* var;
+    rlist_variable_t* var;
 
     if(!isDouble(str, res)) {
         if((var = getVar(str))) {
@@ -201,9 +201,9 @@ int getDoubleValue(double * res, char* str, const char* pname, rlist_cdata *data
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "cert-err34-c"
-int getIntValue(int* res, char* str, const char* pname, rlist_cdata *data)
+int getIntValue(int* res, char* str, const char* pname, rlist_cdata_t *data)
 {
-    rlist_variable* var;
+    rlist_variable_t* var;
 
     if(isInt(str))
     {
@@ -228,7 +228,7 @@ int getIntValue(int* res, char* str, const char* pname, rlist_cdata *data)
 }
 #pragma clang diagnostic pop
 
-int rlist_command_image(rlist_cdata *data) {
+int rlist_command_image(rlist_cdata_t *data) {
 
     int id, scope, mode;
     double cX, cY;
@@ -250,7 +250,7 @@ int rlist_command_image(rlist_cdata *data) {
     return true;
 }
 
-int rlist_command_animation(rlist_cdata* data) {
+int rlist_command_animation(rlist_cdata_t* data) {
     //; type      frameCnt    id                  scope                cX  cY    mode         paths
     int frameCnt, id, scope, mode;
     double cX, cY;
@@ -287,23 +287,23 @@ int rlist_command_animation(rlist_cdata* data) {
     return true;
 }
 
-gameScene* listeningScene = NULL;
+gameScene_t* listeningScene = NULL;
 
-int rlist_command_scene(rlist_cdata *data)
+int rlist_command_scene(rlist_cdata_t *data)
 {
     int id, scope, back;
     if (!getIntValue(&id, data->args[0], "id", data)) return !data->strict;
     if (!getIntValue(&scope, data->args[1], "scope", data)) return !data->strict;
     if (!getIntValue(&back, data->args[2], "back", data)) return !data->strict;
 
-    gameScene* scene = createScene(id, scope);
+    gameScene_t* scene = createScene(id, scope);
     scene->backgroundTexId = back;
 
     scmPushScene(scene);
     return true;
 }
 
-int rlist_command_sog_open(rlist_cdata *data)
+int rlist_command_sog_open(rlist_cdata_t *data)
 {
     int id;
     if (!getIntValue(&id, data->args[0], "id", data)) return !data->strict;
@@ -314,7 +314,7 @@ int rlist_command_sog_open(rlist_cdata *data)
     }
 }
 
-int rlist_command_sog_add(rlist_cdata *data)
+int rlist_command_sog_add(rlist_cdata_t *data)
 {
     if(listeningScene == NULL) {
         printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
@@ -327,19 +327,19 @@ int rlist_command_sog_add(rlist_cdata *data)
     if (!getDoubleValue(&x,  data->args[1], "x",  data)) return !data->strict;
     if (!getDoubleValue(&y,  data->args[2], "y",  data)) return !data->strict;
 
-    publicObject* po = scmGetPublicObject(id);
+    publicObject_t* po = scmGetPublicObject(id);
     if(po == NULL) {
         printf("[rlist_commands.c][DATA ERROR]: Unable to find public object with id %i, at line %i in \"%s\"\n", id, data->lineIndex, data->filename);
         return !data->strict;
     }
 
-    gameObject* go = po->init();
+    gameObject_t* go = po->init();
     go->pos = vec(x, y);
     scmAddStartupObject(listeningScene, go);
     return true;
 }
 
-int rlist_command_sog_add_ex(rlist_cdata *data)
+int rlist_command_sog_add_ex(rlist_cdata_t *data)
 {
     if(listeningScene == NULL) {
         printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
@@ -352,13 +352,13 @@ int rlist_command_sog_add_ex(rlist_cdata *data)
     if (!getDoubleValue(&x,         data->args[1], "x",         data)) return !data->strict;
     if (!getDoubleValue(&y,         data->args[2], "y",         data)) return !data->strict;
 
-    publicObject* po = scmGetPublicObject(id);
+    publicObject_t* po = scmGetPublicObject(id);
     if(po == NULL) {
         printf("[rlist_commands.c][DATA ERROR]: Unable to find public object with id %i, at line %i in \"%s\"\n", id, data->lineIndex, data->filename);
         return !data->strict;
     }
 
-    gameObject* go = po->init();
+    gameObject_t* go = po->init();
     go->pos = vec(x, y);
 
     const char* defaults = "defaults"; //TODO
@@ -403,7 +403,7 @@ int rlist_command_sog_add_ex(rlist_cdata *data)
 }
 
 
-int rlist_command_scm_close(rlist_cdata *data) {
+int rlist_command_scm_close(rlist_cdata_t *data) {
     if(listeningScene == NULL) {
         printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
         return !data->strict;
@@ -412,7 +412,7 @@ int rlist_command_scm_close(rlist_cdata *data) {
     return true;
 }
 
-int rlist_command_scm_sc_load(rlist_cdata *data)
+int rlist_command_scm_sc_load(rlist_cdata_t *data)
 {
     if(listeningScene == NULL) {
         printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
@@ -428,7 +428,7 @@ int rlist_command_scm_sc_load(rlist_cdata *data)
 
 }
 
-int rlist_command_scm_sc_unload(rlist_cdata *data)
+int rlist_command_scm_sc_unload(rlist_cdata_t *data)
 {
     if(listeningScene == NULL) {
         printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
@@ -443,7 +443,7 @@ int rlist_command_scm_sc_unload(rlist_cdata *data)
     return true;
 }
 
-int rlist_command_scm_objects_destroy(rlist_cdata *data)
+int rlist_command_scm_objects_destroy(rlist_cdata_t *data)
 {
     if(listeningScene == NULL) {
         printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
@@ -461,7 +461,7 @@ int rlist_command_scm_objects_destroy(rlist_cdata *data)
     return true;
 }
 
-int rlist_command_scm_objects_free(rlist_cdata *data)
+int rlist_command_scm_objects_free(rlist_cdata_t *data)
 {
     if(listeningScene == NULL) {
         printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);

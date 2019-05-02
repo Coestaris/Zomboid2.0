@@ -4,8 +4,8 @@
 
 #include "eventQueue.h"
 
-registeredNode** registeredListeners;
-event** eventQueue;
+registeredNode_t** registeredListeners;
+event_t** eventQueue;
 
 size_t MAXLISTENERS = MAXLISTENERS_START;
 size_t MAXEVENTS = MAXEVENTS_START;
@@ -13,18 +13,18 @@ size_t MAXEVENTS = MAXEVENTS_START;
 int listenersCount = 0;
 int eventCount = 0;
 
-keyboardEvent* createKeyboardEvent(int key, int x, int y)
+keyboardEvent_t* createKeyboardEvent(int key, int x, int y)
 {
-    keyboardEvent* ev = malloc(sizeof(keyboardEvent));
+    keyboardEvent_t* ev = malloc(sizeof(keyboardEvent_t));
     ev->key = key;
     ev->x = x;
     ev->y = y;
     return ev;
 }
 
-mouseEvent* createMouseEvent(int mouse, int state, int x, int y)
+mouseEvent_t* createMouseEvent(int mouse, int state, int x, int y)
 {
-    mouseEvent* ev = malloc(sizeof(mouseEvent));
+    mouseEvent_t* ev = malloc(sizeof(mouseEvent_t));
     ev->mouse = mouse;
     ev->state = state;
     ev->x = x;
@@ -32,9 +32,9 @@ mouseEvent* createMouseEvent(int mouse, int state, int x, int y)
     return ev;
 }
 
-event* createEvent()
+event_t* createEvent()
 {
-    event* ev = malloc(sizeof(event));
+    event_t* ev = malloc(sizeof(event_t));
     ev->data = NULL;
     return ev;
 }
@@ -44,12 +44,12 @@ int evqGetListenersCount(void)
     return listenersCount;
 }
 
-void freeEvent(event* ev)
+void freeEvent(event_t* ev)
 {
     if(ev->data) free(ev->data);
 }
 
-void evqSubscribeEvent(gameObject *object, int eventType, void (*callback)(gameObject *, void *))
+void evqSubscribeEvent(gameObject_t *object, int eventType, void (*callback)(gameObject_t *, void *))
 {
     if(listenersCount == MAXLISTENERS - 1) {
         size_t newSize = (size_t)(MAXLISTENERS * SIZE_INCREASE);
@@ -57,7 +57,7 @@ void evqSubscribeEvent(gameObject *object, int eventType, void (*callback)(gameO
         MAXLISTENERS = newSize;
     }
 
-    registeredListeners[listenersCount] = malloc(sizeof(registeredNode));
+    registeredListeners[listenersCount] = malloc(sizeof(registeredNode_t));
     registeredListeners[listenersCount]->object = object;
     registeredListeners[listenersCount]->eventType = eventType;
     registeredListeners[listenersCount]->callback = callback;
@@ -65,15 +65,15 @@ void evqSubscribeEvent(gameObject *object, int eventType, void (*callback)(gameO
     listenersCount++;
 }
 
-int remove_node(registeredNode** from, int total, int index)
+int remove_node(registeredNode_t** from, int total, int index)
 {
     if((total - index - 1) > 0) {
-        memmove(from + index, from + index + 1, sizeof(registeredNode*) * (total-index - 1));
+        memmove(from + index, from + index + 1, sizeof(registeredNode_t*) * (total-index - 1));
     }
     return total-1; // return the new array size
 }
 
-void evqUnsubscribeEvents(gameObject *object)
+void evqUnsubscribeEvents(gameObject_t *object)
 {
     for(int i = listenersCount - 1; i >= 0; i--) {
         if(registeredListeners[i]->object == object) {
@@ -83,7 +83,7 @@ void evqUnsubscribeEvents(gameObject *object)
     }
 }
 
-void evqUnsubscribeEvent(gameObject *object, int eventType)
+void evqUnsubscribeEvent(gameObject_t *object, int eventType)
 {
     for(int i = 0; i < listenersCount; i++) {
         if(registeredListeners[i]->object == object && registeredListeners[i]->eventType == eventType) {
@@ -111,11 +111,11 @@ void evqPushEvent(int eventType, void* data)
     eventQueue[index]->eventType = eventType;
 }
 
-event* evqNextEvent(void)
+event_t* evqNextEvent(void)
 {
     if(eventCount > 0)
     {
-        event* ev = eventQueue[--eventCount];
+        event_t* ev = eventQueue[--eventCount];
         for(int i = 0; i < listenersCount; i++)
         {
             if(registeredListeners[i]->eventType == ev->eventType)
@@ -135,8 +135,8 @@ void evqResetEvents(void)
 
 void evqInit(void)
 {
-    eventQueue = malloc(sizeof(event*) * MAXEVENTS);
-    registeredListeners = malloc(sizeof(registeredNode*) * MAXLISTENERS);
+    eventQueue = malloc(sizeof(event_t*) * MAXEVENTS);
+    registeredListeners = malloc(sizeof(registeredNode_t*) * MAXLISTENERS);
 
     for(int i = 0; i < MAXEVENTS; i++) {
         eventQueue[i] = createEvent();

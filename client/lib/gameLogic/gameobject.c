@@ -4,9 +4,9 @@
 
 #include "gameobject.h"
 
-gameObject* object(void)
+gameObject_t* object(void)
 {
-    gameObject* obj = malloc(sizeof(gameObject));
+    gameObject_t* obj = malloc(sizeof(gameObject_t));
     obj->size = 1;
     obj->cachedTex = NULL;
     obj->onInit = NULL;
@@ -24,7 +24,7 @@ gameObject* object(void)
     return obj;
 }
 
-void freeObject(gameObject *object)
+void freeObject(gameObject_t *object)
 {
     if(object->onDestroy) object->onDestroy(object);
     if(object->data) free(object->data);

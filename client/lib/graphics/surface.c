@@ -143,7 +143,7 @@ uint8_t clip(double a)
     else return (uint8_t)a;
 }
 
-void srfDrawTexture(tex2d* tex, int frame, double alpha, vec_t pos, int flipX, int flipY)
+void srfDrawTexture(tex_t* tex, int frame, double alpha, vec_t pos, int flipX, int flipY)
 {
     GLint width,height;
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);

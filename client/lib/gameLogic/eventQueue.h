@@ -35,17 +35,17 @@
 typedef struct _registeredNode {
 
     int eventType;
-    gameObject* object;
-    void (*callback)(gameObject*, void *);
+    gameObject_t* object;
+    void (*callback)(gameObject_t*, void *);
 
-} registeredNode;
+} registeredNode_t;
 
 typedef struct _event {
 
     int eventType;
     void* data;
 
-} event;
+} event_t;
 
 typedef struct _keyboardEvent {
 
@@ -53,7 +53,7 @@ typedef struct _keyboardEvent {
     int x;
     int y;
 
-} keyboardEvent;
+} keyboardEvent_t;
 
 typedef struct _mouseEvent {
 
@@ -62,21 +62,21 @@ typedef struct _mouseEvent {
     int x;
     int y;
 
-} mouseEvent;
+} mouseEvent_t;
 
-keyboardEvent* createKeyboardEvent(int key, int x, int y);
-mouseEvent* createMouseEvent(int mouse, int state, int x, int y);
+keyboardEvent_t* createKeyboardEvent(int key, int x, int y);
+mouseEvent_t* createMouseEvent(int mouse, int state, int x, int y);
 
-event* createEvent();
-void freeEvent(event* ev);
+event_t* createEvent();
+void freeEvent(event_t* ev);
 void evqInit(void);
 
 int  evqGetListenersCount(void);
-void evqSubscribeEvent(gameObject *object, int eventType, void (*callback)(gameObject *, void *));
-void evqUnsubscribeEvent(gameObject *object, int eventType);
-void evqUnsubscribeEvents(gameObject *object);
+void evqSubscribeEvent(gameObject_t *object, int eventType, void (*callback)(gameObject_t *, void *));
+void evqUnsubscribeEvent(gameObject_t *object, int eventType);
+void evqUnsubscribeEvents(gameObject_t *object);
 void evqPushEvent(int eventType, void* data);
-event* evqNextEvent(void);
+event_t* evqNextEvent(void);
 void evqResetEvents(void);
 
 #endif //ZOMBOID2_EVENTQUEUE_H

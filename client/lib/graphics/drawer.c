@@ -3,12 +3,13 @@
 //
 
 #include "drawer.h"
+#include "../resources/font.h"
 
 size_t MAXDP = MAXDP_START;
 size_t DPLEVELS = MAX_DP_LEVELS;
 
 size_t* dpCounts;
-drawingPrimitive*** dpList;
+drawingPrimitive_t*** dpList;
 
 
 void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, double hh, vec_t cp, int s1, int s2)
@@ -21,7 +22,7 @@ void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, dou
 }
 
 
-void dcDrawText(vec_t pos, color_t col, void *font, const char *string)
+void dcDrawText(vec_t pos, color_t col, font_t *font, const char *string)
 {
     if(!string)
         return;
@@ -35,7 +36,7 @@ void dcDrawText(vec_t pos, color_t col, void *font, const char *string)
 
     for( int i = 0; i < j; i++ ) {
         glutBitmapCharacter(font, string[i]);
-        //glutStrokeCharacter(font, string[i]);
+        //glutStrokeCharacter(font_t, string[i]);
     }
 }
 
@@ -51,7 +52,7 @@ void dcDrawSurface(int winW, int winH)
     glEnd();
 }
 
-void dcDrawBackground(tex2d *tex, int frame, int windowW, int windowH)
+void dcDrawBackground(tex_t *tex, int frame, int windowW, int windowH)
 {
     bindTex(tex, frame);
 
@@ -132,7 +133,7 @@ vec_t rotate_point(double cx, double cy,double angle, vec_t p)
     return p;
 }
 
-void dcDrawRotatedTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
+void dcDrawRotatedTexPolygon(tex_t* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
                              double scale, vec_t texOffset, vec_t texScaleFactor)
 {
     bindTex(tex, frame);
@@ -185,7 +186,7 @@ void dcDrawRotatedTexPolygon(tex2d* tex, int frame, relPoint_t *points, int coun
     glPopMatrix();
 }
 
-void dcDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale)
+void dcDrawTexPolygon(tex_t* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale)
 {
     bindTex(tex, frame);
     glPushMatrix();
@@ -220,7 +221,7 @@ void dcDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_
 }
 
 
-void dcDrawTexture(tex2d *tex, color_t col, int frame, vec_t pos, double angle, double scaleFactor)
+void dcDrawTexture(tex_t *tex, color_t col, int frame, vec_t pos, double angle, double scaleFactor)
 {
     bindTex(tex, frame);
 
@@ -280,7 +281,7 @@ void dqnDrawText(vec_t pos, color_t col, void *font, char *string, int depth)
 {
     checkDPSize(depth);
 
-    drawingPrimitive* dp = dpList[depth][dpCounts[depth]++];
+    drawingPrimitive_t* dp = dpList[depth][dpCounts[depth]++];
     dp->type = DPTYPE_TEXT;
 
     dp->p1 =  pos;
@@ -289,11 +290,11 @@ void dqnDrawText(vec_t pos, color_t col, void *font, char *string, int depth)
     dp->string = string;
 }
 
-void dqnDrawSprite(tex2d *tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor, int depth)
+void dqnDrawSprite(tex_t *tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor, int depth)
 {
     checkDPSize(depth);
 
-    drawingPrimitive* dp = dpList[depth][dpCounts[depth]++];
+    drawingPrimitive_t* dp = dpList[depth][dpCounts[depth]++];
     dp->type = DPTYPE_SPRITE;
 
     dp->col = color;
@@ -308,7 +309,7 @@ void dqnDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col, in
 {
     checkDPSize(depth);
 
-    drawingPrimitive* dp = dpList[depth][dpCounts[depth]++];
+    drawingPrimitive_t* dp = dpList[depth][dpCounts[depth]++];
     dp->type = DPTYPE_POLY;
 
     dp->points = points;
@@ -317,12 +318,12 @@ void dqnDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col, in
     dp->col = col;
 }
 
-void dqnDrawRotatedTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
+void dqnDrawRotatedTexPolygon(tex_t* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double angle,
                               double scale, vec_t texOffset, vec_t texScaleFactor, int depth)
 {
     checkDPSize(depth);
 
-    drawingPrimitive* dp = dpList[depth][dpCounts[depth]++];
+    drawingPrimitive_t* dp = dpList[depth][dpCounts[depth]++];
     dp->type = DPTYPE_POLY_ROTATEDTEX;
 
     dp->texOffset = texOffset;
@@ -338,11 +339,11 @@ void dqnDrawRotatedTexPolygon(tex2d* tex, int frame, relPoint_t *points, int cou
     dp->scale = scale;
 }
 
-void dqnDrawTexPolygon(tex2d* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale, int depth)
+void dqnDrawTexPolygon(tex_t* tex, int frame, relPoint_t *points, int count, vec_t center, color_t col, double scale, int depth)
 {
     checkDPSize(depth);
 
-    drawingPrimitive* dp = dpList[depth][dpCounts[depth]++];
+    drawingPrimitive_t* dp = dpList[depth][dpCounts[depth]++];
     dp->type = DPTYPE_POLY_TEX;
 
     dp->tex = tex;
@@ -358,7 +359,7 @@ void dqnDrawLine(vec_t p1, vec_t p2, color_t col, int depth)
 {
     checkDPSize(depth);
 
-    drawingPrimitive* dp = dpList[depth][dpCounts[depth]++];
+    drawingPrimitive_t* dp = dpList[depth][dpCounts[depth]++];
     dp->type = DPTYPE_LINE;
 
     dp->p1 = p1;
@@ -370,7 +371,7 @@ void dcDrawPrimitives()
 {
     for(ssize_t level = 0; level < DPLEVELS; level++) {
         for (size_t i = 0; i < dpCounts[level]; i++) {
-            drawingPrimitive *dp = dpList[level][i];
+            drawingPrimitive_t *dp = dpList[level][i];
             switch (dp->type) {
                 case DPTYPE_TEXT:
                     dcDrawText(dp->p1, dp->col, dp->font, dp->string);
@@ -424,13 +425,13 @@ void dqnClearQueue(void)
 
 void dcInit()
 {
-    dpList = malloc(sizeof(drawingPrimitive**) * DPLEVELS);
+    dpList = malloc(sizeof(drawingPrimitive_t**) * DPLEVELS);
     dpCounts = malloc(sizeof(size_t) * DPLEVELS);
 
     for(size_t level = 0; level < DPLEVELS; level++) {
-        dpList[level] = malloc(sizeof(drawingPrimitive *) * MAXDP);
+        dpList[level] = malloc(sizeof(drawingPrimitive_t *) * MAXDP);
         for (int i = 0; i < MAXDP; i++) {
-            dpList[level][i] = malloc(sizeof(drawingPrimitive));
+            dpList[level][i] = malloc(sizeof(drawingPrimitive_t));
         }
     }
 }

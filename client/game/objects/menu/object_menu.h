@@ -7,6 +7,6 @@
 
 #include "../../objectInclude.h"
 
-gameObject* createMenu();
+gameObject_t* createMenu();
 
 #endif //ZOMBOID2_OBJECT_MENU_H

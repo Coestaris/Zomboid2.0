@@ -4,7 +4,7 @@
 
 #include "shaderManager.h"
 
-shmNode* nodes[SHM_MAX_SHADERS];
+shmNode_t* nodes[SHM_MAX_SHADERS];
 size_t nodeCount;
 
 uint8_t shmHasShader(int id)
@@ -14,7 +14,7 @@ uint8_t shmHasShader(int id)
     return 0;
 }
 
-void shmPush(shader* shader, int id)
+void shmPush(shader_t* shader, int id)
 {
     assert(shader != NULL);
     assert(!shmHasShader(id));
@@ -33,13 +33,13 @@ void shmInit()
 {
     for(size_t i = 0; i < SHM_MAX_SHADERS; i++)
     {
-        nodes[i] = malloc(sizeof(shmNode));
+        nodes[i] = malloc(sizeof(shmNode_t));
         nodes[i]->shader = NULL;
         nodes[i]->id = -1;
     }
 }
 
-shader* shmGetShader(int id)
+shader_t* shmGetShader(int id)
 {
     for(size_t i = 0; i < nodeCount; i++)
         if(nodes[i]->id == id) return nodes[i]->shader;

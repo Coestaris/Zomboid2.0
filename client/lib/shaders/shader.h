@@ -19,13 +19,12 @@ typedef struct _shader
     char* vertexPath;
     char* fragmentPath;
     GLint progID;
-}
-shader;
+} shader_t;
 
-shader* shaderCreate(char* vertexPath, char* fragmentPath);
-void shaderFree(shader* shader);
-void shaderSetInt(shader* shader, const char* name, int value);
-void shaderSetFloat(shader* shader, const char* name, float value);
+shader_t* shaderCreate(char* vertexPath, char* fragmentPath);
+void shaderFree(shader_t* shader);
+void shaderSetInt(shader_t* shader, const char* name, int value);
+void shaderSetFloat(shader_t* shader, const char* name, float value);
 
 #endif //SHADER_H
 

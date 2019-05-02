@@ -14,14 +14,14 @@
 
 typedef struct _bulletData {
 
-    gameObject* light;
+    gameObject_t* light;
     double xOffset;
     double yOffset;
 
-} bulletData;
+} bulletData_t;
 
-void bullet_event_update(gameObject *object, void *data);
-void bullet_init(gameObject* object);
-gameObject* createBullet(vec_t a, double angle);
+void bullet_event_update(gameObject_t *object, void *data);
+void bullet_init(gameObject_t* object);
+gameObject_t* createBullet(vec_t a, double angle);
 
 #endif //ZOMBOID2_OBJ_BULLET_H

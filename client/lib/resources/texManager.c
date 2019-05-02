@@ -4,9 +4,9 @@
 
 #include "texManager.h"
 
-texmNode* list;
+texmNode_t* list;
 
-void texmFreeNode(texmNode *node)
+void texmFreeNode(texmNode_t *node)
 {
     if(node->value)
     {
@@ -17,19 +17,19 @@ void texmFreeNode(texmNode *node)
 }
 
 
-texmNode* temCreateNode(tex2d *tex)
+texmNode_t* temCreateNode(tex_t *tex)
 {
-    texmNode* node = malloc(sizeof(texmNode));
+    texmNode_t* node = malloc(sizeof(texmNode_t));
     node->value = tex;
     node->next = NULL;
 
     return node;
 }
 
-texmNode* texmRemoveNode(int uid, int free)
+texmNode_t* texmRemoveNode(int uid, int free)
 {
-    texmNode* prev = NULL;
-    texmNode* node = list;
+    texmNode_t* prev = NULL;
+    texmNode_t* node = list;
     while(1)
     {
         if(node->value && node->value->id == uid)
@@ -52,7 +52,7 @@ texmNode* texmRemoveNode(int uid, int free)
 }
 
 int texCounter = 0;
-void texmPrintNode(texmNode *node)
+void texmPrintNode(texmNode_t *node)
 {
     if(node == NULL)
     {
@@ -107,7 +107,7 @@ void texmPrintNode(texmNode *node)
 
 void texmPrintNodes()
 {
-    texmNode* node = list;
+    texmNode_t* node = list;
     texCounter = 0;
     puts("[texm.c]: Here`s list of all registered texures: ");
     while(1)
@@ -120,8 +120,8 @@ void texmPrintNodes()
 
 void texmRemoveNodes(int scope, int free)
 {
-    texmNode* prev = NULL;
-    texmNode* node = list;
+    texmNode_t* prev = NULL;
+    texmNode_t* node = list;
     int removed = 0;
 
     while(1)
@@ -143,7 +143,7 @@ void texmRemoveNodes(int scope, int free)
             removed = 0;
             if (free)
             {
-                texmNode *next = node->next;
+                texmNode_t *next = node->next;
                 texmFreeNode(node);
 
                 node = next;
@@ -161,12 +161,12 @@ void texmInit(void)
     list = temCreateNode(NULL);
 }
 
-void texmPush(tex2d* tex)
+void texmPush(tex_t* tex)
 {
-    texmNode* lastNode = list;
+    texmNode_t* lastNode = list;
     while(lastNode->next) lastNode = lastNode->next;
 
-    texmNode* node = temCreateNode(tex);
+    texmNode_t* node = temCreateNode(tex);
     lastNode->next = node;
 
     //texmPrintNode(node);
@@ -174,7 +174,7 @@ void texmPush(tex2d* tex)
 
 void texmLoadID(int uid)
 {
-    texmNode* node = list;
+    texmNode_t* node = list;
     while(1)
     {
         if(node->value && node->value->id == uid)
@@ -188,7 +188,7 @@ void texmLoadID(int uid)
 
 void texmLoadScope(int scope)
 {
-    texmNode* node = list;
+    texmNode_t* node = list;
     while(1)
     {
         if(node->value && node->value->scope == scope)
@@ -200,9 +200,9 @@ void texmLoadScope(int scope)
     }
 }
 
-tex2d* texmGetID(int uid)
+tex_t* texmGetID(int uid)
 {
-    texmNode* node = list;
+    texmNode_t* node = list;
     while(1)
     {
         if(node->value && node->value->id == uid)
@@ -218,7 +218,7 @@ tex2d* texmGetID(int uid)
 
 void texmUnloadID(int uid)
 {
-    texmNode* node = list;
+    texmNode_t* node = list;
     while(1)
     {
         if(node->value && node->value->id == uid)
@@ -232,7 +232,7 @@ void texmUnloadID(int uid)
 
 void texmUnloadScope(int scope)
 {
-    texmNode* node = list;
+    texmNode_t* node = list;
     while(1)
     {
         if(node->value && node->value->scope == scope)

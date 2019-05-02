@@ -13,13 +13,13 @@ typedef struct _label_data {
     char* string;
     void *font;
     color_t col;
-} label_data;
+} label_data_t;
 
-void label_event_update(gameObject* this, void* data);
-void label_init(gameObject* this);
-void label_setEnable(menu_container_child* child, int state);
+void label_event_update(gameObject_t* this, void* data);
+void label_init(gameObject_t* this);
+void label_setEnable(menu_container_child_t* child, int state);
 
-menu_container_child* createLabel(vec_t pos, char* string, void* font, color_t col);
+menu_container_child_t* createLabel(vec_t pos, char* string, void* font, color_t col);
 
 
 #endif //ZOMBOID2_CONTROL_LABEL_H

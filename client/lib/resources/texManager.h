@@ -9,23 +9,23 @@
 
 typedef struct _texNode{
     struct _texNode* next;
-    tex2d* value;
+    tex_t* value;
 
-} texmNode;
+} texmNode_t;
 
-void texmFreeNode(texmNode *node);
-texmNode* temCreateNode(tex2d *tex);
-texmNode* texmRemoveNode(int uid, int free);
-void texmPrintNode(texmNode *node);
+void texmFreeNode(texmNode_t *node);
+texmNode_t* temCreateNode(tex_t *tex);
+texmNode_t* texmRemoveNode(int uid, int free);
+void texmPrintNode(texmNode_t *node);
 void texmPrintNodes();
 void texmRemoveNodes(int scope, int free);
 
 
 void texmInit(void);
-void texmPush(tex2d* tex);
+void texmPush(tex_t* tex);
 void texmLoadID(int uid);
 void texmLoadScope(int scope);
-tex2d* texmGetID(int uid);
+tex_t* texmGetID(int uid);
 void texmUnloadID(int uid);
 void texmUnloadScope(int scope);
 void texmFreeID(int uid);

@@ -39,15 +39,15 @@ typedef struct _tex2d {
 
     GLint VAO;
 
-} tex2d;
+} tex_t;
 
-tex2d* createTex(char *fn, int uid, int scope, vec_t center, int mode);
-tex2d* createAnimation(char **fileNames, int framesCount, int uid, int scope, vec_t center, int mode);
+tex_t* createTex(char *fn, int uid, int scope, vec_t center, int mode);
+tex_t* createAnimation(char **fileNames, int framesCount, int uid, int scope, vec_t center, int mode);
 
-void freeOGlTex(tex2d* tex);
-void freeTex(tex2d* tex);
-void bindTex(tex2d* tex, int frame);
+void freeOGlTex(tex_t* tex);
+void freeTex(tex_t* tex);
+void bindTex(tex_t* tex, int frame);
 
-void loadTex(tex2d* tex);
+void loadTex(tex_t* tex);
 
 #endif //ZOMBOID2_TEX_H

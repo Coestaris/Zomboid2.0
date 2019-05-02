@@ -34,13 +34,13 @@ typedef struct _input_data {
 
     long long prevDeleted;
 
-} input_data;
+} input_data_t;
 
-void input_event_keyDown(gameObject* this, void* data);
-void input_event_mouse(gameObject* this, void* data);
-void input_event_update(gameObject* this, void* data);
+void input_event_keyDown(gameObject_t* this, void* data);
+void input_event_mouse(gameObject_t* this, void* data);
+void input_event_update(gameObject_t* this, void* data);
 
-void input_init(gameObject* this);
-menu_container_child* createInput(vec_t pos, color_t color, void* font, char* defstr);
+void input_init(gameObject_t* this);
+menu_container_child_t* createInput(vec_t pos, color_t color, void* font, char* defstr);
 
 #endif //ZOMBOID2_CONTROL_INPUT_H

@@ -4,13 +4,13 @@
 
 #include "obj_bullet.h"
 
-void bullet_event_update(gameObject *object, void *data)
+void bullet_event_update(gameObject_t *object, void *data)
 {
     int objectsCount;
-    bulletData* bd = object->data;
+    bulletData_t* bd = object->data;
 
-    gameObject** objects = scmGetObjects(&objectsCount);
-    gameObject* light = bd->light;
+    gameObject_t** objects = scmGetObjects(&objectsCount);
+    gameObject_t* light = bd->light;
 
     for(int i = 0; i < objectsCount; i++)
     {
@@ -46,14 +46,14 @@ void bullet_event_update(gameObject *object, void *data)
     }
 }
 
-void bullet_init(gameObject* object)
+void bullet_init(gameObject_t* object)
 {
     evqSubscribeEvent(object, EVT_Update, bullet_event_update);
 }
 
-gameObject* createBullet(vec_t p, double angle)
+gameObject_t* createBullet(vec_t p, double angle)
 {
-    gameObject* go = object();
+    gameObject_t* go = object();
     go->drawable = true;
 
     go->depth = 2;
@@ -64,11 +64,11 @@ gameObject* createBullet(vec_t p, double angle)
     go->size = 1;
     go->onInit = bullet_init;
 
-    go->data = malloc(sizeof(bulletData));
+    go->data = malloc(sizeof(bulletData_t));
 
-    gameObject* light = createTexturedAreaLT(p, BULLET_LIGHT_SIZE,
+    gameObject_t* light = createTexturedAreaLT(p, BULLET_LIGHT_SIZE,
             color(randRange(0, 1), randRange(0, 1), randRange(0, 1), BULLET_LIGHT_ALPHA), texmGetID(TEXID_LIGHT), 0);
-    bulletData* bd = go->data;
+    bulletData_t* bd = go->data;
 
     bd->light = light;
     bd->xOffset = cos(go->angle) * BULLET_SPEED;
