@@ -8,6 +8,7 @@
 #include "GL/freeglut.h"
 #include "GL/gl.h"
 
+#include "resources/font.h"
 #include "shaders/shaderManager.h"
 #include "gameLogic/eventfuncs.h"
 #include "gameLogic/gameScene.h"
