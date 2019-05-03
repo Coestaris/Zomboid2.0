@@ -179,18 +179,22 @@ void scmLoadScene(int id)
 
             for(int j = 0; j < scenes[i]->startupObjectsCount; j++)
             {
-                if (scenes[i]->startupObjects[j]->onInit)
+                gameObject_t* object = scenes[i]->startupObjects[j];
+                if (object->onInit)
                 {
-                    scenes[i]->startupObjects[j]->onInit(scenes[i]->startupObjects[j]);
+                    object->onInit(object);
+
+                    //Objects can be destroy and free itself on init function, i think its normal...
+                    if(!scmHasObject(object)) continue;
                 }
 
-                if (scenes[i]->startupObjects[j]->drawable && !scenes[i]->startupObjects[j]->cachedTex)
+                if (object->drawable && !object->cachedTex)
                 {
-                    scenes[i]->startupObjects[j]->cachedTex = texmGetID(scenes[i]->startupObjects[j]->texID);
-                    assert(scenes[i]->startupObjects[j]->cachedTex != NULL);
+                    object->cachedTex = texmGetID(object->texID);
+                    assert(object->cachedTex != NULL);
 
-                    for(int f = 0; f < scenes[i]->startupObjects[j]->cachedTex->framesCount; f++)
-                        assert(scenes[i]->startupObjects[j]->cachedTex->textureIds[f] != 0);
+                    for(int f = 0; f < object->cachedTex->framesCount; f++)
+                        assert(object->cachedTex->textureIds[f] != 0);
                 }
             }
 

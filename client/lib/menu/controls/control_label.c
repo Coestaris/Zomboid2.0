@@ -7,7 +7,7 @@
 void label_event_update(gameObject_t* this, void* data) {
     label_data_t* ld = this->data;
 
-    //dqnDrawText(this->pos, ld->col, ld->font, ld->string, this->depth + 1);
+    dqnDrawText(this->pos, ld->col, ld->font, ld->string, ld->fontSize, this->depth + 1);
 }
 
 void label_init(gameObject_t* this) {
@@ -18,7 +18,7 @@ void label_setEnable(menu_container_child_t* child, int state) {
     // pass
 }
 
-menu_container_child_t* createLabel(vec_t pos, char* string, void* font, color_t col)
+menu_container_child_t* createLabel(vec_t pos, char* string, font_t* font, double fontSize, color_t col)
 {
     gameObject_t* this = object();
     this->pos = pos;
@@ -30,6 +30,7 @@ menu_container_child_t* createLabel(vec_t pos, char* string, void* font, color_t
     ld->string = string;
     ld->font = font;
     ld->col = col;
+    ld->fontSize = fontSize;
 
     menu_container_child_t* child = menuCreateChild(this);
     child->setEnable = label_setEnable;

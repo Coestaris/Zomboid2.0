@@ -54,10 +54,10 @@ void input_event_update(gameObject_t* this, void* data)
     input_data_t* id = this->data;
     long frame = getFrame();
 
-    //dqnDrawText(this->pos, id->color, id->font, id->str, this->depth);
+    dqnDrawText(this->pos, id->color, id->font, id->str, id->fontSize, this->depth);
 
-    double height = glutBitmapHeight(id->font) / 2.0 + 8;
-    vec_t start = vec_add(this->pos, vec(glutBitmapLength(id->font, (const unsigned char*)id->str) + 2, - height + 4));
+    double height = fontGetStringHeight(id->str, id->font, id->fontSize) / 2.0 + 8;
+    vec_t start = vec_add(this->pos, vec(fontGetStringWidth(id->str, id->font, id->fontSize) + 2, - height + 4));
     vec_t end = vec_add(start, vec(0, height));
 
     if(keyPressed(8))
@@ -102,7 +102,7 @@ void input_setFocused(menu_container_child_t* child, int state) {
     ((input_data_t*)child->object->data)->focused = state;
 }
 
-menu_container_child_t* createInput(vec_t pos, color_t color, void* font, char* defstr)
+menu_container_child_t* createInput(vec_t pos, color_t color, font_t* font, double fontSize, char* defstr)
 {
     gameObject_t* this = object();
     this->onInit = input_init;

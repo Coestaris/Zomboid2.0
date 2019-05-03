@@ -27,7 +27,7 @@ void menu_button_gay_no() {
 void menu_button_multi(menu_container_child_t* button)
 {
     composer_input_double(main_container, "IP address", "Port", "OK", "Cancel", "127.0.0.1", "1234",
-            TEXID_MENU_BUTTON_SMALL, GLUT_BITMAP_TIMES_ROMAN_24, color(0.8, 0.8, 0.8, 1), TEXID_MENU_INDBL,
+            TEXID_MENU_BUTTON_SMALL, mainFont, .45, color(0.8, 0.8, 0.8, 1), TEXID_MENU_INDBL,
             NULL, NULL);
 }
 
@@ -55,21 +55,21 @@ void menu_init(gameObject_t* this)
     menuPushChild(
             main_container,
             createButton(
-                    vec(w / 2.0, hStart + 0 * hStep), "SINGLEPLAYER", GLUT_BITMAP_TIMES_ROMAN_24,
+                    vec(w / 2.0, hStart + 0 * hStep), "SINGLEPLAYER", mainFont, .45,
                     color(0.8, 0.8, 0.8, 1), TEXID_MENU_BUTTON, menu_button_single),
             true);
 
     menuPushChild(
             main_container,
             createButton(
-                    vec(w / 2.0, hStart + 1 * hStep), "MULTIPLAYER", GLUT_BITMAP_TIMES_ROMAN_24,
+                    vec(w / 2.0, hStart + 1 * hStep), "MULTIPLAYER", mainFont, .45,
                     color(0.8, 0.8, 0.8, 1), TEXID_MENU_BUTTON, menu_button_multi),
             true);
 
     menuPushChild(
             main_container,
             createButton(
-                    vec(w / 2.0, hStart + 2 * hStep), "SETTINGS", GLUT_BITMAP_TIMES_ROMAN_24,
+                    vec(w / 2.0, hStart + 2 * hStep), "SETTINGS", mainFont, .45,
                     color(0.8, 0.8, 0.8, 1), TEXID_MENU_BUTTON, menu_button_settings),
             true);
 
@@ -77,7 +77,7 @@ void menu_init(gameObject_t* this)
     menuPushChild(
             main_container,
             createButton(
-                    vec(w / 2.0, hStart + 3 * hStep), "EXIT", GLUT_BITMAP_TIMES_ROMAN_24,
+                    vec(w / 2.0, hStart + 3 * hStep), "EXIT", mainFont, .45,
                     color(0.8, 0.8, 0.8, 1), TEXID_MENU_BUTTON, menu_button_close),
             true);
 

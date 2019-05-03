@@ -43,6 +43,8 @@ typedef struct _font {
 
 font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endIndex);
 void fontFree(font_t* f);
+double fontGetStringWidth(char* str, font_t* f, double fontSize);
+double fontGetStringHeight(char* str, font_t* f, double fontSize);
 
 void fontsInit(void);
 

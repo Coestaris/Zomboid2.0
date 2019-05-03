@@ -124,6 +124,28 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
     return f;
 }
 
+double fontGetStringWidth(char* string, font_t* font, double fontSize)
+{
+    double w = 0;
+    for(size_t i = 0; i < strlen(string); i++)
+    {
+        font_character_t ch = font->chars[string[i] - font->startIndex];
+        w += (ch.advance >> 6) * fontSize;
+    }
+    return w;
+}
+
+double fontGetStringHeight(char* string, font_t* font, double fontSize)
+{
+    font_character_t ch = font->chars[string[0] - font->startIndex];
+    double h = ch.size.y;
+
+    for(size_t i = 0; i < strlen(string); i++)
+        if(string[i] == '\n') h += ch.size.y;
+
+    return h;
+}
+
 void fontFree(font_t* f)
 {
     free(f->chars);

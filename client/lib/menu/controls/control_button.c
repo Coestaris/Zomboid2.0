@@ -16,7 +16,7 @@ void button_event_update(gameObject_t* this, void* data)
         }
     }
 
-    //dqnDrawText(vec_sub(this->pos, vec(bd->width / 2.0, -bd->height / 3.0)), bd->col, bd->font, bd->string, this->depth + 1);
+    dqnDrawText(vec_sub(this->pos, vec(bd->width / 2.0, -bd->height)), bd->col, bd->font, bd->string, bd->fontSize, this->depth + 1);
 }
 
 void button_event_mouseClick(gameObject_t* this, void* data)
@@ -41,7 +41,9 @@ void button_setEnable(menu_container_child_t* child, int state)
     ((button_data_t*)child->object->data)->enabled = state;
 }
 
-menu_container_child_t* createButton(vec_t pos, char* string, void* font, color_t col, int tex, void (*func)(menu_container_child_t*))
+menu_container_child_t* createButton(
+        vec_t pos, char* string, font_t* font, double fontSize, color_t col,
+        int tex, void (*func)(menu_container_child_t*))
 {
     gameObject_t* this = object();
     this->drawable = true;
@@ -55,9 +57,10 @@ menu_container_child_t* createButton(vec_t pos, char* string, void* font, color_
     bd->string = string;
     bd->font = font;
     bd->enabled = 1;
+    bd->fontSize = fontSize;
     bd->col = col;
-    bd->height = glutBitmapHeight(bd->font);
-    bd->width = glutBitmapLength(bd->font, (const unsigned char*)bd->string);
+    bd->height = fontGetStringHeight(bd->string, bd->font, bd->fontSize);
+    bd->width = fontGetStringWidth(bd->string, bd->font, bd->fontSize);
     bd->func = func;
     bd->wrappedFunc = NULL;
 

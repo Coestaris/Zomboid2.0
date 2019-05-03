@@ -20,7 +20,10 @@ typedef struct _input_data {
     int focused;
 
     color_t color;
-    void* font;
+
+    double fontSize;
+    font_t*font;
+
     char* str;
 
     int firstPressed;
@@ -41,6 +44,6 @@ void input_event_mouse(gameObject_t* this, void* data);
 void input_event_update(gameObject_t* this, void* data);
 
 void input_init(gameObject_t* this);
-menu_container_child_t* createInput(vec_t pos, color_t color, void* font, char* defstr);
+menu_container_child_t* createInput(vec_t pos, color_t color, font_t* font, double fontSize, char* defstr);
 
 #endif //ZOMBOID2_CONTROL_INPUT_H
