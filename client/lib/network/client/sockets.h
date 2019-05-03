@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
 #include <sys/select.h>
 #include <errno.h>
 #include <string.h>
@@ -16,7 +17,9 @@
 #include <netdb.h>
 #include <unistd.h>
 
-#include "messageTypes.h"
+#include "../messageTypes.h"
+#include "../metadata.h"
+#include "../../../../lib/netconf.h"
 
 #define MAX_HANDLERS 100
 

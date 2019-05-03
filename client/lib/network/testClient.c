@@ -4,7 +4,7 @@
 
 // Sockets testing unit
 
-#include "sockets.h"
+#include "client/sockets.h"
 #include "metadata.h"
 
 int main() {

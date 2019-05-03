@@ -7,7 +7,7 @@
 
 #include "tex.h"
 
-typedef struct _texNode{
+typedef struct texNode{
     struct _texNode* next;
     tex2d* value;
 

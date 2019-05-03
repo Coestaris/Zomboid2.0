@@ -2,7 +2,11 @@
 // Created by h0tw4t3r on 4/28/19.
 //
 
+
+// WARNING: DON'T USE IT!!!!!!! BUGGGGGGGGGGGGGGGGS!!!!!
+
 #include "metadata.h"
+#include "../../../lib/zdtp.h"
 #include <inttypes.h>
 
 void serialize(uint8_t *data, player_meta_t meta) {
@@ -57,3 +61,4 @@ void deserialize(player_meta_t *meta, uint8_t *data) {
     }
     meta->angle = holder.lf;
 }
+

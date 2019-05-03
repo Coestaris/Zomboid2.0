@@ -2,11 +2,7 @@
 // Created by maxim on 2/23/19.
 //
 
-#include <fcntl.h>
 #include "sockets.h"
-#include "messageTypes.h"
-#include "metadata.h"
-#include "../../../lib/netconf.h"
 
 network_handler *handlers[MAX_HANDLERS];
 int handlersCount = 0;
