@@ -5,11 +5,40 @@
 #include "object_menu.h"
 
 gameObject_t* main_container;
+gameObject_t* sp_container;
 
 void menu_button_single(menu_container_child_t* button)
 {
-    menuDestroy(main_container);
-    scmLoadScene(SCENEID_GAME);
+    int w, h;
+    getWinSize(&w, &h);
+    char* text = "start game";
+    double fontSize = 0.5;
+    int tex = TEXID_MENU_INDBL;
+
+    tex_t* tex2d = texmGetID(tex);
+
+    gameObject_t* container = menuCreate(main_container);
+    container->drawable = 1;
+    container->texID = tex;
+    container->pos = vec(w / 2.0, h / 2.0);
+
+    int strW = fontGetStringWidth(text, mainFont, fontSize);
+    int strH = fontGetStringHeight(text, mainFont, fontSize);
+
+    menu_container_child_t* label = createLabel(
+            vec_sub(vec(w / 2.0, h / 2.0 - tex2d->height / 4.0), vec(strW / 2.0, - strH / 3.0)),
+            text, mainFont, fontSize, color(1, 1, 1, 1));
+    label->object->depth = main_container->depth + 3;
+
+    menuPushChild(container, label, true);
+
+    menu_container_child_t* child = menuCreateChild(container);
+    child->isContainer = true;
+    container->depth = main_container->depth + 2;
+    //child->setEnable = composer_func_dummy_setEnabled;
+
+    menuSetEnabled(main_container, SETENABLE_MODE_REC_PARENTS, 0);
+    menuPushChild(main_container, child, true);
 }
 
 

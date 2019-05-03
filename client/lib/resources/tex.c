@@ -66,8 +66,11 @@ void loadTex(tex_t* tex)
         data.wrappingMode = tex->mode == TEXMODE_BACKGROUND ? GL_REPEAT : GL_CLAMP_TO_EDGE;
         data.minFilter = GL_LINEAR;
         data.magFilter = GL_LINEAR;
+        data.flipY = 1;
 
-        GLuint id = oilTextureFromPngFile(tex->fns[i], GL_RGBA, OIL_TEX_WRAPPING, &data);
+        GLuint id = oilTextureFromPngFile(tex->fns[i], GL_RGBA,
+                OIL_TEX_WRAPPING | OIL_TEX_MIN | OIL_TEX_MAG | OIL_TEX_FLIPY,
+                &data);
         if(!id)
         {
             printf("[tex.c][ERROR]: Unable to load texture %s\n", tex->fns[i]);
@@ -90,7 +93,7 @@ void loadTex(tex_t* tex)
 
         if(tex->mode == TEXMODE_BACKGROUND)
         {
-            GLint VBO, EBO;
+            /*GLint VBO, EBO;
 
             GLfloat vertices[] = {
                  1.0f,  1.0f,  0.0f, (float)winW / w,  0.0f,
@@ -122,7 +125,7 @@ void loadTex(tex_t* tex)
 
             // texture coord attribute
             glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-            glEnableVertexAttribArray(1);
+            glEnableVertexAttribArray(1);*/
         }
     }
 
