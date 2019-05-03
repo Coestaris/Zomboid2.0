@@ -85,7 +85,7 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
                 c,
                 texture,
                 { face->glyph->bitmap.width, face->glyph->bitmap.rows },
-                { face->glyph->metrics.horiBearingX / 26.6 , face->glyph->metrics.vertBearingY / 26.6},
+                { face->glyph->bitmap_left * 1.2, (face->glyph->metrics.vertBearingY / 28.0) + face->glyph->bitmap_top * 1.2},
                 face->glyph->advance.x
         };
         f->chars[c - startIndex] = ch;
