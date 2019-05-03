@@ -23,7 +23,7 @@ Use
 pkg-config --cflags freetype2 
 # copy output
 
-    vim client/CMakeList.txt 
+vim client/CMakeList.txt 
 # and past it to include_directories section 
 # as space separated arguments
 ```
