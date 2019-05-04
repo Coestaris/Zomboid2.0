@@ -21,6 +21,7 @@ void initCommands(void)
     rlist_register_command(create_command("echo_all_vars", 0, rlist_command_echo_all_vars));
 
     rlist_register_command(create_command("set", 2, rlist_command_set));
+    rlist_register_command(create_command("#define", 2, rlist_command_set));
     rlist_register_command(create_command("inc", 1, rlist_command_inc));
 
     rlist_register_command(create_command("image", 6, rlist_command_image));

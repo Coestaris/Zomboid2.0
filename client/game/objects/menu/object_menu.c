@@ -6,6 +6,18 @@
 
 gameObject_t* main_container;
 gameObject_t* sp_container;
+tex_t* dummyTex;
+gameObject_t* ltracer;
+
+void menu_update(gameObject_t* this, void* data)
+{
+    dqnDrawSprite(dummyTex, color(0, 0, 0, 0.4), 0, vec(0, 0), 0, 2000, 1);
+
+    ltracer->pos = getMousePos();
+
+    ltracerUpdate();
+    ltracerDraw(2);
+}
 
 void menu_button_single(menu_container_child_t* button)
 {
@@ -13,8 +25,9 @@ void menu_button_single(menu_container_child_t* button)
     getWinSize(&w, &h);
     char* text = "start game";
     double fontSize = 0.5;
-    int tex = TEXID_MENU_INDBL;
+    int tex = TEXID_MENU_SP;
 
+    tex_t* btnTex = texmGetID(TEXID_MENU_BTN_SM);
     tex_t* tex2d = texmGetID(tex);
 
     gameObject_t* container = menuCreate(main_container);
@@ -22,19 +35,32 @@ void menu_button_single(menu_container_child_t* button)
     container->texID = tex;
     container->pos = vec(w / 2.0, h / 2.0);
 
-    int strW = fontGetStringWidth(text, mainFont, fontSize);
-    int strH = fontGetStringHeight(text, mainFont, fontSize);
+    double strW = fontGetStringWidth(text, mainFont, fontSize);
+    double strH = fontGetStringHeight(text, mainFont, fontSize);
 
     menu_container_child_t* label = createLabel(
-            vec_sub(vec(w / 2.0, h / 2.0 - tex2d->height / 4.0), vec(strW / 2.0, - strH / 3.0)),
+            vec_sub(vec(w / 2.0, h / 2.0 - tex2d->height / 2.5), vec(strW / 2.0, - strH / 2.0)),
             text, mainFont, fontSize, color(1, 1, 1, 1));
+
+    menu_container_child_t* btnClose = createButton(
+            vec(w / 2.0 - btnTex->width / 1.5, h / 2.0 + tex2d->height / 2.5),
+            "back", mainFont, fontSize, color(1, 1, 1, 1), TEXID_MENU_BTN_SM, NULL);
+
+    menu_container_child_t* btnStart = createButton(
+            vec(w / 2.0 + btnTex->width / 1.5, h / 2.0 + tex2d->height / 2.5),
+            "start", mainFont, fontSize, color(1, 1, 1, 1), TEXID_MENU_BTN_SM, NULL);
+
+    btnClose->object->depth = main_container->depth + 3;
+    btnStart->object->depth = main_container->depth + 3;
     label->object->depth = main_container->depth + 3;
 
     menuPushChild(container, label, true);
+    menuPushChild(container, btnClose, true);
+    menuPushChild(container, btnStart, true);
 
     menu_container_child_t* child = menuCreateChild(container);
     child->isContainer = true;
-    container->depth = main_container->depth + 2;
+    container->depth = main_container->depth + 1;
     //child->setEnable = composer_func_dummy_setEnabled;
 
     menuSetEnabled(main_container, SETENABLE_MODE_REC_PARENTS, 0);
@@ -56,7 +82,7 @@ void menu_button_gay_no() {
 void menu_button_multi(menu_container_child_t* button)
 {
     composer_input_double(main_container, "IP address", "Port", "OK", "Cancel", "127.0.0.1", "1234",
-            TEXID_MENU_BUTTON_SMALL, mainFont, .45, color(0.8, 0.8, 0.8, 1), TEXID_MENU_INDBL,
+            TEXID_MENU_BTN_SM, mainFont, .45, color(0.8, 0.8, 0.8, 1), TEXID_MENU_INDBL,
             NULL, NULL);
 }
 
@@ -81,37 +107,30 @@ void menu_init(gameObject_t* this)
     main_container = menuCreate(NULL);
     scmPushObject(main_container);
 
-    menuPushChild(
-            main_container,
-            createButton(
-                    vec(w / 2.0, hStart + 0 * hStep), "SINGLEPLAYER", mainFont, .45,
-                    color(0.8, 0.8, 0.8, 1), TEXID_MENU_BUTTON, menu_button_single),
-            true);
+    menu_container_child_t* btn1 = createButton(vec(w / 2.0, hStart + 0 * hStep), "SINGLEPLAYER", mainFont, .45, color(0.8, 0.8, 0.8, 1), TEXID_MENU_BTN, menu_button_single);
+    menu_container_child_t* btn2 = createButton(vec(w / 2.0, hStart + 1 * hStep), "MULTIPLAYER", mainFont, .45, color(0.8, 0.8, 0.8, 1), TEXID_MENU_BTN, menu_button_multi);
+    menu_container_child_t* btn3 = createButton(vec(w / 2.0, hStart + 2 * hStep), "SETTINGS", mainFont, .45, color(0.8, 0.8, 0.8, 1), TEXID_MENU_BTN, menu_button_settings);
+    menu_container_child_t* btn4 = createButton(vec(w / 2.0, hStart + 3 * hStep), "EXIT", mainFont, .45, color(0.8, 0.8, 0.8, 1), TEXID_MENU_BTN, menu_button_close);
 
-    menuPushChild(
-            main_container,
-            createButton(
-                    vec(w / 2.0, hStart + 1 * hStep), "MULTIPLAYER", mainFont, .45,
-                    color(0.8, 0.8, 0.8, 1), TEXID_MENU_BUTTON, menu_button_multi),
-            true);
+    main_container->depth = 2;
+    btn1->object->depth = main_container->depth + 1;
+    btn2->object->depth = main_container->depth + 1;
+    btn3->object->depth = main_container->depth + 1;
+    btn4->object->depth = main_container->depth + 1;
 
-    menuPushChild(
-            main_container,
-            createButton(
-                    vec(w / 2.0, hStart + 2 * hStep), "SETTINGS", mainFont, .45,
-                    color(0.8, 0.8, 0.8, 1), TEXID_MENU_BUTTON, menu_button_settings),
-            true);
-
-
-    menuPushChild(
-            main_container,
-            createButton(
-                    vec(w / 2.0, hStart + 3 * hStep), "EXIT", mainFont, .45,
-                    color(0.8, 0.8, 0.8, 1), TEXID_MENU_BUTTON, menu_button_close),
-            true);
+    menuPushChild(main_container, btn1, true);
+    menuPushChild(main_container, btn2, true);
+    menuPushChild(main_container, btn3, true);
+    menuPushChild(main_container, btn4, true);
 
     //Doesn't need it anymore
-    scmDestroyObject(this, true);
+    //But it will draw background
+    dummyTex = texmGetID(TEXID_DUMMY);
+    ltracer = createTexturedAreaLT(vec(0, 0), 700, color(1, 1, 1, 0.3), texmGetID(TEXID_LIGHT), 0);
+    scmPushObject(ltracer);
+
+    evqSubscribeEvent(this, EVT_Update, menu_update);
+    //scmDestroyObject(this, true);
 }
 
 gameObject_t* createMenu()

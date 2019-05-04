@@ -1,8 +1,8 @@
 ; type                  id                  scope                cX   cY   mode         path
 image                   TEXID_BULLET        TEXSCOPE_GAME        0    0    TM_DEFAULT   images/bullet.png
-image                   TEXID_BOX           TEXSCOPE_GAME        0    0    TM_DEFAULT   images/box.png
+image                   TEXID_BOX           TEXSCOPE_MM_GEN      0    0    TM_DEFAULT   images/box.png
 image                   TEXID_SIMPLE_LIGHT  TEXSCOPE_GAME        0    0    TM_OVERLAY   images/light/simpleLight.png
-image                   TEXID_LIGHT         TEXSCOPE_GAME        0    0    TM_OVERLAY   images/light/light.png
+image                   TEXID_LIGHT         TEXSCOPE_MM_GEN      0    0    TM_OVERLAY   images/light/light.png
 image                   TEXID_FLASHLIGHT    TEXSCOPE_GAME        110  0    TM_OVERLAY   images/light/flashlight.png
 image                   TEXID_LIGHT_WIDE    TEXSCOPE_GAME        450  0    TM_OVERLAY   images/light/light_wide1.png
 image                   TEXID_LIGHT_DUO     TEXSCOPE_GAME       -640  0    TM_OVERLAY   images/light/light_duo1.png
@@ -11,9 +11,12 @@ image                   TEXID_ENEMY_LARM    TEXSCOPE_GAME        0    0    TM_DE
 image                   TEXID_ENEMY_RARM    TEXSCOPE_GAME        0    0    TM_DEFAULT   images/enemy/rarm.png
 image                   TEXID_ENEMY_LARM_D  TEXSCOPE_GAME        0    0    TM_DEFAULT   images/enemy/larm_d.png
 image                   TEXID_ENEMY_RARM_D  TEXSCOPE_GAME        0    0    TM_DEFAULT   images/enemy/rarm_d.png
+image                   TEXID_ENEMY_BEETLE  TEXSCOPE_MM_GEN      0    0    TM_DEFAULT   images/enemy/beetle.png
 
 image                   TEXID_MENU_INDBL    TEXSCOPE_MAIN_MENU   0    0    TM_DEFAULT   images/menu/dialog_input_double.png
 image                   TEXID_MENU_OUT      TEXSCOPE_MAIN_MENU   0    0    TM_DEFAULT   images/menu/dialog_output.png
+image                   TEXID_MENU_SP       TEXSCOPE_MAIN_MENU   0    0    TM_DEFAULT   images/menu/dialog_sp.png
+image                   TEXID_DUMMY         TEXSCOPE_MM_GEN      0    0    TM_DEFAULT   images/dummy.png
 
 image                   TEXID_BACK_CONCRETE TEXSCOPE_MM_GEN      0    0    TM_BACK      images/backgrounds/concrete.png
 
@@ -23,3 +26,7 @@ animation   2           TEXID_MENU_BTN      TEXSCOPE_MAIN_MENU   0   0     TM_DE
 animation   3           TEXID_ENEMY         TEXSCOPE_GAME        0   0     TM_DEFAULT   images/enemy/enemy%i.png
 animation   3           TEXID_PLAYER        TEXSCOPE_GAME       15   0     TM_DEFAULT   images/player_1/image%i.png
 animation   6           TEXID_SHELLCASE     TEXSCOPE_GAME        0   0     TM_DEFAULT   images/shellCase/shellCase%i.png
+
+animation   7           TEXID_BLOOD         TEXSCOPE_MM_GEN      0   0     TM_DEFAULT   images/blood/blood/image%i.png
+animation   2           TEXID_BLOOD_SMEAR   TEXSCOPE_MM_GEN      0   0     TM_DEFAULT   images/blood/smear/image%i.png
+animation   2           TEXID_BLOOD_DEAD    TEXSCOPE_MM_GEN      0   0     TM_DEFAULT   images/blood/dead/image%i.png
