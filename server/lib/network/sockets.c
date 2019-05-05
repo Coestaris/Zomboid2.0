@@ -83,8 +83,6 @@ int socketMainLoop(int sockfd) {
     FD_SET(sockfd, &master_fds);
     fdmax = sockfd;
 
-    char buff[256];
-
     while (running) {
         read_fds = master_fds;
         if (select(fdmax + 1, &read_fds, NULL, NULL, NULL) == -1) {
@@ -92,9 +90,9 @@ int socketMainLoop(int sockfd) {
             exit(1);
         }
 
-        for (int i = 0; i < fdmax; i++) {
-            if (FD_ISSET(i, &read_fds)) {
-                if (i == sockfd) {
+        for (int sockIt = 0; sockIt < fdmax; sockIt++) {
+            if (FD_ISSET(sockIt, &read_fds)) {
+                if (sockIt == sockfd) {
                     // handling new connections
                     addrlen = sizeof(remoteaddr);
                     newfd = accept(sockfd,
@@ -105,34 +103,39 @@ int socketMainLoop(int sockfd) {
                     } else {
                         FD_SET(newfd, &master_fds);
                         if (newfd > fdmax) fdmax = newfd;
-                        printf("selectserver: new connection from %s on "
-                               "socket %d\n",
-                               inet_ntop(remoteaddr.sa_family,
-                                         &remoteaddr,
-                                         buff, INET_ADDRSTRLEN),
-                               newfd);
                         clients[clientsCount].uid = clientsCount;
                         memcpy(&(clients + clientsCount)->address, &remoteaddr, sizeof(sockaddr_t));
                         clients[clientsCount].sockfd = newfd;
                         clientsCount++;
 
-                        // send packets with clients and hosts data to a new client
-                        uint32_t addr_buff;
-                        for (zsize_t j = 0; j < clientsCount; j++) {
-                            uint8_t res[MSG_CLIENT_DATA_LENGTH];
-                            identityServer_buildClientInfoPacket(&clients[i], res);
-                            // send info
-                            if (send(newfd, res, MSG_CLIENT_DATA_LENGTH, 0) == -1) {
+                        // SYNCHRONIZATION IS HERE
+                        
+                        // send data about existing clients and hosts to a new client
+                        // and at the same time send new client data to existing clients
+                        uint8_t buffClientData[MSG_CLIENT_DATA_LENGTH];
+                        uint8_t buffHostData[MSG_HOST_DATA_LENGTH];
+                        for (zsize_t j = 0; j < clientsCount - 1; j++) {
+                            // send info to a new client
+                            if (send(newfd,
+                                    identityServer_buildClientInfoPacket(&clients[sockIt], buffClientData),
+                                    MSG_CLIENT_DATA_LENGTH, 0) == -1) {
+
+                                perror("send");
+                                exit(1);
+                            }
+                            if (send(clients[sockIt].sockfd,
+                                    identityServer_buildClientInfoPacket(&clients[clientsCount - 1], buffClientData),
+                                    MSG_CLIENT_DATA_LENGTH, 0) == -1) {
+
                                 perror("send");
                                 exit(1);
                             }
                         }
 
                         for (zsize_t j = 0; j < hostsCount; j++) {
-                            uint8_t res[MSG_HOST_DATA_LENGTH];
-                            identityServer_buildHostInfoPacket(&hosts[i], res);
+                            identityServer_buildHostInfoPacket(&hosts[sockIt], buffHostData);
                             // send info
-                            if (send(newfd, res, MSG_HOST_DATA_LENGTH, 0) == -1) {
+                            if (send(newfd, buffHostData, MSG_HOST_DATA_LENGTH, 0) == -1) {
                                 perror("send");
                                 exit(1);
                             }
@@ -141,33 +144,58 @@ int socketMainLoop(int sockfd) {
                 } else {
                     // identifying client uid by it's socket descriptor
                     zsize_t current_client;
+                    uint8_t buff[MAX_BUFFER];
                     for (current_client = 0;
                          current_client < clientsCount &&
-                         clients[current_client].sockfd != sockfd;
+                         clients[current_client].sockfd != sockIt;
                          current_client++);
 
-                    if ((nbytes = recv(i, buff, sizeof buff, 0)) <= 0) {
+                    if ((nbytes = recv(sockIt, buff, sizeof buff, 0)) <= 0) {
                         // got error or connection closed by client
                         if (nbytes == 0) {
                             // connection closed
                             // TODO: destroy client by it's id and associated server node if any
+                            // sending packets to destroy client and associated host to all existing clients
                             uint8_t found = 0;
                             uint8_t cur_h;
+
+                            zsize_t destroyedClientUID = current_client, destroyedHostUID = 0;
                             for (cur_h = 0; cur_h < hostsCount; cur_h++)
                                 if (hosts[cur_h].client_uid == current_client) found = 1;
-                            if (found)
+                            if (found) {
+                                destroyedHostUID = hosts[cur_h].uid;
                                 for (uint8_t j = cur_h; j < hostsCount - 1; j++) hosts[j] = hosts[j + 1];
+                                hostsCount--;
+                            }
                             for (uint8_t j = current_client; j < clientsCount - 1; j++) clients[j] = clients[j + 1];
+                            clientsCount--;
+
+                            // Synchronizing between other clients
+                            // Creating destroy-packet
+                            uint8_t packet[MSG_DESTROY_LENGTH];
+                            identityServer_buildDestroyPacket(destroyedClientUID, found, destroyedHostUID, packet);
+                            for (zsize_t j = 0; j < clientsCount; j++) {
+                                if (send(clients[j].sockfd, packet, MSG_DESTROY_LENGTH, 0) == -1) {
+                                    perror("send");
+                                    exit(1);
+                                }
+                            }
                             printf("selectserver: socket %d hung up\n", sockfd);
                         } else {
                             perror("recv");
                         }
-                        close(i); // bye!
-                        FD_CLR(i, &master_fds); // remove from master set
+                        close(sockIt); // bye!
+                        FD_CLR(sockIt, &master_fds); // remove from master set
                     } else {
-                        // we got some data from a client
+                        // parsing client
                         for (zsize_t j = 0; j < current_client; j++) {
+                            // reading header
+                            /*switch (buff[0]) {
+                                case MSGTYPE_IDENTITY_SERVER_CLIENT_DESTROY:
 
+                                default: break;
+                            }
+*/
                         }
                         for (zsize_t j = (zsize_t) (current_client + 1); j < clientsCount; j++) {
 
@@ -176,7 +204,7 @@ int socketMainLoop(int sockfd) {
                             // send to everyone!
                             if (FD_ISSET(j, &master_fds)) {
                                 // except the listener and ourselves
-                                if (j != sockfd && j != i) {
+                                if (j != sockfd && j != sockIt) {
                                     if (send(j, buff, nbytes, 0) == -1) {
                                         perror("send");
                                     }
