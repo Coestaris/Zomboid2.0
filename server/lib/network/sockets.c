@@ -5,9 +5,49 @@
 /*
  * Main Network Node
  *
- * TCP/IP
+ * ITP/TCP
  */
+
 #include "sockets.h"
+
+// probably could be useful for multiple id-servers...
+void bufferHandler(uint8_t *_buff, zsize_t _currentClient, client_t *_clients, zsize_t *_clientsCount,
+        host_t *_hosts, zsize_t *_hostsCount) {
+    // reading header
+    switch (_buff[0]) {
+        case MSG_ID_SERVER_HOST_DATA:
+            idServer_unpackHostData(_buff, &_hosts[*_hostsCount]);
+            (*_hostsCount)++;
+            break;
+        case MSG_ID_SERVER_HOST_CLOSE:
+            ;// send everybody that host is down
+            uint8_t res[MSG_ID_SERVER_HOST_CLOSE_LENGTH];
+            idServer_packHostClose(_clients[_currentClient].hostUid, res);
+            zsize_t i;
+            for (i = 0; i < _currentClient; i++) {
+                if (send(_clients[i].sockfd, res, MSG_ID_SERVER_CLIENT_CLOSE_LENGTH, 0) == -1) {
+                    perror("send");
+                    exit(1);
+                }
+            }
+            for (i = (zsize_t) (_currentClient + 1); i < *_clientsCount; i++) {
+                if (send(_clients[i].sockfd, res, MSG_ID_SERVER_CLIENT_CLOSE_LENGTH, 0) == -1) {
+                    perror("send");
+                    exit(1);
+                }
+            }
+
+            // looking up for the host and deleting it
+            zsize_t cur_h;
+            for (cur_h = 0;
+                (cur_h < *_hostsCount) && (_hosts[cur_h].uid != _clients[_currentClient].uid); cur_h++);
+            for (zsize_t j = cur_h; j < *_hostsCount - 1; j++) _hosts[j] = _hosts[j + 1];
+            (*_hostsCount)--;
+            break;
+        default:
+            break;
+    }
+}
 
 int socketCreate(char *port) {
     addrinfo_t hints, *nodeinfo, *p;
@@ -56,8 +96,6 @@ int socketCreate(char *port) {
 }
 
 int socketMainLoop(int sockfd) {
-    uint8_t running = 1;
-
     fd_set master_fds;
     fd_set read_fds;
     int fdmax;
@@ -75,7 +113,7 @@ int socketMainLoop(int sockfd) {
     FD_ZERO(&master_fds);
     FD_ZERO(&read_fds);
 
-    if (listen(sockfd, MAX_CONNECTS) == -1) {
+    if (listen(sockfd, MAX_ZNET_CLIENTS) == -1) {
         perror("listen");
         exit(1);
     }
@@ -83,14 +121,14 @@ int socketMainLoop(int sockfd) {
     FD_SET(sockfd, &master_fds);
     fdmax = sockfd;
 
-    while (running) {
+    while (1) {
         read_fds = master_fds;
         if (select(fdmax + 1, &read_fds, NULL, NULL, NULL) == -1) {
             perror("select");
             exit(1);
         }
 
-        for (int sockIt = 0; sockIt < fdmax; sockIt++) {
+        for (int sockIt = 0; sockIt <= fdmax; sockIt++) {
             if (FD_ISSET(sockIt, &read_fds)) {
                 if (sockIt == sockfd) {
                     // handling new connections
@@ -109,23 +147,23 @@ int socketMainLoop(int sockfd) {
                         clientsCount++;
 
                         // SYNCHRONIZATION IS HERE
-                        
+
                         // send data about existing clients and hosts to a new client
                         // and at the same time send new client data to existing clients
-                        uint8_t buffClientData[MSG_CLIENT_DATA_LENGTH];
-                        uint8_t buffHostData[MSG_HOST_DATA_LENGTH];
+                        uint8_t buffClientData[MSG_ID_SERVER_CLIENT_DATA_LENGTH];
+                        uint8_t buffHostData[MSG_ID_SERVER_HOST_DATA_LENGTH];
                         for (zsize_t j = 0; j < clientsCount - 1; j++) {
                             // send info to a new client
-                            if (send(newfd,
-                                    identityServer_buildClientInfoPacket(&clients[sockIt], buffClientData),
-                                    MSG_CLIENT_DATA_LENGTH, 0) == -1) {
+                            if (sendAll(newfd,
+                                     idServer_packClientData(&clients[j], buffClientData),
+                                     MSG_ID_SERVER_CLIENT_DATA_LENGTH, 0) == -1) {
 
                                 perror("send");
                                 exit(1);
                             }
-                            if (send(clients[sockIt].sockfd,
-                                    identityServer_buildClientInfoPacket(&clients[clientsCount - 1], buffClientData),
-                                    MSG_CLIENT_DATA_LENGTH, 0) == -1) {
+                            if (sendAll(clients[j].sockfd,
+                                     idServer_packClientData(&clients[clientsCount - 1], buffClientData),
+                                     MSG_ID_SERVER_CLIENT_DATA_LENGTH, 0) == -1) {
 
                                 perror("send");
                                 exit(1);
@@ -133,9 +171,9 @@ int socketMainLoop(int sockfd) {
                         }
 
                         for (zsize_t j = 0; j < hostsCount; j++) {
-                            identityServer_buildHostInfoPacket(&hosts[sockIt], buffHostData);
+                            idServer_packHostData(&hosts[j], buffHostData);
                             // send info
-                            if (send(newfd, buffHostData, MSG_HOST_DATA_LENGTH, 0) == -1) {
+                            if (sendAll(newfd, buffHostData, MSG_ID_SERVER_HOST_DATA_LENGTH, 0) == -1) {
                                 perror("send");
                                 exit(1);
                             }
@@ -143,12 +181,12 @@ int socketMainLoop(int sockfd) {
                     }
                 } else {
                     // identifying client uid by it's socket descriptor
-                    zsize_t current_client;
+                    zsize_t currentClient;
                     uint8_t buff[MAX_BUFFER];
-                    for (current_client = 0;
-                         current_client < clientsCount &&
-                         clients[current_client].sockfd != sockIt;
-                         current_client++);
+                    for (currentClient = 0;
+                         currentClient < clientsCount &&
+                         clients[currentClient].sockfd != sockIt;
+                         currentClient++);
 
                     if ((nbytes = recv(sockIt, buff, sizeof buff, 0)) <= 0) {
                         // got error or connection closed by client
@@ -156,117 +194,51 @@ int socketMainLoop(int sockfd) {
                             // connection closed
                             // TODO: destroy client by it's id and associated server node if any
                             // sending packets to destroy client and associated host to all existing clients
-                            uint8_t found = 0;
-                            uint8_t cur_h;
 
-                            zsize_t destroyedClientUID = current_client, destroyedHostUID = 0;
-                            for (cur_h = 0; cur_h < hostsCount; cur_h++)
-                                if (hosts[cur_h].client_uid == current_client) found = 1;
-                            if (found) {
-                                destroyedHostUID = hosts[cur_h].uid;
-                                for (uint8_t j = cur_h; j < hostsCount - 1; j++) hosts[j] = hosts[j + 1];
+                            if (clients[currentClient].isHost) {
+                                zsize_t cur_h;
+                                for (cur_h = 0;
+                                     (cur_h < hostsCount) && (hosts[cur_h].uid != clients[currentClient].uid); cur_h++);
+                                for (zsize_t j = cur_h; j < hostsCount - 1; j++) hosts[j] = hosts[j + 1];
                                 hostsCount--;
                             }
-                            for (uint8_t j = current_client; j < clientsCount - 1; j++) clients[j] = clients[j + 1];
-                            clientsCount--;
 
                             // Synchronizing between other clients
-                            // Creating destroy-packet
-                            uint8_t packet[MSG_DESTROY_LENGTH];
-                            identityServer_buildDestroyPacket(destroyedClientUID, found, destroyedHostUID, packet);
+                            // Creating close-packet
+                            uint8_t packet[MSG_ID_SERVER_CLIENT_CLOSE_LENGTH];
+                            idServer_packClientClose(currentClient,
+                                                     clients[currentClient].isHost,
+                                                     clients[currentClient].hostUid,
+                                                     packet);
+
+                            for (uint8_t j = currentClient; j < clientsCount - 1; j++) clients[j] = clients[j + 1];
+                            clientsCount--;
+
                             for (zsize_t j = 0; j < clientsCount; j++) {
-                                if (send(clients[j].sockfd, packet, MSG_DESTROY_LENGTH, 0) == -1) {
+                                if (sendAll(clients[j].sockfd, packet, MSG_ID_SERVER_CLIENT_CLOSE_LENGTH, 0) == -1) {
                                     perror("send");
                                     exit(1);
                                 }
                             }
+
                             printf("selectserver: socket %d hung up\n", sockfd);
                         } else {
                             perror("recv");
                         }
                         close(sockIt); // bye!
                         FD_CLR(sockIt, &master_fds); // remove from master set
-                    } else {
+                    } /*else {
                         // parsing client
-                        for (zsize_t j = 0; j < current_client; j++) {
-                            // reading header
-                            /*switch (buff[0]) {
-                                case MSGTYPE_IDENTITY_SERVER_CLIENT_DESTROY:
-
-                                default: break;
-                            }
-*/
+                        for (zsize_t j = 0; j < currentClient; j++) {
+                            bufferHandler(buff, j, clients, &clientsCount, hosts, &hostsCount);
                         }
-                        for (zsize_t j = (zsize_t) (current_client + 1); j < clientsCount; j++) {
-
+                        for (zsize_t j = (zsize_t) (currentClient + 1); j < clientsCount; j++) {
+                            bufferHandler(buff, j, clients, &clientsCount, hosts, &hostsCount);
                         }
-                        for (int j = 0; j <= fdmax; j++) {
-                            // send to everyone!
-                            if (FD_ISSET(j, &master_fds)) {
-                                // except the listener and ourselves
-                                if (j != sockfd && j != sockIt) {
-                                    if (send(j, buff, nbytes, 0) == -1) {
-                                        perror("send");
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    }*/
                 }
             }
         }
     }
-/*
-    while (running) {
-
-        // everybody will hang on a single socket descriptor
-        // and the only way to identify them - by ip address
-        uint8_t recv_buff[MAX_BUFFER] = {0};
-        sockaddr_in_t their_addr;
-        socklen_t addr_len = sizeof(their_addr);
-
-        if (recvfrom(listener, recv_buff, sizeof(recv_buff), 0, (sockaddr_t *) &their_addr, &addr_len) ==
-            -1) {
-            perror("recvfrom");
-            exit(1);
-        } else {
-            *//*
-             * TODO: Add anywhere something kind of timeout of recieved packets by user
-             * We should track how many packets have been received by every user
-             * and i.e. find delta of best-connected user, and worst-connected user,
-             * and kick worst-connected if delta is more than some defined constant.
-             *//*
-            uint8_t ip_buff[INET_ADDRSTRLEN];
-            printf("server: got packet from %s\n",
-                   inet_ntop(their_addr.sin_family, (sockaddr_t *) &their_addr, (char *) &ip_buff,
-                             sizeof(ip_buff)));
-            //checking if a client is registered
-            uint8_t found = 0;
-            int8_t client_current = 0;
-            for (uint8_t i = 0; i < clientsCount; i++)
-                if (memcmp(clients + i, (sockaddr_t *) &their_addr, sizeof(sockaddr_t)) == 0) {
-                    found = 1;
-                    client_current = i;
-                    clients[client_current].last_packet = clock();
-                }
-            if (!found) {
-                if (clientsCount == MAX_CLIENTS) {
-                    // sending a "sorry lobby is full" message
-                    // ...
-                } else {
-                    memcpy(&(clients + clientsCount)->address, &their_addr, sizeof(sockaddr_t));
-                    client_current = clientsCount;
-                    clientsCount++;
-                }
-            }
-            printf("server: packet contains \"%s\"\n", recv_buff);
-            // sending messages to all except for current player
-            for (uint8_t i = 0; i < client_current; i++) {
-                sendUpdate(listener, clients[i].address);
-            }
-            for (uint8_t i = (uint8_t) (client_current + 1); i < clientsCount; i++) {
-                sendUpdate(listener, clients[i].address);
-            }
-        }
-    }*/
+    return 1;
 }

@@ -8,7 +8,8 @@
 #define MAX_BUFFER 1024
 #define DATA_LENGTH 24
 #define DISCONNECT_TIMEOUT 15
-#define MAX_CONNECTS 3
+#define MONITORING_TIMEOUT 5
+#define DEFAULT_PORT 25565
 
 #include <inttypes.h>
 

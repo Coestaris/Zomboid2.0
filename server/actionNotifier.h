@@ -9,7 +9,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include "client.h"
+#include "../lib/client.h"
 
 void notifierSocketInited(void);
 void notifierSocketListening(char * port);

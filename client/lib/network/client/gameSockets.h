@@ -5,21 +5,10 @@
 #ifndef ZOMBOID2_SOCKETS_H
 #define ZOMBOID2_SOCKETS_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <sys/select.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <unistd.h>
-
 #include "../messageTypes.h"
 #include "../metadata.h"
 #include "../../../../lib/netconf.h"
+#include "../../../../lib/zdtp.h"
 
 #define MAX_HANDLERS 100
 
@@ -34,13 +23,13 @@ typedef struct {
     struct sockaddr addr;
 } r_info;
 
-r_info socketCreate(char *addr, char *port);
-int socketWrite(r_info serv_info, uint8_t *data, size_t *len);
-int socketRead(int socketfd, uint8_t *res, size_t len);
-int socketClose(int socketfd);
+r_info gameSocketCreate(char *addr, char *port);
+int gameSocketWrite(r_info serv_info, uint8_t *data, size_t *len);
+int gameSocketRead(int socketfd, uint8_t *res, size_t len);
+int gameSocketClose(int socketfd);
 
-int socketsOpen(void);
-int socketsGetUpdates();
+int gameSocketsOpen(void);
+int gameSocketsGetUpdates();
 
 void pushHandler(int messageType, void (*func)(char*, size_t));
 

@@ -16,10 +16,12 @@
 #define STATE_UNDEFINED 1
 #define STATE_INITED 2
 
-#include "../lib/netconf.h"
+#include "netconf.h"
 #include <netinet/in.h>
 typedef struct {
     zsize_t uid;
+    uint8_t isHost;
+    zsize_t hostUid;
     uint8_t name[MAX_CLIENT_NAME_LENGTH];
     sockaddr_in_t address;
     int sockfd;

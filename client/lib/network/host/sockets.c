@@ -91,7 +91,7 @@ void sendUpdate(int sockfd, sockaddr_t address) {
 }
 
 int isTimedOut(time_t timestamp) {
-    return ((clock() - timestamp) / CLOCKS_PER_SEC > DISCONNECT_TIMEOUT)
+    return ((clock() - timestamp) / CLOCKS_PER_SEC > DISCONNECT_TIMEOUT);
 }
 
 int socketMainloop(int listener) {
@@ -105,7 +105,7 @@ int socketMainloop(int listener) {
 
     uint8_t running = 1;
     time_t now;
-    client_t clients[MAX_CLIENTS] = {0};
+    player_t clients[MAX_CLIENTS] = {0};
     zsize_t clientsCount = 0;
 
     while (running) {
@@ -152,7 +152,6 @@ int socketMainloop(int listener) {
             }
             printf("server: packet contains \"%s\"\n", recv_buff);
             // sending messages to all except for current player
-            now = clock();
             for (zsize_t i = 0; i < client_current; i++) {
                 if (isTimedOut(clients[i].last_packet)) {
                     // TODO: send disconnect message
@@ -175,37 +174,5 @@ int socketMainloop(int listener) {
                 } else sendUpdate(listener, clients[i].address);
             }
         }
-        /* if (FD_ISSET(listener, &readfds)) {
-             if ((new_socket = accept(listener, (struct sockaddr *) &address, (socklen_t *) &addrlen)) < 0) {
-                 perror("accept");
-                 return 0;
-             }
-
-             notifierSocketNew(new_socket, address);
-
-             for (i = 0; i < MAX_CLIENTS; i++) {
-                 if (clients[i]->sd == 0) {
-                     clients[i]->sd = new_socket;
-                     clients[i]->info->state = STATE_UNDEFINED;
-
-                     notifierSocketAdded(i);
-                     handleConnection(clients[i]);
-                     break;
-                 }
-             }
-         }
-
-         for (i = 0; i < MAX_CLIENTS; i++) {
-             sd = clients[i]->sd;
-             if (FD_ISSET(sd, &readfds)) {
-                 if ((valread = read(sd, clients[i]->buffer, BUFFER_SIZE)) == 0) {
-                     clientDisconnect(clients[i]);
-                 } else {
-                     clients[i]->buffLen = valread;
-                 }
-             }
-         }
-
-         handleClients(clients);*/
     }
 }
