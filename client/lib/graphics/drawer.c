@@ -444,6 +444,15 @@ void dqnDrawLine(vec_t p1, vec_t p2, color_t col, int depth)
     dp->col = col;
 }
 
+int dqnCount(void)
+{
+    int i = 0;
+    for(ssize_t level = 0; level < DPLEVELS; level++) {
+        i += dpCounts[level];
+    }
+    return i;
+}
+
 void dcDrawPrimitives()
 {
     for(ssize_t level = 0; level < DPLEVELS; level++) {

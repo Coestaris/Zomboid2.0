@@ -11,56 +11,70 @@ gameObject_t* ltracer;
 
 void menu_update(gameObject_t* this, void* data)
 {
-    dqnDrawSprite(dummyTex, color(0, 0, 0, 0.4), 0, vec(0, 0), 0, 2000, 1);
+    //dqnDrawSprite(dummyTex, color(0, 0, 0, 0.4), 0, vec(0, 0), 0, 2000, 1);
 
     ltracer->pos = getMousePos();
 
     ltracerUpdate();
-    ltracerDraw(2);
+    ltracerDraw(1);
+}
+
+void menu_sp_back(menu_container_child_t* button)
+{
+    menuDestroy(sp_container);
+    menuSetEnabled(main_container, SETENABLE_MODE_REC_PARENTS, 1);
+}
+
+void menu_sp_start(menu_container_child_t* button)
+{
+    menuDestroy(main_container);
+    scmLoadScene(SCENEID_GAME);
 }
 
 void menu_button_single(menu_container_child_t* button)
 {
     int w, h;
     getWinSize(&w, &h);
-    char* text = "start game";
+    char* text = "START GAME";
     double fontSize = 0.5;
     int tex = TEXID_MENU_SP;
 
     tex_t* btnTex = texmGetID(TEXID_MENU_BTN_SM);
     tex_t* tex2d = texmGetID(tex);
 
-    gameObject_t* container = menuCreate(main_container);
-    container->drawable = 1;
-    container->texID = tex;
-    container->pos = vec(w / 2.0, h / 2.0);
+    color_t textCol = color(0.8, 0.8, 0.8, 1);
+
+    sp_container = menuCreate(main_container);
+    sp_container->drawable = 1;
+    sp_container->texID = tex;
+    sp_container->pos = vec(w / 2.0, h / 2.0);
 
     double strW = fontGetStringWidth(text, mainFont, fontSize);
     double strH = fontGetStringHeight(text, mainFont, fontSize);
 
     menu_container_child_t* label = createLabel(
-            vec_sub(vec(w / 2.0, h / 2.0 - tex2d->height / 2.5), vec(strW / 2.0, - strH / 2.0)),
-            text, mainFont, fontSize, color(1, 1, 1, 1));
+            vec_sub(vec(w / 2.0, h / 2.0 - tex2d->height / 2.5), vec(strW / 2.0, - strH / 2.0 - 15)),
+            text, mainFont, fontSize, textCol);
 
     menu_container_child_t* btnClose = createButton(
             vec(w / 2.0 - btnTex->width / 1.5, h / 2.0 + tex2d->height / 2.5),
-            "back", mainFont, fontSize, color(1, 1, 1, 1), TEXID_MENU_BTN_SM, NULL);
+            "BACK", mainFont, fontSize  / 1.5, textCol, TEXID_MENU_BTN_SM, menu_sp_back);
 
     menu_container_child_t* btnStart = createButton(
             vec(w / 2.0 + btnTex->width / 1.5, h / 2.0 + tex2d->height / 2.5),
-            "start", mainFont, fontSize, color(1, 1, 1, 1), TEXID_MENU_BTN_SM, NULL);
+            "START", mainFont, fontSize / 1.5, textCol, TEXID_MENU_BTN_SM, menu_sp_start);
 
-    btnClose->object->depth = main_container->depth + 3;
-    btnStart->object->depth = main_container->depth + 3;
-    label->object->depth = main_container->depth + 3;
+    btnClose->object->depth = main_container->depth + 4;
+    btnStart->object->depth = main_container->depth + 4;
+    label->object->depth = main_container->depth + 4;
 
-    menuPushChild(container, label, true);
-    menuPushChild(container, btnClose, true);
-    menuPushChild(container, btnStart, true);
+    menuPushChild(sp_container, label, true);
+    menuPushChild(sp_container, btnClose, true);
+    menuPushChild(sp_container, btnStart, true);
 
-    menu_container_child_t* child = menuCreateChild(container);
+    menu_container_child_t* child = menuCreateChild(sp_container);
     child->isContainer = true;
-    container->depth = main_container->depth + 1;
+    sp_container->depth = main_container->depth + 3;
     //child->setEnable = composer_func_dummy_setEnabled;
 
     menuSetEnabled(main_container, SETENABLE_MODE_REC_PARENTS, 0);

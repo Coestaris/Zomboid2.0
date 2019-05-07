@@ -20,6 +20,9 @@
 #define EVT_MouseEntry 6
 #define EVT_Update 7
 
+#define MAX_KB_EVENTS 20
+#define MAX_MS_EVENTS 5
+
 #define MAXEVENTS_START 256
 #define MAXLISTENERS_START 1024
 

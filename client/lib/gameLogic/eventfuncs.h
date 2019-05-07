@@ -26,7 +26,7 @@
 #define KEY_BUFFER_SIZE 256
 #define SPEC_KEY_BUFFER_SIZE 256
 
-#define PRINT_FPS
+#define PRINT_FRAME_LOG
 
 void initEventFuncs(void);
 

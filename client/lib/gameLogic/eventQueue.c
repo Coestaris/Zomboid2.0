@@ -10,12 +10,22 @@ event_t** eventQueue;
 size_t MAXLISTENERS = MAXLISTENERS_START;
 size_t MAXEVENTS = MAXEVENTS_START;
 
+keyboardEvent_t* keyboardEvents[MAX_KB_EVENTS];
+mouseEvent_t* mouseEvents[MAX_MS_EVENTS];
+size_t keyboardEventsCount;
+size_t mouseEventsCount;
+
 int listenersCount = 0;
 int eventCount = 0;
 
 keyboardEvent_t* createKeyboardEvent(int key, int x, int y)
 {
-    keyboardEvent_t* ev = malloc(sizeof(keyboardEvent_t));
+    if(keyboardEventsCount >= MAX_KB_EVENTS) {
+        puts("kb alert!"); //todo: remove
+        return keyboardEvents[MAX_KB_EVENTS - 1];
+    }
+
+    keyboardEvent_t* ev = keyboardEvents[keyboardEventsCount++];
     ev->key = key;
     ev->x = x;
     ev->y = y;
@@ -24,7 +34,12 @@ keyboardEvent_t* createKeyboardEvent(int key, int x, int y)
 
 mouseEvent_t* createMouseEvent(int mouse, int state, int x, int y)
 {
-    mouseEvent_t* ev = malloc(sizeof(mouseEvent_t));
+    if(mouseEventsCount >= MAX_MS_EVENTS) {
+        puts("mouse alert!"); //todo: remove
+        return mouseEvents[MAX_MS_EVENTS - 1];
+    }
+
+    mouseEvent_t* ev = mouseEvents[mouseEventsCount++];
     ev->mouse = mouse;
     ev->state = state;
     ev->x = x;
@@ -46,7 +61,7 @@ int evqGetListenersCount(void)
 
 void freeEvent(event_t* ev)
 {
-    if(ev->data) free(ev->data);
+    //if(ev->data) free(ev->data);
 }
 
 void evqSubscribeEvent(gameObject_t *object, int eventType, void (*callback)(gameObject_t *, void *))
@@ -68,9 +83,9 @@ void evqSubscribeEvent(gameObject_t *object, int eventType, void (*callback)(gam
 int remove_node(registeredNode_t** from, int total, int index)
 {
     if((total - index - 1) > 0) {
-        memmove(from + index, from + index + 1, sizeof(registeredNode_t*) * (total-index - 1));
+        memmove(from + index, from + index + 1, sizeof(registeredNode_t*) * (total - index - 1));
     }
-    return total-1; // return the new array size
+    return total - 1;
 }
 
 void evqUnsubscribeEvents(gameObject_t *object)
@@ -130,6 +145,8 @@ event_t* evqNextEvent(void)
 
 void evqResetEvents(void)
 {
+    mouseEventsCount = 0;
+    keyboardEventsCount = 0;
     eventCount = 0;
 }
 
@@ -137,6 +154,14 @@ void evqInit(void)
 {
     eventQueue = malloc(sizeof(event_t*) * MAXEVENTS);
     registeredListeners = malloc(sizeof(registeredNode_t*) * MAXLISTENERS);
+
+    for(int i = 0; i < MAX_KB_EVENTS; i++) {
+        keyboardEvents[i] = malloc(sizeof(keyboardEvent_t));
+    }
+
+    for(int i = 0; i < MAX_MS_EVENTS; i++) {
+        mouseEvents[i] = malloc(sizeof(mouseEvent_t));
+    }
 
     for(int i = 0; i < MAXEVENTS; i++) {
         eventQueue[i] = createEvent();

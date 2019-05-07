@@ -11,8 +11,11 @@ void mbeetle_init(gameObject_t *this)
 
 void mbeetle_event_update(gameObject_t *this, void* data)
 {
-    this->pos.x += ((mbeetleData_t*)this->data)->xOffset;
-    this->pos.y += ((mbeetleData_t*)this->data)->yOffset;
+    this->angle += randRange(-0.1, 0.1);
+
+    this->pos.x += cos(this->angle) * 0.2;
+    this->pos.y += sin(this->angle) * 0.2;
+    //this->pos.y += ((mbeetleData_t*)this->data)->yOffset;
 
     if(isInWindowExtendedRect(this, MBEETLE_ROOM_OFFSET, MBEETLE_ROOM_OFFSET)) scmDestroyObject(this, true);
     if(getMouseState(MB_LEFT) == MS_PRESSED)

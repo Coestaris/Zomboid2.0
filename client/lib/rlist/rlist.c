@@ -69,7 +69,9 @@ int getTokens(char *str)
 
                 i++;
 
-            } else {
+            }
+            else
+            {
                 while ((str[i - 1] == '\\' || str[i] != ' ') && str[i] != '\0' && str[i] != '\n') {
                     i++;
                 }

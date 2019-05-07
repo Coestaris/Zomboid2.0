@@ -138,10 +138,10 @@ double fontGetStringWidth(char* string, font_t* font, double fontSize)
 double fontGetStringHeight(char* string, font_t* font, double fontSize)
 {
     font_character_t ch = font->chars[string[0] - font->startIndex];
-    double h = ch.size.y;
+    double h = ch.size.y * fontSize;
 
     for(size_t i = 0; i < strlen(string); i++)
-        if(string[i] == '\n') h += ch.size.y;
+        if(string[i] == '\n') h += ch.size.y * fontSize;
 
     return h;
 }

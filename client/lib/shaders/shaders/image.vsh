@@ -1,15 +1,9 @@
 #version 130
-#extension GL_ARB_explicit_attrib_location : enable
 
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec2 aTexCoord;
-
-out vec2 TexCoord;
-
-uniform mat4 transform;
+out vec2 texture_coordinate;
 
 void main()
 {
-    gl_Position = transform * vec4(aPos, 1.0f);
-    TexCoord = aTexCoord;
+    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+    //texture_coordinate = vec2(gl_TexCoord.xy);
 }

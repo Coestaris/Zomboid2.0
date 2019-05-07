@@ -58,6 +58,7 @@ typedef struct _drawingPrimitive {
 
 } drawingPrimitive_t;
 
+int  dqnCount(void);
 void dqnDrawText(vec_t pos, color_t col, font_t* font, char* string, double size, int depth);
 void dqnDrawSprite(tex_t *tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor, int depth);
 void dqnDrawLine(vec_t p1, vec_t p2, color_t col, int depth);

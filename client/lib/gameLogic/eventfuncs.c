@@ -115,9 +115,6 @@ void mainDF(void)
     dfDrawBackground();
     dcDrawSurface(fixedW, fixedH);
 
-    //Adding all object to the queue and processing animations
-    dfDrawObjects();
-
     //Drawing the queue
     dcDrawPrimitives();
 
@@ -140,6 +137,14 @@ void mainEventLoop()
     evqPushEvent(EVT_Update, NULL);
 
     pumpEvents();
+
+    //Adding all object to the queue and processing animations
+    dfDrawObjects();
+
+#ifdef PRINT_FRAME_LOG
+    int count = dqnCount();
+#endif
+
     mainDF();
 
     double diff = getMillis() - tickStart;
@@ -159,8 +164,8 @@ void mainEventLoop()
         counter = 0;
         elapsed = 0;
 
-#ifdef PRINT_FPS
-        printf("[eventFuncs.c]: FPS: %lf (objects %i, listeners: %i)\n", fps, scmGetObjectsCount(), evqGetListenersCount());
+#ifdef PRINT_FRAME_LOG
+        printf("[eventFuncs.c]: FPS: %lf (objects %i, listeners: %i, dqn: %i)\n", fps, scmGetObjectsCount(), evqGetListenersCount(), count);
 #endif
 
     }

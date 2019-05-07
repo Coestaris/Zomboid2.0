@@ -29,6 +29,7 @@ gameObject_t* createBox()
     go->size = 1.5;
     go->texID = TEXID_BOX;
     go->onInit = box_init;
+    go->depth = 2;
 
     return go;
 }
