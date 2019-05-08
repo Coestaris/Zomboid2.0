@@ -48,6 +48,9 @@ int rlist_command_scm_sc_unload(rlist_cdata_t *data);
 int rlist_command_scm_objects_destroy(rlist_cdata_t *data);
 int rlist_command_scm_objects_free(rlist_cdata_t *data);
 
+int rlist_command_scm_ltracer(rlist_cdata_t *data);
+
+
 void initCommands(void);
 rlist_c_t** rlist_getcommands(int* count);
 

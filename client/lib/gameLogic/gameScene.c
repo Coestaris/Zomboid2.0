@@ -143,6 +143,7 @@ gameScene_t* scmGetScene(int id)
 void scmLoadScene(int id)
 {
     printf("[gameScene.c]: Loading scene %i\n", id);
+
     for(int i = 0; i < scenesCount; i++)
     {
         if(scenes[i]->id == id)
@@ -157,6 +158,10 @@ void scmLoadScene(int id)
                 for(int j = 0; j < scenes[i]->scopesToLoadCount; j++) {
                     texmLoadScope(scenes[i]->scopesToLoad[j]);
                 }
+            }
+
+            if(currentScene != -1 && scenes[currentScene]->useLtracer) {
+                ltracerReset();
             }
 
             currentScene = i;
@@ -216,6 +221,8 @@ gameScene_t* createScene(int id, int scope)
 {
     gameScene_t* scene = malloc(sizeof(gameScene_t));
     scene->id = id;
+    scene->ltracerDepth = 0;
+    scene->useLtracer = false;
     scene->scopesToLoadCount = 0;
     scene->scopesToUnloadCount = 0;
     scene->cachedBack = NULL;

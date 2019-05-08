@@ -20,6 +20,7 @@ void ltracerRemoveLight(ltracer_data_t *ld);
 ltracer_edge_t* ltracerPushEdge(vec_t a, vec_t b, vec_t c, vec_t d);
 void ltracerRemoveEdge(int edgeId);
 
+void ltracerReset();
 void ltracerUpdate();
 void ltracerDraw(int depth);
 

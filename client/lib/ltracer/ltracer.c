@@ -26,11 +26,13 @@ void ltracerPushLight(ltracer_data_t *ld)
     lights[lightCount++] = ld;
 }
 
-int remove_light(ltracer_data_t** from, int total, int index) {
-    if((total - index - 1) > 0) {
-        memmove(from + index, from + index + 1, sizeof(ltracer_data_t*) * (total-index - 1));
+int remove_light(ltracer_data_t** from, int total, int index)
+{
+    if((total - index - 1) > 0)
+    {
+        memmove(from + index, from + index + 1, sizeof(ltracer_data_t*) * (total - index - 1));
     }
-    return total-1; // return the new array size
+    return total - 1;
 }
 
 void ltracerRemoveLight(ltracer_data_t *ld)
@@ -134,6 +136,18 @@ void ltracerUpdate()
         ltracer_sortPoints(ld);
     }
 
+}
+
+void ltracerReset()
+{
+    for(size_t i = 0; i < lightCount; i++) {
+        free(lights[i]);
+    }
+    lightCount = 0;
+    for(size_t i = 0; i < edgesCount; i++) {
+        free(edges[i]);
+    }
+    edgesCount = 0;
 }
 
 void ltracerDraw(int depth)

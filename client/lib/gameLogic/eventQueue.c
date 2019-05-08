@@ -35,7 +35,7 @@ keyboardEvent_t* createKeyboardEvent(int key, int x, int y)
 mouseEvent_t* createMouseEvent(int mouse, int state, int x, int y)
 {
     if(mouseEventsCount >= MAX_MS_EVENTS) {
-        puts("mouse alert!"); //todo: remove
+        //puts("mouse alert!"); //todo: remove
         return mouseEvents[MAX_MS_EVENTS - 1];
     }
 

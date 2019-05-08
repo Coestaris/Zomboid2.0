@@ -9,6 +9,7 @@ void initGame(int argc, char** argv)
     initPublicObjects();
     initGraphics(argc, argv, 800, 600, "GAME", true, "../resources/resources.rlist");
     loadResources();
+
     bloodSpawnerInit();
 }
 

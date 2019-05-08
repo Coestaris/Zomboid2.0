@@ -9,6 +9,7 @@
 
 #include "../resources/texManager.h"
 #include "../graphics/drawer.h"
+#include "../ltracer/ltracer.h"
 
 #include "gameobject.h"
 #include "eventQueue.h"
@@ -20,6 +21,9 @@
 #define MAX_SCOPES_TO_UNLOAD 10
 
 typedef struct _gameScene {
+
+    int ltracerDepth;
+    int useLtracer;
 
     int backgroundTexId;
     tex_t* cachedBack;

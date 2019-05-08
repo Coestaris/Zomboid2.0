@@ -34,6 +34,7 @@ void initCommands(void)
 
     rlist_register_command(create_command("scm_close", 0, rlist_command_scm_close));
 
+    rlist_register_command(create_command("scm_ltracer", 2, rlist_command_scm_ltracer));
     rlist_register_command(create_command("scm_sc_load", 1, rlist_command_scm_sc_load));
     rlist_register_command(create_command("scm_sc_unload", 1, rlist_command_scm_sc_unload));
     rlist_register_command(create_command("scm_objects_destroy", 1, rlist_command_scm_objects_destroy));
@@ -440,6 +441,31 @@ int rlist_command_scm_sc_unload(rlist_cdata_t *data)
     if (!getIntValue(&scope, data->args[0], "scope", data)) return !data->strict;
 
     scmAddScopeToUnload(listeningScene, scope);
+
+    return true;
+}
+
+int rlist_command_scm_ltracer(rlist_cdata_t *data)
+{
+    if(listeningScene == NULL) {
+        printf("[rlist_commands.c][DATA ERROR]: No scene is opened, at line %i in \"%s\"\n", data->lineIndex, data->filename);
+        return !data->strict;
+    }
+
+    int use, depth;
+
+    if(strcmp(data->args[0], "true") == 0) {
+        use = true;
+    } else if (strcmp(data->args[0], "false") == 0) {
+        use = false;
+    } else {
+        if (!getIntValue(&use, data->args[0], "use", data)) return !data->strict;
+    }
+
+    if (!getIntValue(&depth, data->args[1], "depth", data)) return !data->strict;
+
+    listeningScene->useLtracer = use;
+    listeningScene->ltracerDepth = depth;
 
     return true;
 }

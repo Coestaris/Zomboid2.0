@@ -23,11 +23,12 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
         return NULL;
     }
 
-
     if(FT_Set_Pixel_Sizes(face, penSize, 0)) {
         puts("[font.c][ERROR]: Failed set pixel sizes");
         return NULL;
     }
+
+    glGetError(); //Reset error flag
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glCheck("Unable to disable pixel alignment")

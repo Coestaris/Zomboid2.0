@@ -120,9 +120,6 @@ void player_event_update(gameObject_t* object, void* data)
 
     pd->prevAnimationFrame = object->frame;
 
-    ltracerUpdate();
-    ltracerDraw(1);
-
     dqnDrawText(vec(10, 400), color(1, 0, 0, 1), mainFont, "the quick brown fox jumps over the lazy dog", 0.5, 10);
     dqnDrawText(vec(10, 600), color(0, 0, 1, 1), mainFont, "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG", 0.5, 10);
 }

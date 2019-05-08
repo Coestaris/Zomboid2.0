@@ -115,6 +115,12 @@ void mainDF(void)
     dfDrawBackground();
     dcDrawSurface(fixedW, fixedH);
 
+    //draw ltracer
+    gameScene_t* scene = scmGetActiveScene();
+    if(scene->useLtracer) {
+        ltracerDraw(scene->ltracerDepth);
+    }
+
     //Drawing the queue
     dcDrawPrimitives();
 
@@ -134,19 +140,30 @@ void pumpEvents()
 void mainEventLoop()
 {
     double tickStart = getMillis();
+    //START OF GAME TICK
+
+    //pushing uptade event to queue
     evqPushEvent(EVT_Update, NULL);
 
+    //make objects to process all events
     pumpEvents();
 
-    //Adding all object to the queue and processing animations
+    //update ltracer if needed
+    if(scmGetActiveScene()->useLtracer) {
+        ltracerUpdate();
+    }
+
+    //adding all object to the queue and processing animations
     dfDrawObjects();
 
 #ifdef PRINT_FRAME_LOG
-    int count = dqnCount();
+    int dqnCnt = 0; //dqnCount();
 #endif
 
+    //drawing everything
     mainDF();
 
+    //END OF GAME TICK
     double diff = getMillis() - tickStart;
     counter++;
     frames++;
@@ -165,7 +182,7 @@ void mainEventLoop()
         elapsed = 0;
 
 #ifdef PRINT_FRAME_LOG
-        printf("[eventFuncs.c]: FPS: %lf (objects %i, listeners: %i, dqn: %i)\n", fps, scmGetObjectsCount(), evqGetListenersCount(), count);
+        printf("[eventFuncs.c][%8lli]: FPS: %lf (objects %i, listeners: %i, dqn: %i)\n", frames, fps, scmGetObjectsCount(), evqGetListenersCount(), dqnCnt);
 #endif
 
     }

@@ -13,6 +13,7 @@
 #include "GL/freeglut.h"
 #include "GL/gl.h"
 
+#include "../ltracer/ltracer.h"
 #include "../graphics/drawer.h"
 #include "../resources/texManager.h"
 #include "eventQueue.h"

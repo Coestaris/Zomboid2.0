@@ -14,6 +14,7 @@ scm_open  SCENEID_GAME
     ; object_ex       scene_id           x     y     angle     size        texid       color      drawable   depth      ani_speed
     scm_sog_add_ex    OBJECT_BOX         200   300   0.4       defaults    defaults    defaults   defaults   defaults   defaults
 
+    scm_ltracer true 2
     scm_sc_load TEXSCOPE_MM_GEN
     scm_sc_unload TEXSCOPE_MAIN_MENU
     scm_objects_destroy true
@@ -37,6 +38,7 @@ scm_open  SCENEID_MAIN_MENU
     scm_sog_add OBJECT_MENU         0   0
     scm_sog_add OBJECT_MENU_SPAWNER 0   0
 
+    scm_ltracer true 2
     scm_sc_load TEXSCOPE_MM_GEN
     scm_objects_destroy true
     scm_objects_free true
