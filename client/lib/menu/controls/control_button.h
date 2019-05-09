@@ -7,14 +7,15 @@
 
 #include "../../structs.h"
 #include "../../gameLogic/gameHelpers.h"
-#include "../../gameLogic/gameobject.h"
+#include "../../gameLogic/gameObject.h"
 #include "../menu_container.h"
 
-typedef struct _button_data {
+typedef struct _button_data
+{
     char* string;
 
     double fontSize;
-    font_t*font;
+    font_t* font;
 
     color_t col;
 
@@ -24,8 +25,9 @@ typedef struct _button_data {
     int enabled;
     menu_container_child_t* self;
 
-    void (*func)(menu_container_child_t*);
-    void (*wrappedFunc)(void);
+    void (* func)(menu_container_child_t*);
+
+    void (* wrappedFunc)(void);
 
 } button_data_t;
 
@@ -36,6 +38,6 @@ void button_setEnable(menu_container_child_t* child, int state);
 
 menu_container_child_t* createButton(
         vec_t pos, char* string, font_t* font, double fontSize, color_t col,
-        int tex, void (*func)(menu_container_child_t*));
+        int tex, void (* func)(menu_container_child_t*));
 
 #endif //ZOMBOID2_CONTROL_BUTTON_H

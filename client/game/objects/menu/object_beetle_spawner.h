@@ -11,13 +11,14 @@
 #define BEETLE_SPAWN_RATE 30
 #define BEETLE_SPEED 0.2
 
-typedef struct _mbeetleSpawnerData {
+typedef struct _mbeetleSpawnerData
+{
     long long lastSpawn;
 
 } mbeetleSpawnerData_t;
 
-void mbeetleSpawner_init(gameObject_t *this);
-void mbeetleSpawner_event_update(gameObject_t *this, void* data);
+void mbeetleSpawner_init(gameObject_t* this);
+void mbeetleSpawner_event_update(gameObject_t* this, void* data);
 gameObject_t* createMenuBeetleSpawner();
 
 #endif //ZOMBOID2_OBJECT_BEETLE_SPAWNER_H

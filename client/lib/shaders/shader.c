@@ -11,7 +11,7 @@ shader_t* shaderCreate(char* vertexPath, char* fragmentPath)
     sh->vertexPath = vertexPath;
     sh->progID = 0;
 
-    if(!shaderLoad(sh)) return NULL;
+    if (!shaderLoad(sh)) return NULL;
 
     printf("[shader.c]: Loaded shader. vertex path: %s, fragment path: %s\n", vertexPath, fragmentPath);
 
@@ -23,22 +23,22 @@ void shaderFree(shader_t* sh)
     free(sh);
 }
 
-void loadShaderSrc(const char *szShaderSrc, GLuint shader)
+void loadShaderSrc(const char* szShaderSrc, GLuint shader)
 {
-    GLchar *fsStringPtr[1];
-    fsStringPtr[0] = (GLchar *)szShaderSrc;
+    GLchar* fsStringPtr[1];
+    fsStringPtr[0] = (GLchar*) szShaderSrc;
 
-    glShaderSource(shader, 1, (const GLchar **)fsStringPtr, NULL);
+    glShaderSource(shader, 1, (const GLchar**) fsStringPtr, NULL);
 }
 
-int loadShaderFile(const char *szFile, GLuint shader)
+int loadShaderFile(const char* szFile, GLuint shader)
 {
     FILE* f = fopen(szFile, "r");
-    if(!f) return 0;
+    if (!f) return 0;
 
     fseek(f, 0, SEEK_END);
 
-    size_t size = (size_t)ftell(f);
+    size_t size = (size_t) ftell(f);
     fseek(f, 0, SEEK_SET);
 
     char* rawInput = malloc(size + 1);
@@ -47,7 +47,7 @@ int loadShaderFile(const char *szFile, GLuint shader)
 
     fclose(f);
 
-    loadShaderSrc((const char *)rawInput, shader);
+    loadShaderSrc((const char*) rawInput, shader);
 
     free(rawInput);
 
@@ -62,19 +62,22 @@ int shaderLoad(shader_t* sh)
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-    if(vertexShader == 0 || fragmentShader == 0) {
+    if (vertexShader == 0 || fragmentShader == 0)
+    {
         printf("[shader.c]: Unable to create shaders\n");
         return 0;
     }
 
-    if(!loadShaderFile(sh->fragmentPath, fragmentShader)) {
+    if (!loadShaderFile(sh->fragmentPath, fragmentShader))
+    {
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
         printf("[shader.c][ERROR]: The fragment shader_t at %s could not be found.\n", sh->fragmentPath);
         return 0;
     }
 
-    if(!loadShaderFile(sh->vertexPath, vertexShader)) {
+    if (!loadShaderFile(sh->vertexPath, vertexShader))
+    {
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
         printf("[shader.c][ERROR]: The vertex shader_t at %s could not be found.\n", sh->vertexPath);
@@ -87,22 +90,24 @@ int shaderLoad(shader_t* sh)
     GLint testVal;
 
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &testVal);
-    if(testVal == GL_FALSE)
+    if (testVal == GL_FALSE)
     {
         char infoLog[1024];
         glGetShaderInfoLog(vertexShader, 1024, NULL, infoLog);
-        printf("[shader.c][ERROR]: The vertex shader_t at %s failed to compile with the following error:\n%s\n", sh->vertexPath, infoLog);
+        printf("[shader.c][ERROR]: The vertex shader_t at %s failed to compile with the following error:\n%s\n",
+               sh->vertexPath, infoLog);
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
         return 0;
     }
 
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &testVal);
-    if(testVal == GL_FALSE)
+    if (testVal == GL_FALSE)
     {
         char infoLog[1024];
         glGetShaderInfoLog(fragmentShader, 1024, NULL, infoLog);
-        printf("[shader.c][ERROR]: The fragment shader_t at %s failed to compile with the following error:\n%s\n", sh->fragmentPath, infoLog);
+        printf("[shader.c][ERROR]: The fragment shader_t at %s failed to compile with the following error:\n%s\n",
+               sh->fragmentPath, infoLog);
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
         return 0;
@@ -116,7 +121,7 @@ int shaderLoad(shader_t* sh)
     glLinkProgram(sh->progID);
 
     glGetProgramiv(sh->progID, GL_LINK_STATUS, &testVal);
-    if(testVal == GL_FALSE)
+    if (testVal == GL_FALSE)
     {
         char infoLog[1024];
         glGetProgramInfoLog(sh->progID, 1024, NULL, infoLog);

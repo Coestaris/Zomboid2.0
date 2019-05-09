@@ -2,7 +2,7 @@
 // Created by maxim on 1/22/19.
 //
 
-#include "eventfuncs.h"
+#include "eventFuncs.h"
 
 int counter = 0;
 double elapsed = 0;
@@ -42,7 +42,7 @@ double getMillis(void)
     struct timeval tv;
     gettimeofday(&tv, NULL);
 
-    return (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000.0 ;
+    return (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000.0;
 }
 
 void rotateScene(double angle)
@@ -53,9 +53,9 @@ void rotateScene(double angle)
 void dfDrawBackground(void)
 {
     gameScene_t* scene = scmGetActiveScene();
-    if(scene->backgroundTexId)
+    if (scene->backgroundTexId)
     {
-        if(!scene->cachedBack)
+        if (!scene->cachedBack)
         {
             scene->cachedBack = texmGetID(scene->backgroundTexId);
 
@@ -71,29 +71,29 @@ void dfDrawObjects(void)
 {
     int count = 0;
     gameObject_t** obj = scmGetObjects(&count);
-    if(obj != NULL)
+    if (obj != NULL)
     {
         for (int i = 0; i < count; i++)
         {
-            if(obj[i]->drawable)
+            if (obj[i]->drawable)
             {
-                if(!obj[i]->cachedTex)
+                if (!obj[i]->cachedTex)
                 {
                     obj[i]->cachedTex = texmGetID(obj[i]->texID);
                     assert(obj[i]->cachedTex != NULL);
 
-                    for(int j = 0; j < obj[i]->cachedTex->framesCount; j++)
+                    for (int j = 0; j < obj[i]->cachedTex->framesCount; j++)
                         assert(obj[i]->cachedTex->textureIds[j] != 0);
                 }
 
-                if(obj[i]->animationSpeed != 0)
+                if (obj[i]->animationSpeed != 0)
                 {
                     obj[i]->animationCounter++;
-                    if(obj[i]->animationCounter >= obj[i]->animationSpeed)
+                    if (obj[i]->animationCounter >= obj[i]->animationSpeed)
                     {
                         obj[i]->frame += 1;
                         obj[i]->animationCounter = 0;
-                        if(obj[i]->frame >= obj[i]->cachedTex->framesCount)
+                        if (obj[i]->frame >= obj[i]->cachedTex->framesCount)
                         {
                             obj[i]->frame = 0;
                         }
@@ -101,7 +101,7 @@ void dfDrawObjects(void)
                 }
 
                 dqnDrawSprite(obj[i]->cachedTex, color(1, 1, 1, obj[i]->alpha),
-                        obj[i]->frame, obj[i]->pos, obj[i]->angle, obj[i]->size, obj[i]->depth);
+                              obj[i]->frame, obj[i]->pos, obj[i]->angle, obj[i]->size, obj[i]->depth);
             }
         }
     }
@@ -117,7 +117,8 @@ void mainDF(void)
 
     //draw ltracer
     gameScene_t* scene = scmGetActiveScene();
-    if(scene->useLtracer) {
+    if (scene->useLtracer)
+    {
         ltracerDraw(scene->ltracerDepth);
     }
 
@@ -149,7 +150,8 @@ void mainEventLoop()
     pumpEvents();
 
     //update ltracer if needed
-    if(scmGetActiveScene()->useLtracer) {
+    if (scmGetActiveScene()->useLtracer)
+    {
         ltracerUpdate();
     }
 
@@ -168,21 +170,23 @@ void mainEventLoop()
     counter++;
     frames++;
 
-    if(diff < FPSDelay) {
+    if (diff < FPSDelay)
+    {
         usleep((unsigned int) (FPSDelay - diff) * 1000);
     }
 
     elapsed += getMillis() - tickStart;
 
 
-    if(elapsed > FPSAvCounter)
+    if (elapsed > FPSAvCounter)
     {
         fps = 1000 * counter / elapsed;
         counter = 0;
         elapsed = 0;
 
 #ifdef PRINT_FRAME_LOG
-        printf("[eventFuncs.c][%8lli]: FPS: %lf (objects %i, listeners: %i, dqn: %i)\n", frames, fps, scmGetObjectsCount(), evqGetListenersCount(), dqnCnt);
+        printf("[eventFuncs.c][%8lli]: FPS: %lf (objects %i, listeners: %i, dqn: %i)\n", frames, fps,
+               scmGetObjectsCount(), evqGetListenersCount(), dqnCnt);
 #endif
 
     }
@@ -190,10 +194,13 @@ void mainEventLoop()
 
 void getWinSize(int* w, int* h)
 {
-    if(fixedH != -1) {
+    if (fixedH != -1)
+    {
         *w = fixedW;
         *h = fixedH;
-    } else {
+    }
+    else
+    {
         *w = glutGet(GLUT_WINDOW_WIDTH);
         *h = glutGet(GLUT_WINDOW_HEIGHT);
     }
@@ -265,9 +272,12 @@ void setFixedSize(int w, int h)
 
 void eventReshapeFunc(int w, int h)
 {
-    if(fixedW != -1) {
+    if (fixedW != -1)
+    {
         glutReshapeWindow(fixedW, fixedH);
-    } else {
+    }
+    else
+    {
         glViewport(0, 0, w, h);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();

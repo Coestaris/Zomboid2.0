@@ -7,7 +7,8 @@
 #ifndef ZOMBOID2_OBJ_ROTATABLE_LIGHT_H
 #define ZOMBOID2_OBJ_ROTATABLE_LIGHT_H
 
-typedef struct _rotatableLight_data {
+typedef struct _rotatableLight_data
+{
     gameObject_t* obj;
     double speed;
 

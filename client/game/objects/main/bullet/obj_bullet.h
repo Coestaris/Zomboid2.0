@@ -12,7 +12,8 @@
 #include "../../../objectInclude.h"
 #include "../light/obj_light.h"
 
-typedef struct _bulletData {
+typedef struct _bulletData
+{
 
     gameObject_t* light;
     double xOffset;
@@ -20,7 +21,7 @@ typedef struct _bulletData {
 
 } bulletData_t;
 
-void bullet_event_update(gameObject_t *object, void *data);
+void bullet_event_update(gameObject_t* object, void* data);
 void bullet_init(gameObject_t* object);
 gameObject_t* createBullet(vec_t a, double angle);
 

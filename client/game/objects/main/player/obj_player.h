@@ -7,7 +7,7 @@
 
 #include "../../../objectInclude.h"
 
-#include "../enemy/obj_enemy.h"
+#include "../enemy/obj_enemy_zombie.h"
 #include "../bullet/obj_bullet.h"
 #include "../flashlight/obj_flashlight.h"
 #include "../light/obj_light_tracer.h"
@@ -31,7 +31,8 @@
 #define PLAYER_BACKLIGHT_SIZE .5
 #define PLAYER_BACKLIGHT_ALPHA .04
 
-typedef struct _playerData {
+typedef struct _playerData
+{
 
     long long lastFireFrame;
 
@@ -53,7 +54,7 @@ typedef struct _playerData {
 
 void player_event_keyPressed(gameObject_t* this, void* data);
 void player_init(gameObject_t* object);
-void player_event_update(gameObject_t *object, void *data);
+void player_event_update(gameObject_t* object, void* data);
 gameObject_t* createPlayer();
 
 #endif //ZOMBOID2_OBJ_TEST_H

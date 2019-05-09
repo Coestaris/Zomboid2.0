@@ -4,17 +4,20 @@
 
 #include "control_label.h"
 
-void label_event_update(gameObject_t* this, void* data) {
+void label_event_update(gameObject_t* this, void* data)
+{
     label_data_t* ld = this->data;
 
     dqnDrawText(this->pos, ld->col, ld->font, ld->string, ld->fontSize, this->depth + 1);
 }
 
-void label_init(gameObject_t* this) {
+void label_init(gameObject_t* this)
+{
     evqSubscribeEvent(this, EVT_Update, label_event_update);
 }
 
-void label_setEnable(menu_container_child_t* child, int state) {
+void label_setEnable(menu_container_child_t* child, int state)
+{
     // pass
 }
 

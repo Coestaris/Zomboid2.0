@@ -13,7 +13,8 @@
 #include "../helpers.h"
 #include "../structs.h"
 
-typedef struct _fontCharacter {
+typedef struct _fontCharacter
+{
 
     char c;
 
@@ -31,7 +32,8 @@ typedef struct _fontCharacter {
 
 } font_character_t;
 
-typedef struct _font {
+typedef struct _font
+{
     char* filename;
     uint8_t startIndex;
     uint8_t endIndex;

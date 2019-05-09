@@ -9,8 +9,8 @@ size_t nodeCount;
 
 uint8_t shmHasShader(int id)
 {
-    for(size_t i = 0; i < nodeCount; i++)
-        if(nodes[i]->id == id) return 1;
+    for (size_t i = 0; i < nodeCount; i++)
+        if (nodes[i]->id == id) return 1;
     return 0;
 }
 
@@ -32,7 +32,7 @@ void shmPushBuiltInShaders()
 
 void shmInit()
 {
-    for(size_t i = 0; i < SHM_MAX_SHADERS; i++)
+    for (size_t i = 0; i < SHM_MAX_SHADERS; i++)
     {
         nodes[i] = malloc(sizeof(shmNode_t));
         nodes[i]->shader = NULL;
@@ -42,7 +42,7 @@ void shmInit()
 
 shader_t* shmGetShader(int id)
 {
-    for(size_t i = 0; i < nodeCount; i++)
-        if(nodes[i]->id == id) return nodes[i]->shader;
+    for (size_t i = 0; i < nodeCount; i++)
+        if (nodes[i]->id == id) return nodes[i]->shader;
     return NULL;
 }

@@ -16,14 +16,13 @@
 #define false 0
 #define FALSE 0
 
+int randBool();
+int randIntRange(int a, int b);
 double randRange(double a, double b);
 color_t randColor(double alpha);
-
 int fileExists(const char* filename);
-
 double twoPointsAngle(vec_t p1, vec_t p2);
 double distance(vec_t p1, vec_t p2);
-
 double toRad(double angle);
 double toDeg(double angle);
 

@@ -13,17 +13,20 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
     GLint glerror;
     FT_Face face;
 
-    if(!fileExists(filename)) {
+    if (!fileExists(filename))
+    {
         printf("[font.c][ERROR]: Unable to find file %s", filename);
         return NULL;
     }
 
-    if (FT_New_Face(ft, filename, 0, &face)) {
+    if (FT_New_Face(ft, filename, 0, &face))
+    {
         puts("[font.c][ERROR]: Failed to load font");
         return NULL;
     }
 
-    if(FT_Set_Pixel_Sizes(face, penSize, 0)) {
+    if (FT_Set_Pixel_Sizes(face, penSize, 0))
+    {
         puts("[font.c][ERROR]: Failed set pixel sizes");
         return NULL;
     }
@@ -57,15 +60,15 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
         glCheck("Unable to bind texture")
 
         glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            GL_ALPHA,
-            face->glyph->bitmap.width,
-            face->glyph->bitmap.rows,
-            0,
-            GL_ALPHA,
-            GL_UNSIGNED_BYTE,
-            face->glyph->bitmap.buffer
+                GL_TEXTURE_2D,
+                0,
+                GL_ALPHA,
+                face->glyph->bitmap.width,
+                face->glyph->bitmap.rows,
+                0,
+                GL_ALPHA,
+                GL_UNSIGNED_BYTE,
+                face->glyph->bitmap.buffer
         );
         glCheck("Unable fill texture data")
 
@@ -82,13 +85,14 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
         glCheck("Unable to set texture attribute: mag_filt")
 
         font_character_t ch =
-        {
-                c,
-                texture,
-                { face->glyph->bitmap.width, face->glyph->bitmap.rows },
-                { face->glyph->bitmap_left * 1.2, (face->glyph->metrics.vertBearingY / 28.0) + face->glyph->bitmap_top * 1.2},
-                face->glyph->advance.x
-        };
+                {
+                        c,
+                        texture,
+                        {face->glyph->bitmap.width, face->glyph->bitmap.rows},
+                        {face->glyph->bitmap_left * 1.2,
+                         (face->glyph->metrics.vertBearingY / 28.0) + face->glyph->bitmap_top * 1.2},
+                        face->glyph->advance.x
+                };
         f->chars[c - startIndex] = ch;
     }
 
@@ -128,7 +132,7 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
 double fontGetStringWidth(char* string, font_t* font, double fontSize)
 {
     double w = 0;
-    for(size_t i = 0; i < strlen(string); i++)
+    for (size_t i = 0; i < strlen(string); i++)
     {
         font_character_t ch = font->chars[string[i] - font->startIndex];
         w += (ch.advance >> 6) * fontSize;
@@ -141,8 +145,8 @@ double fontGetStringHeight(char* string, font_t* font, double fontSize)
     font_character_t ch = font->chars[string[0] - font->startIndex];
     double h = ch.size.y * fontSize;
 
-    for(size_t i = 0; i < strlen(string); i++)
-        if(string[i] == '\n') h += ch.size.y * fontSize;
+    for (size_t i = 0; i < strlen(string); i++)
+        if (string[i] == '\n') h += ch.size.y * fontSize;
 
     return h;
 }
@@ -155,7 +159,8 @@ void fontFree(font_t* f)
 
 void fontsInit(void)
 {
-    if (FT_Init_FreeType(&ft)) {
+    if (FT_Init_FreeType(&ft))
+    {
         puts("[font.c][ERROR]: Could not init FreeType Library");
         exit(1);
     }

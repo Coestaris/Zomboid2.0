@@ -23,10 +23,13 @@ image                   TEXID_BACK_CONCRETE TEXSCOPE_MM_GEN      0    0    TM_BA
 ; type      frameCnt    id                  scope                cX  cY    mode         paths
 animation   2           TEXID_MENU_BTN_SM   TEXSCOPE_MAIN_MENU   0   0     TM_DEFAULT   images/menu/button_small/button%i.png
 animation   2           TEXID_MENU_BTN      TEXSCOPE_MAIN_MENU   0   0     TM_DEFAULT   images/menu/button/button%i.png
-animation   3           TEXID_ENEMY         TEXSCOPE_GAME        0   0     TM_DEFAULT   images/enemy/enemy%i.png
 animation   3           TEXID_PLAYER        TEXSCOPE_GAME       15   0     TM_DEFAULT   images/player_1/image%i.png
 animation   6           TEXID_SHELLCASE     TEXSCOPE_GAME        0   0     TM_DEFAULT   images/shellCase/shellCase%i.png
 
 animation   7           TEXID_BLOOD         TEXSCOPE_MM_GEN      0   0     TM_DEFAULT   images/blood/blood/image%i.png
 animation   2           TEXID_BLOOD_SMEAR   TEXSCOPE_MM_GEN      0   0     TM_DEFAULT   images/blood/smear/image%i.png
 animation   2           TEXID_BLOOD_DEAD    TEXSCOPE_MM_GEN      0   0     TM_DEFAULT   images/blood/dead/image%i.png
+
+animation   3           TEXID_ENEMY_ZOMBIE_1 TEXSCOPE_GAME        0   0     TM_DEFAULT   images/enemy/zombies/green%i.png
+animation   3           TEXID_ENEMY_ZOMBIE_2 TEXSCOPE_GAME        0   0     TM_DEFAULT   images/enemy/zombies/brown%i.png
+animation   3           TEXID_ENEMY_ZOMBIE_3 TEXSCOPE_GAME        0   0     TM_DEFAULT   images/enemy/zombies/blue%i.png

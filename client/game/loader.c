@@ -17,5 +17,5 @@ void initPublicObjects(void)
 void loadResources()
 {
     mainFont = fontLoad("../resources/fonts/arial.ttf", 64, 20, 128);
-    if(mainFont == NULL) exit(1);
+    if (mainFont == NULL) exit(1);
 }

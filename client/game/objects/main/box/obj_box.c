@@ -9,7 +9,7 @@ void box_init(gameObject_t* this)
     const double w = 32;
     const double h = 32;
 
-    /*ltracerPushEdge(
+/*    ltracerPushEdge(
             vec_add(this->pos, vec_mult(vec( w, -h), this->size / 2.0 )),
             vec_add(this->pos, vec_mult(vec(-w, -h), this->size / 2.0 )),
             vec_add(this->pos, vec_mult(vec(-w,  h), this->size / 2.0 )),

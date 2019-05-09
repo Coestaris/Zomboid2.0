@@ -50,12 +50,12 @@ void menu_button_single(menu_container_child_t* button)
     double strH = fontGetStringHeight(text, mainFont, fontSize);
 
     menu_container_child_t* label = createLabel(
-            vec_sub(vec(w / 2.0, h / 2.0 - tex2d->height / 2.5), vec(strW / 2.0, - strH / 2.0 - 15)),
+            vec_sub(vec(w / 2.0, h / 2.0 - tex2d->height / 2.5), vec(strW / 2.0, -strH / 2.0 - 15)),
             text, mainFont, fontSize, textCol);
 
     menu_container_child_t* btnClose = createButton(
             vec(w / 2.0 - btnTex->width / 1.5, h / 2.0 + tex2d->height / 2.5),
-            "BACK", mainFont, fontSize  / 1.5, textCol, TEXID_MENU_BTN_SM, menu_sp_back);
+            "BACK", mainFont, fontSize / 1.5, textCol, TEXID_MENU_BTN_SM, menu_sp_back);
 
     menu_container_child_t* btnStart = createButton(
             vec(w / 2.0 + btnTex->width / 1.5, h / 2.0 + tex2d->height / 2.5),
@@ -93,8 +93,8 @@ void menu_button_gay_no() {
 void menu_button_multi(menu_container_child_t* button)
 {
     composer_input_double(main_container, "IP address", "Port", "OK", "Cancel", "127.0.0.1", "1234",
-            TEXID_MENU_BTN_SM, mainFont, .45, color(0.8, 0.8, 0.8, 1), TEXID_MENU_INDBL,
-            NULL, NULL);
+                          TEXID_MENU_BTN_SM, mainFont, .45, color(0.8, 0.8, 0.8, 1), TEXID_MENU_INDBL,
+                          NULL, NULL);
 }
 
 void menu_button_settings(menu_container_child_t* button)
@@ -118,10 +118,14 @@ void menu_init(gameObject_t* this)
     main_container = menuCreate(NULL);
     scmPushObject(main_container);
 
-    menu_container_child_t* btn1 = createButton(vec(w / 2.0, hStart + 0 * hStep), "SINGLEPLAYER", mainFont, .45, color(0.8, 0.8, 0.8, 1), TEXID_MENU_BTN, menu_button_single);
-    menu_container_child_t* btn2 = createButton(vec(w / 2.0, hStart + 1 * hStep), "MULTIPLAYER", mainFont, .45, color(0.8, 0.8, 0.8, 1), TEXID_MENU_BTN, menu_button_multi);
-    menu_container_child_t* btn3 = createButton(vec(w / 2.0, hStart + 2 * hStep), "SETTINGS", mainFont, .45, color(0.8, 0.8, 0.8, 1), TEXID_MENU_BTN, menu_button_settings);
-    menu_container_child_t* btn4 = createButton(vec(w / 2.0, hStart + 3 * hStep), "EXIT", mainFont, .45, color(0.8, 0.8, 0.8, 1), TEXID_MENU_BTN, menu_button_close);
+    menu_container_child_t* btn1 = createButton(vec(w / 2.0, hStart + 0 * hStep), "SINGLEPLAYER", mainFont, .45,
+                                                color(0.8, 0.8, 0.8, 1), TEXID_MENU_BTN, menu_button_single);
+    menu_container_child_t* btn2 = createButton(vec(w / 2.0, hStart + 1 * hStep), "MULTIPLAYER", mainFont, .45,
+                                                color(0.8, 0.8, 0.8, 1), TEXID_MENU_BTN, menu_button_multi);
+    menu_container_child_t* btn3 = createButton(vec(w / 2.0, hStart + 2 * hStep), "SETTINGS", mainFont, .45,
+                                                color(0.8, 0.8, 0.8, 1), TEXID_MENU_BTN, menu_button_settings);
+    menu_container_child_t* btn4 = createButton(vec(w / 2.0, hStart + 3 * hStep), "EXIT", mainFont, .45,
+                                                color(0.8, 0.8, 0.8, 1), TEXID_MENU_BTN, menu_button_close);
 
     main_container->depth = 2;
     btn1->object->depth = main_container->depth + 1;

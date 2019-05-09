@@ -4,14 +4,14 @@
 
 #include "object_beetle_spawner.h"
 
-void mbeetleSpawner_init(gameObject_t *this)
+void mbeetleSpawner_init(gameObject_t* this)
 {
     evqSubscribeEvent(this, EVT_Update, mbeetleSpawner_event_update);
 
     //todo: paint with some surface
 }
 
-void mbeetleSpawner_event_update(gameObject_t *this, void* data)
+void mbeetleSpawner_event_update(gameObject_t* this, void* data)
 {
     mbeetleSpawnerData_t* sd = this->data;
     int w, h;
@@ -19,13 +19,14 @@ void mbeetleSpawner_event_update(gameObject_t *this, void* data)
 
     long long frame = getFrame();
 
-    if(llabs(sd->lastSpawn - frame) > BEETLE_SPAWN_RATE)
+    if (llabs(sd->lastSpawn - frame) > BEETLE_SPAWN_RATE)
     {
-        int dir = (int)randRange(0, 4);
+        int dir = (int) randRange(0, 4);
         vec_t pos = vec(0, 0);
         double angle = 0;
 
-        switch(dir) {
+        switch (dir)
+        {
             case 0: //from top edge
                 pos = vec(randRange(0, w), 0);
                 angle = randRange(M_PI_4, M_PI - M_PI_4);
@@ -44,7 +45,7 @@ void mbeetleSpawner_event_update(gameObject_t *this, void* data)
                 break;
         }
 
-        scmPushObject(createMenuBeetle(pos, angle , BEETLE_SPEED));
+        scmPushObject(createMenuBeetle(pos, angle, BEETLE_SPEED));
         sd->lastSpawn = frame;
     }
 }

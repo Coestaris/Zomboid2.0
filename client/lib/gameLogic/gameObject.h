@@ -30,8 +30,9 @@ typedef struct _GameObject
 
     void* data;
 
-    void (*onInit)(struct _GameObject* object);
-    void (*onDestroy)(struct _GameObject* object);
+    void (* onInit)(struct _GameObject* object);
+
+    void (* onDestroy)(struct _GameObject* object);
 
 } gameObject_t;
 

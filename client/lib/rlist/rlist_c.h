@@ -11,7 +11,8 @@
 
 struct _rlist_c;
 
-typedef struct _rlist_cdata {
+typedef struct _rlist_cdata
+{
     struct _rlist_c* command;
 
     char** args;
@@ -24,13 +25,14 @@ typedef struct _rlist_cdata {
 
 } rlist_cdata_t;
 
-typedef struct _rlist_c {
+typedef struct _rlist_c
+{
     const char* name;
     int argumentCount;
 
-    int (*runFunc)(rlist_cdata_t* arguments);
+    int (* runFunc)(rlist_cdata_t* arguments);
 } rlist_c_t;
 
-rlist_c_t* create_command(const char* name, int argCount, int (*runFunc)(rlist_cdata_t* arguments));
+rlist_c_t* create_command(const char* name, int argCount, int (* runFunc)(rlist_cdata_t* arguments));
 
 #endif //ZOMBOID2_RLIST_C_H

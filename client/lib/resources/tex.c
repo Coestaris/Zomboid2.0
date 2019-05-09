@@ -6,7 +6,8 @@
 #include "../../../lib/oil/oil.h"
 
 int winW, winH;
-tex_t* createTex(char *fn, int uid, int scope, vec_t center, int mode)
+
+tex_t* createTex(char* fn, int uid, int scope, vec_t center, int mode)
 {
     tex_t* tex = malloc(sizeof(tex_t));
 
@@ -25,7 +26,7 @@ tex_t* createTex(char *fn, int uid, int scope, vec_t center, int mode)
     tex->VAO = 0;
 }
 
-tex_t* createAnimation(char **fileNames, int framesCount, int uid, int scope, vec_t center, int mode)
+tex_t* createAnimation(char** fileNames, int framesCount, int uid, int scope, vec_t center, int mode)
 {
     tex_t* tex = malloc(sizeof(tex_t));
     tex->mode = mode;
@@ -45,8 +46,8 @@ tex_t* createAnimation(char **fileNames, int framesCount, int uid, int scope, ve
 
 void freeOGlTex(tex_t* tex)
 {
-    for(int i = 0; i < tex->framesCount; i++)
-        if(tex->textureIds[i]) glDeleteTextures(1, &tex->textureIds[i]);
+    for (int i = 0; i < tex->framesCount; i++)
+        if (tex->textureIds[i]) glDeleteTextures(1, &tex->textureIds[i]);
     memset(tex->textureIds, 0, sizeof(GLuint) * tex->framesCount);
 }
 
@@ -60,7 +61,7 @@ void freeTex(tex_t* tex)
 void loadTex(tex_t* tex)
 {
     int w, h;
-    for(int i = 0; i < tex->framesCount; i++)
+    for (int i = 0; i < tex->framesCount; i++)
     {
         texData data;
         data.wrappingMode = tex->mode == TEXMODE_BACKGROUND ? GL_REPEAT : GL_CLAMP_TO_EDGE;
@@ -69,9 +70,9 @@ void loadTex(tex_t* tex)
         data.flipY = 1;
 
         GLuint id = oilTextureFromPngFile(tex->fns[i], GL_RGBA,
-                OIL_TEX_WRAPPING | OIL_TEX_MIN | OIL_TEX_MAG | OIL_TEX_FLIPY,
-                &data);
-        if(!id)
+                                          OIL_TEX_WRAPPING | OIL_TEX_MIN | OIL_TEX_MAG | OIL_TEX_FLIPY,
+                                          &data);
+        if (!id)
         {
             printf("[tex.c][ERROR]: Unable to load texture %s\n", tex->fns[i]);
             oilPrintError();
@@ -81,17 +82,18 @@ void loadTex(tex_t* tex)
         w = data.out_width;
         h = data.out_height;
 
-        if(tex->framesCount == 1)
+        if (tex->framesCount == 1)
         {
             printf("[tex.c]: Loaded texture \"%s\". W: %i, H: %i, OGlID: %i\n", tex->fns[i], w, h, id);
         }
         else
         {
-            printf("[tex.c]: Loaded frame (%i/%i) \"%s\". W: %i, H: %i OGlID: %i\n", i + 1, tex->framesCount, tex->fns[i], w, h, id);
+            printf("[tex.c]: Loaded frame (%i/%i) \"%s\". W: %i, H: %i OGlID: %i\n", i + 1, tex->framesCount,
+                   tex->fns[i], w, h, id);
         }
         tex->textureIds[i] = id;
 
-        if(tex->mode == TEXMODE_BACKGROUND)
+        if (tex->mode == TEXMODE_BACKGROUND)
         {
             /*GLint VBO, EBO;
 
@@ -135,7 +137,7 @@ void loadTex(tex_t* tex)
 
 void bindTex(tex_t* tex, int frame)
 {
-    if(!tex)
+    if (!tex)
     {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
@@ -143,7 +145,7 @@ void bindTex(tex_t* tex, int frame)
     {
         assert(frame < tex->framesCount);
 
-        if(tex->mode == TEXMODE_OVERLAY)
+        if (tex->mode == TEXMODE_OVERLAY)
         {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             glBlendEquation(GL_ADD);

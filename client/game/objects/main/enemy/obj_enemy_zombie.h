@@ -10,7 +10,8 @@
 #define ENEMY_SPEED_MAX 0.5
 #define ENEMY_SPEED_MIN 0.1
 
-typedef struct enemyData {
+typedef struct enemyData
+{
     gameObject_t* player;
 
     tex_t* larm_tex;
@@ -25,6 +26,6 @@ typedef struct enemyData {
 
 void enemy_init(gameObject_t* this);
 void enemy_event_update(gameObject_t* this, void* data);
-gameObject_t *createEnemy(gameObject_t* player, vec_t pos);
+gameObject_t* createEnemy(gameObject_t* player, vec_t pos);
 
 #endif //ZOMBOID2_OBJ_ENEMY_H

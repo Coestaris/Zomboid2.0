@@ -9,7 +9,7 @@
 #include <assert.h>
 #include <memory.h>
 
-#include "gameobject.h"
+#include "gameObject.h"
 
 #define EVT_KeyDown 0
 #define EVT_KeyUp 1
@@ -35,22 +35,26 @@
 #define MS_PRESSED 0
 #define MS_RELEASED 1
 
-typedef struct _registeredNode {
+typedef struct _registeredNode
+{
 
     int eventType;
     gameObject_t* object;
-    void (*callback)(gameObject_t*, void *);
+
+    void (* callback)(gameObject_t*, void*);
 
 } registeredNode_t;
 
-typedef struct _event {
+typedef struct _event
+{
 
     int eventType;
     void* data;
 
 } event_t;
 
-typedef struct _keyboardEvent {
+typedef struct _keyboardEvent
+{
 
     int key;
     int x;
@@ -58,7 +62,8 @@ typedef struct _keyboardEvent {
 
 } keyboardEvent_t;
 
-typedef struct _mouseEvent {
+typedef struct _mouseEvent
+{
 
     int mouse;
     int state;
@@ -69,15 +74,15 @@ typedef struct _mouseEvent {
 
 keyboardEvent_t* createKeyboardEvent(int key, int x, int y);
 mouseEvent_t* createMouseEvent(int mouse, int state, int x, int y);
-
 event_t* createEvent();
 void freeEvent(event_t* ev);
 void evqInit(void);
+int evqGetListenersCount(void);
 
-int  evqGetListenersCount(void);
-void evqSubscribeEvent(gameObject_t *object, int eventType, void (*callback)(gameObject_t *, void *));
-void evqUnsubscribeEvent(gameObject_t *object, int eventType);
-void evqUnsubscribeEvents(gameObject_t *object);
+void evqSubscribeCollisionEvent(gameObject_t* object, int collisionWith, void (* callback)(gameObject_t*, gameObject_t*));
+void evqSubscribeEvent(gameObject_t* object, int eventType, void (* callback)(gameObject_t*, void*));
+void evqUnsubscribeEvent(gameObject_t* object, int eventType);
+void evqUnsubscribeEvents(gameObject_t* object);
 void evqPushEvent(int eventType, void* data);
 event_t* evqNextEvent(void);
 void evqResetEvents(void);

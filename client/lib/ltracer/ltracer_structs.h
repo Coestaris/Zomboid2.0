@@ -8,7 +8,8 @@
 #include "../resources/tex.h"
 #include "../graphics/drawer.h"
 
-typedef struct _ltracer_data {
+typedef struct _ltracer_data
+{
 
     vec_t pos;
     double angle;
@@ -36,7 +37,8 @@ typedef struct _ltracer_data {
 } ltracer_data_t;
 
 
-typedef struct _ltracer_edge {
+typedef struct _ltracer_edge
+{
     int id;
     vec_t a, b, c, d;
 

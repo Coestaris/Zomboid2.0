@@ -11,7 +11,7 @@ gameObject_t* createFlashlight(gameObject_t* player, double minSize, double alph
     go->texID = TEXID_FLASHLIGHT;
 
     go->data = malloc(sizeof(flashlightData_t));
-    ((flashlightData_t*)go->data)->minSize = minSize;
+    ((flashlightData_t*) go->data)->minSize = minSize;
 
     go->pos = player->pos;
     go->size = minSize;

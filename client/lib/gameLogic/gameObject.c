@@ -2,7 +2,7 @@
 // Created by maxim on 1/23/19.
 //
 
-#include "gameobject.h"
+#include "gameObject.h"
 
 gameObject_t* object(void)
 {
@@ -24,9 +24,9 @@ gameObject_t* object(void)
     return obj;
 }
 
-void freeObject(gameObject_t *object)
+void freeObject(gameObject_t* object)
 {
-    if(object->onDestroy) object->onDestroy(object);
-    if(object->data) free(object->data);
+    if (object->onDestroy) object->onDestroy(object);
+    if (object->data) free(object->data);
     free(object);
 }

@@ -6,14 +6,15 @@
 #define ZOMBOID2_CONTROL_LABEL_H
 
 #include "../../structs.h"
-#include "../../gameLogic/gameobject.h"
+#include "../../gameLogic/gameObject.h"
 #include "../menu_container.h"
 
-typedef struct _label_data {
+typedef struct _label_data
+{
     char* string;
 
     double fontSize;
-    font_t*font;
+    font_t* font;
 
     color_t col;
 } label_data_t;

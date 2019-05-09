@@ -21,7 +21,8 @@
 #define TEXMODE_BACKGROUND 1
 #define TEXMODE_OVERLAY 2
 
-typedef struct _tex2d {
+typedef struct _tex2d
+{
     char** fns;
     int mode;
 
@@ -41,13 +42,11 @@ typedef struct _tex2d {
 
 } tex_t;
 
-tex_t* createTex(char *fn, int uid, int scope, vec_t center, int mode);
-tex_t* createAnimation(char **fileNames, int framesCount, int uid, int scope, vec_t center, int mode);
-
+tex_t* createTex(char* fn, int uid, int scope, vec_t center, int mode);
+tex_t* createAnimation(char** fileNames, int framesCount, int uid, int scope, vec_t center, int mode);
 void freeOGlTex(tex_t* tex);
 void freeTex(tex_t* tex);
 void bindTex(tex_t* tex, int frame);
-
 void loadTex(tex_t* tex);
 
 #endif //ZOMBOID2_TEX_H

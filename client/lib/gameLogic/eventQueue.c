@@ -20,7 +20,8 @@ int eventCount = 0;
 
 keyboardEvent_t* createKeyboardEvent(int key, int x, int y)
 {
-    if(keyboardEventsCount >= MAX_KB_EVENTS) {
+    if (keyboardEventsCount >= MAX_KB_EVENTS)
+    {
         puts("kb alert!"); //todo: remove
         return keyboardEvents[MAX_KB_EVENTS - 1];
     }
@@ -34,7 +35,8 @@ keyboardEvent_t* createKeyboardEvent(int key, int x, int y)
 
 mouseEvent_t* createMouseEvent(int mouse, int state, int x, int y)
 {
-    if(mouseEventsCount >= MAX_MS_EVENTS) {
+    if (mouseEventsCount >= MAX_MS_EVENTS)
+    {
         //puts("mouse alert!"); //todo: remove
         return mouseEvents[MAX_MS_EVENTS - 1];
     }
@@ -64,10 +66,11 @@ void freeEvent(event_t* ev)
     //if(ev->data) free(ev->data);
 }
 
-void evqSubscribeEvent(gameObject_t *object, int eventType, void (*callback)(gameObject_t *, void *))
+void evqSubscribeEvent(gameObject_t* object, int eventType, void (* callback)(gameObject_t*, void*))
 {
-    if(listenersCount == MAXLISTENERS - 1) {
-        size_t newSize = (size_t)(MAXLISTENERS * SIZE_INCREASE);
+    if (listenersCount == MAXLISTENERS - 1)
+    {
+        size_t newSize = (size_t) (MAXLISTENERS * SIZE_INCREASE);
         registeredListeners = realloc(registeredListeners, newSize);
         MAXLISTENERS = newSize;
     }
@@ -82,26 +85,31 @@ void evqSubscribeEvent(gameObject_t *object, int eventType, void (*callback)(gam
 
 int remove_node(registeredNode_t** from, int total, int index)
 {
-    if((total - index - 1) > 0) {
+    if ((total - index - 1) > 0)
+    {
         memmove(from + index, from + index + 1, sizeof(registeredNode_t*) * (total - index - 1));
     }
     return total - 1;
 }
 
-void evqUnsubscribeEvents(gameObject_t *object)
+void evqUnsubscribeEvents(gameObject_t* object)
 {
-    for(int i = listenersCount - 1; i >= 0; i--) {
-        if(registeredListeners[i]->object == object) {
+    for (int i = listenersCount - 1; i >= 0; i--)
+    {
+        if (registeredListeners[i]->object == object)
+        {
             free(registeredListeners[i]);
             listenersCount = remove_node(registeredListeners, listenersCount, i);
         }
     }
 }
 
-void evqUnsubscribeEvent(gameObject_t *object, int eventType)
+void evqUnsubscribeEvent(gameObject_t* object, int eventType)
 {
-    for(int i = 0; i < listenersCount; i++) {
-        if(registeredListeners[i]->object == object && registeredListeners[i]->eventType == eventType) {
+    for (int i = 0; i < listenersCount; i++)
+    {
+        if (registeredListeners[i]->object == object && registeredListeners[i]->eventType == eventType)
+        {
             free(registeredListeners[i]);
             listenersCount = remove_node(registeredListeners, listenersCount, i);
             return;
@@ -111,10 +119,12 @@ void evqUnsubscribeEvent(gameObject_t *object, int eventType)
 
 void evqPushEvent(int eventType, void* data)
 {
-    if(eventCount == MAXEVENTS - 1) {
-        size_t newSize = (size_t)(eventCount * SIZE_INCREASE);
+    if (eventCount == MAXEVENTS - 1)
+    {
+        size_t newSize = (size_t) (eventCount * SIZE_INCREASE);
         eventQueue = realloc(eventQueue, newSize);
-        for(int i = eventCount; i < newSize; i++) {
+        for (int i = eventCount; i < newSize; i++)
+        {
             eventQueue[i] = createEvent();
         }
 
@@ -128,12 +138,12 @@ void evqPushEvent(int eventType, void* data)
 
 event_t* evqNextEvent(void)
 {
-    if(eventCount > 0)
+    if (eventCount > 0)
     {
         event_t* ev = eventQueue[--eventCount];
-        for(int i = 0; i < listenersCount; i++)
+        for (int i = 0; i < listenersCount; i++)
         {
-            if(registeredListeners[i]->eventType == ev->eventType)
+            if (registeredListeners[i]->eventType == ev->eventType)
             {
                 registeredListeners[i]->callback(registeredListeners[i]->object, ev->data);
             }
@@ -155,15 +165,18 @@ void evqInit(void)
     eventQueue = malloc(sizeof(event_t*) * MAXEVENTS);
     registeredListeners = malloc(sizeof(registeredNode_t*) * MAXLISTENERS);
 
-    for(int i = 0; i < MAX_KB_EVENTS; i++) {
+    for (int i = 0; i < MAX_KB_EVENTS; i++)
+    {
         keyboardEvents[i] = malloc(sizeof(keyboardEvent_t));
     }
 
-    for(int i = 0; i < MAX_MS_EVENTS; i++) {
+    for (int i = 0; i < MAX_MS_EVENTS; i++)
+    {
         mouseEvents[i] = malloc(sizeof(mouseEvent_t));
     }
 
-    for(int i = 0; i < MAXEVENTS; i++) {
+    for (int i = 0; i < MAXEVENTS; i++)
+    {
         eventQueue[i] = createEvent();
     }
 }

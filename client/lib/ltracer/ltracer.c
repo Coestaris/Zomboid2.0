@@ -13,11 +13,12 @@ int edgesCount = 1;
 int lightCount = 0;
 int idCounter = 0;
 
-void ltracerPushLight(ltracer_data_t *ld)
+void ltracerPushLight(ltracer_data_t* ld)
 {
     assert(lightCount <= MAX_LIGHTS);
 
-    if(!lightCount) {
+    if (!lightCount)
+    {
         edges[0] = malloc(sizeof(ltracer_edge_t));
         edges[0]->id = -1;
         ltracer_updateEdges(edges, edgesCount);
@@ -28,18 +29,19 @@ void ltracerPushLight(ltracer_data_t *ld)
 
 int remove_light(ltracer_data_t** from, int total, int index)
 {
-    if((total - index - 1) > 0)
+    if ((total - index - 1) > 0)
     {
         memmove(from + index, from + index + 1, sizeof(ltracer_data_t*) * (total - index - 1));
     }
     return total - 1;
 }
 
-void ltracerRemoveLight(ltracer_data_t *ld)
+void ltracerRemoveLight(ltracer_data_t* ld)
 {
-    for(int light = 0; light < lightCount; light++)
+    for (int light = 0; light < lightCount; light++)
     {
-        if(lights[light] == ld) {
+        if (lights[light] == ld)
+        {
             free(lights[light]);
             remove_light(lights, lightCount--, light);
         }
@@ -70,16 +72,17 @@ void ltracerRemoveEdge(int edgeId)
 
 void ltracerUpdate()
 {
-    for(int light = 0; light < lightCount; light++)
+    for (int light = 0; light < lightCount; light++)
     {
         ltracer_data_t* ld = lights[light];
         ld->pointsCount = 0;
 
-        if(ld->disabled) continue;
+        if (ld->disabled) continue;
 
         double mRange = 0;
 
-        if (ld->type == LT_AREA) {
+        if (ld->type == LT_AREA)
+        {
             edges[0]->a = vec(ld->pos.x + ld->range / 2, ld->pos.y + ld->range / 2);
             edges[0]->b = vec(ld->pos.x + ld->range / 2, ld->pos.y - ld->range / 2);
             edges[0]->c = vec(ld->pos.x - ld->range / 2, ld->pos.y - ld->range / 2);
@@ -88,7 +91,8 @@ void ltracerUpdate()
             mRange = ld->range / 2 * M_SQRT2 + 0.001;
         }
 
-        else if (ld->type == LT_SPOT) {
+        else if (ld->type == LT_SPOT)
+        {
 
             mRange = 999999;
 
@@ -118,14 +122,18 @@ void ltracerUpdate()
         dqnDrawLine(edges[0]->d, edges[0]->a, ld->color, 0);
 #endif
 
-        for (int i = 0; i < edgesCount; i++) {
+        for (int i = 0; i < edgesCount; i++)
+        {
 
-            if (i == 0) {
+            if (i == 0)
+            {
                 ltracer_ray_single_to(ld, ld->pos, edges[i]->a, mRange);
                 ltracer_ray_single_to(ld, ld->pos, edges[i]->b, mRange);
                 ltracer_ray_single_to(ld, ld->pos, edges[i]->c, mRange);
                 ltracer_ray_single_to(ld, ld->pos, edges[i]->d, mRange);
-            } else {
+            }
+            else
+            {
                 ltracer_ray_twice_to(ld, ld->pos, edges[i]->a, mRange, 0.00001);
                 ltracer_ray_twice_to(ld, ld->pos, edges[i]->b, mRange, 0.00001);
                 ltracer_ray_twice_to(ld, ld->pos, edges[i]->c, mRange, 0.00001);
@@ -140,14 +148,17 @@ void ltracerUpdate()
 
 void ltracerReset()
 {
-    for(size_t i = 0; i < lightCount; i++) {
+    for (size_t i = 0; i < lightCount; i++)
+    {
         free(lights[i]);
     }
     lightCount = 0;
-    for(size_t i = 0; i < edgesCount; i++) {
+    for (size_t i = 0; i < edgesCount; i++)
+    {
         free(edges[i]);
     }
-    edgesCount = 0;
+    edgesCount = 1;
+    ltracer_updateEdges(edges, edgesCount);
 }
 
 void ltracerDraw(int depth)
@@ -162,23 +173,30 @@ void ltracerDraw(int depth)
     }
 #endif
 
-    for(int light = 0; light < lightCount; light++)
+    for (int light = 0; light < lightCount; light++)
     {
-        ltracer_data_t *ld = lights[light];
+        ltracer_data_t* ld = lights[light];
 
-        if(ld->disabled) continue;
+        if (ld->disabled) continue;
 
-        if (ld->textured) {
+        if (ld->textured)
+        {
 
-            if (ld->type == LT_AREA) {
-                dqnDrawTexPolygon(ld->tex, ld->frame, ld->points, ld->pointsCount, ld->pos, ld->color, ld->range, depth);
+            if (ld->type == LT_AREA)
+            {
+                dqnDrawTexPolygon(ld->tex, ld->frame, ld->points, ld->pointsCount, ld->pos, ld->color, ld->range,
+                                  depth);
             }
-            else {
+            else
+            {
                 dqnDrawRotatedTexPolygon(ld->tex, ld->frame, ld->points, ld->pointsCount, ld->pos,
-                        ld->color, ld->angle, ld->range, vec(ld->backOffset, 0), ld->scaleFactor, depth);
+                                         ld->color, ld->angle, ld->range, vec(ld->backOffset, 0), ld->scaleFactor,
+                                         depth);
             }
 
-        } else {
+        }
+        else
+        {
             dqnDrawPolygon(ld->points, ld->pointsCount, ld->pos, ld->color, depth);
         }
     }

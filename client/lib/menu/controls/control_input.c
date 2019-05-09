@@ -19,14 +19,17 @@ void input_event_keyDown(gameObject_t* this, void* data)
     input_data_t* id = this->data;
     keyboardEvent_t* ke = data;
 
-    if(ke->key == 8) {
+    if (ke->key == 8)
+    {
         //backspace
         long long frame = getFrame();
 
-        if(frame - id->prevDeleted > FRAMES_BETWEEN_DELETING) {
+        if (frame - id->prevDeleted > FRAMES_BETWEEN_DELETING)
+        {
             size_t len = strlen(id->str);
 
-            if(len != 0) {
+            if (len != 0)
+            {
                 id->str[len - 1] = '\0';
             }
 
@@ -34,10 +37,11 @@ void input_event_keyDown(gameObject_t* this, void* data)
             id->prevDeleted = frame + 100;
         }
     }
-    else if(ke->key == ' ' || (ke->key >= 0x21 && ke->key <= 0x7F))
+    else if (ke->key == ' ' || (ke->key >= 0x21 && ke->key <= 0x7F))
     {
         size_t len = strlen(id->str);
-        if(len < MAX_INPUT_LEN) {
+        if (len < MAX_INPUT_LEN)
+        {
             id->str[len] = (char) ke->key;
             id->str[len + 1] = '\0';
         }
@@ -57,31 +61,37 @@ void input_event_update(gameObject_t* this, void* data)
     dqnDrawText(this->pos, id->color, id->font, id->str, id->fontSize, this->depth);
 
     double height = fontGetStringHeight(id->str, id->font, id->fontSize) / 2.0 + 8;
-    vec_t start = vec_add(this->pos, vec(fontGetStringWidth(id->str, id->font, id->fontSize) + 2, - height + 4));
+    vec_t start = vec_add(this->pos, vec(fontGetStringWidth(id->str, id->font, id->fontSize) + 2, -height + 4));
     vec_t end = vec_add(start, vec(0, height));
 
-    if(keyPressed(8))
+    if (keyPressed(8))
     {
-        if(!id->firstPressed && frame - id->prevDeleted > FRAMES_BETWEEN_DELETING) {
+        if (!id->firstPressed && frame - id->prevDeleted > FRAMES_BETWEEN_DELETING)
+        {
 
             size_t len = strlen(id->str);
-            if(len != 0) {
+            if (len != 0)
+            {
                 id->str[len - 1] = '\0';
             }
 
             id->prevDeleted = frame;
         }
-    } else {
+    }
+    else
+    {
         id->firstPressed = false;
     }
 
-    if(frame - id->flashStarted > FRAMES_BETWEEN_FLASH) {
+    if (frame - id->flashStarted > FRAMES_BETWEEN_FLASH)
+    {
         id->flashStarted = frame;
         id->flash = !id->flash;
         id->col = randColor(1);
     }
 
-    if(id->flash) {
+    if (id->flash)
+    {
         dqnDrawLine(start, end, id->col, this->depth);
     }
 }
@@ -94,12 +104,14 @@ void input_init(gameObject_t* this)
     evqSubscribeEvent(this, EVT_Update, input_event_update);
 }
 
-void input_setEnable(menu_container_child_t* child, int state) {
-    ((input_data_t*)child->object->data)->enabled = state;
+void input_setEnable(menu_container_child_t* child, int state)
+{
+    ((input_data_t*) child->object->data)->enabled = state;
 }
 
-void input_setFocused(menu_container_child_t* child, int state) {
-    ((input_data_t*)child->object->data)->focused = state;
+void input_setFocused(menu_container_child_t* child, int state)
+{
+    ((input_data_t*) child->object->data)->focused = state;
 }
 
 menu_container_child_t* createInput(vec_t pos, color_t color, font_t* font, double fontSize, char* defstr)

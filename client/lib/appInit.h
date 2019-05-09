@@ -10,7 +10,7 @@
 
 #include "resources/font.h"
 #include "shaders/shaderManager.h"
-#include "gameLogic/eventfuncs.h"
+#include "gameLogic/eventFuncs.h"
 #include "gameLogic/gameScene.h"
 #include "rlist/rlist.h"
 #include "helpers.h"
@@ -18,11 +18,11 @@
 #define OVERRIDE_GL_VERSION
 
 #ifdef OVERRIDE_GL_VERSION
-    #define MAJOR_GL_VERSION 3
-    #define MINOR_GL_VERSION 0
+#define MAJOR_GL_VERSION 3
+#define MINOR_GL_VERSION 0
 #endif
 
-void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize, char* mainResFile);
+void initGraphics(int argc, char** argv, int w, int h, const char* title, int isFixedSize, char* mainResFile);
 void registerEvents();
 void runApp(int sceneID);
 

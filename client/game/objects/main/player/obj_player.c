@@ -9,21 +9,28 @@ void player_event_keyPressed(gameObject_t* this, void* data)
     keyboardEvent_t* ke = data;
     playerData_t* pd = this->data;
 
-    if(ke->key == 'f') {
+    if (ke->key == 'f')
+    {
         pd->enabledFlashLight = !pd->enabledFlashLight;
-        ((lightTracer_data_t*)pd->flashlight->data)->data->disabled = !pd->enabledFlashLight;
+        ((lightTracer_data_t*) pd->flashlight->data)->data->disabled = !pd->enabledFlashLight;
         pd->flashlight->pos = this->pos;
 
-    } else if(ke->key == 'e') {
+    }
+    else if (ke->key == 'e')
+    {
 
         srfDrawTexture(texmGetID(TEXID_BOX), 0, 1, vec(100, 100), 0, 0);
-    } else if(ke->key == 'c') {
+    }
+    else if (ke->key == 'c')
+    {
 
         srfClear();
-    } else if(ke->key == 'q') {
+    }
+    else if (ke->key == 'q')
+    {
 
         int w, h;
-        getWinSize(&w ,&h);
+        getWinSize(&w, &h);
         scmPushObject(createEnemy(this, vec(randRange(0, w), randRange(0, h))));
     }
 }
@@ -39,7 +46,7 @@ void player_init(gameObject_t* object)
 
 void addFireLight(playerData_t* pd, vec_t pos)
 {
-    gameObject_t* light = createLight(pos ,pd->currLightSize, pd->currLightAlpha);
+    gameObject_t* light = createLight(pos, pd->currLightSize, pd->currLightAlpha);
     pd->fireLights[pd->currentLightsCount++] = light;
     scmPushObject(light);
 }
@@ -53,19 +60,19 @@ void player_event_update(gameObject_t* object, void* data)
     vec_t rel = relativeCoordinates(object);
     vec_t mpos = getMousePos();
 
-    if(object->frame == 0 && pd->prevAnimationFrame != 0)
+    if (object->frame == 0 && pd->prevAnimationFrame != 0)
     {
         rotateScene(0);
         object->animationSpeed = 0;
 
-        for(int i = 0; i < pd->currentLightsCount; i++)
+        for (int i = 0; i < pd->currentLightsCount; i++)
             scmDestroyObject(pd->fireLights[i], true);
 
         pd->currentLightsCount = 0;
 
     }
 
-    if(object->frame != 0 && pd->prevAnimationFrame != object->frame)
+    if (object->frame != 0 && pd->prevAnimationFrame != object->frame)
     {
         pd->currShake *= -1 * PLAYER_SHAKE_REDUCTION;
         rotateScene(randRange(pd->currShake, pd->currShake * PLAYER_SHAKE_MIN));
@@ -79,14 +86,14 @@ void player_event_update(gameObject_t* object, void* data)
 
     object->angle = twoPointsAngle(object->pos, mpos);
 
-    if(keyPressed('a') || specKeyPressed(GLUT_KEY_LEFT))  object->pos.x -= PLAYER_MOVE_X;
-    if(keyPressed('w') || specKeyPressed(GLUT_KEY_UP))    object->pos.y -= PLAYER_MOVE_Y;
-    if(keyPressed('s') || specKeyPressed(GLUT_KEY_DOWN))  object->pos.y += PLAYER_MOVE_X;
-    if(keyPressed('d') || specKeyPressed(GLUT_KEY_RIGHT)) object->pos.x += PLAYER_MOVE_Y;
+    if (keyPressed('a') || specKeyPressed(GLUT_KEY_LEFT)) object->pos.x -= PLAYER_MOVE_X;
+    if (keyPressed('w') || specKeyPressed(GLUT_KEY_UP)) object->pos.y -= PLAYER_MOVE_Y;
+    if (keyPressed('s') || specKeyPressed(GLUT_KEY_DOWN)) object->pos.y += PLAYER_MOVE_X;
+    if (keyPressed('d') || specKeyPressed(GLUT_KEY_RIGHT)) object->pos.x += PLAYER_MOVE_Y;
 
-    if(getMouseState(MB_LEFT) == MS_PRESSED)
+    if (getMouseState(MB_LEFT) == MS_PRESSED)
     {
-        if(frame - pd->lastFireFrame > PLAYER_FIRE_RATE)
+        if (frame - pd->lastFireFrame > PLAYER_FIRE_RATE)
         {
             pd->lastFireFrame = frame;
 
@@ -100,19 +107,20 @@ void player_event_update(gameObject_t* object, void* data)
 
             rotateScene(randRange(pd->currShake, pd->currShake * PLAYER_SHAKE_MIN));
 
-            int shellCaseFrame = (int)(randRange(0, 5));
+            int shellCaseFrame = (int) (randRange(0, 5));
             srfDrawTexture(texmGetID(TEXID_SHELLCASE), shellCaseFrame,
-                    (shellCaseFrame == 0 || shellCaseFrame == 5 ? .5 : 1),
-                    vec(
-                        rel.x + randRange(-5, 5),
-                        rel.y + randRange(-5, 5)),
-                    (int)random() % 2, (int)random() % 2);
+                           (shellCaseFrame == 0 || shellCaseFrame == 5 ? .5 : 1),
+                           vec(
+                                   rel.x + randRange(-5, 5),
+                                   rel.y + randRange(-5, 5)),
+                           randBool(), randBool());
 
             scmPushObject(createBullet(rel, object->angle));
         }
     }
 
-    if(pd->enabledFlashLight) {
+    if (pd->enabledFlashLight)
+    {
         pd->flashlight->angle = object->angle + M_PI;
         pd->flashlight->pos = rel;
     }
@@ -133,7 +141,7 @@ gameObject_t* createPlayer()
     playerData_t* pd = go->data;
 
     int w, h;
-    getWinSize(&w,  &h);
+    getWinSize(&w, &h);
 
     go->depth = 2;
     go->pos = vec(w / 2.0, h / 2.0);
@@ -144,11 +152,12 @@ gameObject_t* createPlayer()
     pd->enabledFlashLight = true;
 
     pd->flashlight =
-            createTexturedDirectLT(go->pos, 800, M_PI_4, 500, 40, color(1, 1, 1, 0.5), texmGetID(TEXID_LIGHT_WIDE), 0, vec(-1, 1));
-            //createDirectLT(go->pos, 400, M_PI_4, 100, 100, color(1, 1, 1, 0.4));
-            //createAreaLT(go->pos, 400, color(1, 1, 0.5, 0.2));
-            //createTexturedAreaLT(go->pos, 500, color(1, 1, 0.5, 0.2), texmGetID(TEXID_LIGHT), 0);
-            //createLight(go->pos, PLAYER_BACKLIGHT_SIZE, PLAYER_BACKLIGHT_ALPHA);
+            createTexturedDirectLT(go->pos, 800, M_PI_4, 500, 40, color(1, 1, 1, 0.5), texmGetID(TEXID_LIGHT_WIDE), 0,
+                                   vec(-1, 1));
+    //createDirectLT(go->pos, 400, M_PI_4, 100, 100, color(1, 1, 1, 0.4));
+    //createAreaLT(go->pos, 400, color(1, 1, 0.5, 0.2));
+    //createTexturedAreaLT(go->pos, 500, color(1, 1, 0.5, 0.2), texmGetID(TEXID_LIGHT), 0);
+    //createLight(go->pos, PLAYER_BACKLIGHT_SIZE, PLAYER_BACKLIGHT_ALPHA);
 
     go->texID = TEXID_PLAYER;
     go->animationSpeed = 0;

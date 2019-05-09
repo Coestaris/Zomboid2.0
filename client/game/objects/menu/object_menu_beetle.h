@@ -13,14 +13,15 @@
 #define MBEETLE_BLOOD_COUNT 10
 #define MBEETLE_BLOOD_RANGE 10
 
-typedef struct _mbeetleData {
+typedef struct _mbeetleData
+{
     double xOffset;
     double yOffset;
 
 } mbeetleData_t;
 
-void mbeetle_init(gameObject_t *this);
-void mbeetle_event_update(gameObject_t *this, void* data);
+void mbeetle_init(gameObject_t* this);
+void mbeetle_event_update(gameObject_t* this, void* data);
 gameObject_t* createMenuBeetle(vec_t pos, double angle, double speed);
 
 #endif //ZOMBOID2_OBJECT_MENU_BEETLE_H
