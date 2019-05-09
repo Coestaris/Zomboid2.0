@@ -111,7 +111,7 @@ void mainDF(void)
 {
     dcBeginDraw();
 
-    dcRotateScreen(sceneAngle, fixedW, fixedH);
+    //dcRotateScreen(sceneAngle, fixedW, fixedH);
     dfDrawBackground();
     dcDrawSurface(fixedW, fixedH);
 
@@ -188,7 +188,7 @@ void mainEventLoop()
         elapsed = 0;
 
 #ifdef PRINT_FRAME_LOG
-        printf("[eventFuncs.c][%8lli]: FPS: %lf (objects %i, listeners: %i, col listeners: %i)\n", frames, fps,
+        printf("[eventFuncs.c][%8lli]: FPS: %lf (objects %3i, listeners: %3i, col listeners: %3i)\n", frames, fps,
                scmGetObjectsCount(), evqGetListenersCount(), evqGetColListenersCount());
 #endif
 

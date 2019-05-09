@@ -146,7 +146,7 @@ gameObject_t* createPlayer()
     pd->lastFireFrame = getFrame();
     pd->currentLightsCount = 0;
     pd->prevAnimationFrame = 0;
-    pd->enabledFlashLight = true;
+    pd->enabledFlashLight = false;
 
     pd->flashlight =
             createTexturedDirectLT(go->pos, 800, M_PI_4, 500, 40, color(1, 1, 1, 0.5), texmGetID(TEXID_LIGHT_WIDE), 0,

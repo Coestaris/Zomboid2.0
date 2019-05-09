@@ -20,7 +20,10 @@ void enemy_zombie_harm(gameObject_t* this)
 
     if(ed->hp < 2 * ENEMY_HP / 3.0) this->frame = ed->larm ? 1 : 2;
     if(ed->hp < ENEMY_HP / 3.0) this->frame = 3;
-    if(ed->hp <= 0) scmDestroyObject(this, true);
+    if(ed->hp <= 0) {
+        scmDestroyObject(this, true);
+        spawnSpotBlood(20, 30, this->pos);
+    }
 }
 
 void enemy_init(gameObject_t* this)

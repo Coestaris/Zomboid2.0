@@ -5,14 +5,14 @@ scene         SCENEID_GAME        TEXSCOPE_GAME         TEXID_BACK_CONCRETE
 ; ========== SCENEID_GAME ==========
 scm_open  SCENEID_GAME
     ; object          scene_id           x     y
-    scm_sog_add       OBJECT_BOX         200   200
-    scm_sog_add       OBJECT_BOX         300   300
-    scm_sog_add       OBJECT_BOX         400   400
-    scm_sog_add       OBJECT_BOX         400   100
+    ;scm_sog_add       OBJECT_BOX         200   200
+    ;scm_sog_add       OBJECT_BOX         300   300
+    ;scm_sog_add       OBJECT_BOX         400   400
+    ;scm_sog_add       OBJECT_BOX         400   100
     scm_sog_add       OBJECT_PLAYER      200   500
 
     ; object_ex       scene_id           x     y     angle     size        texid       color      drawable   depth      ani_speed
-    scm_sog_add_ex    OBJECT_BOX         200   300   0.4       defaults    defaults    defaults   defaults   defaults   defaults
+    ;scm_sog_add_ex    OBJECT_BOX         200   300   0.4       defaults    defaults    defaults   defaults   defaults   defaults
 
     scm_ltracer true 2
     scm_sc_load TEXSCOPE_MM_GEN

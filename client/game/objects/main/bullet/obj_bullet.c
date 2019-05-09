@@ -21,7 +21,7 @@ void bullet_event_update(gameObject_t* object, void* data)
     {
         object->pos.x += bd->xOffset;
         object->pos.y += bd->yOffset;
-        light->pos = object->pos;
+        //light->pos = object->pos;
     }
 }
 
@@ -37,9 +37,9 @@ void bullet_zombie(gameObject_t* this, gameObject_t* zombie)
     bulletData_t* bd = this->data;
 
     scmPushObject(createMovingBloodSpawner(this->pos,
-            this->angle, 14, 4, 3, 9));
+            this->angle, 14, 5, 2, 9));
 
-    scmDestroyObject(bd->light, true);
+    //scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
 
     enemy_zombie_harm(zombie);
@@ -66,15 +66,15 @@ gameObject_t* createBullet(vec_t p, double angle)
     go->onInit = bullet_init;
     go->data = malloc(sizeof(bulletData_t));
 
-    gameObject_t* light = createTexturedAreaLT(p, BULLET_LIGHT_SIZE, color(randRange(0, 1), randRange(0, 1), randRange(0, 1),
-                                                     BULLET_LIGHT_ALPHA), texmGetID(TEXID_LIGHT), 0);
+  /*  gameObject_t* light = createTexturedAreaLT(p, BULLET_LIGHT_SIZE, color(randRange(0, 1), randRange(0, 1), randRange(0, 1),
+                                                     BULLET_LIGHT_ALPHA), texmGetID(TEXID_LIGHT), 0);*/
     bulletData_t* bd = go->data;
 
-    bd->light = light;
+   // bd->light = light;
     bd->xOffset = cos(go->angle) * BULLET_SPEED;
     bd->yOffset = sin(go->angle) * BULLET_SPEED;
 
 
-    scmPushObject(light);
+    //scmPushObject(light);
     return go;
 }
