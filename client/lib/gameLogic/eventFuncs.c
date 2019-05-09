@@ -146,6 +146,9 @@ void mainEventLoop()
     //pushing uptade event to queue
     evqPushEvent(EVT_Update, NULL);
 
+    //calculate collisions
+    proceedCollisions();
+
     //make objects to process all events
     pumpEvents();
 
@@ -185,8 +188,8 @@ void mainEventLoop()
         elapsed = 0;
 
 #ifdef PRINT_FRAME_LOG
-        printf("[eventFuncs.c][%8lli]: FPS: %lf (objects %i, listeners: %i, dqn: %i)\n", frames, fps,
-               scmGetObjectsCount(), evqGetListenersCount(), dqnCnt);
+        printf("[eventFuncs.c][%8lli]: FPS: %lf (objects %i, listeners: %i, col listeners: %i)\n", frames, fps,
+               scmGetObjectsCount(), evqGetListenersCount(), evqGetColListenersCount());
 #endif
 
     }

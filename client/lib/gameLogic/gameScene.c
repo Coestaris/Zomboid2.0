@@ -49,6 +49,44 @@ int scmHasScene(int id)
     return 0;
 }
 
+void proceedCollisions(void)
+{
+    struct {
+        collisionEventListener_t* listener;
+        gameObject_t* object;
+    } toCall[100];
+    size_t toCallCount = 0;
+
+    size_t count;
+    collisionEventListener_t** listeners = evqGetCollisionListeners(&count);
+    for (int i = 0; i < objectsCount; i++)
+    {
+        for(size_t listener = 0; listener < count; listener++)
+        {
+            if(listeners[listener]->collisionWith == objects[i]->ID)
+            {
+                vec_t point = listeners[listener]->object->pos;
+                gameObject_t* obj = objects[i];
+
+                if(    point.x > obj->pos.x - obj->cachedTex->width  / 2.0 * obj->size &&
+                       point.x < obj->pos.x + obj->cachedTex->width  / 2.0 * obj->size &&
+                       point.y > obj->pos.y - obj->cachedTex->height / 2.0 * obj->size &&
+                       point.y < obj->pos.y + obj->cachedTex->height / 2.0 * obj->size)
+                {
+                    //listeners[listener]->callback(listeners[listener]->object, objects[i]);
+                    toCall[toCallCount].listener = listeners[listener];
+                    toCall[toCallCount].object = objects[i];
+                    toCallCount++;
+                }
+            }
+        }
+    }
+
+    for(size_t i = 0; i < toCallCount; i++) {
+        toCall[i].listener->callback(toCall[i].listener->object, toCall[i].object);
+    }
+}
+
 gameScene_t* scmGetActiveScene()
 {
     return scenes[currentScene];

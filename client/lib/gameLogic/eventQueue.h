@@ -20,9 +20,11 @@
 #define EVT_MouseEntry 6
 #define EVT_Update 7
 
+#define MAX_CL_EVENTS 200
 #define MAX_KB_EVENTS 20
 #define MAX_MS_EVENTS 5
 
+#define MAXCOLLISTENERS_START 1024
 #define MAXEVENTS_START 256
 #define MAXLISTENERS_START 1024
 
@@ -43,7 +45,16 @@ typedef struct _registeredNode
 
     void (* callback)(gameObject_t*, void*);
 
-} registeredNode_t;
+} eventListener_t;
+
+typedef struct _collisionEventListener
+{
+    int collisionWith;
+    gameObject_t* object;
+    void (* callback)(gameObject_t*, gameObject_t*);
+
+} collisionEventListener_t;
+
 
 typedef struct _event
 {
@@ -72,12 +83,21 @@ typedef struct _mouseEvent
 
 } mouseEvent_t;
 
+typedef struct _collisionEvent
+{
+    gameObject_t* object;
+
+} collisionEvent_t;
+
+collisionEvent_t* createCollisionEvent(gameObject_t* sub);
 keyboardEvent_t* createKeyboardEvent(int key, int x, int y);
 mouseEvent_t* createMouseEvent(int mouse, int state, int x, int y);
 event_t* createEvent();
 void freeEvent(event_t* ev);
 void evqInit(void);
 int evqGetListenersCount(void);
+int evqGetColListenersCount(void);
+collisionEventListener_t** evqGetCollisionListeners(size_t* count);
 
 void evqSubscribeCollisionEvent(gameObject_t* object, int collisionWith, void (* callback)(gameObject_t*, gameObject_t*));
 void evqSubscribeEvent(gameObject_t* object, int eventType, void (* callback)(gameObject_t*, void*));

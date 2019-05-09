@@ -12,6 +12,7 @@
 typedef struct _GameObject
 {
     int drawable;
+    int ID;
 
     int texID;
     vec_t pos;

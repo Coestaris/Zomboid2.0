@@ -4,9 +4,12 @@
 
 #include "eventQueue.h"
 
-registeredNode_t** registeredListeners;
+eventListener_t** eventListeners;
 event_t** eventQueue;
 
+collisionEventListener_t** collisionListeners;
+
+size_t MAXCOLLISTENERS = MAXCOLLISTENERS_START;
 size_t MAXLISTENERS = MAXLISTENERS_START;
 size_t MAXEVENTS = MAXEVENTS_START;
 
@@ -16,7 +19,30 @@ size_t keyboardEventsCount;
 size_t mouseEventsCount;
 
 int listenersCount = 0;
+int collisionListenersCount = 0;
 int eventCount = 0;
+
+collisionEventListener_t** evqGetCollisionListeners(size_t* count)
+{
+    *count = collisionListenersCount;
+    return collisionListeners;
+}
+
+void evqSubscribeCollisionEvent(gameObject_t* object, int collisionWith, void (* callback)(gameObject_t*, gameObject_t*))
+{
+    if (collisionListenersCount == MAXCOLLISTENERS - 1)
+    {
+        size_t newSize = (size_t) (MAXCOLLISTENERS * SIZE_INCREASE);
+        collisionListeners = realloc(collisionListeners, newSize);
+        MAXCOLLISTENERS = newSize;
+    }
+
+    collisionEventListener_t* listener = malloc(sizeof(collisionEventListener_t));
+    listener->object = object;
+    listener->collisionWith = collisionWith;
+    listener->callback = callback;
+    collisionListeners[collisionListenersCount++] = listener;
+}
 
 keyboardEvent_t* createKeyboardEvent(int key, int x, int y)
 {
@@ -56,6 +82,11 @@ event_t* createEvent()
     return ev;
 }
 
+int evqGetColListenersCount()
+{
+    return collisionListenersCount;
+}
+
 int evqGetListenersCount(void)
 {
     return listenersCount;
@@ -71,23 +102,33 @@ void evqSubscribeEvent(gameObject_t* object, int eventType, void (* callback)(ga
     if (listenersCount == MAXLISTENERS - 1)
     {
         size_t newSize = (size_t) (MAXLISTENERS * SIZE_INCREASE);
-        registeredListeners = realloc(registeredListeners, newSize);
+        eventListeners = realloc(eventListeners, newSize);
         MAXLISTENERS = newSize;
     }
 
-    registeredListeners[listenersCount] = malloc(sizeof(registeredNode_t));
-    registeredListeners[listenersCount]->object = object;
-    registeredListeners[listenersCount]->eventType = eventType;
-    registeredListeners[listenersCount]->callback = callback;
+    eventListeners[listenersCount] = malloc(sizeof(eventListener_t));
+    eventListeners[listenersCount]->object = object;
+    eventListeners[listenersCount]->eventType = eventType;
+    eventListeners[listenersCount]->callback = callback;
 
     listenersCount++;
 }
 
-int remove_node(registeredNode_t** from, int total, int index)
+int remove_listener(eventListener_t** from, int total, int index)
 {
     if ((total - index - 1) > 0)
     {
-        memmove(from + index, from + index + 1, sizeof(registeredNode_t*) * (total - index - 1));
+        memmove(from + index, from + index + 1, sizeof(eventListener_t*) * (total - index - 1));
+    }
+    return total - 1;
+}
+
+
+int remove_collision_listener(collisionEventListener_t** from, int total, int index)
+{
+    if ((total - index - 1) > 0)
+    {
+        memmove(from + index, from + index + 1, sizeof(collisionEventListener_t*) * (total - index - 1));
     }
     return total - 1;
 }
@@ -96,10 +137,19 @@ void evqUnsubscribeEvents(gameObject_t* object)
 {
     for (int i = listenersCount - 1; i >= 0; i--)
     {
-        if (registeredListeners[i]->object == object)
+        if (eventListeners[i]->object == object)
         {
-            free(registeredListeners[i]);
-            listenersCount = remove_node(registeredListeners, listenersCount, i);
+            free(eventListeners[i]);
+            listenersCount = remove_listener(eventListeners, listenersCount, i);
+        }
+    }
+
+    for(int i = collisionListenersCount - 1; i >= 0; i--)
+    {
+        if(collisionListeners[i]->object == object)
+        {
+            free(collisionListeners[i]);
+            collisionListenersCount = remove_collision_listener(collisionListeners, collisionListenersCount, i);
         }
     }
 }
@@ -108,10 +158,10 @@ void evqUnsubscribeEvent(gameObject_t* object, int eventType)
 {
     for (int i = 0; i < listenersCount; i++)
     {
-        if (registeredListeners[i]->object == object && registeredListeners[i]->eventType == eventType)
+        if (eventListeners[i]->object == object && eventListeners[i]->eventType == eventType)
         {
-            free(registeredListeners[i]);
-            listenersCount = remove_node(registeredListeners, listenersCount, i);
+            free(eventListeners[i]);
+            listenersCount = remove_listener(eventListeners, listenersCount, i);
             return;
         }
     }
@@ -143,9 +193,9 @@ event_t* evqNextEvent(void)
         event_t* ev = eventQueue[--eventCount];
         for (int i = 0; i < listenersCount; i++)
         {
-            if (registeredListeners[i]->eventType == ev->eventType)
+            if (eventListeners[i]->eventType == ev->eventType)
             {
-                registeredListeners[i]->callback(registeredListeners[i]->object, ev->data);
+                eventListeners[i]->callback(eventListeners[i]->object, ev->data);
             }
         }
         return ev;
@@ -163,7 +213,8 @@ void evqResetEvents(void)
 void evqInit(void)
 {
     eventQueue = malloc(sizeof(event_t*) * MAXEVENTS);
-    registeredListeners = malloc(sizeof(registeredNode_t*) * MAXLISTENERS);
+    eventListeners = malloc(sizeof(eventListener_t*) * MAXLISTENERS);
+    collisionListeners = malloc(sizeof(collisionEventListener_t*) * MAXCOLLISTENERS);
 
     for (int i = 0; i < MAX_KB_EVENTS; i++)
     {

@@ -12,7 +12,6 @@ gameObject_t* ltracer;
 void menu_update(gameObject_t* this, void* data)
 {
     //dqnDrawSprite(dummyTex, color(0, 0, 0, 0.4), 0, vec(0, 0), 0, 2000, 1);
-
     ltracer->pos = getMousePos();
 }
 

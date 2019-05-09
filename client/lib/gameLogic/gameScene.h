@@ -73,5 +73,6 @@ gameScene_t* createScene(int id, int scope);
 void scmAddScopeToLoad(gameScene_t* scene, int scope);
 void scmAddScopeToUnload(gameScene_t* scene, int scope);
 void scmAddStartupObject(gameScene_t* scene, gameObject_t* object);
+void proceedCollisions(void);
 
 #endif //ZOMBOID2_GAMESCENE_H

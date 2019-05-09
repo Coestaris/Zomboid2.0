@@ -6,10 +6,11 @@
 #define ZOMBOID2_OBJ_BULLET_H
 
 #define BULLET_SPEED 15
-#define BULLET_LIGHT_ALPHA .3
+#define BULLET_LIGHT_ALPHA .15
 #define BULLET_LIGHT_SIZE 400
 
 #include "../../../objectInclude.h"
+#include "../enemy/obj_enemy_zombie.h"
 #include "../light/obj_light.h"
 
 typedef struct _bulletData

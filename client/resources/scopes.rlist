@@ -44,3 +44,4 @@
 #define OBJECT_BOX    1
 #define OBJECT_MENU 2
 #define OBJECT_MENU_SPAWNER 3
+#define OBJECT_ZOMBIE 4

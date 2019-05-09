@@ -10,4 +10,16 @@
 void bloodSpawnerInit(void);
 void spawnSpotBlood(int count, double range, vec_t position);
 
+typedef struct _movingBS_data{
+    double speed;
+    long long lifeTime;
+    long long spawnTime;
+
+    int bloodCount;
+    double bloodRange;
+
+} movingBS_data_t;
+
+gameObject_t* createMovingBloodSpawner(vec_t pos, double angle, double speed, long long int ttl, int count, double range);
+
 #endif //ZOMBOID2_BLOODSPAWNER_H

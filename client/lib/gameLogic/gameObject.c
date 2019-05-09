@@ -8,6 +8,7 @@ gameObject_t* object(void)
 {
     gameObject_t* obj = malloc(sizeof(gameObject_t));
     obj->size = 1;
+    obj->ID = -1;
     obj->cachedTex = NULL;
     obj->onInit = NULL;
     obj->onDestroy = NULL;

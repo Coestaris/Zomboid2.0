@@ -30,6 +30,6 @@ animation   7           TEXID_BLOOD         TEXSCOPE_MM_GEN      0   0     TM_DE
 animation   2           TEXID_BLOOD_SMEAR   TEXSCOPE_MM_GEN      0   0     TM_DEFAULT   images/blood/smear/image%i.png
 animation   2           TEXID_BLOOD_DEAD    TEXSCOPE_MM_GEN      0   0     TM_DEFAULT   images/blood/dead/image%i.png
 
-animation   3           TEXID_ENEMY_ZOMBIE_1 TEXSCOPE_GAME        0   0     TM_DEFAULT   images/enemy/zombies/green%i.png
-animation   3           TEXID_ENEMY_ZOMBIE_2 TEXSCOPE_GAME        0   0     TM_DEFAULT   images/enemy/zombies/brown%i.png
-animation   3           TEXID_ENEMY_ZOMBIE_3 TEXSCOPE_GAME        0   0     TM_DEFAULT   images/enemy/zombies/blue%i.png
+animation   4           TEXID_ENEMY_ZOMBIE_1 TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/zombies/green%i.png
+animation   4           TEXID_ENEMY_ZOMBIE_2 TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/zombies/brown%i.png
+animation   4           TEXID_ENEMY_ZOMBIE_3 TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/zombies/blue%i.png
