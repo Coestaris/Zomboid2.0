@@ -12,6 +12,7 @@
 int getWeaponMaxCount(int wtype);
 int getWeaponCount(int wtype);
 tex_t* getWeaponTexture(int wtype);
+tex_t* getWeaponLeftTexture(int wtype);
 
 void weaponCache(void);
 

@@ -55,7 +55,8 @@ typedef struct _playerData
 
     int weapon;
     uint8_t weaponStates[WEAPON_COUNT];
-    uint8_t weaponCount[WEAPON_COUNT];
+    int weaponCount[WEAPON_COUNT];
+    int weaponMaxCount[WEAPON_COUNT];
 
     //Gameplay stuff
     double hp;

@@ -16,6 +16,8 @@ char keysBuffer[KEY_BUFFER_SIZE];
 char specKeysBuffer[SPEC_KEY_BUFFER_SIZE];
 int mouseBuffer[MOUSE_BUFFER_SIZE];
 
+int winW, winH;
+
 long long getFrame()
 {
     return frames;
@@ -63,7 +65,7 @@ void dfDrawBackground(void)
             assert(scene->cachedBack->textureIds[0] != 0);
         }
 
-        dcDrawBackground(scene->cachedBack, 0, fixedW, fixedH);
+        dcDrawBackground(scene->cachedBack, 0, winW, winH);
     }
 }
 
@@ -113,7 +115,7 @@ void mainDF(void)
 
     //dcRotateScreen(sceneAngle, fixedW, fixedH);
     dfDrawBackground();
-    dcDrawSurface(fixedW, fixedH);
+    dcDrawSurface(winW, winH);
 
     //draw ltracer
     gameScene_t* scene = scmGetActiveScene();
@@ -275,16 +277,25 @@ void setFixedSize(int w, int h)
 
 void eventReshapeFunc(int w, int h)
 {
+
     if (fixedW != -1)
     {
         glutReshapeWindow(fixedW, fixedH);
     }
     else
     {
+        srfFree();
+
+        winW = w;
+        winH = h;
+
+        srfInit();
+
         glViewport(0, 0, w, h);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glOrtho(0, w, h, 0, -1, 1);
         glMatrixMode(GL_MODELVIEW);
+
     }
 }

@@ -22,6 +22,9 @@
 #define MINOR_GL_VERSION 0
 #endif
 
+extern int winW;
+extern int winH;
+
 void initGraphics(int argc, char** argv, int w, int h, const char* title, int isFixedSize, char* mainResFile);
 void registerEvents();
 void runApp(int sceneID);

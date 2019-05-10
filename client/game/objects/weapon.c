@@ -16,9 +16,9 @@ double weapon[WEAPON_COUNT * 4] = {
 
 int maxWeaponCount[WEAPON_COUNT * 2] = {
     // Count  |   Max count    |  wtype
-        10,         150,      //0 - pistol
+        15,         150,      //0 - pistol
         5,          60,       //1 - crossbow
-        30,         500,      //2 - smg
+        90,         500,      //2 - smg
         5,          32,       //3 - shotgun
         1000,       1000,     //4 - laser
         1,          5,        //5 - rpg
@@ -33,7 +33,19 @@ int weaponTextures[WEAPON_COUNT] = {
         TEXID_WEAPON_RPG
 };
 
+int weaponLeftTextures[WEAPON_COUNT] = {
+        TEXID_HUD_LEFT_BULLET,
+        TEXID_HUD_LEFT_BOLT,
+        TEXID_HUD_LEFT_BULLET,
+        TEXID_HUD_LEFT_SHELL,
+        TEXID_HUD_LEFT_LASER,
+        TEXID_HUD_LEFT_ROCKET,
+};
+
+
+
 tex_t* cachedTextures[WEAPON_COUNT];
+tex_t* cachedLeftTextures[WEAPON_COUNT];
 
 int getWeaponMaxCount(int wtype)
 {
@@ -50,6 +62,11 @@ tex_t* getWeaponTexture(int wtype)
     return cachedTextures[wtype];
 }
 
+tex_t* getWeaponLeftTexture(int wtype)
+{
+    return cachedLeftTextures[wtype];
+}
+
 int harmZombie(int wtype, gameObject_t* player, gameObject_t* zombie)
 {
 
@@ -58,8 +75,8 @@ int harmZombie(int wtype, gameObject_t* player, gameObject_t* zombie)
 void weaponCache()
 {
     for(int i = 0; i < WEAPON_COUNT; i++)
-    {
         cachedTextures[i] = texmGetID(weaponTextures[i]);
-        assert(cachedTextures[i]);
-    }
+
+    for(int i = 0; i < WEAPON_COUNT; i++)
+        cachedLeftTextures[i] = texmGetID(weaponLeftTextures[i]);
 }

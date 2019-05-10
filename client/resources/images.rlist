@@ -25,6 +25,13 @@ image                   TEXID_WEAPON_SHOTGUN    TEXSCOPE_GAME    0    0    TM_DE
 image                   TEXID_WEAPON_LASER      TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/laser.png
 image                   TEXID_WEAPON_RPG        TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/rpg.png
 
+image                   TEXID_HUD_LEFT_BULLET   TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/bullet_left.png
+image                   TEXID_HUD_LEFT_BOLT     TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/bolt_left.png
+image                   TEXID_HUD_LEFT_SHELL    TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/shell_left.png
+image                   TEXID_HUD_LEFT_LASER    TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/laser_left.png
+image                   TEXID_HUD_LEFT_ROCKET   TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/rocket_left.png
+image                   TEXID_HUD_LEFT_GRENADE  TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/grenade_left.png
+
 
 image                   TEXID_BACK_CONCRETE TEXSCOPE_MM_GEN      0    0    TM_BACK      images/backgrounds/concrete.png
 

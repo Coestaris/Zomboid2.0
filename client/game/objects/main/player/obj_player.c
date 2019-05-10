@@ -11,19 +11,18 @@ void player_event_keyPressed(gameObject_t* this, void* data)
 
     if (ke->key == 'f')
     {
-        pd->enabledFlashLight = !pd->enabledFlashLight;
+        glutFullScreenToggle();
+       /* pd->enabledFlashLight = !pd->enabledFlashLight;
         ((lightTracer_data_t*) pd->flashlight->data)->data->disabled = !pd->enabledFlashLight;
-        pd->flashlight->pos = this->pos;
+        pd->flashlight->pos = this->pos;*/
 
     }
     else if (ke->key == 'e')
     {
-
         srfDrawTexture(texmGetID(TEXID_BOX), 0, 1, vec(100, 100), 0, 0);
     }
     else if (ke->key == 'c')
     {
-
         srfClear();
     }
     else if (ke->key == 'q')
@@ -39,6 +38,17 @@ void player_event_keyPressed(gameObject_t* this, void* data)
         if(pd->weaponStates[wtype]) {
             pd->weapon = wtype;
         }
+    }
+    else if(ke->key == 'r')
+    {
+        pd->weaponMaxCount[pd->weapon] += pd->weaponCount[pd->weapon];
+        pd->weaponMaxCount[pd->weapon] -= getWeaponCount(pd->weapon);
+        pd->weaponCount[pd->weapon] = getWeaponCount(pd->weapon);
+    }
+    else if(ke->key == 't')
+    {
+        pd->weaponMaxCount[pd->weapon] = getWeaponMaxCount(pd->weapon);
+        pd->weaponCount[pd->weapon] = getWeaponCount(pd->weapon);
     }
 }
 
@@ -100,7 +110,7 @@ void player_event_update(gameObject_t* object, void* data)
 
     if (getMouseState(MB_LEFT) == MS_PRESSED)
     {
-        if (frame - pd->lastFireFrame > PLAYER_FIRE_RATE)
+        if (frame - pd->lastFireFrame > PLAYER_FIRE_RATE && pd->weaponCount[pd->weapon] != 0)
         {
             pd->lastFireFrame = frame;
 
@@ -123,6 +133,8 @@ void player_event_update(gameObject_t* object, void* data)
                            randBool(), randBool());
 
             scmPushObject(createBullet(rel, object->angle));
+
+            pd->weaponCount[pd->weapon] -= 1;
         }
     }
 
@@ -131,7 +143,6 @@ void player_event_update(gameObject_t* object, void* data)
         pd->flashlight->angle = object->angle + M_PI;
         pd->flashlight->pos = rel;
     }
-
 
     pd->prevAnimationFrame = object->frame;
 }
@@ -167,12 +178,13 @@ gameObject_t* createPlayer()
     pd->weapon = 0;
     pd->weaponCount[0] = 23;
 
-    pd->weaponStates[0] = 1;
-    pd->weaponStates[1] = 1;
-    pd->weaponStates[2] = 1;
-    pd->weaponStates[3] = 0;
-    pd->weaponStates[4] = 0;
-    pd->weaponStates[5] = 1;
+    for(int i = 0; i < WEAPON_COUNT; i++)
+    {
+        pd->weaponCount[i] = getWeaponCount(i);
+        pd->weaponMaxCount[i] = getWeaponMaxCount(i);
+        pd->weaponStates[i] = 1;
+    }
+
 
     go->texID = TEXID_PLAYER;
     go->animationSpeed = 0;

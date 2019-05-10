@@ -9,8 +9,6 @@
 
 uint8_t pixelData[SCREEN_HEIGHT][SCREEN_WIDTH][4];
 
-int winW;
-int winH;
 GLuint surfGLID;
 
 void srfFree()
@@ -86,8 +84,6 @@ uint8_t  ***alloc_data(size_t xlen, size_t ylen, size_t zlen)
 
 void srfInit(int wW, int wH)
 {
-    winW = wW;
-    winH = wH;
 /*
     if(!(pixelData = alloc_data((size_t)SCREEN_HEIGHT, (size_t)SCREEN_WIDTH, 4))) {
         puts("Unable allocate data to surface");

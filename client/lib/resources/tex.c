@@ -5,8 +5,6 @@
 #include "tex.h"
 #include "../../../lib/oil/oil.h"
 
-int winW, winH;
-
 tex_t* createTex(char* fn, int uid, int scope, vec_t center, int mode)
 {
     tex_t* tex = malloc(sizeof(tex_t));

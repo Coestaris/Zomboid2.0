@@ -10,10 +10,11 @@
 
 #include "../resources/tex.h"
 
-void srfInit(int wW, int wH);
+void srfInit();
 void srfClear();
 void srfBind();
 void srfFree();
+void srfRealloc();
 void srfDrawTexture(tex_t* tex, int frame, double alpha, vec_t pos, int flipX, int flipY);
 
 #endif //ZOMBOID2_SURFACE_H

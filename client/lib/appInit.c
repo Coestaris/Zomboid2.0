@@ -4,6 +4,9 @@
 
 #include "appInit.h"
 
+int winW;
+int winH;
+
 void initGraphics(int argc, char** argv, int w, int h, const char* title, int isFixedSize, char* mainResFile)
 {
 #ifdef OVERRIDE_GL_VERSION
@@ -17,6 +20,7 @@ void initGraphics(int argc, char** argv, int w, int h, const char* title, int is
 
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA);
     glutInitWindowSize(w, h);
+
     glutCreateWindow(title);
 
     glViewport(0, 0, w, h);
@@ -25,10 +29,15 @@ void initGraphics(int argc, char** argv, int w, int h, const char* title, int is
     glOrtho(0, w, h, 0, -1, 1);
     glMatrixMode(GL_MODELVIEW);
 
+    winW = w;
+    winH = h;
+
     if (isFixedSize)
     {
         setFixedSize(w, h);
     }
+
+    glutFullScreenToggle();
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);

@@ -12,6 +12,8 @@ size_t* dpCounts;
 drawingPrimitive_t*** dpList;
 shader_t* textShader;
 
+int winW, winH;
+
 void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, double hh, vec_t cp, int s1, int s2)
 {
     inp.x += hw * s1;
@@ -20,8 +22,6 @@ void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, dou
     p->x = inp.x * vcos - inp.y * vsin - cp.x * (vcos - 1) + cp.y * vsin;
     p->y = inp.x * vsin + inp.y * vcos - cp.y * (vcos - 1) - cp.x * vsin;
 }
-
-int winW, winH;
 
 void dcDrawText(vec_t pos, color_t col, font_t* font, const char* string, double scale)
 {
@@ -308,7 +308,6 @@ void dcDrawTexPolygon(tex_t* tex, int frame, relPoint_t* points, int count, vec_
 
     glPopMatrix();
 }
-
 
 void dcDrawTexture(tex_t* tex, color_t col, int frame, vec_t pos, double angle, double scaleFactor)
 {
