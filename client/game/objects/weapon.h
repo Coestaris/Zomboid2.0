@@ -8,9 +8,11 @@
 #include "../objectInclude.h"
 
 #define WEAPON_COUNT 6
+#define MAX_GRENADES 4
 
 int getWeaponMaxCount(int wtype);
 int getWeaponCount(int wtype);
+tex_t* getGrenTexture(void);
 tex_t* getWeaponTexture(int wtype);
 tex_t* getWeaponLeftTexture(int wtype);
 

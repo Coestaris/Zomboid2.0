@@ -13,13 +13,13 @@ char* strings[WEAPON_COUNT] = {
         "1", "2", "3", "4", "5", "6"
 };
 
-char str[20];
+char str1[20];
+char str2[20];
 int winW, winH;
 
 void hud_update(gameObject_t* this, void* data)
 {
     playerData_t* pd = ((hudData_t*)this->data)->playerData;
-
 
     for(int i = 0; i < WEAPON_COUNT; i++) {
         int state = 0;
@@ -31,10 +31,10 @@ void hud_update(gameObject_t* this, void* data)
      }
 
 
-    snprintf(str, 20, "%i / %i", pd->weaponCount[pd->weapon], pd->weaponMaxCount[pd->weapon]);
-    double strW = fontGetStringWidth(str, hudFont, 0.5);
-    double strH = fontGetStringHeight(str, hudFont, 0.5);
-    dqnDrawText(vec(winW - strW - wepSlotTex->width + 4, winH - strH + 19), hudColor, hudFont, str, 0.5, hudDepth);
+    snprintf(str1, 20, "%i / %i", pd->weaponCount[pd->weapon], pd->weaponMaxCount[pd->weapon]);
+    double strW = fontGetStringWidth(str1, hudFont, 0.4);
+    double strH = fontGetStringHeight(str1, hudFont, 0.4);
+    dqnDrawText(vec(winW - strW - wepSlotTex->width + 4, winH - strH + 10), hudColor, hudFont, str1, 0.4, hudDepth);
 
     tex_t* leftTex = getWeaponLeftTexture(pd->weapon);
 
@@ -61,7 +61,7 @@ void hud_update(gameObject_t* this, void* data)
                 j++;
             }
             dqnDrawSprite(leftTex, hudColor, 0, vec(winW - (leftTex->width + stride) * (k++) - 19,
-                                                    winH - (leftTex->height + 3) * j - strH - wepSlotTex->height - 25),
+                                                    winH - (leftTex->height + 3) * j - strH - wepSlotTex->height - 12),
                           0, 1, hudDepth);
         }
     }
@@ -70,13 +70,21 @@ void hud_update(gameObject_t* this, void* data)
         for(int i = 0; i < pd->weaponCount[pd->weapon] / 15; i++)
         {
             dqnDrawSprite(leftTex, hudColor, 0, vec(winW - (leftTex->width) * (i) - 19,
-                                                    winH - (leftTex->height + 3) - strH - wepSlotTex->height - 25),
+                                                    winH - (leftTex->height + 3) - strH - wepSlotTex->height - 12),
                           0, 1, hudDepth);
         }
     }
 
     tex_t* wepTex = getWeaponTexture(pd->weapon);
-    dqnDrawSprite(wepTex, hudColor, 0, vec(winW - wepTex->width + 20, winH - wepTex->height - strH - (leftTex->height + 3) * rows - 10), 0, 1, hudDepth);
+    dqnDrawSprite(wepTex, hudColor, 0, vec(winW - wepTex->width + 20, winH - wepTex->height - strH - (leftTex->height + 3) * rows), 0, 1, hudDepth);
+
+    tex_t* grenTex = getGrenTexture();
+    dqnDrawSprite(grenTex, hudColor, 0, vec(winW - (wepSlotTex->width + 5)* WEAPON_COUNT - 20, winH - wepSlotTex->height / 2.0 - 10), 0, 1, hudDepth);
+
+    snprintf(str2, 20, "%i", pd->grenades);
+    strW = fontGetStringWidth(str2, hudFont, 0.4);
+    strH = fontGetStringHeight(str2, hudFont, 0.4);
+    dqnDrawText(vec(winW - (wepSlotTex->width + 5)* WEAPON_COUNT - 28 - strW, winH - wepSlotTex->height / 2.0 + 29), hudColor, hudFont, str2, 0.4, hudDepth);
 }
 
 void hud_init(gameObject_t* this)
@@ -101,7 +109,8 @@ gameObject_t* createHud(void)
 {
     hudColor = color(175 / 255.0, 192 / 255.0, 243 / 255.0, 0.6);
 
-    memset(str, 0, 20);
+    memset(str1, 0, 20);
+    memset(str2, 0, 20);
 
     gameObject_t* this = object();
     this->onInit = hud_init;

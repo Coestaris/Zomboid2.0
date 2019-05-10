@@ -41,14 +41,29 @@ void player_event_keyPressed(gameObject_t* this, void* data)
     }
     else if(ke->key == 'r')
     {
-        pd->weaponMaxCount[pd->weapon] += pd->weaponCount[pd->weapon];
-        pd->weaponMaxCount[pd->weapon] -= getWeaponCount(pd->weapon);
-        pd->weaponCount[pd->weapon] = getWeaponCount(pd->weapon);
+        if(pd->weaponMaxCount[pd->weapon] > 0) {
+            pd->weaponMaxCount[pd->weapon] += pd->weaponCount[pd->weapon];
+
+            if(pd->weaponMaxCount[pd->weapon] - getWeaponCount(pd->weapon) < 0)
+            {
+                pd->weaponCount[pd->weapon] = pd->weaponMaxCount[pd->weapon];
+                pd->weaponMaxCount[pd->weapon] = 0;
+            }
+            else
+            {
+                pd->weaponMaxCount[pd->weapon] -= getWeaponCount(pd->weapon);
+                pd->weaponCount[pd->weapon] = getWeaponCount(pd->weapon);
+            }
+        }
     }
     else if(ke->key == 't')
     {
         pd->weaponMaxCount[pd->weapon] = getWeaponMaxCount(pd->weapon);
         pd->weaponCount[pd->weapon] = getWeaponCount(pd->weapon);
+    }
+    else if(ke->key == 'g')
+    {
+        if(pd->grenades > 0) pd->grenades -= 1;
     }
 }
 
@@ -176,7 +191,7 @@ gameObject_t* createPlayer()
     //createLight(go->pos, PLAYER_BACKLIGHT_SIZE, PLAYER_BACKLIGHT_ALPHA);
 
     pd->weapon = 0;
-    pd->weaponCount[0] = 23;
+    pd->grenades = MAX_GRENADES;
 
     for(int i = 0; i < WEAPON_COUNT; i++)
     {

@@ -37,7 +37,7 @@ void initGraphics(int argc, char** argv, int w, int h, const char* title, int is
         setFixedSize(w, h);
     }
 
-    glutFullScreenToggle();
+    //glutFullScreenToggle();
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);

@@ -42,10 +42,11 @@ int weaponLeftTextures[WEAPON_COUNT] = {
         TEXID_HUD_LEFT_ROCKET,
 };
 
-
+int grenTexture = TEXID_HUD_LEFT_GRENADE;
 
 tex_t* cachedTextures[WEAPON_COUNT];
 tex_t* cachedLeftTextures[WEAPON_COUNT];
+tex_t* cachedGrenTexture;
 
 int getWeaponMaxCount(int wtype)
 {
@@ -55,6 +56,11 @@ int getWeaponMaxCount(int wtype)
 int getWeaponCount(int wtype)
 {
     return maxWeaponCount[wtype * 2];
+}
+
+tex_t* getGrenTexture(void)
+{
+    return cachedGrenTexture;
 }
 
 tex_t* getWeaponTexture(int wtype)
@@ -79,4 +85,6 @@ void weaponCache()
 
     for(int i = 0; i < WEAPON_COUNT; i++)
         cachedLeftTextures[i] = texmGetID(weaponLeftTextures[i]);
+
+    cachedGrenTexture = texmGetID(grenTexture);
 }

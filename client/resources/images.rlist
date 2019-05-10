@@ -50,3 +50,6 @@ animation   4           TEXID_ENEMY_ZOMBIE_2 TEXSCOPE_GAME       0   0     TM_DE
 animation   4           TEXID_ENEMY_ZOMBIE_3 TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/zombies/blue%i.png
 
 animation   3           TEXID_HUD_WEPSLOT    TEXSCOPE_GAME       0   0     TM_DEFAULT   images/hud/wepSlot%i.png
+animation   17          TEXID_HUD_HEART      TEXSCOPE_GAME       0   0     TM_DEFAULT   images/hud/heart/heart%i.png
+animation   17          TEXID_HUD_SHIELD     TEXSCOPE_GAME       0   0     TM_DEFAULT   images/hud/shield/shield%i.png
+
