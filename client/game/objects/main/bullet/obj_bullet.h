@@ -10,6 +10,9 @@
 #define BULLET_LIGHT_SIZE 400
 
 #include "../../../objectInclude.h"
+
+#include "../../bloodSpawner.h"
+
 #include "../enemy/obj_enemy_zombie.h"
 #include "../light/obj_light.h"
 

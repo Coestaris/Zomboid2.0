@@ -37,11 +37,21 @@
 
 #define TEXID_DUMMY 25
 
-#define SCENEID_MAIN_MENU 0
-#define SCENEID_GAME 1
+#define TEXID_WEAPON_PISTOL    29
+#define TEXID_WEAPON_CROSSBOW  30
+#define TEXID_WEAPON_SMG       31
+#define TEXID_WEAPON_SHOTGUN   32
+#define TEXID_WEAPON_LASER     33
+#define TEXID_WEAPON_RPG       34
+
+#define TEXID_HUD_WEPSLOT      35
+
+#define SCENEID_MAIN_MENU 1
+#define SCENEID_GAME 0
 
 #define OBJECT_PLAYER 0
 #define OBJECT_BOX    1
 #define OBJECT_MENU 2
 #define OBJECT_MENU_SPAWNER 3
 #define OBJECT_ZOMBIE 4
+#define OBJECT_HUD 5

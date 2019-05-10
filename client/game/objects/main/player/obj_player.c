@@ -33,12 +33,19 @@ void player_event_keyPressed(gameObject_t* this, void* data)
         getWinSize(&w, &h);
         scmPushObject(createEnemy(this, vec(randRange(0, w), randRange(0, h))));
     }
+    else if(ke->key >= '1' && ke->key <= '6')
+    {
+        int wtype = ke->key - '1';
+        if(pd->weaponStates[wtype]) {
+            pd->weapon = wtype;
+        }
+    }
 }
 
 void player_init(gameObject_t* object)
 {
     evqSubscribeEvent(object, EVT_Update, player_event_update);
-    evqSubscribeEvent(object, EVT_CharKeyUp, player_event_keyPressed);
+    evqSubscribeEvent(object, EVT_CharKeyDown, player_event_keyPressed);
 
     playerData_t* pd = object->data;
     scmPushObject(pd->flashlight);
@@ -134,6 +141,7 @@ gameObject_t* createPlayer()
     gameObject_t* go = object();
     go->data = malloc(sizeof(playerData_t));
     go->drawable = true;
+    go->ID = OBJECT_PLAYER;
 
     playerData_t* pd = go->data;
 
@@ -155,6 +163,16 @@ gameObject_t* createPlayer()
     //createAreaLT(go->pos, 400, color(1, 1, 0.5, 0.2));
     //createTexturedAreaLT(go->pos, 500, color(1, 1, 0.5, 0.2), texmGetID(TEXID_LIGHT), 0);
     //createLight(go->pos, PLAYER_BACKLIGHT_SIZE, PLAYER_BACKLIGHT_ALPHA);
+
+    pd->weapon = 0;
+    pd->weaponCount[0] = 23;
+
+    pd->weaponStates[0] = 1;
+    pd->weaponStates[1] = 1;
+    pd->weaponStates[2] = 1;
+    pd->weaponStates[3] = 0;
+    pd->weaponStates[4] = 0;
+    pd->weaponStates[5] = 1;
 
     go->texID = TEXID_PLAYER;
     go->animationSpeed = 0;

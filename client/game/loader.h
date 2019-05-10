@@ -12,14 +12,13 @@
 #include "../lib/gameLogic/gameHelpers.h"
 #include "../lib/gameLogic/gameScene.h"
 
+#include "objects/main/hud/obj_hud.h"
 #include "objects/menu/object_beetle_spawner.h"
 #include "objects/menu/object_menu.h"
 #include "objects/main/player/obj_player.h"
 #include "objects/main/box/obj_box.h"
 
-#include "../resources/scopes.rlist"
-
-extern font_t* mainFont;
+#include "objectInclude.h"
 
 void initPublicObjects(void);
 void loadResources();

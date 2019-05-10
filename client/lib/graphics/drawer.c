@@ -372,6 +372,7 @@ void checkDPSize(int depth)
 
 void dqnDrawText(vec_t pos, color_t col, font_t* font, char* string, double size, int depth)
 {
+    assert(font);
     checkDPSize(depth);
 
     drawingPrimitive_t* dp = dpList[depth][dpCounts[depth]++];
@@ -386,6 +387,7 @@ void dqnDrawText(vec_t pos, color_t col, font_t* font, char* string, double size
 
 void dqnDrawSprite(tex_t* tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor, int depth)
 {
+    assert(tex);
     checkDPSize(depth);
 
     drawingPrimitive_t* dp = dpList[depth][dpCounts[depth]++];
@@ -412,10 +414,10 @@ void dqnDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col, in
     dp->col = col;
 }
 
-void
-dqnDrawRotatedTexPolygon(tex_t* tex, int frame, relPoint_t* points, int count, vec_t center, color_t col, double angle,
+void dqnDrawRotatedTexPolygon(tex_t* tex, int frame, relPoint_t* points, int count, vec_t center, color_t col, double angle,
                          double scale, vec_t texOffset, vec_t texScaleFactor, int depth)
 {
+    assert(tex);
     checkDPSize(depth);
 
     drawingPrimitive_t* dp = dpList[depth][dpCounts[depth]++];
@@ -437,6 +439,7 @@ dqnDrawRotatedTexPolygon(tex_t* tex, int frame, relPoint_t* points, int count, v
 void dqnDrawTexPolygon(tex_t* tex, int frame, relPoint_t* points, int count, vec_t center, color_t col, double scale,
                        int depth)
 {
+    assert(tex);
     checkDPSize(depth);
 
     drawingPrimitive_t* dp = dpList[depth][dpCounts[depth]++];

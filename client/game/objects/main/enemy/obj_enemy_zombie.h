@@ -7,6 +7,8 @@
 
 #include "../../../objectInclude.h"
 
+#include "../../bloodSpawner.h"
+
 #define ENEMY_SPEED_MAX 0.5
 #define ENEMY_SPEED_MIN 0.1
 

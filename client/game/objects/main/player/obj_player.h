@@ -11,6 +11,7 @@
 #include "../bullet/obj_bullet.h"
 #include "../flashlight/obj_flashlight.h"
 #include "../light/obj_light_tracer.h"
+#include "../../weapon.h"
 
 #define PLAYER_FIRE_RATE 5
 
@@ -34,21 +35,33 @@
 typedef struct _playerData
 {
 
-    long long lastFireFrame;
-
     int prevAnimationFrame;
 
+    //Light and shake visuals
     double currLightSize;
     double currLightAlpha;
     double currShake;
 
     int currentLightsCount;
+    int enabledFlashLight;
 
     gameObject_t* fireLights[PLAYER_MAXLIGHTS];
     gameObject_t* backLight;
     gameObject_t* flashlight;
+    //=======
 
-    int enabledFlashLight;
+    //Weapon stuff
+    long long lastFireFrame;
+
+    int weapon;
+    uint8_t weaponStates[WEAPON_COUNT];
+    uint8_t weaponCount[WEAPON_COUNT];
+
+    //Gameplay stuff
+    double hp;
+    double armour;
+    int points;
+
 
 } playerData_t;
 

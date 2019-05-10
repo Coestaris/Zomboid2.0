@@ -18,6 +18,14 @@ image                   TEXID_MENU_OUT      TEXSCOPE_MAIN_MENU   0    0    TM_DE
 image                   TEXID_MENU_SP       TEXSCOPE_MAIN_MENU   0    0    TM_DEFAULT   images/menu/dialog_sp.png
 image                   TEXID_DUMMY         TEXSCOPE_MM_GEN      0    0    TM_DEFAULT   images/dummy.png
 
+image                   TEXID_WEAPON_PISTOL     TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/pistol.png
+image                   TEXID_WEAPON_CROSSBOW   TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/crossbow.png
+image                   TEXID_WEAPON_SMG        TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/smg.png
+image                   TEXID_WEAPON_SHOTGUN    TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/shotgun.png
+image                   TEXID_WEAPON_LASER      TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/laser.png
+image                   TEXID_WEAPON_RPG        TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/rpg.png
+
+
 image                   TEXID_BACK_CONCRETE TEXSCOPE_MM_GEN      0    0    TM_BACK      images/backgrounds/concrete.png
 
 ; type      frameCnt    id                  scope                cX  cY    mode         paths
@@ -33,3 +41,5 @@ animation   2           TEXID_BLOOD_DEAD    TEXSCOPE_MM_GEN      0   0     TM_DE
 animation   4           TEXID_ENEMY_ZOMBIE_1 TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/zombies/green%i.png
 animation   4           TEXID_ENEMY_ZOMBIE_2 TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/zombies/brown%i.png
 animation   4           TEXID_ENEMY_ZOMBIE_3 TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/zombies/blue%i.png
+
+animation   3           TEXID_HUD_WEPSLOT    TEXSCOPE_GAME       0   0     TM_DEFAULT   images/hud/wepSlot%i.png
