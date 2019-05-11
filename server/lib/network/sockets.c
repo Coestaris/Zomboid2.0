@@ -10,6 +10,34 @@
 
 #include "sockets.h"
 
+zsize_t genereateClientUID(client_t client[MAX_ZNET_CLIENTS], zsize_t clientsCount) {
+    zsize_t res = MAX_ZNET_CLIENTS;
+    for (zsize_t i = 0; i < MAX_ZNET_CLIENTS; i++) {
+        uint8_t isFree = 1;
+        for (zsize_t j = 0; isFree && j < clientsCount; j++)
+            if (client[j].uid == i) isFree = 0;
+        if (isFree) {
+            res = i;
+            break;
+        }
+    }
+    return res;
+}
+
+zsize_t generateHostUID(host_t *hosts, zsize_t hostsCount) {
+    zsize_t res = MAX_ZNET_HOSTS;
+    for (zsize_t i = 0; i < MAX_ZNET_HOSTS; i++) {
+        uint8_t isFree = 1;
+        for (zsize_t j = 0; isFree && j < hostsCount; j++)
+            if (hosts[j].uid == i) isFree = 0;
+        if (isFree) {
+            res = i;
+            break;
+        }
+    }
+    return res;
+}
+
 // probably could be useful for multiple id-servers...
 void bufferHandler(uint8_t *_buff, zsize_t _currentClient, client_t *_clients, zsize_t *_clientsCount,
         host_t *_hosts, zsize_t *_hostsCount) {
@@ -36,7 +64,6 @@ void bufferHandler(uint8_t *_buff, zsize_t _currentClient, client_t *_clients, z
                     exit(1);
                 }
             }
-
             // looking up for the host and deleting it
             zsize_t cur_h;
             for (cur_h = 0;
@@ -49,7 +76,7 @@ void bufferHandler(uint8_t *_buff, zsize_t _currentClient, client_t *_clients, z
     }
 }
 
-int socketCreate(char *port) {
+int idServerSocketCreate(char *port) {
     addrinfo_t hints, *nodeinfo, *p;
 
     int rv;
@@ -95,7 +122,7 @@ int socketCreate(char *port) {
     return sockfd;
 }
 
-int socketMainLoop(int sockfd) {
+int idServerSocketMainLoop(int sockfd) {
     fd_set master_fds;
     fd_set read_fds;
     int fdmax;
@@ -141,7 +168,12 @@ int socketMainLoop(int sockfd) {
                     } else {
                         FD_SET(newfd, &master_fds);
                         if (newfd > fdmax) fdmax = newfd;
-                        clients[clientsCount].uid = clientsCount;
+                      /*  zsize_t newUID = genereateClientUID(clients, clientsCount);
+                        if (newUID == MAX_ZNET_CLIENTS) {
+                            perror("IDServer is full");
+                            exit(1);
+                        }
+                        clients[clientsCount].uid = newUID;
                         memcpy(&(clients + clientsCount)->address, &remoteaddr, sizeof(sockaddr_t));
                         clients[clientsCount].sockfd = newfd;
                         clientsCount++;
@@ -177,20 +209,23 @@ int socketMainLoop(int sockfd) {
                                 perror("send");
                                 exit(1);
                             }
-                        }
+                        }*/
                     }
                 } else {
                     // identifying client uid by it's socket descriptor
+                    uint8_t clientExists = 0;
                     zsize_t currentClient;
                     uint8_t buff[MAX_BUFFER];
-                    for (currentClient = 0;
-                         currentClient < clientsCount &&
-                         clients[currentClient].sockfd != sockIt;
-                         currentClient++);
+                    for (currentClient = 0; currentClient < clientsCount; currentClient++) {
+                         if (clients[currentClient].sockfd != sockIt) {
+                             clientExists = 1;
+                             break;
+                         }
+                    }
 
                     if ((nbytes = recv(sockIt, buff, sizeof buff, 0)) <= 0) {
                         // got error or connection closed by client
-                        if (nbytes == 0) {
+                        if (nbytes == 0 && clientExists) {
                             // connection closed
                             // TODO: destroy client by it's id and associated server node if any
                             // sending packets to destroy client and associated host to all existing clients
@@ -227,15 +262,69 @@ int socketMainLoop(int sockfd) {
                         }
                         close(sockIt); // bye!
                         FD_CLR(sockIt, &master_fds); // remove from master set
-                    } /*else {
+                    } else {
                         // parsing client
-                        for (zsize_t j = 0; j < currentClient; j++) {
-                            bufferHandler(buff, j, clients, &clientsCount, hosts, &hostsCount);
+                        zsize_t newUID;
+                        switch (buff[0]) {
+                            case MSG_ID_CLIENT_CLIENT_INIT:
+                                ;
+                                newUID = genereateClientUID(clients, clientsCount);
+                                if (newUID == MAX_ZNET_CLIENTS) {
+                                    perror("idServer is full");
+                                    exit(1);
+                                }
+                                clients[clientsCount].uid = newUID;
+                                memcpy(&(clients + clientsCount)->address, &remoteaddr, sizeof(sockaddr_t));
+                                clients[clientsCount].sockfd = sockIt;
+                                idClient_unpackClientInit(buff, clients[clientsCount].name);
+                                clientsCount++;
+                                break;
+                            case MSG_ID_CLIENT_HOST_INIT:
+                                ;
+                                newUID = generateHostUID(hosts, hostsCount);
+                                if (newUID == MAX_ZNET_HOSTS) {
+                                    perror("idServer is full of hosts");
+                                    exit(1);
+                                }
+                                hosts[hostsCount].uid = newUID;
+                                clients[currentClient].hostUid = hosts[hostsCount].uid;
+                                idClient_unpackHostInit(buff, &hosts[hostsCount].port, hosts[hostsCount].name);
+                                hostsCount++;
+                                break;
+                            case MSG_ID_CLIENT_UPDATE_INIT:
+                                if(sendAll(sockIt, idServer_packUpdateStart(buff), MSG_ID_SERVER_UPDATE_START, 0) == -1) {
+                                    perror("send");
+                                    exit(1);
+                                }
+                                for (zsize_t i = 0; i < currentClient; i++) {
+                                    if (sendAll(sockIt, idServer_packClientData(&clients[i], buff),
+                                                MSG_ID_SERVER_CLIENT_DATA_LENGTH, 0) == -1) {
+                                        perror("send");
+                                        exit(1);
+                                    }
+                                }
+                                for (zsize_t i = (zsize_t) (currentClient + 1); i < clientsCount; i++) {
+                                    if (sendAll(sockIt, idServer_packClientData(&clients[i], buff),
+                                            MSG_ID_SERVER_CLIENT_DATA_LENGTH, 0) == -1) {
+                                        perror("send");
+                                        exit(1);
+                                    }
+                                }
+                                for (zsize_t i = 0; i < hostsCount; i++) {
+                                    if (sendAll(sockIt, idServer_packHostData(&hosts[i], buff),
+                                            MSG_ID_SERVER_HOST_DATA_LENGTH, 0) == -1) {
+                                       perror("send");
+                                       exit(1);
+                                    }
+                                }
+                                if (sendAll(sockIt, idServer_packUpdateEnd(buff), MSG_ID_SERVER_UPDATE_END_LENGTH, 0) == -1) {
+                                    perror("send");
+                                    exit(1);
+                                }
+                                break;
+                            default: break;
                         }
-                        for (zsize_t j = (zsize_t) (currentClient + 1); j < clientsCount; j++) {
-                            bufferHandler(buff, j, clients, &clientsCount, hosts, &hostsCount);
-                        }
-                    }*/
+                    }
                 }
             }
         }

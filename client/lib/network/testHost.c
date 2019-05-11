@@ -1,14 +1,8 @@
-#include <stdio.h>
-#include <stdbool.h>
-#include <ctype.h>
-#include <string.h>
-#include <stdlib.h>
-
-#include "host/sockets.h"
-#include "../../../server/handlers/baseHandlers.h"
+#include "../../../server/lib/network/sockets.h"
+#include "../../../lib/zdtp.h"
 
 int main(int argc, char** argv) {
-    int listener = socketServerCreate("9305");
-    socketMainloop(listener);
+    int sockfd = idServerSocketCreate("25565");
+    idServerSocketMainLoop(sockfd);
     return 0;
 }

@@ -2,11 +2,11 @@
 // Created by h0tw4t3r on 5/6/19.
 //
 
-#include "serverSockets.h"
+#include "idSockets.h"
 
 uint64_t max(uint64_t a, uint64_t b) { return a > b ? a : b; }
 
-int serverSocketCreate(const char *address, const char *port) {
+int idClientSocketCreate(const char *address, const char *port) {
     int sockfd = -1;
     addrinfo_t hints, *servinfo, *p;
     int rv;
@@ -51,26 +51,38 @@ int serverSocketCreate(const char *address, const char *port) {
     return sockfd;
 }
 
-int serverSocketWrite(int sockfd, uint8_t * buff, size_t bufflen) {
+int idClientSocketWrite(int sockfd, uint8_t *buff, size_t bufflen) {
     if (sendAll(sockfd, buff, bufflen, 0) == -1) {
         perror("sendAll");
         exit(1);
     }
 }
 
-int serverSocketRead(int sockfd, uint8_t *res, size_t reslen) {
+int idClientSocketRead(int sockfd, uint8_t *res, size_t reslen) {
     if (recv(sockfd, res, reslen, 0) == -1) {
         perror("recv");
         exit(1);
     }
 }
 
-int serverSocketClose(int sockfd) {
+int idClientSocketClose(int sockfd) {
     close(sockfd);
 }
 
-int serverSocketUpdateData(int sockfd, client_t *clients, zsize_t *clientsCount,
-        host_t *hosts, zsize_t *hostsCount, void (*spinnerCb)(uint8_t show)) {
+int idClientSocketClientInit(int sockfd, uint8_t clientName[MAX_CLIENT_NAME_LENGTH]) {
+    uint8_t buff[MSG_ID_CLIENT_CLIENT_INIT_LENGTH];
+
+    return idClientSocketWrite(sockfd, idClient_packClientInit(clientName, buff), MSG_ID_CLIENT_CLIENT_INIT_LENGTH);
+}
+
+int idClientSocketHostInit(int sockfd, uint8_t *hostName, uint16_t port) {
+    uint8_t buff[MSG_ID_CLIENT_HOST_INIT_LENGTH];
+
+    return idClientSocketWrite(sockfd, idClient_packHostInit(hostName, port, buff), MSG_ID_CLIENT_HOST_INIT_LENGTH);
+}
+
+int idClientSocketUpdateData(int sockfd, client_t *clients, zsize_t *clientsCount,
+                             host_t *hosts, zsize_t *hostsCount, void (*spinnerCb)(uint8_t show)) {
 
     fd_set masterfds, readfds;
     ssize_t rv;
@@ -129,5 +141,4 @@ int serverSocketUpdateData(int sockfd, client_t *clients, zsize_t *clientsCount,
             }
         }
     }
-
 }

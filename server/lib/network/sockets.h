@@ -20,14 +20,13 @@
 #include <asm/errno.h>
 #include <netdb.h>
 
-#include "../protocol/idServer.h"
-#include "../../../lib/client.h"
+#include "../../../lib/zdtp.h"
 
 #define MAX_ZNET_CLIENTS 100
 #define MAX_ZNET_HOSTS 10
 
 
-int socketCreate(char * port);
-int socketMainLoop(int sockfd);
+int idServerSocketCreate(char *port);
+int idServerSocketMainLoop(int sockfd);
 
 #endif //SERVER_SOCKETS_H

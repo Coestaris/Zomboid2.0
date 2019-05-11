@@ -4,22 +4,27 @@
 
 // Sockets testing unit
 
+#include "client/idSockets.h"
 #include "client/gameSockets.h"
 #include "metadata.h"
 
-int main() {
-    r_info info = socketCreate("localhost", "9305");
-    uint8_t res[24];
+void fakeSpinner(int state){};
 
-    res[0] = 1;
-    res[1] = 2;
-    res[23] = 23;
-    size_t len = 24;
-    socketWrite(info, res, &len);
-    int rv = -1;
-    while(rv == -1) {
-        rv = socketRead(info.sockfd, res, sizeof(res));
+int main() {
+    int sockfd = idClientSocketCreate("localhost", "25565");
+
+    idClientSocketClientInit(sockfd, "username");
+
+    client_t clients[255];
+    host_t hosts[255];
+    zsize_t hostsCount, clientsCount;
+    uint8_t buff[1024];
+
+    for (int i = 0; i < 5; i++) {
+        idClientSocketUpdateData(sockfd, clients, &clientsCount, hosts, &hostsCount, fakeSpinner);
+        idClientSocketRead(sockfd, buff, 1024);
     }
-    socketClose(info.sockfd);
+
+    idClientSocketClose(sockfd);
     return 0;
 }

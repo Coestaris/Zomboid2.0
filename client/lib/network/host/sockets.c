@@ -121,12 +121,6 @@ int socketMainloop(int listener) {
             perror("recvfrom");
             exit(1);
         } else {
-            /*
-             * TODO: Add anywhere something kind of timeout of recieved packets by user
-             * We should track how many packets have been received by every user
-             * and i.e. find delta of best-connected user, and worst-connected user,
-             * and kick worst-connected if delta is more than some defined constant.
-             */
             uint8_t ip_buff[INET_ADDRSTRLEN];
             printf("server: got packet from %s\n",
                    inet_ntop(their_addr.sin_family, (sockaddr_t *) &their_addr, (char *) &ip_buff,
