@@ -65,6 +65,10 @@ void player_event_keyPressed(gameObject_t* this, void* data)
     {
         if(pd->grenades > 0) pd->grenades -= 1;
     }
+    else if(ke->key == '`')
+    {
+        exit(0);
+    }
 }
 
 void player_init(gameObject_t* object)
@@ -159,6 +163,12 @@ void player_event_update(gameObject_t* object, void* data)
         pd->flashlight->pos = rel;
     }
 
+    pd->hp -= .2;
+    if(pd->hp <= 0) pd->hp = MAX_PLAYER_HP;
+
+    pd->armour += .2;
+    if(pd->armour > MAX_PLAYER_ARMOUR) pd->armour= 0;
+
     pd->prevAnimationFrame = object->frame;
 }
 
@@ -192,6 +202,8 @@ gameObject_t* createPlayer()
 
     pd->weapon = 0;
     pd->grenades = MAX_GRENADES;
+    pd->hp = 32;
+    pd->armour = 42;
 
     for(int i = 0; i < WEAPON_COUNT; i++)
     {

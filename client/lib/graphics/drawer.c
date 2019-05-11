@@ -94,23 +94,13 @@ void dcDrawText(vec_t pos, color_t col, font_t* font, const char* string, double
         GLfloat h = ch.size.y * scale;
 
         glBindTexture(GL_TEXTURE_2D, ch.textureID);
-        glColor3f(col.r, col.g, col.b);
+        glColor4f(col.r, col.g, col.b, col.a);
 
         glBegin(GL_TRIANGLE_STRIP);
-        /*glTexCoord2i(1, 1); glVertex2f(xpos + w, ypos);
-        glTexCoord2i(1, 0); glVertex2f(xpos + w, ypos + h);
-        glTexCoord2i(0, 0); glVertex2f(xpos, ypos + h);
-        glTexCoord2i(0, 1); glVertex2f(xpos, ypos);*/
-
-        glTexCoord2f(0, 1);
-        glVertex3d(xpos, ypos + h, 1);
-        glTexCoord2f(0, 0);
-        glVertex3d(xpos, ypos, 1);
-        glTexCoord2f(1, 1);
-        glVertex3d(xpos + w, ypos + h, 1);
-        glTexCoord2f(1, 0);
-        glVertex3d(xpos + w, ypos, 1);
-
+            glTexCoord2i(0, 1); glVertex2f(xpos, ypos + h);
+            glTexCoord2i(0, 0); glVertex2f(xpos, ypos);
+            glTexCoord2i(1, 1); glVertex2f(xpos + w, ypos + h);
+            glTexCoord2i(1, 0); glVertex2f(xpos + w, ypos);
         glEnd();
 
 
@@ -126,15 +116,29 @@ void dcDrawSurface()
     srfBind();
 
     glBegin(GL_QUADS);
-    glTexCoord2f(0.0, 0.0);
-    glVertex2f(0.0, 0.0);
-    glTexCoord2f(1.0, 0.0);
-    glVertex2f(winW, 0.0);
-    glTexCoord2f(1.0, 1.0);
-    glVertex2f(winW, winH);
-    glTexCoord2f(0.0, 1.0);
-    glVertex2f(0.0, winH);
+        glTexCoord2i(0, 0); glVertex2f(0.0, 0.0);
+        glTexCoord2i(1, 0); glVertex2f(winW, 0.0);
+        glTexCoord2i(1, 1); glVertex2f(winW, winH);
+        glTexCoord2i(0, 1); glVertex2f(0.0, winH);
     glEnd();
+}
+
+void dcDrawStretchedTexture(tex_t* tex, vec_t pos, int frame, color_t col, double w, double h)
+{
+    bindTex(tex, frame);
+
+    glPushMatrix();
+
+    glColor4d(col.r, col.g, col.b, col.a);
+
+    glBegin(GL_QUAD_STRIP);
+        glTexCoord2i(0, 1); glVertex2f(pos.x, pos.y + tex->height * h);
+        glTexCoord2i(0, 0); glVertex2f(pos.x, pos.y);
+        glTexCoord2i(1, 1); glVertex2f(pos.x + tex->width * w, pos.y + tex->height * h);
+        glTexCoord2i(1, 0); glVertex2f(pos.x + tex->width * w, pos.y);
+    glEnd();
+
+    glPopMatrix();
 }
 
 void dcDrawBackground(tex_t* tex, int frame, int windowW, int windowH)
@@ -148,17 +152,17 @@ void dcDrawBackground(tex_t* tex, int frame, int windowW, int windowH)
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     glBegin(GL_QUAD_STRIP);
-    glTexCoord2f(0, (GLfloat) texH);
-    glVertex2f((GLfloat) -BACKGROUND_OFFSET, (GLfloat) -BACKGROUND_OFFSET);
+        glTexCoord2f(0, (GLfloat) texH);
+        glVertex2f((GLfloat) -BACKGROUND_OFFSET, (GLfloat) -BACKGROUND_OFFSET);
 
-    glTexCoord2f(0, 0);
-    glVertex2f((GLfloat) -BACKGROUND_OFFSET, (GLfloat) windowH + BACKGROUND_OFFSET);
+        glTexCoord2f(0, 0);
+        glVertex2f((GLfloat) -BACKGROUND_OFFSET, (GLfloat) windowH + BACKGROUND_OFFSET);
 
-    glTexCoord2f((GLfloat) texW, (GLfloat) texH);
-    glVertex2f((GLfloat) windowW + BACKGROUND_OFFSET, (GLfloat) -BACKGROUND_OFFSET);
+        glTexCoord2f((GLfloat) texW, (GLfloat) texH);
+        glVertex2f((GLfloat) windowW + BACKGROUND_OFFSET, (GLfloat) -BACKGROUND_OFFSET);
 
-    glTexCoord2f((GLfloat) texW, 0);
-    glVertex2f((GLfloat) windowW + BACKGROUND_OFFSET, (GLfloat) windowH + BACKGROUND_OFFSET);
+        glTexCoord2f((GLfloat) texW, 0);
+        glVertex2f((GLfloat) windowW + BACKGROUND_OFFSET, (GLfloat) windowH + BACKGROUND_OFFSET);
     glEnd();
 
     glPopMatrix();
@@ -170,12 +174,10 @@ void dcDrawLine(vec_t p1, vec_t p2, color_t col)
 
     glColor4d(col.r, col.g, col.b, col.a);
     glBegin(GL_LINES);
-    glVertex3d(p1.x, p1.y, 0);
-    glVertex3d(p2.x, p2.y, 0);
+        glVertex2f(p1.x, p1.y);
+        glVertex2f(p2.x, p2.y);
     glEnd();
 }
-
-#include "../helpers.h"
 
 void dcDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col)
 {
@@ -190,10 +192,9 @@ void dcDrawPolygon(relPoint_t* points, int count, vec_t center, color_t col)
     {
         int c = (i + 1) % count;
 
-        glVertex2d(center.x, center.y);
-
-        glVertex2d(points[i].point.x, points[i].point.y);
-        glVertex2d(points[c].point.x, points[c].point.y);
+        glVertex2f(center.x, center.y);
+        glVertex2f(points[i].point.x, points[i].point.y);
+        glVertex2f(points[c].point.x, points[c].point.y);
     }
     glEnd();
 
@@ -229,7 +230,7 @@ dcDrawRotatedTexPolygon(tex_t* tex, int frame, relPoint_t* points, int count, ve
     double x = center.x;
     double y = center.y;
 
-    glColor4d(col.r, col.g, col.b, col.a);
+    glColor4f(col.r, col.g, col.b, col.a);
     glBegin(GL_TRIANGLES);
 
     double zeroX = (tex->width - tex->center.x - texOffset.x) / (2.0 * tex->width);
@@ -244,30 +245,28 @@ dcDrawRotatedTexPolygon(tex_t* tex, int frame, relPoint_t* points, int count, ve
         double y1 = points[i].point.y;
         double y2 = points[c].point.y;
 
-        glTexCoord2d(zeroX, zeroY);
-        glVertex2d(x, y);
+        glTexCoord2f(zeroX, zeroY);
+        glVertex2f(x, y);
 
         vec_t coordP1 = vec(
                 (x1 - x) / scale + zeroX,
                 (y1 - y) / scale + zeroY);
 
         coordP1 = rotate_point(zeroX, zeroY, -angle, coordP1);
-        glTexCoord2d(
+        glTexCoord2f(
                 (coordP1.x - zeroX) / texScaleFactor.x + zeroX,
                 (coordP1.y - zeroY) / texScaleFactor.y + zeroY);
-        glVertex2d(x1, y1);
+        glVertex2f(x1, y1);
 
         vec_t coordP2 = vec(
                 (x2 - x) / scale + zeroX,
                 (y2 - y) / scale + zeroY);
 
         coordP2 = rotate_point(zeroX, zeroY, -angle, coordP2);
-        glTexCoord2d(
+        glTexCoord2f(
                 (coordP2.x - zeroX) / texScaleFactor.x + zeroX,
                 (coordP2.y - zeroY) / texScaleFactor.y + zeroY);
-        glVertex2d(x2, y2);
-
-
+        glVertex2f(x2, y2);
     }
     glEnd();
 
@@ -279,7 +278,7 @@ void dcDrawTexPolygon(tex_t* tex, int frame, relPoint_t* points, int count, vec_
     bindTex(tex, frame);
     glPushMatrix();
 
-    glColor4d(col.r, col.g, col.b, col.a);
+    glColor4f(col.r, col.g, col.b, col.a);
     glBegin(GL_TRIANGLES);
 
     double x = center.x;
@@ -294,14 +293,14 @@ void dcDrawTexPolygon(tex_t* tex, int frame, relPoint_t* points, int count, vec_
         double y1 = points[i].point.y;
         double y2 = points[c].point.y;
 
-        glTexCoord2d(0.5, 0.5);
-        glVertex2d(x, y);
+        glTexCoord2f(0.5, 0.5);
+        glVertex2f(x, y);
 
-        glTexCoord2d((x1 - x) / scale + 0.5, (y1 - y) / scale + 0.5);
-        glVertex2d(x1, y1);
+        glTexCoord2f((x1 - x) / scale + 0.5, (y1 - y) / scale + 0.5);
+        glVertex2f(x1, y1);
 
-        glTexCoord2d((x2 - x) / scale + 0.5, (y2 - y) / scale + 0.5);
-        glVertex2d(x2, y2);
+        glTexCoord2f((x2 - x) / scale + 0.5, (y2 - y) / scale + 0.5);
+        glVertex2f(x2, y2);
 
     }
     glEnd();
@@ -328,17 +327,13 @@ void dcDrawTexture(tex_t* tex, color_t col, int frame, vec_t pos, double angle, 
     dcCreatePoint(&p3, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), 1, -1);
     dcCreatePoint(&p4, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), 1, 1);
 
-    glColor4d(col.r, col.g, col.b, col.a);
+    glColor4f(col.r, col.g, col.b, col.a);
 
     glBegin(GL_QUAD_STRIP);
-    glTexCoord2f(0, 1);
-    glVertex3d(p1.x, p1.y, 1);
-    glTexCoord2f(0, 0);
-    glVertex3d(p2.x, p2.y, 1);
-    glTexCoord2f(1, 1);
-    glVertex3d(p3.x, p3.y, 1);
-    glTexCoord2f(1, 0);
-    glVertex3d(p4.x, p4.y, 1);
+        glTexCoord2i(0, 1); glVertex2f(p1.x, p1.y);
+        glTexCoord2i(0, 0); glVertex2f(p2.x, p2.y);
+        glTexCoord2i(1, 1); glVertex2f(p3.x, p3.y);
+        glTexCoord2i(1, 0); glVertex2f(p4.x, p4.y);
     glEnd();
 
     glPopMatrix();
@@ -382,6 +377,22 @@ void dqnDrawText(vec_t pos, color_t col, font_t* font, char* string, double size
     dp->font = font;
     dp->string = string;
     dp->scale = size;
+}
+
+void dqnDrawStretchedTexture(tex_t* tex, vec_t pos, int frame, color_t col, double w, double h, int depth)
+{
+    assert(tex);
+    checkDPSize(depth);
+
+    drawingPrimitive_t* dp = dpList[depth][dpCounts[depth]++];
+    dp->type = DPTYPE_STR_SPRITE;
+
+    dp->col = col;
+    dp->p1 = pos;
+    dp->tex = tex;
+    dp->frame = frame;
+
+    dp->p2 = vec(w, h);
 }
 
 void dqnDrawSprite(tex_t* tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor, int depth)
@@ -517,7 +528,11 @@ void dcDrawPrimitives()
                             dp->p1, dp->col, dp->angle,
                             dp->scale, dp->texOffset, dp->texScaleFactor);
                     break;
-
+                case DPTYPE_STR_SPRITE:
+                    dcDrawStretchedTexture(
+                            dp->tex, dp->p1, dp->frame,
+                            dp->col, dp->p2.x, dp->p2.y);
+                    break;
 
                 default:
                     break;

@@ -141,7 +141,7 @@ void bindTex(tex_t* tex, int frame)
     }
     else
     {
-        assert(frame < tex->framesCount);
+        assert(frame >= 0 && frame < tex->framesCount);
 
         if (tex->mode == TEXMODE_OVERLAY)
         {

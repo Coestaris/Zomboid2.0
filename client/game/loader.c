@@ -14,6 +14,7 @@ void initPublicObjects(void)
     scmPushPublicObject(OBJECT_MENU, createMenu);
     scmPushPublicObject(OBJECT_HUD, createHud);
     scmPushPublicObject(OBJECT_MENU_SPAWNER, createMenuBeetleSpawner);
+    scmPushPublicObject(OBJECT_GAME_CONTROLLER, createGameController);
 }
 
 void loadResources()

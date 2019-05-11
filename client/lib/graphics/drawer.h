@@ -29,6 +29,7 @@
 #define DPTYPE_POLY 3
 #define DPTYPE_POLY_TEX 4
 #define DPTYPE_POLY_ROTATEDTEX 5
+#define DPTYPE_STR_SPRITE 6
 
 typedef struct _relPoint
 {
@@ -62,6 +63,7 @@ typedef struct _drawingPrimitive
 
 int dqnCount(void);
 
+void dqnDrawStretchedTexture(tex_t* tex, vec_t pos, int frame, color_t col, double w, double h, int depth);
 void dqnDrawText(vec_t pos, color_t col, font_t* font, char* string, double size, int depth);
 void dqnDrawSprite(tex_t* tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor, int depth);
 void dqnDrawLine(vec_t p1, vec_t p2, color_t col, int depth);
@@ -73,6 +75,7 @@ void dqnDrawRotatedTexPolygon(tex_t* tex, int frame, relPoint_t* points, int cou
 
 void dqnClearQueue(void);
 
+void dcDrawStretchedTexture(tex_t* tex, vec_t pos, int frame, color_t col, double w, double h);
 void dcRotateScreen(double angle, double sceneW, double sceneH);
 void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, double hh, vec_t cp, int s1, int s2);
 void dcDrawText(vec_t pos, color_t col, font_t* font, const char* string, double size);

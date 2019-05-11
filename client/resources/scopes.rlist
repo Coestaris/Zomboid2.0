@@ -55,6 +55,7 @@
 
 #define TEXID_HUD_HEART        42
 #define TEXID_HUD_SHIELD       43
+#define TEXID_HUD_BORDER       44
 
 #define SCENEID_MAIN_MENU 1
 #define SCENEID_GAME 0
@@ -65,3 +66,5 @@
 #define OBJECT_MENU_SPAWNER 3
 #define OBJECT_ZOMBIE 4
 #define OBJECT_HUD 5
+#define OBJECT_GAME_CONTROLLER 6
+
