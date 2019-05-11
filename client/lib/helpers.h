@@ -20,6 +20,7 @@ int randBool();
 int randIntRange(int a, int b);
 double randRange(double a, double b);
 color_t randColor(double alpha);
+vec_t randVector(double maxW, double maxH);
 int fileExists(const char* filename);
 double twoPointsAngle(vec_t p1, vec_t p2);
 double distance(vec_t p1, vec_t p2);

@@ -164,10 +164,11 @@ void hud_init(gameObject_t* this)
     int count;
     gameObject_t** objects = scmGetObjects(&count);
     for(int i = 0; i < count; i++) {
-        if(objects[i]->ID == OBJECT_PLAYER)
-            hd->playerData = objects[i]->data;
-        else if(objects[i]->ID == OBJECT_GAME_CONTROLLER)
-            hd->gcData = objects[i]->data;
+       if(objects[i]->ID == OBJECT_GAME_CONTROLLER)
+       {
+           hd->gcData = objects[i]->data;
+           hd->playerData = hd->gcData->players[0];
+       }
     }
 }
 

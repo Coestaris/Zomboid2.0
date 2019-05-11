@@ -4,13 +4,6 @@
 
 #include "object_beetle_spawner.h"
 
-void mbeetleSpawner_init(gameObject_t* this)
-{
-    evqSubscribeEvent(this, EVT_Update, mbeetleSpawner_event_update);
-
-    //todo: paint with some surface
-}
-
 void mbeetleSpawner_event_update(gameObject_t* this, void* data)
 {
     mbeetleSpawnerData_t* sd = this->data;
@@ -48,6 +41,13 @@ void mbeetleSpawner_event_update(gameObject_t* this, void* data)
         scmPushObject(createMenuBeetle(pos, angle, BEETLE_SPEED));
         sd->lastSpawn = frame;
     }
+}
+
+void mbeetleSpawner_init(gameObject_t* this)
+{
+    evqSubscribeEvent(this, EVT_Update, mbeetleSpawner_event_update);
+
+    //todo: paint with some surface
 }
 
 gameObject_t* createMenuBeetleSpawner()

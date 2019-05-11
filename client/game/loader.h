@@ -15,7 +15,6 @@
 #include "objects/main/hud/obj_hud.h"
 #include "objects/menu/object_beetle_spawner.h"
 #include "objects/menu/object_menu.h"
-#include "objects/main/player/obj_player.h"
 #include "objects/main/box/obj_box.h"
 
 #include "objectInclude.h"

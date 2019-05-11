@@ -36,7 +36,7 @@ void enemy_init(gameObject_t* this)
 //    evqSubscribeCollisionEvent(this, TEXID_BULLET, enemy_event_bulletCollision);
 }
 
-gameObject_t* createEnemy(gameObject_t* player, vec_t pos)
+gameObject_t* createEnemy(playerData_t* player, vec_t pos)
 {
     gameObject_t* obj = object();
     obj->drawable = 1;

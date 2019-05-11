@@ -88,8 +88,10 @@ void initGraphics(int argc, char** argv, int w, int h, const char* title, int is
 void registerEvents()
 {
     glutIgnoreKeyRepeat(1);
+
     glutSpecialUpFunc(eventKeyUp);
     glutSpecialFunc(eventKeyDown);
+
     glutMotionFunc(eventMouseMove);
     glutPassiveMotionFunc(eventMouseMove);
     glutMouseFunc(eventMouseClick);

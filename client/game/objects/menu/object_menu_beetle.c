@@ -4,11 +4,6 @@
 
 #include "object_menu_beetle.h"
 
-void mbeetle_init(gameObject_t* this)
-{
-    evqSubscribeEvent(this, EVT_Update, mbeetle_event_update);
-}
-
 void mbeetle_event_update(gameObject_t* this, void* data)
 {
     this->angle += randRange(-0.1, 0.1);
@@ -26,6 +21,11 @@ void mbeetle_event_update(gameObject_t* this, void* data)
             scmDestroyObject(this, true);
         }
     }
+}
+
+void mbeetle_init(gameObject_t* this)
+{
+    evqSubscribeEvent(this, EVT_Update, mbeetle_event_update);
 }
 
 gameObject_t* createMenuBeetle(vec_t pos, double angle, double speed)

@@ -4,6 +4,13 @@
 
 #include "obj_light_tracer.h"
 
+void lightTracer_event_update(gameObject_t* this, void* data)
+{
+    ltracer_data_t* ld = ((lightTracer_data_t*) this->data)->data;
+    ld->pos = this->pos;
+    ld->angle = this->angle;
+}
+
 void lightTracer_destroy(gameObject_t* this)
 {
     ltracer_data_t* ld = ((lightTracer_data_t*) this->data)->data;
@@ -16,13 +23,6 @@ void lightTracer_init(gameObject_t* this)
     ltracerPushLight(ld);
 
     evqSubscribeEvent(this, EVT_Update, lightTracer_event_update);
-}
-
-void lightTracer_event_update(gameObject_t* this, void* data)
-{
-    ltracer_data_t* ld = ((lightTracer_data_t*) this->data)->data;
-    ld->pos = this->pos;
-    ld->angle = this->angle;
 }
 
 gameObject_t* createAreaLT(vec_t pos, double range, color_t color)

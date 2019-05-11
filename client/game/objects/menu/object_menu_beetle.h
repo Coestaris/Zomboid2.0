@@ -20,8 +20,6 @@ typedef struct _mbeetleData
 
 } mbeetleData_t;
 
-void mbeetle_init(gameObject_t* this);
-void mbeetle_event_update(gameObject_t* this, void* data);
 gameObject_t* createMenuBeetle(vec_t pos, double angle, double speed);
 
 #endif //ZOMBOID2_OBJECT_MENU_BEETLE_H

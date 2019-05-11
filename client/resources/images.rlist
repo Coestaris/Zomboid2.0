@@ -35,13 +35,11 @@ image                   TEXID_HUD_LEFT_GRENADE  TEXSCOPE_GAME    0    0    TM_DE
 image                   TEXID_HUD_BORDER        TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/bar_border.png
 image                   TEXID_HUD_MENU          TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/menu.png
 
-
 image                   TEXID_BACK_CONCRETE TEXSCOPE_MM_GEN      0    0    TM_BACK      images/backgrounds/concrete.png
 
 ; type      frameCnt    id                  scope                cX  cY    mode         paths
 animation   2           TEXID_MENU_BTN_SM   TEXSCOPE_MAIN_MENU   0   0     TM_DEFAULT   images/menu/button_small/button%i.png
 animation   2           TEXID_MENU_BTN      TEXSCOPE_MAIN_MENU   0   0     TM_DEFAULT   images/menu/button/button%i.png
-animation   3           TEXID_PLAYER        TEXSCOPE_GAME       15   0     TM_DEFAULT   images/player_1/image%i.png
 animation   6           TEXID_SHELLCASE     TEXSCOPE_GAME        0   0     TM_DEFAULT   images/shellCase/shellCase%i.png
 
 animation   7           TEXID_BLOOD         TEXSCOPE_MM_GEN      0   0     TM_DEFAULT   images/blood/blood/image%i.png
@@ -56,3 +54,14 @@ animation   3           TEXID_HUD_WEPSLOT    TEXSCOPE_GAME       0   0     TM_DE
 animation   17          TEXID_HUD_HEART      TEXSCOPE_GAME       0   0     TM_DEFAULT   images/hud/heart/heart%i.png
 animation   17          TEXID_HUD_SHIELD     TEXSCOPE_GAME       0   0     TM_DEFAULT   images/hud/shield/shield%i.png
 
+animation   3           TEXID_PLAYER_PISTOL         TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/pistol_fire/image%i.png
+animation   17          TEXID_PLAYER_PISTOL_RELOAD  TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/pistol_reload/image%i.png
+animation   2           TEXID_PLAYER_CROSS          TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/crossbow_fire/image%i.png
+animation   8           TEXID_PLAYER_CROSS_RELOAD   TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/crossbow_reload/image%i.png
+animation   5           TEXID_PLAYER_SMG            TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/smg_fire/image%i.png
+animation   20          TEXID_PLAYER_SMG_RELOAD     TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/smg_reload/image%i.png
+animation   4           TEXID_PLAYER_SHOT           TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/shotgun_fire/image%i.png
+animation   26          TEXID_PLAYER_SHOT_RELOAD    TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/shotgun_reload/image%i.png
+image                   TEXID_PLAYER_LASER          TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/laser/image0.png
+animation   3           TEXID_PLAYER_RPG            TEXSCOPE_GAME      -3   0     TM_DEFAULT   images/player/rpg_fire/image%i.png
+animation   15          TEXID_PLAYER_RPG_RELOAD     TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/rpg_reload/image%i.png

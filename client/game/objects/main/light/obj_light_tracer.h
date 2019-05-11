@@ -15,10 +15,6 @@ typedef struct _lightTracer_data
 
 } lightTracer_data_t;
 
-void lightTracer_destroy(gameObject_t* this);
-void lightTracer_init(gameObject_t* this);
-void lightTracer_event_update(gameObject_t* this, void* data);
-
 gameObject_t* createAreaLT(vec_t pos, double range, color_t color);
 gameObject_t* createTexturedAreaLT(vec_t pos, double range, color_t color, tex_t* tex, int frame);
 gameObject_t* createDirectLT(vec_t pos, double range, double angle, double width, double backOffset, color_t color,

@@ -53,12 +53,28 @@ int isInWindowRect(gameObject_t* object)
            object->pos.y > texH * object->size + winH;
 }
 
+vec_t relativeCoordinatesEx(tex_t* tex, vec_t pos, double angle)
+{
+    vec_t result;
+    dcCreatePoint(
+            &result,
+            pos,
+            cos(angle),
+            sin(angle),
+            0,
+            0,
+            vec(
+                -tex->center.x + pos.x,
+                -tex->center.y + pos.y),
+            0, 0);
+    return result;
+}
+
 vec_t relativeCoordinates(gameObject_t* obj)
 {
     if (!obj->cachedTex)
     {
         return obj->pos;
-
     }
     else
     {

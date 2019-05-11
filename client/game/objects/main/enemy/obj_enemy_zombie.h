@@ -8,6 +8,7 @@
 #include "../../../objectInclude.h"
 
 #include "../../bloodSpawner.h"
+#include "../../playerData.h"
 
 #define ENEMY_SPEED_MAX 0.5
 #define ENEMY_SPEED_MIN 0.1
@@ -18,7 +19,7 @@ typedef struct enemyData
 {
     double hp;
 
-    gameObject_t* player;
+    playerData_t* player;
 
     tex_t* larm_tex;
     tex_t* rarm_tex;
@@ -30,9 +31,6 @@ typedef struct enemyData
 
 } enemyData_t;
 
-void enemy_zombie_harm(gameObject_t* this);
-void enemy_init(gameObject_t* this);
-void enemy_event_update(gameObject_t* this, void* data);
-gameObject_t* createEnemy(gameObject_t* player, vec_t pos);
+gameObject_t* createEnemy(playerData_t* player, vec_t pos);
 
 #endif //ZOMBOID2_OBJ_ENEMY_H

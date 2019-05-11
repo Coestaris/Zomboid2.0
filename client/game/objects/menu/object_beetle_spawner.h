@@ -17,8 +17,6 @@ typedef struct _mbeetleSpawnerData
 
 } mbeetleSpawnerData_t;
 
-void mbeetleSpawner_init(gameObject_t* this);
-void mbeetleSpawner_event_update(gameObject_t* this, void* data);
 gameObject_t* createMenuBeetleSpawner();
 
 #endif //ZOMBOID2_OBJECT_BEETLE_SPAWNER_H

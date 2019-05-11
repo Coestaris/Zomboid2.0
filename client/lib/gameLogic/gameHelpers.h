@@ -19,6 +19,7 @@
 void loadTexture(char* fn, int id, int scope, vec_t center, int mode);
 void loadAnimation(int framesCount, int id, int scope, vec_t center, int mode, ...);
 
+vec_t relativeCoordinatesEx(tex_t* tex, vec_t pos, double angle);
 vec_t relativeCoordinates(gameObject_t* obj);
 int isInWindowRect(gameObject_t* obj);
 int isInWindowExtendedRect(gameObject_t* obj, int exW, int exH);

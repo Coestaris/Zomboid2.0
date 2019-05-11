@@ -60,7 +60,7 @@ gameObject_t* createBullet(vec_t p, double angle)
     go->depth = 1;
     go->pos = p;
 
-    go->angle = angle + toRad(randRange(-50, 50));
+    go->angle = angle;
     go->texID = TEXID_BULLET;
     go->size = 1;
     go->onInit = bullet_init;

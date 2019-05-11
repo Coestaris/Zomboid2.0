@@ -8,7 +8,6 @@
 #include "../../../objectInclude.h"
 
 #include "../gameController/obj_gameController.h"
-#include "../player/obj_player.h"
 
 typedef struct _hudData {
     playerData_t* playerData;

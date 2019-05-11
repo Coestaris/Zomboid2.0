@@ -9,7 +9,6 @@ scm_open  SCENEID_GAME
     ;scm_sog_add       OBJECT_BOX         300   300
     ;scm_sog_add       OBJECT_BOX         400   400
     ;scm_sog_add       OBJECT_BOX         400   100
-    scm_sog_add       OBJECT_PLAYER             200   500
     scm_sog_add       OBJECT_HUD                0     0
     scm_sog_add       OBJECT_GAME_CONTROLLER    0     0
 

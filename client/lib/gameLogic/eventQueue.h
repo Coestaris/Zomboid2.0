@@ -33,6 +33,8 @@
 #define MB_LEFT 0
 #define MB_RIGHT 2
 #define MB_MIDDLE 1
+#define MB_WHEEL_UP 3
+#define MB_WHEEL_DOWN 4
 
 #define MS_PRESSED 0
 #define MS_RELEASED 1

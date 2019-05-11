@@ -17,6 +17,11 @@ int fileExists(const char* filename)
     return 1;
 }
 
+vec_t randVector(double maxW, double maxH)
+{
+    return vec(randRange(0, maxW), randRange(0, maxH));
+}
+
 color_t randColor(double alpha)
 {
     return color(randRange(0, 1), randRange(0, 1), randRange(0, 1), alpha);
