@@ -12,6 +12,7 @@ tex_t* hpTex;
 tex_t* armourTex;
 tex_t* progressBarTex;
 tex_t* borderTex;
+tex_t* menuTex;
 
 char* strings[WEAPON_COUNT] = {
         "1", "2", "3", "4", "5", "6"
@@ -88,12 +89,9 @@ void hud_update(gameObject_t* this, void* data)
     }
     else
     {
-        for(int i = 0; i < pd->weaponCount[pd->weapon] / 15; i++)
-        {
-            dqnDrawSprite(leftTex, hudColor, 0, vec(winW - (leftTex->width) * (i) - 19,
-                                                    winH - (leftTex->height + 3) - strH - wepSlotTex->height - 12),
-                          0, 1, hudDepth);
-        }
+        dqnDrawStretchedTexture(progressBarTex, vec(winW - 15, winH - strH - wepSlotTex->height - 50), 0, hudColor,
+                -(225 / (double)progressBarTex->width * (pd->weaponCount[pd->weapon]) / (double)getWeaponCount(pd->weapon)),
+                1.15, hudDepth);
     }
 
     //Drawing weapon texture
@@ -140,6 +138,15 @@ void hud_update(gameObject_t* this, void* data)
     snprintf(completedText, completedTextLen, "%.0lf%% Completed", gd->completed);
     strW = fontGetStringWidth(completedText, hudFont, 0.6);
     dqnDrawText(vec(winW / 2.0 - strW / 2.0 + .1, 120.1), hudColor, hudFont, completedText, 0.6, hudDepth);
+
+    dqnDrawSprite(menuTex, color(1, 1, 1, hudColor.a), 0, vec(menuTex->width - 10, menuTex->height - 10), 0, 1, hudDepth + 1);
+
+    //Score text
+    snprintf(scoreText, scoreTextLen, "Score %i", pd->score);
+    strW = fontGetStringWidth(scoreText, hudFont, 0.5);
+    dqnDrawText(vec(winW - strW, 60), hudColor, hudFont, scoreText, 0.5, hudDepth);
+
+
 }
 
 void hud_init(gameObject_t* this)
@@ -150,6 +157,7 @@ void hud_init(gameObject_t* this)
     armourTex = texmGetID(TEXID_HUD_SHIELD);
     progressBarTex = texmGetID(TEXID_HUD_LEFT_LASER);
     borderTex = texmGetID(TEXID_HUD_BORDER);
+    menuTex = texmGetID(TEXID_HUD_MENU);
 
     evqSubscribeEvent(this, EVT_Update, hud_update);
     hudData_t* hd = this->data;
@@ -165,7 +173,7 @@ void hud_init(gameObject_t* this)
 
 gameObject_t* createHud(void)
 {
-    hudColor = color(175 / 255.0, 192 / 255.0, 243 / 255.0, 0.6);
+    hudColor = color(175 / 255.0, 192 / 255.0, 243 / 255.0, 0.8);
 
     memset(weaponText, 0, weaponTextLen);
     memset(grenadeText, 0, grenadeTextLen);

@@ -33,6 +33,7 @@ image                   TEXID_HUD_LEFT_ROCKET   TEXSCOPE_GAME    0    0    TM_DE
 image                   TEXID_HUD_LEFT_GRENADE  TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/grenade_left.png
 
 image                   TEXID_HUD_BORDER        TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/bar_border.png
+image                   TEXID_HUD_MENU          TEXSCOPE_GAME    0    0    TM_DEFAULT   images/hud/menu.png
 
 
 image                   TEXID_BACK_CONCRETE TEXSCOPE_MM_GEN      0    0    TM_BACK      images/backgrounds/concrete.png

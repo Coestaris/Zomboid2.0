@@ -1,70 +1,60 @@
-#define TEXSCOPE_MAIN_MENU 0
-#define TEXSCOPE_GAME 1
-#define TEXSCOPE_MM_GEN 2
+#define TEXSCOPE_MAIN_MENU  0
+#define TEXSCOPE_GAME       1
+#define TEXSCOPE_MM_GEN     2
 
-#define TEXID_PLAYER 1
-#define TEXID_BULLET 2
-#define TEXID_BOX 3
-#define TEXID_SIMPLE_LIGHT 4
-#define TEXID_LIGHT 5
-#define TEXID_FLASHLIGHT 6
-#define TEXID_SHELLCASE 8
+#define TEXID_PLAYER            1
+#define TEXID_BULLET            2
+#define TEXID_BOX               3
+#define TEXID_SIMPLE_LIGHT      4
+#define TEXID_LIGHT             5
+#define TEXID_FLASHLIGHT        6
+#define TEXID_BACK_CONCRETE     7
+#define TEXID_SHELLCASE         8
+#define TEXID_ENEMY_LARM        10
+#define TEXID_ENEMY_RARM        11
+#define TEXID_ENEMY_LARM_D      12
+#define TEXID_ENEMY_RARM_D      13
+#define TEXID_LIGHT_WIDE        14
+#define TEXID_LIGHT_DUO         15
+#define TEXID_MENU_BTN_SM       16
+#define TEXID_MENU_BTN          17
+#define TEXID_MENU_INDBL        18
+#define TEXID_MENU_OUT          19
+#define TEXID_MENU_SP           20
+#define TEXID_ENEMY_BEETLE      21
+#define TEXID_BLOOD             22
+#define TEXID_BLOOD_SMEAR       23
+#define TEXID_BLOOD_DEAD        24
+#define TEXID_DUMMY             25
+#define TEXID_ENEMY_ZOMBIE_1    26
+#define TEXID_ENEMY_ZOMBIE_2    27
+#define TEXID_ENEMY_ZOMBIE_3    28
+#define TEXID_WEAPON_PISTOL     29
+#define TEXID_WEAPON_CROSSBOW   30
+#define TEXID_WEAPON_SMG        31
+#define TEXID_WEAPON_SHOTGUN    32
+#define TEXID_WEAPON_LASER      33
+#define TEXID_WEAPON_RPG        34
+#define TEXID_HUD_WEPSLOT       35
+#define TEXID_HUD_LEFT_BULLET   36
+#define TEXID_HUD_LEFT_BOLT     37
+#define TEXID_HUD_LEFT_SHELL    38
+#define TEXID_HUD_LEFT_LASER    39
+#define TEXID_HUD_LEFT_ROCKET   40
+#define TEXID_HUD_LEFT_GRENADE  41
+#define TEXID_HUD_HEART         42
+#define TEXID_HUD_SHIELD        43
+#define TEXID_HUD_BORDER        44
+#define TEXID_HUD_MENU          45
 
-#define TEXID_ENEMY_LARM 10
-#define TEXID_ENEMY_RARM 11
-#define TEXID_ENEMY_LARM_D 12
-#define TEXID_ENEMY_RARM_D 13
-#define TEXID_ENEMY_BEETLE 21
+#define SCENEID_MAIN_MENU   1
+#define SCENEID_GAME        0
 
-#define TEXID_ENEMY_ZOMBIE_1 26
-#define TEXID_ENEMY_ZOMBIE_2 27
-#define TEXID_ENEMY_ZOMBIE_3 28
-
-#define TEXID_BACK_CONCRETE 7
-
-#define TEXID_LIGHT_WIDE 14
-#define TEXID_LIGHT_DUO  15
-
-#define TEXID_MENU_BTN_SM 16
-#define TEXID_MENU_BTN 17
-#define TEXID_MENU_INDBL 18
-#define TEXID_MENU_OUT 19
-#define TEXID_MENU_SP 20
-
-#define TEXID_BLOOD 22
-#define TEXID_BLOOD_SMEAR 23
-#define TEXID_BLOOD_DEAD 24
-
-#define TEXID_DUMMY 25
-
-#define TEXID_WEAPON_PISTOL    29
-#define TEXID_WEAPON_CROSSBOW  30
-#define TEXID_WEAPON_SMG       31
-#define TEXID_WEAPON_SHOTGUN   32
-#define TEXID_WEAPON_LASER     33
-#define TEXID_WEAPON_RPG       34
-
-#define TEXID_HUD_WEPSLOT      35
-
-#define TEXID_HUD_LEFT_BULLET  36
-#define TEXID_HUD_LEFT_BOLT    37
-#define TEXID_HUD_LEFT_SHELL   38
-#define TEXID_HUD_LEFT_LASER   39
-#define TEXID_HUD_LEFT_ROCKET  40
-#define TEXID_HUD_LEFT_GRENADE 41
-
-#define TEXID_HUD_HEART        42
-#define TEXID_HUD_SHIELD       43
-#define TEXID_HUD_BORDER       44
-
-#define SCENEID_MAIN_MENU 1
-#define SCENEID_GAME 0
-
-#define OBJECT_PLAYER 0
-#define OBJECT_BOX    1
-#define OBJECT_MENU 2
-#define OBJECT_MENU_SPAWNER 3
-#define OBJECT_ZOMBIE 4
-#define OBJECT_HUD 5
-#define OBJECT_GAME_CONTROLLER 6
+#define OBJECT_PLAYER           0
+#define OBJECT_BOX              1
+#define OBJECT_MENU             2
+#define OBJECT_MENU_SPAWNER     3
+#define OBJECT_ZOMBIE           4
+#define OBJECT_HUD              5
+#define OBJECT_GAME_CONTROLLER  6
 

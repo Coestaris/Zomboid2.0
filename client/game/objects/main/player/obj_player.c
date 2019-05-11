@@ -139,6 +139,7 @@ void player_event_update(gameObject_t* object, void* data)
             pd->currShake = PLAYER_SHAKE_START;
             pd->currLightAlpha = PLAYER_LIGHT_ALPHA_START;
             pd->currLightSize = PLAYER_LIGHT_SIZE_START;
+
             addFireLight(pd, rel);
 
             rotateScene(randRange(pd->currShake, pd->currShake * PLAYER_SHAKE_MIN));
@@ -150,7 +151,6 @@ void player_event_update(gameObject_t* object, void* data)
                                    rel.x + randRange(-5, 5),
                                    rel.y + randRange(-5, 5)),
                            randBool(), randBool());
-
             scmPushObject(createBullet(rel, object->angle));
 
             pd->weaponCount[pd->weapon] -= 1;
@@ -204,6 +204,7 @@ gameObject_t* createPlayer()
     pd->grenades = MAX_GRENADES;
     pd->hp = 32;
     pd->armour = 42;
+    pd->score = 200;
 
     for(int i = 0; i < WEAPON_COUNT; i++)
     {

@@ -62,7 +62,7 @@ typedef struct _playerData
     //Gameplay stuff
     double hp;
     double armour;
-    int points;
+    int score;
 
 
 } playerData_t;
