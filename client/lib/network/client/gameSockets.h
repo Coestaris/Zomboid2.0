@@ -8,7 +8,7 @@
 #include "../messageTypes.h"
 #include "../metadata.h"
 #include "../../../../lib/netconf.h"
-#include "../../../../lib/zdtp.h"
+#include "../../../../lib/idtp.h"
 
 #define MAX_HANDLERS 100
 

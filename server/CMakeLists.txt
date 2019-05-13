@@ -3,4 +3,4 @@ project(main_server C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(node lib/network/sockets.h lib/network/sockets.c ../lib/zdtp.h ../lib/zdtp.c ../lib/netconf.h ../lib/client.h client.c ../lib/host.h test.c ../client/lib/network/client/idSockets.c ../client/lib/network/client/idSockets.h)
+add_executable(node lib/network/sockets.h lib/network/sockets.c ../lib/idtp.h ../lib/idtp.c ../lib/netconf.h ../lib/client.h client.c ../lib/host.h test.c ../client/lib/network/client/idSockets.c ../client/lib/network/client/idSockets.h)

@@ -125,6 +125,7 @@ int idClientSocketUpdateData(int sockfd, client_t *clients, zsize_t *clientsCoun
                             *clientsCount = 0;
                             memset(hosts, 0, *hostsCount * sizeof (host_t));
                             *hostsCount = 0;
+                            break;
                         case MSG_ID_SERVER_UPDATE_END:
                             running = 0;
                             break;

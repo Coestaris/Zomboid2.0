@@ -2,7 +2,7 @@
 // Created by h0tw4t3r on 5/3/19.
 //
 
-#include "zdtp.h"
+#include "idtp.h"
 
 uint64_t read_uint_n(const uint8_t *data, uint8_t n, uint64_t offset, void *res) {
     if (n > sizeof (uint64_t)) {
@@ -86,7 +86,8 @@ uint8_t * idServer_packHostData(host_t *host, uint8_t res[MSG_ID_SERVER_HOST_DAT
 
     total = write_uint_n(host->uid, sizeof (zsize_t), total, res);
     total = write_string(host->name, MAX_HOST_NAME_LENGTH, total, res);
-    write_uint_n(host->port, sizeof (uint16_t), total, res);
+    total = write_uint_n(host->port, sizeof (uint16_t), total, res);
+    write_uint_n(host->clientsCount, sizeof (zsize_t), total, res);
 
     return res;
 }
@@ -146,7 +147,8 @@ host_t * idClient_unpackHostData(uint8_t data[MSG_ID_SERVER_HOST_DATA_LENGTH], h
 
     total = read_uint_n(data, sizeof (zsize_t), total, &(res->uid));
     total = read_string(data, MAX_HOST_NAME_LENGTH, total, res->name);
-    read_uint_n(data, sizeof (uint16_t), total, &(res->port));
+    total = read_uint_n(data, sizeof (uint16_t), total, &(res->port));
+    read_uint_n(data, sizeof (zsize_t), total, &(res->clientsCount));
 
     return res;
 }

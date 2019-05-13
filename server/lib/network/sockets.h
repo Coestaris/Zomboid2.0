@@ -20,7 +20,7 @@
 #include <asm/errno.h>
 #include <netdb.h>
 
-#include "../../../lib/zdtp.h"
+#include "../../../lib/idtp.h"
 
 #define MAX_ZNET_CLIENTS 100
 #define MAX_ZNET_HOSTS 10

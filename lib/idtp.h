@@ -64,9 +64,10 @@ enum {
  *  - UID - sizeof (zsize_t)
  *  - Name [up to 32 symbols] - 32 bytes | TODO: RESTRICT NON-LATIN SYMBOLS
  *  - Port - 4 bytes
+ *  - clientsCount - sizeof (zsize_t)
  */
 
-#define MSG_ID_SERVER_HOST_DATA_LENGTH 37 + sizeof (zsize_t)
+#define MSG_ID_SERVER_HOST_DATA_LENGTH 37 + 2 * sizeof (zsize_t)
 
 /* Client close
  *

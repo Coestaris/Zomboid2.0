@@ -12,6 +12,7 @@
 typedef struct {
     zsize_t uid;
     uint8_t name[MAX_HOST_NAME_LENGTH];
+    zsize_t clientsCount;
     uint16_t port;
 } host_t;
 

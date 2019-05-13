@@ -6,7 +6,7 @@
 #define SERVER_SOCKETS_H
 
 #include "../../../../lib/netconf.h"
-#include "../../../../lib/zdtp.h"
+#include "../../../../lib/idtp.h"
 #include "../../../../lib/client.h"
 #include "../../../../server/logicHandler.h"
 #include "../../../../server/actionNotifier.h"

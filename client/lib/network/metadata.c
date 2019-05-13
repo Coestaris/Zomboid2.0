@@ -6,7 +6,7 @@
 // WARNING: DON'T USE IT!!!!!!! BUGGGGGGGGGGGGGGGGS!!!!!
 
 #include "metadata.h"
-#include "../../../lib/zdtp.h"
+#include "../../../lib/idtp.h"
 #include <inttypes.h>
 
 void serialize(uint8_t *data, player_meta_t meta) {

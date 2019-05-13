@@ -18,6 +18,7 @@
 
 #include "netconf.h"
 #include <netinet/in.h>
+
 typedef struct {
     zsize_t uid;
     uint8_t isHost;
@@ -26,7 +27,6 @@ typedef struct {
     sockaddr_in_t address;
     int sockfd;
 } client_t;
-
 
 typedef struct _client_info {
     int state;

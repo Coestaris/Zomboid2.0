@@ -217,7 +217,7 @@ int idServerSocketMainLoop(int sockfd) {
                     zsize_t currentClient;
                     uint8_t buff[MAX_BUFFER];
                     for (currentClient = 0; currentClient < clientsCount; currentClient++) {
-                         if (clients[currentClient].sockfd != sockIt) {
+                         if (clients[currentClient].sockfd == sockIt) {
                              clientExists = 1;
                              break;
                          }
@@ -273,10 +273,10 @@ int idServerSocketMainLoop(int sockfd) {
                                     perror("idServer is full");
                                     exit(1);
                                 }
-                                clients[clientsCount].uid = newUID;
-                                memcpy(&(clients + clientsCount)->address, &remoteaddr, sizeof(sockaddr_t));
-                                clients[clientsCount].sockfd = sockIt;
-                                idClient_unpackClientInit(buff, clients[clientsCount].name);
+                                clients[newUID].uid = newUID;
+                                memcpy(&(clients + newUID)->address, &remoteaddr, sizeof(sockaddr_t));
+                                clients[newUID].sockfd = sockIt;
+                                idClient_unpackClientInit(buff, clients[newUID].name);
                                 clientsCount++;
                                 break;
                             case MSG_ID_CLIENT_HOST_INIT:
@@ -286,13 +286,13 @@ int idServerSocketMainLoop(int sockfd) {
                                     perror("idServer is full of hosts");
                                     exit(1);
                                 }
-                                hosts[hostsCount].uid = newUID;
-                                clients[currentClient].hostUid = hosts[hostsCount].uid;
-                                idClient_unpackHostInit(buff, &hosts[hostsCount].port, hosts[hostsCount].name);
+                                hosts[newUID].uid = newUID;
+                                clients[newUID].hostUid = hosts[newUID].uid;
+                                idClient_unpackHostInit(buff, &hosts[newUID].port, hosts[newUID].name);
                                 hostsCount++;
                                 break;
                             case MSG_ID_CLIENT_UPDATE_INIT:
-                                if(sendAll(sockIt, idServer_packUpdateStart(buff), MSG_ID_SERVER_UPDATE_START, 0) == -1) {
+                                if(sendAll(sockIt, idServer_packUpdateStart(buff), MSG_ID_SERVER_UPDATE_START_LENGTH, 0) == -1) {
                                     perror("send");
                                     exit(1);
                                 }
