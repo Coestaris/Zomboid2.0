@@ -6,22 +6,25 @@
 #define ZOMBOID2_OBJ_BULLET_H
 
 #define BULLET_SPEED 15
-#define BULLET_LIGHT_ALPHA .3
+#define BULLET_LIGHT_ALPHA .15
 #define BULLET_LIGHT_SIZE 400
 
 #include "../../../objectInclude.h"
+
+#include "../../bloodSpawner.h"
+
+#include "../enemy/obj_enemy_zombie.h"
 #include "../light/obj_light.h"
 
-typedef struct _bulletData {
-
-    gameObject* light;
+typedef struct _bulletData
+{
+    gameObject_t* light;
     double xOffset;
     double yOffset;
+    double damage;
 
-} bulletData;
+} bulletData_t;
 
-void bullet_event_update(gameObject *object, void *data);
-void bullet_init(gameObject* object);
-gameObject* createBullet(vec_t a, double angle);
+gameObject_t* createBullet(vec_t p, double angle, int texID, double damage);
 
 #endif //ZOMBOID2_OBJ_BULLET_H

@@ -8,19 +8,24 @@
 #include "GL/freeglut.h"
 #include "GL/gl.h"
 
-#include "gameLogic/eventfuncs.h"
+#include "resources/font.h"
+#include "shaders/shaderManager.h"
+#include "gameLogic/eventFuncs.h"
 #include "gameLogic/gameScene.h"
-#include "helpers.h"
 #include "rlist/rlist.h"
+#include "helpers.h"
 
-//#define OVERRIDE_GL_VERSION
+#define OVERRIDE_GL_VERSION
 
 #ifdef OVERRIDE_GL_VERSION
-    #define MAJOR_GL_VERSION 4
-    #define MINOR_GL_VERSION 2
+#define MAJOR_GL_VERSION 3
+#define MINOR_GL_VERSION 0
 #endif
 
-void initGraphics(int argc, char **argv, int w, int h, const char *title, int isFixedSize, char* mainResFile);
+extern int winW;
+extern int winH;
+
+void initGraphics(int argc, char** argv, int w, int h, const char* title, int isFixedSize, char* mainResFile);
 void registerEvents();
 void runApp(int sceneID);
 

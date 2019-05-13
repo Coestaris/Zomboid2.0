@@ -5,6 +5,8 @@
 #ifndef ZOMBOID2_TEX_H
 #define ZOMBOID2_TEX_H
 
+#define USE_SOIL
+
 #include <malloc.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -13,15 +15,20 @@
 
 #include <GL/freeglut.h>
 #include <GL/gl.h>
-#include "../../../lib/oil/oil.h"
-
 #include "../structs.h"
+
+#ifdef USE_SOIL
+    #include <SOIL/SOIL.h>
+#else
+    #include "../../../lib/oil/oil.h"
+#endif
 
 #define TEXMODE_DEFAULT 0
 #define TEXMODE_BACKGROUND 1
 #define TEXMODE_OVERLAY 2
 
-typedef struct _tex2d {
+typedef struct _tex2d
+{
     char** fns;
     int mode;
 
@@ -36,16 +43,16 @@ typedef struct _tex2d {
 
     int width;
     int height;
-} tex2d;
 
-tex2d* createTex(char *fn, int uid, int scope, vec_t center, int mode);
-tex2d* createAnimation(char **fileNames, int framesCount, int uid, int scope, vec_t center, int mode);
+    GLint VAO;
 
-void freeOGlTex(tex2d* tex);
-void freeTex(tex2d* tex);
-void bindTex(tex2d* tex, int frame);
+} tex_t;
 
-int texSize(char* filename, int* w, int* h);
-void loadTex(tex2d* tex);
+tex_t* createTex(char* fn, int uid, int scope, vec_t center, int mode);
+tex_t* createAnimation(char** fileNames, int framesCount, int uid, int scope, vec_t center, int mode);
+void freeOGlTex(tex_t* tex);
+void freeTex(tex_t* tex);
+void bindTex(tex_t* tex, int frame);
+void loadTex(tex_t* tex);
 
 #endif //ZOMBOID2_TEX_H

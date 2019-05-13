@@ -4,11 +4,11 @@
 
 #include "texManager.h"
 
-texmNode* list;
+texmNode_t* list;
 
-void texmFreeNode(texmNode *node)
+void texmFreeNode(texmNode_t* node)
 {
-    if(node->value)
+    if (node->value)
     {
         freeOGlTex(node->value);
         freeTex(node->value);
@@ -17,32 +17,32 @@ void texmFreeNode(texmNode *node)
 }
 
 
-texmNode* temCreateNode(tex2d *tex)
+texmNode_t* temCreateNode(tex_t* tex)
 {
-    texmNode* node = malloc(sizeof(texmNode));
+    texmNode_t* node = malloc(sizeof(texmNode_t));
     node->value = tex;
     node->next = NULL;
 
     return node;
 }
 
-texmNode* texmRemoveNode(int uid, int free)
+texmNode_t* texmRemoveNode(int uid, int free)
 {
-    texmNode* prev = NULL;
-    texmNode* node = list;
-    while(1)
+    texmNode_t* prev = NULL;
+    texmNode_t* node = list;
+    while (1)
     {
-        if(node->value && node->value->id == uid)
+        if (node->value && node->value->id == uid)
         {
-            if(prev)
+            if (prev)
             {
                 prev->next = node->next;
             }
-            if(free) texmFreeNode(node);
+            if (free) texmFreeNode(node);
             return node;
             //return node;
         }
-        if(!node->next) break;
+        if (!node->next) break;
 
         prev = node;
         node = node->next;
@@ -51,29 +51,34 @@ texmNode* texmRemoveNode(int uid, int free)
     return NULL;
 }
 
-void texmPrintNode(texmNode *node)
+int texCounter = 0;
+
+void texmPrintNode(texmNode_t* node)
 {
-    if(node == NULL)
+    if (node == NULL)
     {
-        puts("Texture[NULL]");
+        printf("[texm.c]: %2i. Texture[NULL]\n", ++texCounter);
     }
     else
     {
         if (node->value)
         {
-            if(node->value->textureIds[0])
+            if (node->value->textureIds[0])
             {
-                if(node->value->framesCount == 1)
+                if (node->value->framesCount == 1)
                 {
-                    printf("Texture[UID: %i, Scope %i, FN: \"%s\", Loaded: true, W: %i, H: %i, OGLId: %i]\n",
+                    printf("[texm.c]: %2i. Texture[UID: %i, Scope %i, FN: \"%s\", Loaded: true, W: %i, H: %i, OGLId: %i]\n",
+                           ++texCounter,
                            node->value->id, node->value->scope,
                            node->value->fns[0], node->value->width, node->value->height, node->value->textureIds[0]);
                 }
                 else
                 {
-                    printf("Animation[UID: %i, Scope %i, Loaded: true, W: %i, H: %i, OGLIds: [",
-                            node->value->id, node->value->scope, node->value->width, node->value->height);
-                    for(int i = 0; i < node->value->framesCount; i++) {
+                    printf("[texm.c]: %2i. Animation[UID: %i, Scope %i, Loaded: true, W: %i, H: %i, OGLIds: [",
+                           ++texCounter,
+                           node->value->id, node->value->scope, node->value->width, node->value->height);
+                    for (int i = 0; i < node->value->framesCount; i++)
+                    {
                         printf("%i%c", node->value->textureIds[i], (i == node->value->framesCount - 1) ? ']' : ',');
                     }
                     putchar('\n');
@@ -81,50 +86,56 @@ void texmPrintNode(texmNode *node)
             }
             else
             {
-                if(node->value->framesCount == 1)
+                if (node->value->framesCount == 1)
                 {
-                    printf("Texture[UID: %i, FN: \"%s\", Scope %i, Loaded: false]\n", node->value->id, node->value->fns[0], node->value->scope);
+                    printf("[texm.c]: %2i. Texture[UID: %i, FN: \"%s\", Scope %i, Loaded: false]\n",
+                           ++texCounter,
+                           node->value->id, node->value->fns[0], node->value->scope);
                 }
                 else
                 {
-                    printf("Animation[UID: %i, Scope %i, Loaded: false]\n", node->value->id, node->value->scope);
+                    printf("[texm.c]: %2i. Animation[UID: %i, Scope %i, Loaded: false]\n",
+                           ++texCounter,
+                           node->value->id, node->value->scope);
                 }
             }
         }
         else
         {
-            puts("Texture[empty]");
+            printf("[texm.c]: %2i. Texture[NULL]\n", ++texCounter);
         }
     }
 }
 
 void texmPrintNodes()
 {
-    texmNode* node = list;
-    while(1)
+    texmNode_t* node = list;
+    texCounter = 0;
+    puts("[texm.c]: Here`s list of all registered texures: ");
+    while (1)
     {
         texmPrintNode(node);
-        if(node->next == NULL) break;
+        if (node->next == NULL) break;
         node = node->next;
     }
 }
 
 void texmRemoveNodes(int scope, int free)
 {
-    texmNode* prev = NULL;
-    texmNode* node = list;
+    texmNode_t* prev = NULL;
+    texmNode_t* node = list;
     int removed = 0;
 
-    while(1)
+    while (1)
     {
-        if(node->value && node->value->scope == scope)
+        if (node->value && node->value->scope == scope)
         {
-            if(prev) prev->next = node->next;
+            if (prev) prev->next = node->next;
             removed = 1;
         }
-        if(!node->next) break;
+        if (!node->next) break;
 
-        if(!removed)
+        if (!removed)
         {
             prev = node;
             node = node->next;
@@ -134,7 +145,7 @@ void texmRemoveNodes(int scope, int free)
             removed = 0;
             if (free)
             {
-                texmNode *next = node->next;
+                texmNode_t* next = node->next;
                 texmFreeNode(node);
 
                 node = next;
@@ -152,12 +163,20 @@ void texmInit(void)
     list = temCreateNode(NULL);
 }
 
-void texmPush(tex2d* tex)
+void texmPush(tex_t* tex)
 {
-    texmNode* lastNode = list;
-    while(lastNode->next) lastNode = lastNode->next;
+    tex_t* oldTex;
+    if ((oldTex = texmGetID(tex->id)))
+    {
+        printf("[texm.c][ERROR]: Texture with ID %i already exists. New path: \"%s\", old path \"%s\"", tex->id,
+               tex->fns[0], oldTex->fns[0]);
+        exit(1);
+    }
 
-    texmNode* node = temCreateNode(tex);
+    texmNode_t* lastNode = list;
+    while (lastNode->next) lastNode = lastNode->next;
+
+    texmNode_t* node = temCreateNode(tex);
     lastNode->next = node;
 
     //texmPrintNode(node);
@@ -165,42 +184,42 @@ void texmPush(tex2d* tex)
 
 void texmLoadID(int uid)
 {
-    texmNode* node = list;
-    while(1)
+    texmNode_t* node = list;
+    while (1)
     {
-        if(node->value && node->value->id == uid)
+        if (node->value && node->value->id == uid)
         {
             loadTex(node->value);
         }
-        if(node->next == NULL) break;
+        if (node->next == NULL) break;
         node = node->next;
     }
 }
 
 void texmLoadScope(int scope)
 {
-    texmNode* node = list;
-    while(1)
+    texmNode_t* node = list;
+    while (1)
     {
-        if(node->value && node->value->scope == scope)
+        if (node->value && node->value->scope == scope)
         {
             loadTex(node->value);
         }
-        if(node->next == NULL) break;
+        if (node->next == NULL) break;
         node = node->next;
     }
 }
 
-tex2d* texmGetID(int uid)
+tex_t* texmGetID(int uid)
 {
-    texmNode* node = list;
-    while(1)
+    texmNode_t* node = list;
+    while (1)
     {
-        if(node->value && node->value->id == uid)
+        if (node->value && node->value->id == uid)
         {
             return node->value;
         }
-        if(node->next == NULL) break;
+        if (node->next == NULL) break;
         node = node->next;
     }
 
@@ -209,28 +228,28 @@ tex2d* texmGetID(int uid)
 
 void texmUnloadID(int uid)
 {
-    texmNode* node = list;
-    while(1)
+    texmNode_t* node = list;
+    while (1)
     {
-        if(node->value && node->value->id == uid)
+        if (node->value && node->value->id == uid)
         {
             freeOGlTex(node->value);
         }
-        if(node->next == NULL) break;
+        if (node->next == NULL) break;
         node = node->next;
     }
 }
 
 void texmUnloadScope(int scope)
 {
-    texmNode* node = list;
-    while(1)
+    texmNode_t* node = list;
+    while (1)
     {
-        if(node->value && node->value->scope == scope)
+        if (node->value && node->value->scope == scope)
         {
             freeOGlTex(node->value);
         }
-        if(node->next == NULL) break;
+        if (node->next == NULL) break;
         node = node->next;
     }
 }

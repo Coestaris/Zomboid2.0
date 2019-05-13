@@ -5,7 +5,7 @@
 #ifndef ZOMBOID2_CONTROL_INPUT_H
 #define ZOMBOID2_CONTROL_INPUT_H
 
-#include "../../gameLogic/gameobject.h"
+#include "../../gameLogic/gameObject.h"
 #include "../../gameLogic/eventQueue.h"
 #include "../../structs.h"
 
@@ -15,12 +15,16 @@
 #define FRAMES_BETWEEN_DELETING 5
 #define FRAMES_BETWEEN_FLASH 30
 
-typedef struct _input_data {
+typedef struct _input_data
+{
 
     int focused;
 
     color_t color;
-    void* font;
+
+    double fontSize;
+    font_t* font;
+
     char* str;
 
     int firstPressed;
@@ -34,13 +38,13 @@ typedef struct _input_data {
 
     long long prevDeleted;
 
-} input_data;
+} input_data_t;
 
-void input_event_keyDown(gameObject* this, void* data);
-void input_event_mouse(gameObject* this, void* data);
-void input_event_update(gameObject* this, void* data);
+void input_event_keyDown(gameObject_t* this, void* data);
+void input_event_mouse(gameObject_t* this, void* data);
+void input_event_update(gameObject_t* this, void* data);
+void input_init(gameObject_t* this);
 
-void input_init(gameObject* this);
-menu_container_child* createInput(vec_t pos, color_t color, void* font, char* defstr);
+menu_container_child_t* createInput(vec_t pos, color_t color, font_t* font, double fontSize, char* defstr);
 
 #endif //ZOMBOID2_CONTROL_INPUT_H

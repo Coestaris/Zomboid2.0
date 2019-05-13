@@ -9,8 +9,6 @@
 
 uint8_t pixelData[SCREEN_HEIGHT][SCREEN_WIDTH][4];
 
-int winW;
-int winH;
 GLuint surfGLID;
 
 void srfFree()
@@ -27,10 +25,11 @@ void srfFree()
 
 void srfBind()
 {
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(1, 1, 1, 1);
     glBindTexture(GL_TEXTURE_2D, surfGLID);
 }
+
 /*
 
 void free_data(uint8_t ***data, size_t xlen, size_t ylen)
@@ -85,8 +84,6 @@ uint8_t  ***alloc_data(size_t xlen, size_t ylen, size_t zlen)
 
 void srfInit(int wW, int wH)
 {
-    winW = wW;
-    winH = wH;
 /*
     if(!(pixelData = alloc_data((size_t)SCREEN_HEIGHT, (size_t)SCREEN_WIDTH, 4))) {
         puts("Unable allocate data to surface");
@@ -94,8 +91,9 @@ void srfInit(int wW, int wH)
     }*/
 
 
-    for(int y = 0; y < SCREEN_HEIGHT; ++y)
-        for(int x = 0; x < SCREEN_WIDTH; ++x) {
+    for (int y = 0; y < SCREEN_HEIGHT; ++y)
+        for (int x = 0; x < SCREEN_WIDTH; ++x)
+        {
             pixelData[y][x][0] = pixelData[y][x][1] = pixelData[y][x][2] = 4;
             pixelData[y][x][3] = 0;
         }
@@ -105,18 +103,20 @@ void srfInit(int wW, int wH)
 
     glBindTexture(GL_TEXTURE_2D, surfGLID);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)pixelData);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                 (GLvoid*) pixelData);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
 void srfClear()
 {
-    for(int y = 0; y < SCREEN_HEIGHT; ++y)
-        for(int x = 0; x < SCREEN_WIDTH; ++x) {
+    for (int y = 0; y < SCREEN_HEIGHT; ++y)
+        for (int x = 0; x < SCREEN_WIDTH; ++x)
+        {
             pixelData[y][x][0] = 0;
             pixelData[y][x][1] = 0;
             pixelData[y][x][2] = 0;
@@ -124,10 +124,11 @@ void srfClear()
         }
 
     glBindTexture(GL_TEXTURE_2D, surfGLID);
-    glTexSubImage2D(GL_TEXTURE_2D, 0 ,0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)pixelData);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                    (GLvoid*) pixelData);
 }
 
-void getPixel(uint8_t* pixels, int x, int y, int w, int h, uint8_t * r, uint8_t * g, uint8_t * b, uint8_t * a)
+void getPixel(uint8_t* pixels, int x, int y, int w, int h, uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* a)
 {
     const int offset = (y * w + x) * 4;
     *r = pixels[offset];
@@ -138,37 +139,41 @@ void getPixel(uint8_t* pixels, int x, int y, int w, int h, uint8_t * r, uint8_t 
 
 uint8_t clip(double a)
 {
-    if(a >= 255) return 255;
-    else if(a <= 0) return 0;
-    else return (uint8_t)a;
+    if (a >= 255) return 255;
+    else if (a <= 0) return 0;
+    else return (uint8_t) a;
 }
 
-void srfDrawTexture(tex2d* tex, int frame, double alpha, vec_t pos, int flipX, int flipY)
+void srfDrawTexture(tex_t* tex, int frame, double alpha, vec_t pos, int flipX, int flipY)
 {
-    GLint width,height;
+    GLint width, height;
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
     size_t numBytes = width * height * 4U;
 
-    uint8_t  *pixels = (uint8_t*) malloc(numBytes);
+    uint8_t* pixels = (uint8_t*) malloc(numBytes);
 
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-    for (int x = 0; x < width; x++) {
-        for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++)
+    {
+        for (int y = 0; y < height; y++)
+        {
 
             uint8_t r, g, b, a;
             getPixel(pixels, x, y, width, height, &r, &g, &b, &a);
 
-            if(a) {
+            if (a)
+            {
 
-                int xPos = (int)(flipX ? (width - x + pos.x) : (x + pos.x));
-                int yPos = (int)(flipY ? (height- y + pos.y) : (y + pos.y));
+                int xPos = (int) (flipX ? (width - x + pos.x) : (x + pos.x));
+                int yPos = (int) (flipY ? (height - y + pos.y) : (y + pos.y));
 
-                if(xPos >= SCREEN_WIDTH || yPos >= SCREEN_HEIGHT || xPos <= 0 || yPos <= 0)
+                if (xPos >= SCREEN_WIDTH || yPos >= SCREEN_HEIGHT || xPos <= 0 || yPos <= 0)
                     continue;
 
-                if(tex->mode == TEXMODE_OVERLAY) {
+                if (tex->mode == TEXMODE_OVERLAY)
+                {
 
                     double oldAlpha = pixelData[yPos][xPos][3] / 255.0 * alpha;
 
@@ -178,7 +183,9 @@ void srfDrawTexture(tex2d* tex, int frame, double alpha, vec_t pos, int flipX, i
                     pixelData[yPos][xPos][3] = clip((oldAlpha * pixelData[yPos][xPos][3] + (1 - oldAlpha) * a));
 
 
-                } else {
+                }
+                else
+                {
 
                     pixelData[yPos][xPos][0] = clip(r);
                     pixelData[yPos][xPos][1] = clip(g);
@@ -191,5 +198,6 @@ void srfDrawTexture(tex2d* tex, int frame, double alpha, vec_t pos, int flipX, i
     free(pixels);
 
     glBindTexture(GL_TEXTURE_2D, surfGLID);
-    glTexSubImage2D(GL_TEXTURE_2D, 0 ,0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)pixelData);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                    (GLvoid*) pixelData);
 }

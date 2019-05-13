@@ -7,7 +7,6 @@
 
 #include "../../../objectInclude.h"
 
-void box_init(gameObject* this);
-gameObject* createBox();
+gameObject_t* createBox();
 
 #endif //ZOMBOID2_OBJ_BOX_H

@@ -4,9 +4,9 @@
 
 #include "gameScene.h"
 
-gameScene* scenes[MAXSCENES];
-gameObject* objects[MAXOBJECTS];
-publicObject* publicObjects[MAXOBJECTS];
+gameScene_t* scenes[MAXSCENES];
+gameObject_t* objects[MAXOBJECTS];
+publicObject_t* publicObjects[MAXOBJECTS];
 
 int scenesCount = 0;
 int objectsCount = 0;
@@ -14,20 +14,22 @@ int publicObjectCount = 0;
 
 int currentScene = -1;
 
-void scmPushPublicObject(int id, gameObject* (*init)())
+void scmPushPublicObject(int id, gameObject_t* (* init)())
 {
     assert(publicObjectCount <= MAXOBJECTS);
 
-    publicObject* po = malloc(sizeof(publicObject));
+    publicObject_t* po = malloc(sizeof(publicObject_t));
     po->id = id;
     po->init = init;
     publicObjects[publicObjectCount++] = po;
 }
 
-publicObject* scmGetPublicObject(int id)
+publicObject_t* scmGetPublicObject(int id)
 {
-    for(int i = 0; i < publicObjectCount; i++) {
-        if(publicObjects[i]->id == id) {
+    for (int i = 0; i < publicObjectCount; i++)
+    {
+        if (publicObjects[i]->id == id)
+        {
             return publicObjects[i];
         }
     }
@@ -37,41 +39,83 @@ publicObject* scmGetPublicObject(int id)
 
 int scmHasScene(int id)
 {
-    for(int i = 0; i < scenesCount; i++) {
-        if(scenes[i]->id == id) {
+    for (int i = 0; i < scenesCount; i++)
+    {
+        if (scenes[i]->id == id)
+        {
             return 1;
         }
     }
     return 0;
 }
 
-gameScene* scmGetActiveScene()
+void proceedCollisions(void)
+{
+    struct {
+        collisionEventListener_t* listener;
+        gameObject_t* object;
+    } toCall[100];
+    size_t toCallCount = 0;
+
+    size_t count;
+    collisionEventListener_t** listeners = evqGetCollisionListeners(&count);
+    for (int i = 0; i < objectsCount; i++)
+    {
+        for(size_t listener = 0; listener < count; listener++)
+        {
+            if(listeners[listener]->collisionWith == objects[i]->ID)
+            {
+                vec_t point = listeners[listener]->object->pos;
+                gameObject_t* obj = objects[i];
+
+                if(    point.x > obj->pos.x - obj->cachedTex->width  / 2.0 * obj->size &&
+                       point.x < obj->pos.x + obj->cachedTex->width  / 2.0 * obj->size &&
+                       point.y > obj->pos.y - obj->cachedTex->height / 2.0 * obj->size &&
+                       point.y < obj->pos.y + obj->cachedTex->height / 2.0 * obj->size)
+                {
+                    //listeners[listener]->callback(listeners[listener]->object, objects[i]);
+                    toCall[toCallCount].listener = listeners[listener];
+                    toCall[toCallCount].object = objects[i];
+                    toCallCount++;
+                }
+            }
+        }
+    }
+
+    for(size_t i = 0; i < toCallCount; i++) {
+        toCall[i].listener->callback(toCall[i].listener->object, toCall[i].object);
+    }
+}
+
+gameScene_t* scmGetActiveScene()
 {
     return scenes[currentScene];
 }
 
-gameObject** scmGetObjects(int *count)
+gameObject_t** scmGetObjects(int* count)
 {
-    if(currentScene != -1) {
+    if (currentScene != -1)
+    {
         *count = objectsCount;
-        return  objects;
+        return objects;
     }
 
     return NULL;
 }
 
-int scmHasObject(gameObject *object)
+int scmHasObject(gameObject_t* object)
 {
-    for(int i = 0; i < objectsCount; i++)
-        if(objects[i] == object) return 1;
+    for (int i = 0; i < objectsCount; i++)
+        if (objects[i] == object) return 1;
     return 0;
 }
 
-void scmPushObject(gameObject *object)
+void scmPushObject(gameObject_t* object)
 {
     assert(object != NULL);
 
-    if(currentScene != -1 && object->onInit) {
+    if (currentScene != -1 && object->onInit)
+    {
         object->onInit(object);
     }
 
@@ -80,7 +124,7 @@ void scmPushObject(gameObject *object)
     {
         if(objects[i]->depth <= object->depth)
         {
-            memmove (&objects[i + 1], &objects[i], (objectsCount - i) * sizeof(gameObject*));
+            memmove (&objects[i + 1], &objects[i], (objectsCount - i) * sizeof(gameObject_t*));
             objects[i] = object;
             objectsCount++;
             return;
@@ -92,30 +136,33 @@ void scmPushObject(gameObject *object)
 
 void scmDestroyAllObjects(int free)
 {
-    for(int i = 0; i < objectsCount; i++)
+    for (int i = 0; i < objectsCount; i++)
         evqUnsubscribeEvents(objects[i]);
 
-    if(free) for(int i = 0; i < objectsCount; i++)
-        freeObject(objects[i]);
-    memset(objects, 0, sizeof(gameObject*) * MAXOBJECTS);
+    if (free)
+        for (int i = 0; i < objectsCount; i++)
+            freeObject(objects[i]);
+    memset(objects, 0, sizeof(gameObject_t*) * MAXOBJECTS);
     objectsCount = 0;
 }
 
-int remove_element(gameObject** from, int total, int index) {
-    if((total - index - 1) > 0) {
-        memmove(from + index, from + index + 1, sizeof(gameObject*) * (total-index - 1));
+int remove_element(gameObject_t** from, int total, int index)
+{
+    if ((total - index - 1) > 0)
+    {
+        memmove(from + index, from + index + 1, sizeof(gameObject_t*) * (total - index - 1));
     }
-    return total-1; // return the new array size
+    return total - 1; // return the new array size
 }
 
-void scmDestroyObject(gameObject *object, int free)
+void scmDestroyObject(gameObject_t* object, int free)
 {
     evqUnsubscribeEvents(object);
-    for(int i = 0; i < objectsCount; i++)
+    for (int i = 0; i < objectsCount; i++)
     {
-        if(objects[i] == object)
+        if (objects[i] == object)
         {
-            if(free) freeObject(object);
+            if (free) freeObject(object);
             objects[i] = NULL;
             objectsCount = remove_element(objects, objectsCount, i);
             return;
@@ -123,17 +170,19 @@ void scmDestroyObject(gameObject *object, int free)
     }
 }
 
-void scmPushScene(gameScene *scene)
+void scmPushScene(gameScene_t* scene)
 {
     assert(scenesCount <= MAXSCENES);
 
     scenes[scenesCount++] = scene;
 }
 
-gameScene* scmGetScene(int id)
+gameScene_t* scmGetScene(int id)
 {
-    for(int i = 0; i < scenesCount; i++) {
-        if(id == scenes[i]->id) {
+    for (int i = 0; i < scenesCount; i++)
+    {
+        if (id == scenes[i]->id)
+        {
             return scenes[i];
         }
     }
@@ -142,67 +191,92 @@ gameScene* scmGetScene(int id)
 
 void scmLoadScene(int id)
 {
-    printf("Loading scene %i\n", id);
-    for(int i = 0; i < scenesCount; i++)
+    printf("[gameScene.c]: Loading scene %i\n", id);
+
+    for (int i = 0; i < scenesCount; i++)
     {
-        if(scenes[i]->id == id)
+        if (scenes[i]->id == id)
         {
-            if (scenes[i]->scopesToUnloadCount != 0) {
-                for(int j = 0; j < scenes[i]->scopesToUnloadCount; j++) {
+            if (scenes[i]->scopesToUnloadCount != 0)
+            {
+                for (int j = 0; j < scenes[i]->scopesToUnloadCount; j++)
+                {
                     texmUnloadScope(scenes[i]->scopesToUnload[j]);
                 }
             }
 
-            if (scenes[i]->scopesToLoadCount != 0) {
-                for(int j = 0; j < scenes[i]->scopesToLoadCount; j++) {
+            if (scenes[i]->scopesToLoadCount != 0)
+            {
+                for (int j = 0; j < scenes[i]->scopesToLoadCount; j++)
+                {
                     texmLoadScope(scenes[i]->scopesToLoad[j]);
                 }
             }
 
+            if (currentScene != -1 && scenes[currentScene]->useLtracer)
+            {
+                ltracerReset();
+            }
+
             currentScene = i;
 
-            if(scenes[i]->destroyObjects)
+            if (scenes[i]->destroyObjects)
             {
                 scmDestroyAllObjects(scenes[i]->freeObjects);
                 objectsCount = scenes[i]->startupObjectsCount;
-                memcpy(objects, scenes[i]->startupObjects, sizeof(gameObject*) * objectsCount);
+                memcpy(objects, scenes[i]->startupObjects, sizeof(gameObject_t*) * objectsCount);
             }
             else
             {
                 memcpy(
-                        objects + objectsCount * sizeof(gameObject*),
+                        objects + objectsCount * sizeof(gameObject_t*),
                         scenes[i]->startupObjects,
-                        sizeof(gameObject*) * scenes[i]->startupObjectsCount
-                        );
+                        sizeof(gameObject_t*) * scenes[i]->startupObjectsCount
+                );
                 objectsCount += scenes[i]->startupObjectsCount;
             }
 
-            for(int j = 0; j < scenes[i]->startupObjectsCount; j++) {
-                if (scenes[i]->startupObjects[j]->onInit) {
-                    scenes[i]->startupObjects[j]->onInit(scenes[i]->startupObjects[j]);
+            for (int j = 0; j < scenes[i]->startupObjectsCount; j++)
+            {
+                gameObject_t* object = scenes[i]->startupObjects[j];
+                if (object->onInit)
+                {
+                    object->onInit(object);
+
+                    //Objects can be destroy and free itself on init function, i think its normal...
+                    if (!scmHasObject(object)) continue;
                 }
-                if (scenes[i]->startupObjects[j]->drawable && !scenes[i]->startupObjects[j]->cachedTex)
-                    scenes[i]->startupObjects[j]->cachedTex = texmGetID(scenes[i]->startupObjects[j]->texID);
+
+                if (object->drawable && !object->cachedTex)
+                {
+                    object->cachedTex = texmGetID(object->texID);
+                    assert(object->cachedTex != NULL);
+
+                    for (int f = 0; f < object->cachedTex->framesCount; f++)
+                        assert(object->cachedTex->textureIds[f] != 0);
+                }
             }
 
             dqnClearQueue();
             evqResetEvents();
 
-            if(scenes[i]->onLoad)
+            if (scenes[i]->onLoad)
                 scenes[i]->onLoad(scenes[i]);
 
             return;
         }
     }
 
-    printf("Unable to find scene with id %i", id);
+    printf("[gameScene.c][ERROR]: Unable to find scene with id %i", id);
     exit(1);
 }
 
-gameScene* createScene(int id, int scope)
+gameScene_t* createScene(int id, int scope)
 {
-    gameScene* scene = malloc(sizeof(gameScene));
+    gameScene_t* scene = malloc(sizeof(gameScene_t));
     scene->id = id;
+    scene->ltracerDepth = 0;
+    scene->useLtracer = false;
     scene->scopesToLoadCount = 0;
     scene->scopesToUnloadCount = 0;
     scene->cachedBack = NULL;
@@ -222,27 +296,27 @@ int scmGetObjectsCount(void)
     return objectsCount;
 }
 
-void scmAddScopeToLoad(gameScene* scene, int scope)
+void scmAddScopeToLoad(gameScene_t* scene, int scope)
 {
     scene->scopesToLoad[scene->scopesToLoadCount++] = scope;
 }
 
-void scmAddScopeToUnload(gameScene* scene, int scope)
+void scmAddScopeToUnload(gameScene_t* scene, int scope)
 {
     scene->scopesToUnload[scene->scopesToUnloadCount++] = scope;
 }
 
-void scmAddStartupObject(gameScene *scene, gameObject *object)
+void scmAddStartupObject(gameScene_t* scene, gameObject_t* object)
 {
-    if(scene->startupObjectsArrLen == 0)
+    if (scene->startupObjectsArrLen == 0)
     {
         scene->startupObjectsArrLen = 5;
-        scene->startupObjects = malloc(scene->startupObjectsArrLen * sizeof(gameObject));
+        scene->startupObjects = malloc(scene->startupObjectsArrLen * sizeof(gameObject_t));
     }
-    else if(scene->startupObjectsCount == scene->startupObjectsArrLen - 1)
+    else if (scene->startupObjectsCount == scene->startupObjectsArrLen - 1)
     {
         scene->startupObjectsArrLen *= 2;
-        scene->startupObjects = realloc(scene->startupObjects, scene->startupObjectsArrLen * sizeof(gameObject));
+        scene->startupObjects = realloc(scene->startupObjects, scene->startupObjectsArrLen * sizeof(gameObject_t));
     }
     scene->startupObjects[scene->startupObjectsCount++] = object;
 }

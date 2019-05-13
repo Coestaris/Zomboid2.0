@@ -4,9 +4,9 @@
 
 #include "obj_light.h"
 
-gameObject* createLight(vec_t p, double size, double alpha)
+gameObject_t* createLight(vec_t p, double size, double alpha)
 {
-    gameObject* go = object();
+    gameObject_t* go = object();
     go->drawable = true;
 
     go->depth = 0;

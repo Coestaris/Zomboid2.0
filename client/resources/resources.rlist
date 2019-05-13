@@ -1,5 +1,8 @@
 ; main resource file
 
+; #define is equivalent to set
+; just C-style synonym for include-compatibility
+
 inc defines.rlist
 inc scopes.rlist
 

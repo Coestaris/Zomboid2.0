@@ -4,14 +4,14 @@
 
 #include "obj_flashlight.h"
 
-gameObject* createFlashlight(gameObject* player, double minSize, double alpha)
+gameObject_t* createFlashlight(gameObject_t* player, double minSize, double alpha)
 {
-    gameObject* go = object();
+    gameObject_t* go = object();
     go->drawable = true;
     go->texID = TEXID_FLASHLIGHT;
 
-    go->data = malloc(sizeof(flashlightData));
-    ((flashlightData*)go->data)->minSize = minSize;
+    go->data = malloc(sizeof(flashlightData_t));
+    ((flashlightData_t*) go->data)->minSize = minSize;
 
     go->pos = player->pos;
     go->size = minSize;

@@ -4,36 +4,15 @@
 
 #include "obj_bullet.h"
 
-void bullet_event_update(gameObject *object, void *data)
+void bullet_event_update(gameObject_t* object, void* data)
 {
     int objectsCount;
-    bulletData* bd = object->data;
+    bulletData_t* bd = object->data;
 
-    gameObject** objects = scmGetObjects(&objectsCount);
-    gameObject* light = bd->light;
+    gameObject_t** objects = scmGetObjects(&objectsCount);
+    gameObject_t* light = bd->light;
 
-    for(int i = 0; i < objectsCount; i++)
-    {
-        if(objects[i]->texID == TEXID_BOX)
-        {
-            double boxX = objects[i]->pos.x;
-            double boxY = objects[i]->pos.y;
-            double boxW = objects[i]->cachedTex->width * objects[i]->size;
-            double boxH = objects[i]->cachedTex->height * objects[i]->size;
-
-            if(object->pos.x > boxX - boxW / 2 &&
-               object->pos.x < boxX + boxW / 2 &&
-               object->pos.y > boxY - boxH / 2 &&
-               object->pos.y < boxY + boxH / 2)
-            {
-                scmDestroyObject(light, true);
-                scmDestroyObject(object, true);
-                return;
-            }
-        }
-    }
-
-    if(isInWindowExtendedRect(object, BULLET_LIGHT_SIZE, BULLET_LIGHT_SIZE))
+    if (isInWindowExtendedRect(object, BULLET_LIGHT_SIZE, BULLET_LIGHT_SIZE))
     {
         scmDestroyObject(light, true);
         scmDestroyObject(object, true);
@@ -42,39 +21,62 @@ void bullet_event_update(gameObject *object, void *data)
     {
         object->pos.x += bd->xOffset;
         object->pos.y += bd->yOffset;
-        light->pos = object->pos;
+        //light->pos = object->pos;
     }
 }
 
-void bullet_init(gameObject* object)
+void bullet_box(gameObject_t* this, gameObject_t* box)
 {
-    evqSubscribeEvent(object, EVT_Update, bullet_event_update);
+    bulletData_t* bd = this->data;
+    scmDestroyObject(bd->light, true);
+    scmDestroyObject(this, true);
 }
 
-gameObject* createBullet(vec_t p, double angle)
+void bullet_zombie(gameObject_t* this, gameObject_t* zombie)
 {
-    gameObject* go = object();
+    bulletData_t* bd = this->data;
+
+    scmPushObject(createMovingBloodSpawner(this->pos,
+            this->angle, 14, 5, 2, 9));
+
+    //scmDestroyObject(bd->light, true);
+    scmDestroyObject(this, true);
+
+    enemy_zombie_harm(bd->damage, zombie);
+}
+
+void bullet_init(gameObject_t* object)
+{
+    evqSubscribeEvent(object, EVT_Update, bullet_event_update);
+    evqSubscribeCollisionEvent(object, OBJECT_BOX, bullet_box);
+    evqSubscribeCollisionEvent(object, OBJECT_ZOMBIE, bullet_zombie);
+}
+
+gameObject_t* createBullet(vec_t p, double angle, int texID, double damage)
+{
+    gameObject_t* go = object();
     go->drawable = true;
 
-    go->depth = 2;
+    go->depth = 1;
     go->pos = p;
 
-    go->angle = angle + toRad(randRange(-50, 50));
-    go->texID = TEXID_BULLET;
+    go->angle = angle;
+    go->texID = texID;
     go->size = 1;
     go->onInit = bullet_init;
+    go->data = malloc(sizeof(bulletData_t));
 
-    go->data = malloc(sizeof(bulletData));
+  /*  gameObject_t* light = createTexturedAreaLT(p, BULLET_LIGHT_SIZE, color(randRange(0, 1), randRange(0, 1), randRange(0, 1),
+                                                     BULLET_LIGHT_ALPHA), texmGetID(TEXID_LIGHT), 0);*/
+    bulletData_t* bd = go->data;
 
-    gameObject* light = createTexturedAreaLT(p, BULLET_LIGHT_SIZE,
-            color(randRange(0, 1), randRange(0, 1), randRange(0, 1), BULLET_LIGHT_ALPHA), texmGetID(TEXID_LIGHT), 0);
-    bulletData* bd = go->data;
+    go->animationSpeed = 1;
 
-    bd->light = light;
+   // bd->light = light;
     bd->xOffset = cos(go->angle) * BULLET_SPEED;
     bd->yOffset = sin(go->angle) * BULLET_SPEED;
+    bd->damage = damage;
 
-
-    scmPushObject(light);
+    //scmPushObject(light);
     return go;
 }

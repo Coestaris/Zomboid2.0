@@ -8,19 +8,22 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "gameobject.h"
+#include "gameObject.h"
 #include "../graphics/drawer.h"
 #include "../resources/tex.h"
 #include "../resources/texManager.h"
-#include "eventfuncs.h"
+#include "eventFuncs.h"
 
 #include "../helpers.h"
 
 void loadTexture(char* fn, int id, int scope, vec_t center, int mode);
 void loadAnimation(int framesCount, int id, int scope, vec_t center, int mode, ...);
-vec_t relativeCoordinates(gameObject* obj);
-int isInWindowRect(gameObject* obj);
-int isInWindowExtendedRect(gameObject* obj, int exW, int exH);
-int isInObjectRect(gameObject* obj, vec_t point);
+
+vec_t relativeCoordinatesEx(tex_t* tex, vec_t pos, double angle);
+vec_t relativeCoordinates(gameObject_t* obj);
+int isInWindowRect(gameObject_t* obj);
+int isInWindowExtendedRect(gameObject_t* obj, int exW, int exH);
+
+int isInObjectRect(gameObject_t* obj, vec_t point);
 
 #endif //ZOMBOID2_GAMEHELPERS_H

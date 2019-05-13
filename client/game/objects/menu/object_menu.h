@@ -7,6 +7,8 @@
 
 #include "../../objectInclude.h"
 
-gameObject* createMenu();
+#include "../main/light/obj_light_tracer.h"
+
+gameObject_t* createMenu();
 
 #endif //ZOMBOID2_OBJECT_MENU_H

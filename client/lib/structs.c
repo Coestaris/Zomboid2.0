@@ -4,7 +4,7 @@
 
 #include "structs.h"
 
-color_t color(double r, double  g, double b, double  a)
+color_t color(double r, double g, double b, double a)
 {
     color_t c = {r, g, b, a};
     return c;

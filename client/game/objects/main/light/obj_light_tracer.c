@@ -4,38 +4,38 @@
 
 #include "obj_light_tracer.h"
 
-void lightTracer_destroy(gameObject* this)
+void lightTracer_event_update(gameObject_t* this, void* data)
 {
-    ltracer_data* ld = ((lightTracer_data*)this->data)->data;
+    ltracer_data_t* ld = ((lightTracer_data_t*) this->data)->data;
+    ld->pos = this->pos;
+    ld->angle = this->angle;
+}
+
+void lightTracer_destroy(gameObject_t* this)
+{
+    ltracer_data_t* ld = ((lightTracer_data_t*) this->data)->data;
     ltracerRemoveLight(ld);
 }
 
-void lightTracer_init(gameObject* this)
+void lightTracer_init(gameObject_t* this)
 {
-    ltracer_data* ld = ((lightTracer_data*)this->data)->data;
+    ltracer_data_t* ld = ((lightTracer_data_t*) this->data)->data;
     ltracerPushLight(ld);
 
     evqSubscribeEvent(this, EVT_Update, lightTracer_event_update);
 }
 
-void lightTracer_event_update(gameObject* this, void* data)
+gameObject_t* createAreaLT(vec_t pos, double range, color_t color)
 {
-    ltracer_data* ld = ((lightTracer_data*)this->data)->data;
-    ld->pos = this->pos;
-    ld->angle = this->angle;
-}
-
-gameObject* createAreaLT(vec_t pos, double range, color_t color)
-{
-    gameObject* this = object();
+    gameObject_t* this = object();
     this->onInit = lightTracer_init;
     this->onDestroy = lightTracer_destroy;
     this->pos = pos;
 
-    this->data = malloc(sizeof(lightTracer_data));
-    lightTracer_data* ld = (lightTracer_data*)this->data;
+    this->data = malloc(sizeof(lightTracer_data_t));
+    lightTracer_data_t* ld = (lightTracer_data_t*) this->data;
 
-    ld->data = malloc(sizeof(ltracer_data));
+    ld->data = malloc(sizeof(ltracer_data_t));
     ld->data->points = malloc(sizeof(relPoint_t) * 100);
     ld->data->pointsCount = 0;
     ld->data->angleRange = 0;
@@ -49,17 +49,17 @@ gameObject* createAreaLT(vec_t pos, double range, color_t color)
     return this;
 }
 
-gameObject* createTexturedAreaLT(vec_t pos, double range, color_t color, tex2d* tex, int frame)
+gameObject_t* createTexturedAreaLT(vec_t pos, double range, color_t color, tex_t* tex, int frame)
 {
-    gameObject* this = object();
+    gameObject_t* this = object();
     this->onInit = lightTracer_init;
     this->onDestroy = lightTracer_destroy;
     this->pos = pos;
 
-    this->data = malloc(sizeof(lightTracer_data));
-    lightTracer_data* ld = (lightTracer_data*)this->data;
+    this->data = malloc(sizeof(lightTracer_data_t));
+    lightTracer_data_t* ld = (lightTracer_data_t*) this->data;
 
-    ld->data = malloc(sizeof(ltracer_data));
+    ld->data = malloc(sizeof(ltracer_data_t));
     ld->data->points = malloc(sizeof(relPoint_t) * 100);
     ld->data->pointsCount = 0;
     ld->data->angleRange = 0;
@@ -75,17 +75,18 @@ gameObject* createTexturedAreaLT(vec_t pos, double range, color_t color, tex2d* 
     return this;
 }
 
-gameObject* createDirectLT(vec_t pos, double range, double angle, double width, double backoffset, color_t color, vec_t scaleFactor)
+gameObject_t*
+createDirectLT(vec_t pos, double range, double angle, double width, double backoffset, color_t color, vec_t scaleFactor)
 {
-    gameObject* this = object();
+    gameObject_t* this = object();
     this->onInit = lightTracer_init;
     this->onDestroy = lightTracer_destroy;
     this->pos = pos;
 
-    this->data = malloc(sizeof(lightTracer_data));
-    lightTracer_data* ld = (lightTracer_data*)this->data;
+    this->data = malloc(sizeof(lightTracer_data_t));
+    lightTracer_data_t* ld = (lightTracer_data_t*) this->data;
 
-    ld->data = malloc(sizeof(ltracer_data));
+    ld->data = malloc(sizeof(ltracer_data_t));
     ld->data->points = malloc(sizeof(relPoint_t) * 100);
     ld->data->pointsCount = 0;
     ld->data->backOffset = backoffset;
@@ -102,17 +103,19 @@ gameObject* createDirectLT(vec_t pos, double range, double angle, double width, 
     return this;
 }
 
-gameObject* createTexturedDirectLT(vec_t pos, double range, double angle, double width, double backOffset, color_t color, tex2d* tex, int frame, vec_t scaleFactor)
+gameObject_t*
+createTexturedDirectLT(vec_t pos, double range, double angle, double width, double backOffset, color_t color,
+                       tex_t* tex, int frame, vec_t scaleFactor)
 {
-    gameObject* this = object();
+    gameObject_t* this = object();
     this->onInit = lightTracer_init;
     this->onDestroy = lightTracer_destroy;
     this->pos = pos;
 
-    this->data = malloc(sizeof(lightTracer_data));
-    lightTracer_data* ld = (lightTracer_data*)this->data;
+    this->data = malloc(sizeof(lightTracer_data_t));
+    lightTracer_data_t* ld = (lightTracer_data_t*) this->data;
 
-    ld->data = malloc(sizeof(ltracer_data));
+    ld->data = malloc(sizeof(ltracer_data_t));
     ld->data->points = malloc(sizeof(relPoint_t) * 100);
     ld->data->pointsCount = 0;
     ld->data->backOffset = backOffset;

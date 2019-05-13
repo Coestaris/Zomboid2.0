@@ -3,11 +3,10 @@
 //
 
 #include "tex.h"
-#include "../../../lib/oil/oil.h"
 
-tex2d* createTex(char *fn, int uid, int scope, vec_t center, int mode)
+tex_t* createTex(char* fn, int uid, int scope, vec_t center, int mode)
 {
-    tex2d* tex = malloc(sizeof(tex2d));
+    tex_t* tex = malloc(sizeof(tex_t));
 
     tex->textureIds = malloc(sizeof(GLuint) * 1);
     tex->textureIds[0] = 0;
@@ -21,11 +20,12 @@ tex2d* createTex(char *fn, int uid, int scope, vec_t center, int mode)
 
     tex->id = uid;
     tex->scope = scope;
+    tex->VAO = 0;
 }
 
-tex2d* createAnimation(char **fileNames, int framesCount, int uid, int scope, vec_t center, int mode)
+tex_t* createAnimation(char** fileNames, int framesCount, int uid, int scope, vec_t center, int mode)
 {
-    tex2d* tex = malloc(sizeof(tex2d));
+    tex_t* tex = malloc(sizeof(tex_t));
     tex->mode = mode;
 
     tex->textureIds = malloc(sizeof(GLuint) * framesCount);
@@ -38,21 +38,23 @@ tex2d* createAnimation(char **fileNames, int framesCount, int uid, int scope, ve
     tex->framesCount = framesCount;
     tex->id = uid;
     tex->scope = scope;
+    tex->VAO = 0;
 }
 
-void freeOGlTex(tex2d* tex)
+void freeOGlTex(tex_t* tex)
 {
-    for(int i = 0; i < tex->framesCount; i++)
-        if(tex->textureIds[i]) glDeleteTextures(1, &tex->textureIds[i]);
+    for (int i = 0; i < tex->framesCount; i++)
+        if (tex->textureIds[i]) glDeleteTextures(1, &tex->textureIds[i]);
     memset(tex->textureIds, 0, sizeof(GLuint) * tex->framesCount);
 }
 
-void freeTex(tex2d* tex)
+void freeTex(tex_t* tex)
 {
     free(tex->textureIds);
     free(tex->fns);
     free(tex);
 }
+
 
 int texSize(char* filename, int* w, int* h)
 {
@@ -70,100 +72,104 @@ int texSize(char* filename, int* w, int* h)
 
     unsigned char buf[24];
     fread(buf, 1, 24, f);
-
-    if (buf[0] == 0xFF && buf[1] == 0xD8 && buf[2] == 0xFF && buf[3] == 0xE0 && buf[6] == 'J' && buf[7] == 'F' && buf[8] == 'I' && buf[9] == 'F')
-    {
-        long pos = 2;
-        while (buf[2] == 0xFF)
-        {
-            if (buf[3] == 0xC0 || buf[3] == 0xC1 || buf[3] == 0xC2 || buf[3] == 0xC3 || buf[3] == 0xC9 || buf[3] == 0xCA || buf[3] == 0xCB) break;
-            pos += 2 + (buf[4] << 8) + buf[5];
-            if (pos + 12 > len) break;
-            fseek(f, pos, SEEK_SET);
-            fread(buf + 2, 1, 12, f);
-        }
-    }
     fclose(f);
 
-    if (buf[0] == 0xFF && buf[1] == 0xD8 && buf[2] == 0xFF)
-    {
-        *w = (buf[7] << 8) + buf[8];
-        *h = (buf[9] << 8) + buf[10];
-        return 1;
-    }
+    *w = (buf[16] << 24) + (buf[17] << 16) + (buf[18] << 8) + (buf[19] << 0);
+    *h = (buf[20] << 24) + (buf[21] << 16) + (buf[22] << 8) + (buf[23] << 0);
 
-    if (buf[0] == 'G' && buf[1] == 'I' && buf[2] == 'F')
-    {
-        *w = buf[6] + (buf[7] << 8);
-        *h = buf[8] + (buf[9] << 8);
-        return 1;
-    }
-
-    if (
-            buf[0] == 0x89 && buf[1] == 'P' && buf[2] == 'N' &&
-            buf[3] == 'G' && buf[4] == 0x0D && buf[5] == 0x0A &&
-            buf[6] == 0x1A && buf[7] == 0x0A && buf[12] == 'I' &&
-            buf[13] == 'H' && buf[14] == 'D' && buf[15] == 'R')
-    {
-        *w = (buf[16] << 24) + (buf[17] << 16) + (buf[18] << 8) + (buf[19] << 0);
-        *h = (buf[20] << 24) + (buf[21] << 16) + (buf[22] << 8) + (buf[23] << 0);
-
-        return 1;
-    }
-
-    return 0;
+    return 1;
 }
 
-void loadTex(tex2d* tex)
+
+void loadTex(tex_t* tex)
 {
     int w, h;
-    if(!texSize(tex->fns[0], &w, &h)) {
-        w = -1;
-        h = -1;
-    }
-
-    for(int i = 0; i < tex->framesCount; i++)
+    for (int i = 0; i < tex->framesCount; i++)
     {
-        GLuint id = oilTextureFromFile(tex->fns[i], GL_RGBA, GL_UNSIGNED_BYTE);
-        if(!id)
+#ifdef USE_SOIL
+        GLuint id = SOIL_load_OGL_texture
+        (
+                tex->fns[i],
+                SOIL_LOAD_AUTO,
+                SOIL_CREATE_NEW_ID,
+                SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_MULTIPLY_ALPHA
+        );
+
+        if(id == 0) {
+            printf("[tex.c][ERROR]: Unable to load texture %s", tex->fns[i]);
+            exit(1);
+        }
+
+
+        if(!texSize(tex->fns[i], &w, &h)) {
+            printf("[tex.c][ERROR]: Unable to get texture size of %s", tex->fns[i]);
+            exit(1);
+        }
+
+        glBindTexture(GL_TEXTURE_2D, id);
+        /*glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w);
+        glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
+*/
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        //1glGenerateMipmap(GL_TEXTURE_2D);
+
+#else
+        texData data;
+        data.wrappingMode = tex->mode == TEXMODE_BACKGROUND ? GL_REPEAT : GL_CLAMP_TO_EDGE;
+        data.minFilter = GL_LINEAR;
+        data.magFilter = GL_LINEAR;
+        data.flipY = 1;
+
+        GLuint id = oilTextureFromPngFile(tex->fns[i], GL_RGBA,
+                                          OIL_TEX_WRAPPING | OIL_TEX_MIN | OIL_TEX_MAG | OIL_TEX_FLIPY,
+                                          &data);
+        if (!id)
         {
-            printf("Unable to load texture %s\n", tex->fns[i]);
+            printf("[tex.c][ERROR]: Unable to load texture %s\n", tex->fns[i]);
             oilPrintError();
             exit(EXIT_FAILURE);
         }
 
-        if(tex->framesCount == 1)
+        w = data.out_width;
+        h = data.out_height;
+#endif
+
+        if (tex->framesCount == 1)
         {
-            printf("Loaded texture \"%s\". W: %i, H: %i, OGlID: %i\n", tex->fns[i], w, h, id);
+            printf("[tex.c]: Loaded texture \"%s\". W: %i, H: %i, OGlID: %i\n", tex->fns[i], w, h, id);
         }
         else
         {
-            printf("Loaded frame (%i/%i) \"%s\". W: %i, H: %i OGlID: %i\n", i + 1, tex->framesCount, tex->fns[i], w, h, id);
+            printf("[tex.c]: Loaded frame (%i/%i) \"%s\". W: %i, H: %i OGlID: %i\n", i + 1, tex->framesCount,
+                   tex->fns[i], w, h, id);
         }
         tex->textureIds[i] = id;
 
-        glBindTexture(GL_TEXTURE_2D, id);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        if(tex->mode == TEXMODE_BACKGROUND)
+#ifdef USE_SOIL
+        if (tex->mode == TEXMODE_BACKGROUND)
         {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         }
+#endif
     }
+
     tex->width = w;
     tex->height = h;
 }
 
-void bindTex(tex2d* tex, int frame)
+void bindTex(tex_t* tex, int frame)
 {
-    if(!tex) glBindTexture(GL_TEXTURE_2D, 0);
-    else {
+    if (!tex)
+    {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+    else
+    {
+        assert(frame >= 0 && frame < tex->framesCount);
 
-        assert(frame < tex->framesCount);
-
-        if(tex->mode == TEXMODE_OVERLAY)
+        if (tex->mode == TEXMODE_OVERLAY)
         {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             glBlendEquation(GL_ADD);

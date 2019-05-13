@@ -7,19 +7,20 @@
 
 #include <math.h>
 
-typedef struct _vec {
+typedef struct _vec
+{
     double x;
     double y;
 } vec_t;
 
-typedef struct _color {
+typedef struct _color
+{
     double r, g, b, a;
 
 } color_t;
 
-color_t color(double r, double  g, double b, double  a);
+color_t color(double r, double g, double b, double a);
 vec_t vec(double x, double y);
-
 vec_t vec_add(vec_t a, vec_t b);
 vec_t vec_sub(vec_t a, vec_t b);
 vec_t vec_mult(vec_t a, double c);

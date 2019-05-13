@@ -7,13 +7,14 @@
 
 #include "../../../objectInclude.h"
 
-typedef struct _flashlightData{
+typedef struct _flashlightData
+{
 
-    gameObject* player;
+    gameObject_t* player;
     double minSize;
 
-} flashlightData;
+} flashlightData_t;
 
-gameObject* createFlashlight(gameObject* player, double minSize, double alpha);
+gameObject_t* createFlashlight(gameObject_t* player, double minSize, double alpha);
 
 #endif //ZOMBOID2_OBJ_FLASHLIGHT_H

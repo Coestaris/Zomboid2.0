@@ -7,6 +7,7 @@
 
 #include "../lib/appInit.h"
 
+#include "objects/bloodSpawner.h"
 #include "loader.h"
 
 void initGame(int argc, char** arg);
