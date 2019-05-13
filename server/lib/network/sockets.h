@@ -1,5 +1,5 @@
 //
-// Created by maxim on 2/23/19.
+// Created by h0tw4t3r on 5/2/19.
 //
 
 #ifndef SERVER_SOCKETS_H
@@ -16,16 +16,17 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <sys/time.h>
+#include <time.h>
 #include <asm/errno.h>
+#include <netdb.h>
 
-#include "client.h"
-#include "logicHandler.h"
+#include "../../../lib/idtp.h"
 
-#define PENDING_CONNECTIONS 3
+#define MAX_ZNET_CLIENTS 100
+#define MAX_ZNET_HOSTS 10
 
-void setPort(uint16_t port);
-int socketInit(void);
-int socketMainloop(void);
+
+int idServerSocketCreate(char *port);
+int idServerSocketMainLoop(int sockfd);
 
 #endif //SERVER_SOCKETS_H
