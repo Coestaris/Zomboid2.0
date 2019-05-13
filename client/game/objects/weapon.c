@@ -7,17 +7,17 @@
 double weapon[WEAPON_COUNT * 6] = {
     //Min dmg   | Max dmg   | Min reload  | Max reload  |   auto fire |   missRange   |  wtype
         5,            10,          30,           32,            0,          0.05,        //0 - pistol
-        10,           30,          25,           28,            1,          0,          //1 - crossbow
-        3,            8,           5,            6,             1,          0,          //2 - smg
-        5,            10,          60,           65,            1,          0,          //3 - shotgun
-        5,            10,          0,            0,             1,          0,          //4 - laser
-        100,          100,         200,          200,           1,          0,          //5 - rpg
+        10,           30,          25,           28,            0,          0,           //1 - crossbow
+        3,            8,           5,            6,             1,          0.1,         //2 - smg
+        5,            10,          60,           65,            1,          0.12,         //3 - shotgun
+        5,            10,          0,            0,             1,          0,           //4 - laser
+        100,          100,         200,          200,           0,          0,           //5 - rpg
 };
 
 int maxWeaponCount[WEAPON_COUNT * 2] = {
     // Count  |   Max count    |  wtype
         15,         150,      //0 - pistol
-        5,          60,       //1 - crossbow
+        1,          60,       //1 - crossbow
         90,         500,      //2 - smg
         5,          32,       //3 - shotgun
         1000,       1000,     //4 - laser
@@ -28,10 +28,10 @@ double weaponAnimationSpeed[WEAPON_COUNT * 2] = {
     // Shooting  |  Animation   |    wtype
          1.0,          0.25,      //0 - pistol
          1.0,          0.5,       //1 - crossbow
-         1.0,          0.5,       //2 - smg
-         1.0,          0.5,       //3 - shotgun
+         1.0,          0.35,      //2 - smg
+         1.0,          0.25,      //3 - shotgun
          1.0,          0.5,       //4 - laser
-         1.0,          0.5,       //5 - rpg
+         0.75,         0.25,      //5 - rpg
 };
 
 int playerTextures[WEAPON_COUNT * 2] = {
@@ -87,28 +87,48 @@ void reload(playerData_t* player)
     }
 }
 
+int getWeaponFireRate(int wtype)
+{
+    return weapon[wtype * 6 + 3];
+}
+
 void fire(playerData_t* player)
 {
-    if(player->weaponCount[player->weapon] > 0 && player->state != reloading)
+    if(player->weaponCount[player->weapon] > 0)
     {
+        if(player->state == reloading) return;
+
         double range = weapon[player->weapon * 6 + 5];
         vec_t rel = relativeCoordinatesEx(getPlayerTexture(player->weapon), player->pos, player->angle);
 
         player->weaponCount[player->weapon]--;
         switch (player->weapon)
         {
-            case(0):
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range)));
+            case 0:
+                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET));
+                break;
+            case 3:
+                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET));
+                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET));
+                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET));
+                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET));
+                break;
             default:
+                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET));
                 break;
         }
 
-        if(player->state == shooting) {
+        if (player->state == shooting)
+        {
             player->frame = 0;
         }
-        else {
+        else
+        {
             player->state = shooting;
         }
+    }
+    else if(player->weaponMaxCount[player->weapon] != 0 && player->state != reloading) {
+        player->state = reloading;
     }
 }
 

@@ -52,7 +52,7 @@ void bullet_init(gameObject_t* object)
     evqSubscribeCollisionEvent(object, OBJECT_ZOMBIE, bullet_zombie);
 }
 
-gameObject_t* createBullet(vec_t p, double angle)
+gameObject_t* createBullet(vec_t p, double angle, int texID)
 {
     gameObject_t* go = object();
     go->drawable = true;
@@ -61,7 +61,7 @@ gameObject_t* createBullet(vec_t p, double angle)
     go->pos = p;
 
     go->angle = angle;
-    go->texID = TEXID_BULLET;
+    go->texID = texID;
     go->size = 1;
     go->onInit = bullet_init;
     go->data = malloc(sizeof(bulletData_t));

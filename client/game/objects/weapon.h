@@ -26,6 +26,7 @@ void fire(playerData_t* player);
 void reload(playerData_t* player);
 double getWeaponShootingSpeed(int wtype);
 double getWeaponReloadingSpeed(int wtype);
+int getWeaponFireRate(int wtype);
 
 void weaponCache(void);
 

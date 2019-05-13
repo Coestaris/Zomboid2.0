@@ -22,6 +22,7 @@ typedef struct _playerData
     double angle;
 
     double frame;
+    long long lastFireFrame;
 
     playerState_t state;
 

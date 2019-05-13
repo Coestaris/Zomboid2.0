@@ -25,6 +25,6 @@ typedef struct _bulletData
 
 } bulletData_t;
 
-gameObject_t* createBullet(vec_t a, double angle);
+gameObject_t* createBullet(vec_t p, double angle, int texID);
 
 #endif //ZOMBOID2_OBJ_BULLET_H

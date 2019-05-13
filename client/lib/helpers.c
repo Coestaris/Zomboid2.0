@@ -49,7 +49,7 @@ double randRange(double a, double b)
     double min = a > b ? b : a;
     double max = a > b ? a : b;
 
-    double scale = random() / (float) RAND_MAX; /* [0, 1.0] */
+    double scale = rand() / (float) RAND_MAX; /* [0, 1.0] */
 
     return min + scale * (max - min);
 }

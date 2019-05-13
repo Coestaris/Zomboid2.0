@@ -15,6 +15,7 @@ void initGraphics(int argc, char** argv, int w, int h, const char* title, int is
     glutInitContextVersion(MAJOR_GL_VERSION, MINOR_GL_VERSION);
     glutInitContextProfile(GLUT_CORE_PROFILE);
 #endif
+    //srand(time(NULL));
 
     glutInit(&argc, argv);
 

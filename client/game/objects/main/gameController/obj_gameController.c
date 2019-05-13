@@ -27,11 +27,24 @@ void gc_update(gameObject_t* this, void* data)
     long long frame = getFrame();
     vec_t rel = relativeCoordinates(this);
 
-    if(pd->state == shooting) {
+    if(getWeaponAutoFire(pd->weapon)) {
+        if(getMouseState(MB_LEFT) == MS_PRESSED &&  frame - pd->lastFireFrame > getWeaponFireRate(pd->weapon)) {
+            pd->lastFireFrame = frame;
+            fire(pd);
+        }
+    }
+
+    if( pd->state == shooting ) {
         if(pd->frame >= getPlayerTexture(pd->weapon)->framesCount - 1)
         {
             pd->state = nothing;
-            pd->frame = 0;
+            if(pd->weapon == 5) {
+                pd->frame = 3;
+            } else if(pd->weapon == 1){
+                pd->frame = 1;
+            } else {
+                pd->frame = 0;
+            }
         }
         else pd->frame += getWeaponShootingSpeed(pd->weapon);
     }
@@ -96,17 +109,17 @@ void gc_keyPressed(gameObject_t* this, void* data)
     }
     else if (ke->key == 'q')
     {
-
-        int w, h;
-        getWinSize(&w, &h);
-        scmPushObject(createEnemy(pd, vec(randRange(0, w), randRange(0, h))));
+        scmPushObject(createEnemy(pd, vec(randRange(0, winW), randRange(0, winH))));
     }
     else if(ke->key >= '1' && ke->key <= '6')
     {
-        int wtype = ke->key - '1';
-        if(pd->weaponStates[wtype])
+        if(pd->state != reloading)
         {
-            pd->weapon = wtype;
+            int wtype = ke->key - '1';
+            if (pd->weaponStates[wtype])
+            {
+                pd->weapon = wtype;
+            }
         }
     }
     else if(ke->key == 'r')
@@ -163,6 +176,7 @@ gameObject_t* createGameController()
     data->players[0]->hp = MAX_PLAYER_HP / 2;
     data->players[0]->armour = MAX_PLAYER_ARMOUR / 3;
     data->players[0]->frame = 0;
+    data->players[0]->lastFireFrame = 0;
 
     for(int i = 0; i < WEAPON_COUNT; i++) {
         data->players[0]->weaponStates[i] = 1;

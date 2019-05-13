@@ -5,6 +5,8 @@
 #ifndef ZOMBOID2_TEX_H
 #define ZOMBOID2_TEX_H
 
+#define USE_SOIL
+
 #include <malloc.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -13,9 +15,13 @@
 
 #include <GL/freeglut.h>
 #include <GL/gl.h>
-#include "../../../lib/oil/oil.h"
-
 #include "../structs.h"
+
+#ifdef USE_SOIL
+    #include <SOIL/SOIL.h>
+#else
+    #include "../../../lib/oil/oil.h"
+#endif
 
 #define TEXMODE_DEFAULT 0
 #define TEXMODE_BACKGROUND 1

@@ -3,7 +3,6 @@
 //
 
 #include "tex.h"
-#include "../../../lib/oil/oil.h"
 
 tex_t* createTex(char* fn, int uid, int scope, vec_t center, int mode)
 {
@@ -56,11 +55,66 @@ void freeTex(tex_t* tex)
     free(tex);
 }
 
+
+int texSize(char* filename, int* w, int* h)
+{
+    FILE *f = fopen(filename, "rb");
+
+    fseek(f, 0, SEEK_END);
+    long len = ftell(f);
+
+    fseek(f, 0, SEEK_SET);
+    if (len < 24)
+    {
+        fclose(f);
+        return 0;
+    }
+
+    unsigned char buf[24];
+    fread(buf, 1, 24, f);
+    fclose(f);
+
+    *w = (buf[16] << 24) + (buf[17] << 16) + (buf[18] << 8) + (buf[19] << 0);
+    *h = (buf[20] << 24) + (buf[21] << 16) + (buf[22] << 8) + (buf[23] << 0);
+
+    return 1;
+}
+
+
 void loadTex(tex_t* tex)
 {
     int w, h;
     for (int i = 0; i < tex->framesCount; i++)
     {
+#ifdef USE_SOIL
+        GLuint id = SOIL_load_OGL_texture
+        (
+                tex->fns[i],
+                SOIL_LOAD_AUTO,
+                SOIL_CREATE_NEW_ID,
+                SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_MULTIPLY_ALPHA
+        );
+
+        if(id == 0) {
+            printf("[tex.c][ERROR]: Unable to load texture %s", tex->fns[i]);
+            exit(1);
+        }
+
+
+        if(!texSize(tex->fns[i], &w, &h)) {
+            printf("[tex.c][ERROR]: Unable to get texture size of %s", tex->fns[i]);
+            exit(1);
+        }
+
+        glBindTexture(GL_TEXTURE_2D, id);
+        /*glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w);
+        glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h);
+*/
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        //1glGenerateMipmap(GL_TEXTURE_2D);
+
+#else
         texData data;
         data.wrappingMode = tex->mode == TEXMODE_BACKGROUND ? GL_REPEAT : GL_CLAMP_TO_EDGE;
         data.minFilter = GL_LINEAR;
@@ -79,6 +133,7 @@ void loadTex(tex_t* tex)
 
         w = data.out_width;
         h = data.out_height;
+#endif
 
         if (tex->framesCount == 1)
         {
@@ -91,42 +146,13 @@ void loadTex(tex_t* tex)
         }
         tex->textureIds[i] = id;
 
+#ifdef USE_SOIL
         if (tex->mode == TEXMODE_BACKGROUND)
         {
-            /*GLint VBO, EBO;
-
-            GLfloat vertices[] = {
-                 1.0f,  1.0f,  0.0f, (float)winW / w,  0.0f,
-                 1.0f, -1.0f,  0.0f, (float)winW / w,  (float)winH / h,
-                -1.0f, -1.0f,  0.0f,  0.0f,            (float)winH / h,
-                -1.0f,  1.0f,  0.0f,  0.0f,             0,
-            };
-
-            GLint indices[] = {
-                0, 1, 3,
-                1, 2, 3
-            };
-
-            glGenVertexArrays(1, &tex->VAO);
-            glGenBuffers(1, &VBO);
-            glGenBuffers(1, &EBO);
-
-            glBindVertexArray(tex->VAO);
-
-            glBindBuffer(GL_ARRAY_BUFFER, VBO);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-            // position attribute
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-            glEnableVertexAttribArray(0);
-
-            // texture coord attribute
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-            glEnableVertexAttribArray(1);*/
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         }
+#endif
     }
 
     tex->width = w;

@@ -63,5 +63,5 @@ animation   20          TEXID_PLAYER_SMG_RELOAD     TEXSCOPE_GAME      15   0   
 animation   4           TEXID_PLAYER_SHOT           TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/shotgun_fire/image%i.png
 animation   26          TEXID_PLAYER_SHOT_RELOAD    TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/shotgun_reload/image%i.png
 image                   TEXID_PLAYER_LASER          TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/laser/image0.png
-animation   3           TEXID_PLAYER_RPG            TEXSCOPE_GAME      -3   0     TM_DEFAULT   images/player/rpg_fire/image%i.png
-animation   15          TEXID_PLAYER_RPG_RELOAD     TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/rpg_reload/image%i.png
+animation   4           TEXID_PLAYER_RPG            TEXSCOPE_GAME      -3   0     TM_DEFAULT   images/player/rpg_fire/image%i.png
+animation   15          TEXID_PLAYER_RPG_RELOAD     TEXSCOPE_GAME      -3   0     TM_DEFAULT   images/player/rpg_reload/image%i.png
