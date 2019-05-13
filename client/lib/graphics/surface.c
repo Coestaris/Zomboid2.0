@@ -25,7 +25,7 @@ void srfFree()
 
 void srfBind()
 {
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4f(1, 1, 1, 1);
     glBindTexture(GL_TEXTURE_2D, surfGLID);
 }
@@ -103,7 +103,7 @@ void srfInit(int wW, int wH)
 
     glBindTexture(GL_TEXTURE_2D, surfGLID);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV,
                  (GLvoid*) pixelData);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -124,7 +124,7 @@ void srfClear()
         }
 
     glBindTexture(GL_TEXTURE_2D, surfGLID);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE,
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV,
                     (GLvoid*) pixelData);
 }
 
@@ -198,6 +198,6 @@ void srfDrawTexture(tex_t* tex, int frame, double alpha, vec_t pos, int flipX, i
     free(pixels);
 
     glBindTexture(GL_TEXTURE_2D, surfGLID);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE,
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV,
                     (GLvoid*) pixelData);
 }

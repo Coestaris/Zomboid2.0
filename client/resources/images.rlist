@@ -1,5 +1,5 @@
 ; type                  id                  scope                cX   cY   mode         path
-image                   TEXID_BULLET        TEXSCOPE_GAME        0    0    TM_DEFAULT   images/bullet.png
+image                   TEXID_BULLET        TEXSCOPE_GAME        0    0    TM_DEFAULT   images/weapon/bullet.png
 image                   TEXID_BOX           TEXSCOPE_MM_GEN      0    0    TM_DEFAULT   images/box.png
 image                   TEXID_SIMPLE_LIGHT  TEXSCOPE_GAME        0    0    TM_OVERLAY   images/light/simpleLight.png
 image                   TEXID_LIGHT         TEXSCOPE_MM_GEN      0    0    TM_OVERLAY   images/light/light.png
@@ -40,9 +40,9 @@ image                   TEXID_BACK_CONCRETE TEXSCOPE_MM_GEN      0    0    TM_BA
 ; type      frameCnt    id                  scope                cX  cY    mode         paths
 animation   2           TEXID_MENU_BTN_SM   TEXSCOPE_MAIN_MENU   0   0     TM_DEFAULT   images/menu/button_small/button%i.png
 animation   2           TEXID_MENU_BTN      TEXSCOPE_MAIN_MENU   0   0     TM_DEFAULT   images/menu/button/button%i.png
-animation   6           TEXID_SHELLCASE     TEXSCOPE_GAME        0   0     TM_DEFAULT   images/shellCase/shellCase%i.png
+animation   6           TEXID_SHELLCASE     TEXSCOPE_GAME        0   0     TM_DEFAULT   images/weapon/shellCase/shellCase%i.png
 
-animation   7           TEXID_BLOOD         TEXSCOPE_MM_GEN      0   0     TM_DEFAULT   images/blood/blood/image%i.png
+animation   7           TEXID_BLOOD         TEXSCOPE_MM_GEN      0   0     TM_OVERLAY   images/blood/blood/image%i.png
 animation   2           TEXID_BLOOD_SMEAR   TEXSCOPE_MM_GEN      0   0     TM_DEFAULT   images/blood/smear/image%i.png
 animation   2           TEXID_BLOOD_DEAD    TEXSCOPE_MM_GEN      0   0     TM_DEFAULT   images/blood/dead/image%i.png
 
@@ -53,6 +53,9 @@ animation   4           TEXID_ENEMY_ZOMBIE_3 TEXSCOPE_GAME       0   0     TM_DE
 animation   3           TEXID_HUD_WEPSLOT    TEXSCOPE_GAME       0   0     TM_DEFAULT   images/hud/wepSlot%i.png
 animation   17          TEXID_HUD_HEART      TEXSCOPE_GAME       0   0     TM_DEFAULT   images/hud/heart/heart%i.png
 animation   17          TEXID_HUD_SHIELD     TEXSCOPE_GAME       0   0     TM_DEFAULT   images/hud/shield/shield%i.png
+animation   15          TEXID_BULLET_BOLT    TEXSCOPE_GAME       0   0     TM_DEFAULT   images/weapon/bolt.png
+animation   15          TEXID_BULLET_SHOTGUN TEXSCOPE_GAME       0   0     TM_DEFAULT   images/weapon/shotgun_bullet.png
+animation   15          TEXID_GRENADE        TEXSCOPE_GAME       0   0     TM_DEFAULT   images/weapon/grenade.png
 
 animation   3           TEXID_PLAYER_PISTOL         TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/pistol_fire/image%i.png
 animation   17          TEXID_PLAYER_PISTOL_RELOAD  TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/pistol_reload/image%i.png
@@ -65,3 +68,5 @@ animation   26          TEXID_PLAYER_SHOT_RELOAD    TEXSCOPE_GAME      15   0   
 image                   TEXID_PLAYER_LASER          TEXSCOPE_GAME      15   0     TM_DEFAULT   images/player/laser/image0.png
 animation   4           TEXID_PLAYER_RPG            TEXSCOPE_GAME      -3   0     TM_DEFAULT   images/player/rpg_fire/image%i.png
 animation   15          TEXID_PLAYER_RPG_RELOAD     TEXSCOPE_GAME      -3   0     TM_DEFAULT   images/player/rpg_reload/image%i.png
+animation   3           TEXID_BULLET_ROCKET         TEXSCOPE_GAME       0   0     TM_DEFAULT   images/weapon/rocket/image%i.png
+animation   2           TEXID_EXPLOSION             TEXSCOPE_GAME       0   0     TM_DEFAULT   images/weapon/rocket/image%i.png

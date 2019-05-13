@@ -11,13 +11,6 @@ void gc_update(gameObject_t* this, void* data)
     playerData_t* pd = gd->players[0];
     vec_t mpos = getMousePos();
 
-    gd->completed += 0.6;
-    if(gd->completed > 100)
-    {
-        gd->completed = 0;
-        gd->wave++;
-    }
-
     pd->angle = twoPointsAngle(pd->pos, mpos);
     if (keyPressed('a') || specKeyPressed(GLUT_KEY_LEFT)) pd->pos.x -= PLAYER_MOVE_X;
     if (keyPressed('w') || specKeyPressed(GLUT_KEY_UP)) pd->pos.y -= PLAYER_MOVE_Y;
@@ -25,13 +18,16 @@ void gc_update(gameObject_t* this, void* data)
     if (keyPressed('d') || specKeyPressed(GLUT_KEY_RIGHT)) pd->pos.x += PLAYER_MOVE_Y;
 
     long long frame = getFrame();
-    vec_t rel = relativeCoordinates(this);
 
     if(getWeaponAutoFire(pd->weapon)) {
         if(getMouseState(MB_LEFT) == MS_PRESSED &&  frame - pd->lastFireFrame > getWeaponFireRate(pd->weapon)) {
             pd->lastFireFrame = frame;
             fire(pd);
         }
+    }
+
+    if(getMouseState(MB_LEFT) == MS_PRESSED && pd->weapon == 4 && pd->weaponCount[pd->weapon] != 0) {
+        proceedLaser(pd);
     }
 
     if( pd->state == shooting ) {
@@ -46,7 +42,10 @@ void gc_update(gameObject_t* this, void* data)
                 pd->frame = 0;
             }
         }
-        else pd->frame += getWeaponShootingSpeed(pd->weapon);
+        else
+        {
+            pd->frame += getWeaponShootingSpeed(pd->weapon);
+        }
     }
 
     if(pd->state == reloading) {
@@ -77,10 +76,12 @@ void gc_mouse(gameObject_t* this, void* data)
     mouseEvent_t* me = data;
     if(me->mouse == MB_WHEEL_UP && me->state == MS_PRESSED)
     {
+        pd->frame = 0;
         while(pd->weaponStates[(pd->weapon = (pd->weapon + 1) % WEAPON_COUNT)] == 0);
     }
     else if(me->mouse == MB_WHEEL_DOWN && me->state == MS_PRESSED)
     {
+        pd->frame = 0;
         while(pd->weaponStates[(pd->weapon = ((pd->weapon - 1 < 0) ? WEAPON_COUNT - 1 : pd->weapon - 1))] == 0);
     }
     if(me->mouse == MB_LEFT && me->state == MS_PRESSED && !getWeaponAutoFire(pd->weapon))
@@ -118,6 +119,7 @@ void gc_keyPressed(gameObject_t* this, void* data)
             int wtype = ke->key - '1';
             if (pd->weaponStates[wtype])
             {
+                pd->frame = 0;
                 pd->weapon = wtype;
             }
         }

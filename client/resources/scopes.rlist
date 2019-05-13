@@ -58,6 +58,12 @@
 #define TEXID_PLAYER_RPG            55
 #define TEXID_PLAYER_RPG_RELOAD     56
 
+#define TEXID_BULLET_SHOTGUN        57
+#define TEXID_BULLET_BOLT           58
+#define TEXID_BULLET_ROCKET         59
+#define TEXID_GRENADE               60
+#define TEXID_EXPLOSION             61
+
 #define SCENEID_MAIN_MENU   1
 #define SCENEID_GAME        0
 

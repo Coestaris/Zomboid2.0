@@ -9,8 +9,8 @@ double weapon[WEAPON_COUNT * 6] = {
         5,            10,          30,           32,            0,          0.05,        //0 - pistol
         10,           30,          25,           28,            0,          0,           //1 - crossbow
         3,            8,           5,            6,             1,          0.1,         //2 - smg
-        5,            10,          60,           65,            1,          0.12,         //3 - shotgun
-        5,            10,          0,            0,             1,          0,           //4 - laser
+        5,            10,          60,           65,            1,          0.12,        //3 - shotgun
+        1,            1.2,         0,            0,             1,          0,           //4 - laser
         100,          100,         200,          200,           0,          0,           //5 - rpg
 };
 
@@ -20,7 +20,7 @@ int maxWeaponCount[WEAPON_COUNT * 2] = {
         1,          60,       //1 - crossbow
         90,         500,      //2 - smg
         5,          32,       //3 - shotgun
-        1000,       1000,     //4 - laser
+        500,        1500,     //4 - laser
         1,          5,        //5 - rpg
 };
 
@@ -68,6 +68,65 @@ tex_t* cachedTextures[WEAPON_COUNT];
 tex_t* cachedLeftTextures[WEAPON_COUNT];
 tex_t* cachedGrenTexture;
 
+int winW, winH;
+
+#define  checkLaserInt(xx1, yy1, xx2, yy2)                                                   \
+                        if(ltracer_getIntersection(rel.x, rel.y, dest.x, dest.y,             \
+                                    vec(xx1, yy1),                                           \
+                                    vec(xx2, yy2),                                           \
+                                    &intX, &intY, &dist))                                    \
+                        {                                                                    \
+                            if (dist < minDist) {                                            \
+                                minX = intX;                                                 \
+                                minY = intY;                                                 \
+                                minDist = dist;                                              \
+                                minObject = objects[i];                                      \
+                            }                                                                \
+                        }
+
+void proceedLaser(playerData_t* pd)
+{
+    int count = 0;
+    gameObject_t** objects = scmGetObjects(&count);
+
+    vec_t rel = relativeCoordinatesEx(getPlayerTexture(pd->weapon), pd->pos, pd->angle);
+    vec_t dest = vec_add(rel, vec_mult(vec(cos(pd->angle), sin(pd->angle)), winW * M_SQRT2));
+
+
+    double minX = dest.x, minY = dest.y;
+    double minDist = winW * winW;
+    gameObject_t* minObject = NULL;
+
+    for(int i = 0; i < count; i++) {
+        if(objects[i]->ID == OBJECT_ZOMBIE) {
+
+            double intX, intY;
+            double dist;
+
+            //checkLaserInt(0, 0, 0, objects[i]->cachedTex->height);
+            double offset = 5;
+            double width = objects[i]->cachedTex->height / 2.0;
+
+            vec_t normal =  vec_mult(vec_normalize(vec_normal(vec_sub(rel, objects[i]->pos))), width);
+            vec_t off = vec_add(objects[i]->pos, vec_mult(vec(cos(objects[i]->angle), sin(objects[i]->angle)), offset));
+
+            //dqnDrawLine(vec_add(off, normal), vec_sub(off, normal), color(0, 1, 0, 1), 3);
+
+            checkLaserInt(off.x + normal.x, off.y + normal.y, off.x - normal.x, off.y - normal.y);
+        }
+    }
+
+    dqnDrawLine(rel, vec(minX, minY), color(1, 0, 0, 1), 3);
+
+    if(minX != dest.x && minY != dest.y)
+    {
+        //harmZombie(pd, minObject);
+        enemy_zombie_harm(randRange(weapon[pd->weapon * 6 + 0], weapon[pd->weapon * 6 + 1]), minObject);
+        spawnSpotBlood(1, 10, minObject->pos);
+    }
+
+}
+
 void reload(playerData_t* player)
 {
     if(player->weaponMaxCount[player->weapon] > 0)
@@ -89,7 +148,7 @@ void reload(playerData_t* player)
 
 int getWeaponFireRate(int wtype)
 {
-    return weapon[wtype * 6 + 3];
+    return (int)weapon[wtype * 6 + 3];
 }
 
 void fire(playerData_t* player)
@@ -99,22 +158,28 @@ void fire(playerData_t* player)
         if(player->state == reloading) return;
 
         double range = weapon[player->weapon * 6 + 5];
+        double damage = randRange(weapon[player->weapon * 6 + 0], weapon[player->weapon * 6 + 1]);
+
         vec_t rel = relativeCoordinatesEx(getPlayerTexture(player->weapon), player->pos, player->angle);
 
         player->weaponCount[player->weapon]--;
         switch (player->weapon)
         {
+            case 2:
             case 0:
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET));
+                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET, damage));
+                break;
+            case 1:
+                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET_BOLT, damage));
                 break;
             case 3:
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET));
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET));
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET));
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET));
+                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
+                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
+                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
+                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
                 break;
-            default:
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET));
+            case 5:
+                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET_ROCKET, damage));
                 break;
         }
 
@@ -180,11 +245,6 @@ double getWeaponShootingSpeed(int wtype)
 double getWeaponReloadingSpeed(int wtype)
 {
     return weaponAnimationSpeed[wtype * 2 + 1];
-}
-
-int harmZombie(int wtype, gameObject_t* player, gameObject_t* zombie)
-{
-
 }
 
 void weaponCache()

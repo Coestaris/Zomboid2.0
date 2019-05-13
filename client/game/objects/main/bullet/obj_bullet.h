@@ -18,13 +18,13 @@
 
 typedef struct _bulletData
 {
-
     gameObject_t* light;
     double xOffset;
     double yOffset;
+    double damage;
 
 } bulletData_t;
 
-gameObject_t* createBullet(vec_t p, double angle, int texID);
+gameObject_t* createBullet(vec_t p, double angle, int texID, double damage);
 
 #endif //ZOMBOID2_OBJ_BULLET_H

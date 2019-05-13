@@ -42,7 +42,7 @@ void bullet_zombie(gameObject_t* this, gameObject_t* zombie)
     //scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
 
-    enemy_zombie_harm(zombie);
+    enemy_zombie_harm(bd->damage, zombie);
 }
 
 void bullet_init(gameObject_t* object)
@@ -52,7 +52,7 @@ void bullet_init(gameObject_t* object)
     evqSubscribeCollisionEvent(object, OBJECT_ZOMBIE, bullet_zombie);
 }
 
-gameObject_t* createBullet(vec_t p, double angle, int texID)
+gameObject_t* createBullet(vec_t p, double angle, int texID, double damage)
 {
     gameObject_t* go = object();
     go->drawable = true;
@@ -70,10 +70,12 @@ gameObject_t* createBullet(vec_t p, double angle, int texID)
                                                      BULLET_LIGHT_ALPHA), texmGetID(TEXID_LIGHT), 0);*/
     bulletData_t* bd = go->data;
 
+    go->animationSpeed = 1;
+
    // bd->light = light;
     bd->xOffset = cos(go->angle) * BULLET_SPEED;
     bd->yOffset = sin(go->angle) * BULLET_SPEED;
-
+    bd->damage = damage;
 
     //scmPushObject(light);
     return go;

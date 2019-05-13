@@ -7,6 +7,7 @@
 
 #include "../objectInclude.h"
 
+#include "main/enemy/obj_enemy_zombie.h"
 #include "main/bullet/obj_bullet.h"
 #include "playerData.h"
 
@@ -27,9 +28,8 @@ void reload(playerData_t* player);
 double getWeaponShootingSpeed(int wtype);
 double getWeaponReloadingSpeed(int wtype);
 int getWeaponFireRate(int wtype);
+void proceedLaser(playerData_t* pd);
 
 void weaponCache(void);
-
-int harmZombie(int wtype, gameObject_t* player, gameObject_t* zombie);
 
 #endif //ZOMBOID2_WEAPON_H

@@ -15,22 +15,17 @@
 
 #define ENEMY_HP 100.0
 
-typedef struct enemyData
+typedef struct _zombieData
 {
     double hp;
-
     playerData_t* player;
 
-    tex_t* larm_tex;
-    tex_t* rarm_tex;
-
     int larm;
-
-
     double speed;
 
-} enemyData_t;
+} zombieData_t;
 
+void enemy_zombie_harm(double damage, gameObject_t* this);
 gameObject_t* createEnemy(playerData_t* player, vec_t pos);
 
 #endif //ZOMBOID2_OBJ_ENEMY_H
