@@ -8,7 +8,7 @@
 #include <memory.h>
 #include <zconf.h>
 
-#include "client.h"
+#include "../lib/client.h"
 #include "actionNotifier.h"
 #include "handlers/messageTypes.h"
 

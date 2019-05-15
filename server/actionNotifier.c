@@ -9,9 +9,9 @@ void notifierSocketInited(void)
     puts("[Socket]: Sockets inited");
 }
 
-void notifierSocketListening(int port)
+void notifierSocketListening(char * port)
 {
-    printf("[Socket]: Listener on port %d \n", port);
+    printf("[Socket]: Listener on port %s \n", port);
 }
 
 void notifierSocketWaiting(void)

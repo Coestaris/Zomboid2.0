@@ -2,7 +2,7 @@
 // Created by maxim on 2/23/19.
 //
 
-#include "client.h"
+#include "../lib/client.h"
 
 socket_client* createClient(void)
 {
