@@ -54,7 +54,7 @@ int sendAll(int sockfd, uint8_t *buff, size_t len, int flags) {
     return n == -1 ? -1 : 0;
 }
 
-uint8_t * idServer_packClientData(client_t *client, uint8_t res[MSG_ID_SERVER_CLIENT_DATA_LENGTH]) {
+uint8_t * idServer_packClientData(idClient_t *client, uint8_t res[MSG_ID_SERVER_CLIENT_DATA_LENGTH]) {
     uint64_t total = 1;
     res[0] = MSG_ID_SERVER_CLIENT_DATA;
 
@@ -80,7 +80,7 @@ uint8_t * idServer_packClientClose(zsize_t clientUID, uint8_t isHost,
     return res;
 }
 
-uint8_t * idServer_packHostData(host_t *host, uint8_t res[MSG_ID_SERVER_HOST_DATA_LENGTH]) {
+uint8_t * idServer_packHostData(idHost_t *host, uint8_t res[MSG_ID_SERVER_HOST_DATA_LENGTH]) {
     uint64_t total = 1;
     res[0] = MSG_ID_SERVER_HOST_DATA;
 
@@ -102,7 +102,7 @@ uint8_t * idServer_packHostClose(zsize_t hostUID, uint8_t res[MSG_ID_SERVER_HOST
     return res;
 }
 
-client_t * idServer_unpackClientData(uint8_t data[MSG_ID_SERVER_CLIENT_DATA_LENGTH], client_t *res) {
+idClient_t * idServer_unpackClientData(uint8_t data[MSG_ID_SERVER_CLIENT_DATA_LENGTH], idClient_t *res) {
     uint64_t total = 1;
 
     total = read_uint_n(data, sizeof (zsize_t), total, &(res->uid));
@@ -114,7 +114,7 @@ client_t * idServer_unpackClientData(uint8_t data[MSG_ID_SERVER_CLIENT_DATA_LENG
     return res;
 }
 
-host_t * idServer_unpackHostData(uint8_t data[MSG_ID_SERVER_HOST_DATA_LENGTH], host_t *res) {
+idHost_t * idServer_unpackHostData(uint8_t data[MSG_ID_SERVER_HOST_DATA_LENGTH], idHost_t *res) {
     uint64_t total = 1;
 
     total = read_uint_n(data, sizeof (zsize_t), total, &(res->uid));
@@ -130,7 +130,7 @@ uint8_t * idClient_packUpdate(uint8_t *res) {
     return res;
 }
 
-client_t * idClient_unpackClientData(uint8_t data[MSG_ID_SERVER_CLIENT_DATA_LENGTH], client_t *res) {
+idClient_t * idClient_unpackClientData(uint8_t data[MSG_ID_SERVER_CLIENT_DATA_LENGTH], idClient_t *res) {
     uint64_t total = 1;
 
     total = read_uint_n(data, sizeof (zsize_t), total, &(res->uid));
@@ -142,7 +142,7 @@ client_t * idClient_unpackClientData(uint8_t data[MSG_ID_SERVER_CLIENT_DATA_LENG
     return res;
 }
 
-host_t * idClient_unpackHostData(uint8_t data[MSG_ID_SERVER_HOST_DATA_LENGTH], host_t *res) {
+idHost_t * idClient_unpackHostData(uint8_t data[MSG_ID_SERVER_HOST_DATA_LENGTH], idHost_t *res) {
     uint64_t total = 1;
 
     total = read_uint_n(data, sizeof (zsize_t), total, &(res->uid));

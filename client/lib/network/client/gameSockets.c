@@ -101,60 +101,26 @@ int gameSocketRead(int socketfd, uint8_t *res, size_t reslen) {
     }
 }
 
+int gameSocketHandlerSubscribe(network_handler *handler) {
+    if (handlersCount == MAX_HANDLERS) {
+        return -1;
+    }
+    handlers[handler->messageType] = handler;
+    handlersCount++;
+    return handlersCount;
+}
+
+network_handler * gameSocketHandlerCreate(int messageType, void (*func)(char*, size_t)) {
+    network_handler *newHandler = malloc(sizeof (network_handler));
+    newHandler->messageType = messageType;
+    newHandler->func = func;
+    return newHandler;
+}
+
+void gameSocketHandlersClear() {
+    for (int i = 0; i < handlersCount; i++) free(handlers[i]);
+}
+
 int gameSocketClose(int sockfd) {
     return close(sockfd);
 }
-
-/*int socketsGetUpdates()
-{
-    //buffLen = read(fd, buffer, BUFFER_SIZE);
-    if(buffLen < 0) {
-        return 0;
-    }
-
-    if(buffLen != 0) {
-
-        if(buffLen < 4) {
-            perror("message is too short!");
-            return 1;
-        }
-
-        int type;
-        memcpy(&type, buffer, sizeof(int));
-
-        printf("Got message with type: %i, dataLen: %li\n", type, buffLen);
-
-        for(int i = 0; i < handlersCount; i++) {
-            if(handlers[i]->messageType == type || handlers[i]->messageType == MSGTYPE__ANY) {
-                handlers[i]->func(buffer + sizeof(int), buffLen - sizeof(int));
-            }
-        }
-    }
-
-    return 1;
-}
-
-void pushHandler(int messageType, void (*func)(char*, size_t))
-{
-    network_handler* nh = malloc(sizeof(network_handler));
-    nh->messageType = messageType;
-    nh->func = func;
-    handlers[handlersCount++] = nh;
-}
-
-int socketsSend(char* buffer, size_t buffLen)
-{
-    if(send(fd, buffer, buffLen, 0) != buffLen) {
-        perror("Send!");
-        return 0;
-    } else {
-        return 1;
-    }
-}
-
-int socketsSendMessage(int messageType, char* buffer, size_t buffLen)
-{
-    memcpy(send_buffer, &messageType, sizeof(int));
-    if(buffer) memcpy(send_buffer + sizeof(int), buffer, (size_t)buffLen);
-    return socketsSend(send_buffer, (size_t)buffLen + sizeof(int));
-}*/

@@ -16,8 +16,8 @@ int idClientSocketCreate(const char *address, const char *port);
 int idClientSocketWrite(int sockfd, uint8_t *buff, size_t bufflen);
 int idClientSocketRead(int sockfd, uint8_t *res, size_t reslen);
 int idClientSocketClose(int sockfd);
-int idClientSocketUpdateData(int sockfd, client_t *clients, zsize_t *clientsCount,
-                             host_t *hosts, zsize_t *hostsCount, void (*spinnerCb)(uint8_t show));
+int idClientSocketUpdateData(int sockfd, idClient_t *clients, zsize_t *clientsCount,
+                             idHost_t *hosts, zsize_t *hostsCount, void (*spinnerCb)(uint8_t show));
 int idClientSocketClientInit(int sockfd, uint8_t *clientName);
 int idClientSocketHostInit(int sockfd, uint8_t *hostName, uint16_t port);
 

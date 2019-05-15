@@ -4,7 +4,7 @@
 
 #include "sockets.h"
 
-/*client_t *clients[MAX_CLIENTS];*/
+/*idClient_t *clients[MAX_CLIENTS];*/
 /*
 int socketInit(void) {
     for (uint8_t i = 0; i < MAX_CLIENTS; i++) {

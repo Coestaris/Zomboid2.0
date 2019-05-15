@@ -81,8 +81,8 @@ int idClientSocketHostInit(int sockfd, uint8_t *hostName, uint16_t port) {
     return idClientSocketWrite(sockfd, idClient_packHostInit(hostName, port, buff), MSG_ID_CLIENT_HOST_INIT_LENGTH);
 }
 
-int idClientSocketUpdateData(int sockfd, client_t *clients, zsize_t *clientsCount,
-                             host_t *hosts, zsize_t *hostsCount, void (*spinnerCb)(uint8_t show)) {
+int idClientSocketUpdateData(int sockfd, idClient_t *clients, zsize_t *clientsCount,
+                             idHost_t *hosts, zsize_t *hostsCount, void (*spinnerCb)(uint8_t show)) {
 
     fd_set masterfds, readfds;
     ssize_t rv;
@@ -121,9 +121,9 @@ int idClientSocketUpdateData(int sockfd, client_t *clients, zsize_t *clientsCoun
                     // if there's an update end metapackage - stop the loop
                     switch (buff[0]) {
                         case MSG_ID_SERVER_UPDATE_START:
-                            memset(clients, 0, *clientsCount * sizeof (client_t));
+                            memset(clients, 0, *clientsCount * sizeof (idClient_t));
                             *clientsCount = 0;
-                            memset(hosts, 0, *hostsCount * sizeof (host_t));
+                            memset(hosts, 0, *hostsCount * sizeof (idHost_t));
                             *hostsCount = 0;
                             break;
                         case MSG_ID_SERVER_UPDATE_END:

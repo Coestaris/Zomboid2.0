@@ -10,7 +10,7 @@
 
 #include "sockets.h"
 
-zsize_t genereateClientUID(client_t client[MAX_ZNET_CLIENTS], zsize_t clientsCount) {
+zsize_t genereateClientUID(idClient_t client[MAX_ZNET_CLIENTS], zsize_t clientsCount) {
     zsize_t res = MAX_ZNET_CLIENTS;
     for (zsize_t i = 0; i < MAX_ZNET_CLIENTS; i++) {
         uint8_t isFree = 1;
@@ -24,7 +24,7 @@ zsize_t genereateClientUID(client_t client[MAX_ZNET_CLIENTS], zsize_t clientsCou
     return res;
 }
 
-zsize_t generateHostUID(host_t *hosts, zsize_t hostsCount) {
+zsize_t generateHostUID(idHost_t *hosts, zsize_t hostsCount) {
     zsize_t res = MAX_ZNET_HOSTS;
     for (zsize_t i = 0; i < MAX_ZNET_HOSTS; i++) {
         uint8_t isFree = 1;
@@ -39,8 +39,8 @@ zsize_t generateHostUID(host_t *hosts, zsize_t hostsCount) {
 }
 
 // probably could be useful for multiple id-servers...
-void bufferHandler(uint8_t *_buff, zsize_t _currentClient, client_t *_clients, zsize_t *_clientsCount,
-        host_t *_hosts, zsize_t *_hostsCount) {
+void bufferHandler(uint8_t *_buff, zsize_t _currentClient, idClient_t *_clients, zsize_t *_clientsCount,
+        idHost_t *_hosts, zsize_t *_hostsCount) {
     // reading header
     switch (_buff[0]) {
         case MSG_ID_SERVER_HOST_DATA:
@@ -128,8 +128,8 @@ int idServerSocketMainLoop(int sockfd) {
     int fdmax;
     int newfd;
 
-    client_t clients[MAX_ZNET_CLIENTS] = {0};
-    host_t hosts[MAX_ZNET_HOSTS] = {0};
+    idClient_t clients[MAX_ZNET_CLIENTS] = {0};
+    idHost_t hosts[MAX_ZNET_HOSTS] = {0};
     uint8_t clientsCount = 0;
     uint8_t hostsCount = 0;
 

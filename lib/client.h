@@ -9,7 +9,6 @@
 #include <memory.h>
 
 #define BUFFER_SIZE 1025
-#define MAX_CLIENTS 30
 
 #define MAX_CLIENT_NAME_LENGTH 32
 #define STATE_EMPTY 0
@@ -26,7 +25,13 @@ typedef struct {
     uint8_t name[MAX_CLIENT_NAME_LENGTH];
     sockaddr_in_t address;
     int sockfd;
-} client_t;
+} idClient_t;
+
+typedef struct {
+    uint8_t name[MAX_CLIENT_NAME_LENGTH];
+    //other meta-shit
+    uint64_t score;
+} gameClient_t;
 
 typedef struct _client_info {
     int state;

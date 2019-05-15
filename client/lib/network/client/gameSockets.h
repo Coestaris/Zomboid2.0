@@ -15,7 +15,6 @@
 typedef struct _network_handler {
     int messageType;
     void (*func)(char*, size_t);
-
 } network_handler;
 
 typedef struct {
@@ -28,12 +27,8 @@ int gameSocketWrite(r_info serv_info, uint8_t *data, size_t *len);
 int gameSocketRead(int socketfd, uint8_t *res, size_t len);
 int gameSocketClose(int socketfd);
 
-int gameSocketsOpen(void);
-int gameSocketsGetUpdates();
-
-void pushHandler(int messageType, void (*func)(char*, size_t));
-
-int socketsSend(char *buffer, size_t buffLen);
-int socketsSendMessage(int msgType, char *buffer, size_t buffLen);
+int gameSocketHandlerSubscribe(network_handler *handler);
+network_handler * gameSocketHandlerCreate(int messageType, void (*func)(char*, size_t));
+void gameSocketHandlersClear();
 
 #endif //ZOMBOID2_SOCKETS_H
