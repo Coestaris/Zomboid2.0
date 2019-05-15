@@ -4,10 +4,6 @@
 
 #include "score.h"
 
-#define MAX_LEVELS 13
-#define MAX_ENEMIES 6
-#define COMPLETED 0.9
-
 int levels[MAX_LEVELS * MAX_ENEMIES] = {
     //  tic     body    zombie  slug    ghost   slicer
         10,     0,      0,      0,      0,      0,
@@ -24,6 +20,11 @@ int levels[MAX_LEVELS * MAX_ENEMIES] = {
         15,     0,     30,     10,     20,     10,
         15,     5,     30,     30,     30,     20,
 };
+
+int spawnEnemy()
+{
+
+}
 
 int mobCount(int level)
 {
