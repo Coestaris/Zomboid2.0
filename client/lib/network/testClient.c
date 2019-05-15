@@ -5,7 +5,7 @@
 // Sockets testing unit
 
 #include "client/idSockets.h"
-#include "client/gameSockets.h"
+#include "client/gameClientSockets.h"
 #include "metadata.h"
 
 void fakeSpinner(int state){};

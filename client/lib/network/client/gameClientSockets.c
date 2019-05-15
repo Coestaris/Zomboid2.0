@@ -2,7 +2,7 @@
 // Created by maxim on 2/23/19.
 //
 
-#include "gameSockets.h"
+#include "gameClientSockets.h"
 
 network_handler *handlers[MAX_HANDLERS];
 int handlersCount = 0;

@@ -2,20 +2,10 @@
 // Created by maxim on 2/23/19.
 //
 
-#include "sockets.h"
+#include "gameHostSockets.h"
+#include <pthread.h>
 
-/*idClient_t *clients[MAX_CLIENTS];*/
-/*
-int socketInit(void) {
-    for (uint8_t i = 0; i < MAX_CLIENTS; i++) {
-        clients[i] = createClient();
-    }
-
-    notifierSocketInited();
-    return 1;
-}*/
-
-int socketServerCreate(char *port) {
+int gameHostSocketServerCreate(char *port) {
     /*
      * We use connect() for UDP packet's to increase performance
      * This function returns new socket fd
@@ -69,15 +59,14 @@ int socketServerCreate(char *port) {
     return sockfd;
 }
 
-void sendUpdate(int sockfd, sockaddr_t address) {
+void sendUpdate(int sockfd, void *data, size_t length, sockaddr_t address) {
     /*
      * Here we have to create new thread were data is processing
      */
     size_t total = 0;
-    char data[5] = "cool!";
     ssize_t n = -1;
-    size_t left = sizeof (data);
-    while (total < 5) {
+    size_t left = length;
+    while (total < length) {
         n = sendto(sockfd, data + total, left, 0, &address, sizeof (address));
         if (n == -1) break;
         total += n;
@@ -94,22 +83,19 @@ int isTimedOut(time_t timestamp) {
     return ((clock() - timestamp) / CLOCKS_PER_SEC > DISCONNECT_TIMEOUT);
 }
 
-int socketMainloop(int listener) {
-    /*   int opt = 1;
-       int addrlen, new_socket, sd;
-       ssize_t valread;
-       ssize_t nbytes;
-       struct sockaddr_in address;
-       addrlen = sizeof(address);*/
-/*    int fdmax;*/
+void * _gameHostSocketMainloop(void *_args) {
+    thread_args args = *(thread_args *)_args;
+    int listener = args.listener;
+    int *runnning = args.running;
+    void **players = args.players;
+    size_t playerSize = args.playerSize;
 
-    uint8_t running = 1;
     time_t now;
-    player_t clients[MAX_CLIENTS] = {0};
+    gameClientInfo_t clients[MAX_CLIENTS] = {0};
+    for (int i = 0; i < MAX_CLIENTS; i++) clients[i].clientData = players[i];
     zsize_t clientsCount = 0;
 
-    while (running) {
-
+    while (*runnning) {
         // everybody will hang on a single socket descriptor
         // and the only way to identify them - by ip address
         uint8_t recv_buff[MAX_BUFFER] = {0};
@@ -127,12 +113,12 @@ int socketMainloop(int listener) {
                              sizeof(ip_buff)));
             //checking if a client is registered
             uint8_t found = 0;
-            zsize_t client_current = 0;
-            for (zsize_t i = 0; i < clientsCount; i++)
+            int currentClient = 0;
+            for (int i = 0; i < clientsCount; i++)
                 if (memcmp(clients + i, (sockaddr_t *) &their_addr, sizeof (sockaddr_t)) == 0) {
                     found = 1;
-                    client_current = i;
-                    clients[client_current].last_packet = clock();
+                    currentClient = i;
+                    clients[currentClient].lastPacket = clock();
                 }
             if (!found) {
                 if (clientsCount == MAX_CLIENTS) {
@@ -140,33 +126,49 @@ int socketMainloop(int listener) {
                     // ...
                 } else {
                     memcpy(&(clients + clientsCount)->address, &their_addr, sizeof (sockaddr_t));
-                    client_current = clientsCount;
+                    currentClient = clientsCount;
                     clientsCount++;
                 }
             }
             printf("server: packet contains \"%s\"\n", recv_buff);
             // sending messages to all except for current player
-            for (zsize_t i = 0; i < client_current; i++) {
-                if (isTimedOut(clients[i].last_packet)) {
+            for (int i = 0; i < currentClient; i++) {
+                if (isTimedOut(clients[i].lastPacket)) {
                     // TODO: send disconnect message
                     // removing client
-                    for (uint8_t j = i; j < clientsCount - 1; j++) {
+                    for (int j = i; j < clientsCount - 1; j++) {
                         clients[j] = clients[j + 1];
                     }
-                    client_current--;
+                    currentClient--;
                     clientsCount--;
-                } else sendUpdate(listener, clients[i].address);
+                } else
+                    for(i = 0; i < clientsCount; i++) sendUpdate(listener, clients[i].clientData,
+                            playerSize, clients[i].address);
             }
-            for (zsize_t i = (uint8_t) (client_current + 1); i < clientsCount; i++) {
-                if (isTimedOut(clients[i].last_packet)) {
+            for (int i = (uint8_t) (currentClient + 1); i < clientsCount; i++) {
+                if (isTimedOut(clients[i].lastPacket)) {
                     // TODO: send disconnect message
                     // removing client
-                    for (uint8_t j = i; j < clientsCount - 1; j++) {
+                    for (int j = i; j < clientsCount - 1; j++) {
                         clients[j] = clients[j + 1];
                     }
                     clientsCount--;
-                } else sendUpdate(listener, clients[i].address);
+                } else
+                    for(i = 0; i < clientsCount; i++) sendUpdate(listener, clients[i].clientData,
+                            playerSize, clients[i].address);
             }
         }
     }
+}
+
+void gameHostSocketMainloop(int listenfd, int *running, void *players[MAX_CLIENTS], size_t playerSize) {
+    pthread_t tid;
+    thread_args args = {
+            listenfd,
+            running,
+            players,
+            playerSize
+    };
+    pthread_create(&tid, NULL, _gameHostSocketMainloop, (void *)&args);
+    pthread_exit(NULL);
 }
