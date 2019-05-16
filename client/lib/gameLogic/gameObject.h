@@ -32,8 +32,10 @@ typedef struct _GameObject
     void* data;
 
     void (* onInit)(struct _GameObject* object);
-
     void (* onDestroy)(struct _GameObject* object);
+
+    int collisionXExt;
+    int collisionYExt;
 
 } gameObject_t;
 

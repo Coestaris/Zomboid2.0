@@ -151,7 +151,7 @@ int getWeaponFireRate(int wtype)
     return (int)weapon[wtype * 6 + 3];
 }
 
-void fire(playerData_t* player)
+void fire(gameMobData_t* md, playerData_t* player)
 {
     if(player->weaponCount[player->weapon] > 0)
     {
@@ -167,19 +167,19 @@ void fire(playerData_t* player)
         {
             case 2:
             case 0:
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET, damage));
+                scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET, damage));
                 break;
             case 1:
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET_BOLT, damage));
+                scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_BOLT, damage));
                 break;
             case 3:
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
+                scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
+                scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
+                scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
+                scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
                 break;
             case 5:
-                scmPushObject(createBullet(rel, player->angle + randRange(-range, range), TEXID_BULLET_ROCKET, damage));
+                scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_ROCKET, damage));
                 break;
         }
 

@@ -35,14 +35,21 @@ void bullet_box(gameObject_t* this, gameObject_t* box)
 void bullet_zombie(gameObject_t* this, gameObject_t* zombie)
 {
     bulletData_t* bd = this->data;
-
-    scmPushObject(createMovingBloodSpawner(this->pos,
-            this->angle, 14, 5, 2, 9));
-
-    //scmDestroyObject(bd->light, true);
+    scmPushObject(createMovingBloodSpawner(this->pos, this->angle, 14, 5, 2, 9));
     scmDestroyObject(this, true);
 
-    enemy_zombie_harm(bd->damage, zombie);
+    if(enemy_zombie_harm(bd->damage, zombie))
+    {
+        killEnemy(bd->md, 3);
+    }
+}
+
+void bullet_tic(gameObject_t* this, gameObject_t* tic)
+{
+    bulletData_t* bd = this->data;
+    scmPushObject(createMovingBloodSpawner(this->pos, this->angle, 14, 5, 2, 9));
+    scmDestroyObject(this, true);
+    enemy_tic_harm(bd->damage, tic);
 }
 
 void bullet_init(gameObject_t* object)
@@ -50,9 +57,10 @@ void bullet_init(gameObject_t* object)
     evqSubscribeEvent(object, EVT_Update, bullet_event_update);
     evqSubscribeCollisionEvent(object, OBJECT_BOX, bullet_box);
     evqSubscribeCollisionEvent(object, OBJECT_ZOMBIE, bullet_zombie);
+    evqSubscribeCollisionEvent(object, OBJECT_TIC, bullet_tic);
 }
 
-gameObject_t* createBullet(vec_t p, double angle, int texID, double damage)
+gameObject_t* createBullet(gameMobData_t* md, vec_t p, double angle, int texID, double damage)
 {
     gameObject_t* go = object();
     go->drawable = true;
@@ -76,6 +84,7 @@ gameObject_t* createBullet(vec_t p, double angle, int texID, double damage)
     bd->xOffset = cos(go->angle) * BULLET_SPEED;
     bd->yOffset = sin(go->angle) * BULLET_SPEED;
     bd->damage = damage;
+    bd->md = md;
 
     //scmPushObject(light);
     return go;

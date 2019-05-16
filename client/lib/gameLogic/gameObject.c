@@ -22,6 +22,8 @@ gameObject_t* object(void)
     obj->alpha = 1;
     obj->animationSpeed = 0;
     obj->animationCounter = 0;
+    obj->collisionXExt = 0;
+    obj->collisionYExt = 0;
     return obj;
 }
 

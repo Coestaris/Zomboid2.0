@@ -10,19 +10,21 @@
 #include "../../weapon.h"
 #include "../enemy/obj_enemy_zombie.h"
 #include "../../playerData.h"
+#include "../../score.h"
 
 //todo: Replace by real define!!!!!!
-#define ASD 10
+#define ASD 1
 
 typedef struct _gameController_data {
 
     int wave;
     double completed;
 
-    //todo: Insert zsize_t type here
     int playerCount;
 
     playerData_t* players[ASD];
+    gameMobData_t* mobData[ASD];
+
 
 } gameControllerData_t ;
 

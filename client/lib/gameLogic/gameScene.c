@@ -55,6 +55,7 @@ void proceedCollisions(void)
         collisionEventListener_t* listener;
         gameObject_t* object;
     } toCall[100];
+
     size_t toCallCount = 0;
 
     size_t count;
@@ -68,10 +69,10 @@ void proceedCollisions(void)
                 vec_t point = listeners[listener]->object->pos;
                 gameObject_t* obj = objects[i];
 
-                if(    point.x > obj->pos.x - obj->cachedTex->width  / 2.0 * obj->size &&
-                       point.x < obj->pos.x + obj->cachedTex->width  / 2.0 * obj->size &&
-                       point.y > obj->pos.y - obj->cachedTex->height / 2.0 * obj->size &&
-                       point.y < obj->pos.y + obj->cachedTex->height / 2.0 * obj->size)
+                if(    point.x > obj->pos.x - obj->cachedTex->width  / 2.0 * obj->size - obj->collisionXExt &&
+                       point.x < obj->pos.x + obj->cachedTex->width  / 2.0 * obj->size + obj->collisionXExt &&
+                       point.y > obj->pos.y - obj->cachedTex->height / 2.0 * obj->size - obj->collisionYExt&&
+                       point.y < obj->pos.y + obj->cachedTex->height / 2.0 * obj->size + obj->collisionYExt)
                 {
                     //listeners[listener]->callback(listeners[listener]->object, objects[i]);
                     toCall[toCallCount].listener = listeners[listener];

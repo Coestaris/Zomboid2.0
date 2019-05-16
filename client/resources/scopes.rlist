@@ -64,6 +64,12 @@
 #define TEXID_GRENADE               60
 #define TEXID_EXPLOSION             61
 
+#define TEXID_ENEMY_BODY            62
+#define TEXID_ENEMY_SLUG            63
+#define TEXID_ENEMY_GHOST           64
+#define TEXID_ENEMY_SLICER          65
+
+
 #define SCENEID_MAIN_MENU   1
 #define SCENEID_GAME        0
 
@@ -73,4 +79,12 @@
 #define OBJECT_ZOMBIE           3
 #define OBJECT_HUD              4
 #define OBJECT_GAME_CONTROLLER  5
+
+#define OBJECT_TIC              6
+#define OBJECT_BODY             7
+#define OBJECT_SLICER           8
+#define OBJECT_GHOST            9
+#define OBJECT_SLUG            10
+
+
 

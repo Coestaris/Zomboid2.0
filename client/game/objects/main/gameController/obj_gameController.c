@@ -9,6 +9,8 @@ void gc_update(gameObject_t* this, void* data)
 {
     gameControllerData_t* gd = this->data;
     playerData_t* pd = gd->players[0];
+    gameMobData_t* md = gd->mobData[0];
+
     vec_t mpos = getMousePos();
 
     pd->angle = twoPointsAngle(pd->pos, mpos);
@@ -22,7 +24,7 @@ void gc_update(gameObject_t* this, void* data)
     if(getWeaponAutoFire(pd->weapon)) {
         if(getMouseState(MB_LEFT) == MS_PRESSED &&  frame - pd->lastFireFrame > getWeaponFireRate(pd->weapon)) {
             pd->lastFireFrame = frame;
-            fire(pd);
+            fire(md, pd);
         }
     }
 
@@ -67,12 +69,19 @@ void gc_update(gameObject_t* this, void* data)
                       vec_sub(pd->pos, vec(pd->weapon == 5 ? 18 : 0, 0)), pd->angle, 1, 4);
     }
 
+    if(frame - md->lastSpawnFrame > getMobSpawnInterval(md->wave) && md->currentMobs < getMaxMobs(md->wave))
+    {
+        spawnEnemy(md);
+        md->lastSpawnFrame = frame;
+    }
 }
 
 void gc_mouse(gameObject_t* this, void* data)
 {
     gameControllerData_t* gd = this->data;
     playerData_t* pd = gd->players[0];
+    gameMobData_t* md = gd->mobData[0];
+
     mouseEvent_t* me = data;
     if(me->mouse == MB_WHEEL_UP && me->state == MS_PRESSED)
     {
@@ -86,7 +95,7 @@ void gc_mouse(gameObject_t* this, void* data)
     }
     if(me->mouse == MB_LEFT && me->state == MS_PRESSED && !getWeaponAutoFire(pd->weapon))
     {
-        fire(pd);
+        fire(md, pd);
     }
 }
 
@@ -179,6 +188,8 @@ gameObject_t* createGameController()
     data->players[0]->armour = MAX_PLAYER_ARMOUR / 3;
     data->players[0]->frame = 0;
     data->players[0]->lastFireFrame = 0;
+
+    data->mobData[0] = createMobData();
 
     for(int i = 0; i < WEAPON_COUNT; i++) {
         data->players[0]->weaponStates[i] = 1;
