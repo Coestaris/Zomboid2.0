@@ -19,8 +19,12 @@ gameObject_t* createGhost(playerData_t* player, vec_t pos)
     gameObject_t* this = object();
     this->drawable = 1;
     this->texID = TEXID_ENEMY_GHOST;
+    this->onInit = ghost_init;
+    this->pos = pos;
+    this->ID = OBJECT_GHOST;
 
     allocData(ghostData_t, this, data);
+    data->pd = player;
 
     return this;
 }

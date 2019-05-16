@@ -9,6 +9,8 @@
 #include "../../playerData.h"
 
 typedef struct _ghostData {
+    playerData_t* pd;
+    double hp;
 
 } ghostData_t;
 

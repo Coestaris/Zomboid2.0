@@ -11,6 +11,7 @@
 
 typedef struct _hudData {
     playerData_t* playerData;
+    gameMobData_t* md;
     gameControllerData_t* gcData;
 
 } hudData_t;

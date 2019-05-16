@@ -69,7 +69,7 @@ void gc_update(gameObject_t* this, void* data)
                       vec_sub(pd->pos, vec(pd->weapon == 5 ? 18 : 0, 0)), pd->angle, 1, 4);
     }
 
-    if(frame - md->lastSpawnFrame > getMobSpawnInterval(md->wave) && md->currentMobs < getMaxMobs(md->wave))
+    if(frame - md->lastSpawnFrame > getMobSpawnInterval(md->wave) && shouldSpawnMob(md))
     {
         spawnEnemy(md);
         md->lastSpawnFrame = frame;
@@ -119,7 +119,7 @@ void gc_keyPressed(gameObject_t* this, void* data)
     }
     else if (ke->key == 'q')
     {
-        scmPushObject(createEnemy(pd, vec(randRange(0, winW), randRange(0, winH))));
+        scmPushObject(createZombie(pd, vec(randRange(0, winW), randRange(0, winH))));
     }
     else if(ke->key >= '1' && ke->key <= '6')
     {
@@ -175,8 +175,6 @@ gameObject_t* createGameController()
     obj->ID = OBJECT_GAME_CONTROLLER;
 
     allocData(gameControllerData_t, obj, data);
-    data->wave = 4;
-    data->completed = 0;
 
     //Just one player yet....
     data->playerCount = 1;
@@ -190,6 +188,7 @@ gameObject_t* createGameController()
     data->players[0]->lastFireFrame = 0;
 
     data->mobData[0] = createMobData();
+    data->mobData[0]->pd = data->players[0];
 
     for(int i = 0; i < WEAPON_COUNT; i++) {
         data->players[0]->weaponStates[i] = 1;

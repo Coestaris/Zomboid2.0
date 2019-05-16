@@ -26,6 +26,6 @@ typedef struct _zombieData
 } zombieData_t;
 
 int enemy_zombie_harm(double damage, gameObject_t* this);
-gameObject_t* createEnemy(playerData_t* player, vec_t pos);
+gameObject_t* createZombie(playerData_t* player, vec_t pos);
 
 #endif //ZOMBOID2_OBJ_ENEMY_H

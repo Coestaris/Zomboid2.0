@@ -28,12 +28,14 @@ typedef struct _gameMobData {
 
 } gameMobData_t;
 
+int shouldSpawnMob(gameMobData_t* md);
+double getKilledPercentage(gameMobData_t* md);
 int killEnemy(gameMobData_t* md, int id);
 double getMobSpawnInterval(int level);
 int getMaxMobs(int level);
 void increaseLevel(gameMobData_t* md);
 gameMobData_t* createMobData();
-gameObject_t* spawnEnemy(gameMobData_t* md);
+void spawnEnemy(gameMobData_t* md);
 int mobCount(int level);
 void recieveScore(int level, int id);
 

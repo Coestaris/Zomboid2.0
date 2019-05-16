@@ -19,8 +19,12 @@ gameObject_t* createSlicer(playerData_t* player, vec_t pos)
     gameObject_t* this = object();
     this->drawable = 1;
     this->texID = TEXID_ENEMY_SLICER;
+    this->onInit = slicer_init;
+    this->pos = pos;
+    this->ID = OBJECT_SLICER;
 
     allocData(slicerData_t, this, data);
+    data->pd = player;
 
     return this;
 }

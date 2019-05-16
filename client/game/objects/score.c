@@ -6,9 +6,9 @@
 
 int levels[MAX_LEVELS * MAX_ENEMIES] = {
     //  tic     body    zombie  slug    ghost   slicer
-        10,     0,      0,      0,      0,      0,
         10,     5,      0,      0,      0,      0,
-        10,     5,      5,      0,      0,      0,
+        10,     10,     0,      0,      0,      0,
+        10,     10,     5,      0,      0,      0,
         10,     5,     10,      0,      0,      0,
         10,     5,     20,      5,      0,      0,
         10,     0,     20,     10,      0,      0,
@@ -18,23 +18,23 @@ int levels[MAX_LEVELS * MAX_ENEMIES] = {
         15,     0,     30,     10,     20,      0,
         15,     0,     30,     10,     20,      5,
         15,     0,     30,     10,     20,     10,
-        15,     5,     30,     30,     30,     20,
+        15,     5,     35,     30,     30,     20,
 };
 
 double maxMobs[MAX_LEVELS * 2] = {
     //Max mobs   |  spawn timeout
         5,          80,
         10,         60,
-        10,         60,
-        10,         60,
-        15,         45,
-        15,         45,
+        15,         60,
+        20,         60,
         20,         45,
-        20,         30,
-        25,         30,
-        25,         30,
+        25,         45,
+        25,         45,
         30,         30,
-        30,         30,
+        35,         30,
+        40,         30,
+        45,         30,
+        45,         30,
         50,         15,
 };
 
@@ -80,7 +80,9 @@ gameObject_t* getMob(int id, playerData_t* pd)
         case 0:
             return createTic(pd, pos, angle);
         case 1:
+            return createBody(pd, pos);
         case 2:
+            return createZombie(pd, pos);
         case 3:
         case 4:
         case 5:
@@ -91,31 +93,70 @@ gameObject_t* getMob(int id, playerData_t* pd)
     }
 }
 
-int killEnemy(gameMobData_t* md, int id)
+int shouldSpawnMob(gameMobData_t* md)
 {
-    md->currentMobs -= 1;
+    if(getKilledPercentage(md) == 1) {
+        increaseLevel(md);
+        return true;
+    }
+
+    return md->currentMobs < getMaxMobs(md->wave);
 }
 
-gameObject_t* spawnEnemy(gameMobData_t* md)
+double getKilledPercentage(gameMobData_t* md)
 {
-    int sum = 0;
-    for(int i = 0; i < MAX_ENEMIES; i++)
-        sum += md->toSpawn[i];
+    int sum1 = 0, sum2 = 0;
+    for(int i = 1; i < MAX_ENEMIES; i++)
+    {
+        sum1 += md->toSpawn[i];
+        sum2 += levels[md->wave * MAX_ENEMIES + i];
+    }
 
-    int index = randIntRange(0, sum);
-    int i = 0;
-    while(index - md->toSpawn[i] > 0)
-        index -= md->toSpawn[i++];
+    double v = (sum1 + md->currentMobs) * (2 - COMPLETED) / sum2;
+    return 1 - (v > 1 ? 1 : v);
+}
 
-    md->toSpawn[i] -= 1;
-    md->currentMobs++;
+int ticCount;
+int killEnemy(gameMobData_t* md, int id)
+{
+    if(id == 1)
+        ticCount--;
+    else
+    {
+        if (md->currentMobs != 0)
+            md->currentMobs -= 1;
+    }
+}
 
-    printf("Spawned mob %i. To spawn: %i\n", i, sum);
+void spawnEnemy(gameMobData_t* md)
+{
+    if(ticCount != levels[md->wave * MAX_ENEMIES])
+    {
+        scmPushObject(getMob(0, md->pd));
+        ticCount++;
+        printf("Spawned tic. Tic count %i\n", ticCount);
+    }
+    else
+    {
+        int sum = 0;
+        for (int i = 1; i < MAX_ENEMIES; i++)
+            sum += md->toSpawn[i];
 
-    gameObject_t* obj = getMob(i, md->pd);
-    scmPushObject(obj);
+        if (sum == 0)
+            return;
 
-    return obj;
+        int index = randIntRange(0, sum);
+        int i = 1;
+        while (index - md->toSpawn[i] > 0)
+            index -= md->toSpawn[i++];
+
+        md->toSpawn[i] -= 1;
+        md->currentMobs++;
+
+        printf("Spawned mob %i. To spawn: %i\n", i, sum);
+
+        scmPushObject(getMob(i, md->pd));
+    }
 }
 
 void increaseLevel(gameMobData_t* md)
@@ -128,7 +169,7 @@ void increaseLevel(gameMobData_t* md)
 gameMobData_t* createMobData()
 {
     gameMobData_t* md = malloc(sizeof(gameMobData_t));
-    md->wave = -1;
+    md->wave = 0;
     md->currentMobs = 0;
     md->lastSpawnFrame = 0;
     increaseLevel(md);

@@ -34,7 +34,7 @@ void enemy_init(gameObject_t* this)
     evqSubscribeEvent(this, EVT_Update, enemy_event_update);
 }
 
-gameObject_t* createEnemy(playerData_t* player, vec_t pos)
+gameObject_t* createZombie(playerData_t* player, vec_t pos)
 {
     gameObject_t* obj = object();
     obj->drawable = 1;

@@ -36,20 +36,27 @@ void bullet_zombie(gameObject_t* this, gameObject_t* zombie)
 {
     bulletData_t* bd = this->data;
     scmPushObject(createMovingBloodSpawner(this->pos, this->angle, 14, 5, 2, 9));
-    scmDestroyObject(this, true);
+    if(enemy_zombie_harm(bd->damage, zombie)) { killEnemy(bd->md, 3); }
 
-    if(enemy_zombie_harm(bd->damage, zombie))
-    {
-        killEnemy(bd->md, 3);
-    }
+    scmDestroyObject(this, true);
 }
 
 void bullet_tic(gameObject_t* this, gameObject_t* tic)
 {
     bulletData_t* bd = this->data;
     scmPushObject(createMovingBloodSpawner(this->pos, this->angle, 14, 5, 2, 9));
+    if(enemy_tic_harm(bd->damage, tic)) { killEnemy(bd->md, 1); }
+
     scmDestroyObject(this, true);
-    enemy_tic_harm(bd->damage, tic);
+}
+
+void bullet_body(gameObject_t* this, gameObject_t* body)
+{
+    bulletData_t* bd = this->data;
+    scmPushObject(createMovingBloodSpawner(this->pos, this->angle, 14, 5, 2, 9));
+    if(enemy_body_harm(bd->damage, body)) { killEnemy(bd->md, 2);  }
+
+    scmDestroyObject(this, true);
 }
 
 void bullet_init(gameObject_t* object)
@@ -58,6 +65,7 @@ void bullet_init(gameObject_t* object)
     evqSubscribeCollisionEvent(object, OBJECT_BOX, bullet_box);
     evqSubscribeCollisionEvent(object, OBJECT_ZOMBIE, bullet_zombie);
     evqSubscribeCollisionEvent(object, OBJECT_TIC, bullet_tic);
+    evqSubscribeCollisionEvent(object, OBJECT_BODY, bullet_body);
 }
 
 gameObject_t* createBullet(gameMobData_t* md, vec_t p, double angle, int texID, double damage)

@@ -26,8 +26,8 @@ int enemy_tic_harm(double damage, gameObject_t* this)
     td->hp -= damage;
 
     if(td->hp <= 0) {
-        scmDestroyObject(this, true);
         spawnSpotBlood(20, 30, this->pos);
+        scmDestroyObject(this, true);
         return 1;
     }
 

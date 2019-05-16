@@ -17,9 +17,6 @@
 
 typedef struct _gameController_data {
 
-    int wave;
-    double completed;
-
     int playerCount;
 
     playerData_t* players[ASD];

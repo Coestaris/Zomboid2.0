@@ -19,8 +19,12 @@ gameObject_t* createSlug(playerData_t* player, vec_t pos)
     gameObject_t* this = object();
     this->drawable = 1;
     this->texID = TEXID_ENEMY_SLUG;
+    this->onInit = slug_init;
+    this->pos = pos;
+    this->ID = OBJECT_SLUG;
 
     allocData(slugData_t, this, data);
+    data->pd = player;
 
     return this;
 }

@@ -9,6 +9,8 @@
 #include "../../playerData.h"
 
 typedef struct _slicerData {
+    playerData_t* pd;
+    double hp;
 
 } slicerData_t;
 
