@@ -38,7 +38,6 @@ typedef struct _playerData
     double armour;
     int score;
 
-
 } playerData_t;
 
 #endif //ZOMBOID2_PLAYERDATA_H

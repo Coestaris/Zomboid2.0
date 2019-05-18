@@ -79,6 +79,7 @@
 #define OBJECT_ZOMBIE           3
 #define OBJECT_HUD              4
 #define OBJECT_GAME_CONTROLLER  5
+#define OBJECT_ZNET_CONTROLLER  6
 
 #define OBJECT_TIC              6
 #define OBJECT_BODY             7

@@ -5,7 +5,7 @@
 // Sockets testing unit
 
 #include "client/idSockets.h"
-#include "client/gameSockets.h"
+#include "client/gameClientSockets.h"
 #include "metadata.h"
 
 void fakeSpinner(int state){};
@@ -15,8 +15,8 @@ int main() {
 
     idClientSocketClientInit(sockfd, "username");
 
-    client_t clients[255];
-    host_t hosts[255];
+    idClient_t clients[255];
+    idHost_t hosts[255];
     zsize_t hostsCount, clientsCount;
     uint8_t buff[1024];
 
