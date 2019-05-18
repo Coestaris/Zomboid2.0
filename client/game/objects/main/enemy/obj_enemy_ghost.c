@@ -13,6 +13,20 @@ void ghost_update(gameObject_t* this, void* data)
     this->pos.y += sin(this->angle) * gd->speed;
 }
 
+int enemy_ghost_harm(double damage, gameObject_t* this)
+{
+    ghostData_t* gd = this->data;
+    gd->hp -= damage;
+
+    if(gd->hp <= 0) {
+        spawnSpotBlood(20, 30, this->pos);
+        scmDestroyObject(this, true);
+        return 1;
+    }
+
+    return 0;
+}
+
 void ghost_init(gameObject_t* this)
 {
     evqSubscribeEvent(this, EVT_Update, ghost_update);

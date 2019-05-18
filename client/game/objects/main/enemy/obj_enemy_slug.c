@@ -18,6 +18,20 @@ void slug_init(gameObject_t* this)
     evqSubscribeEvent(this, EVT_Update, slug_update);
 }
 
+int enemy_slug_harm(double damage, gameObject_t* this)
+{
+    slugData_t* sd = this->data;
+    sd->hp -= damage;
+
+    if(sd->hp <= 0) {
+        spawnSpotBlood(20, 30, this->pos);
+        scmDestroyObject(this, true);
+        return 1;
+    }
+
+    return 0;
+}
+
 gameObject_t* createSlug(playerData_t* player, vec_t pos)
 {
     gameObject_t* this = object();

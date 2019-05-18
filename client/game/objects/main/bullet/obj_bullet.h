@@ -9,6 +9,8 @@
 #define BULLET_LIGHT_ALPHA .15
 #define BULLET_LIGHT_SIZE 400
 
+#include "../../enemy.h"
+
 #include "../../../objectInclude.h"
 
 #include "../../bloodSpawner.h"

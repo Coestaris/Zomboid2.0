@@ -26,7 +26,7 @@ int enemy_tic_harm(double damage, gameObject_t* this)
     td->hp -= damage;
 
     if(td->hp <= 0) {
-        spawnSpotBlood(20, 30, this->pos);
+        spawnSpotBlood(TOC_DEAD_COUNT, TOC_DEAD_RANGE, this->pos);
         srfDrawTexture(texmGetID(TEXID_BEETLE_DEAD), 0, color(1, 1, 1, 1), this->pos, randAngle(), randRange(0.9, 1.1));
         scmDestroyObject(this, true);
         return 1;

@@ -35,7 +35,8 @@ void bullet_box(gameObject_t* this, gameObject_t* box)
 void bullet_zombie(gameObject_t* this, gameObject_t* zombie)
 {
     bulletData_t* bd = this->data;
-    scmPushObject(createMovingBloodSpawner(this->pos, this->angle, 14, 5, 2, 9));
+    scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
+            ZOMBIE_MBS_SPEED, ZOMBIE_MBS_TTL, ZOMBIE_MBS_COUNT, ZOMBIE_MBS_RANGE));
     if(enemy_zombie_harm(bd->damage, zombie)) { killEnemy(bd->md, 3); }
 
     scmDestroyObject(this, true);
@@ -44,7 +45,8 @@ void bullet_zombie(gameObject_t* this, gameObject_t* zombie)
 void bullet_tic(gameObject_t* this, gameObject_t* tic)
 {
     bulletData_t* bd = this->data;
-    scmPushObject(createMovingBloodSpawner(this->pos, this->angle, 14, 5, 2, 9));
+    scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
+           TIC_MBS_SPEED, TIC_MBS_TTL, TIC_MBS_COUNT, TIC_MBS_RANGE));
     if(enemy_tic_harm(bd->damage, tic)) { killEnemy(bd->md, 1); }
 
     scmDestroyObject(this, true);
@@ -53,8 +55,39 @@ void bullet_tic(gameObject_t* this, gameObject_t* tic)
 void bullet_body(gameObject_t* this, gameObject_t* body)
 {
     bulletData_t* bd = this->data;
-    scmPushObject(createMovingBloodSpawner(this->pos, this->angle, 14, 5, 2, 9));
+    scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
+           BODY_MBS_SPEED, BODY_MBS_TTL, BODY_MBS_COUNT, BODY_MBS_RANGE));
     if(enemy_body_harm(bd->damage, body)) { killEnemy(bd->md, 2);  }
+
+    scmDestroyObject(this, true);
+}
+
+void bullet_slug(gameObject_t* this, gameObject_t* body)
+{
+    bulletData_t* bd = this->data;
+    scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
+           SLUG_MBS_SPEED, SLUG_MBS_TTL, SLUG_MBS_COUNT, SLUG_MBS_RANGE));
+    if(enemy_slug_harm(bd->damage, body)) { killEnemy(bd->md, 4);  }
+
+    scmDestroyObject(this, true);
+}
+
+void bullet_ghost(gameObject_t* this, gameObject_t* body)
+{
+    bulletData_t* bd = this->data;
+    scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
+            GHOST_MBS_SPEED, GHOST_MBS_TTL, GHOST_MBS_COUNT, GHOST_MBS_RANGE));
+    if(enemy_ghost_harm(bd->damage, body)) { killEnemy(bd->md, 5);  }
+
+    scmDestroyObject(this, true);
+}
+
+void bullet_slicer(gameObject_t* this, gameObject_t* body)
+{
+    bulletData_t* bd = this->data;
+    scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
+            SLICER_MBS_SPEED, SLICER_MBS_TTL, SLICER_MBS_COUNT, SLICER_MBS_RANGE));
+    if(enemy_slicer_harm(bd->damage, body)) { killEnemy(bd->md, 6);  }
 
     scmDestroyObject(this, true);
 }
@@ -63,9 +96,13 @@ void bullet_init(gameObject_t* object)
 {
     evqSubscribeEvent(object, EVT_Update, bullet_event_update);
     evqSubscribeCollisionEvent(object, OBJECT_BOX, bullet_box);
-    evqSubscribeCollisionEvent(object, OBJECT_ZOMBIE, bullet_zombie);
-    evqSubscribeCollisionEvent(object, OBJECT_TIC, bullet_tic);
-    evqSubscribeCollisionEvent(object, OBJECT_BODY, bullet_body);
+
+    evqSubscribeCollisionEvent(object, OBJECT_TIC,     bullet_tic);
+    evqSubscribeCollisionEvent(object, OBJECT_BODY,    bullet_body);
+    evqSubscribeCollisionEvent(object, OBJECT_ZOMBIE,  bullet_zombie);
+    evqSubscribeCollisionEvent(object, OBJECT_SLUG,    bullet_slug);
+    evqSubscribeCollisionEvent(object, OBJECT_GHOST,   bullet_ghost);
+    evqSubscribeCollisionEvent(object, OBJECT_SLICER,  bullet_slicer);
 }
 
 gameObject_t* createBullet(gameMobData_t* md, vec_t p, double angle, int texID, double damage)

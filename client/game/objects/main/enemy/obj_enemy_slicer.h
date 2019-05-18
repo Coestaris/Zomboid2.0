@@ -8,6 +8,7 @@
 #include "../../../objectInclude.h"
 #include "../../playerData.h"
 #include "../../enemy.h"
+#include "../../bloodSpawner.h"
 
 typedef struct _slicerData {
     playerData_t* pd;
@@ -16,6 +17,7 @@ typedef struct _slicerData {
 
 } slicerData_t;
 
+int enemy_slicer_harm(double damage, gameObject_t* this);
 gameObject_t* createSlicer(playerData_t* player, vec_t pos);
 
 #endif //ZOMBOID2_OBJ_ENEMY_SLICER_H

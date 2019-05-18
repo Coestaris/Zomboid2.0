@@ -16,13 +16,13 @@ void enemy_event_update(gameObject_t* this, void* data)
     }
     else
     {
-        this->frame = (int)(ed->frame += 1);
+        this->frame = (int)(ed->frame += ZOMBIE_DEAD_ANSPEED);
         if(this->frame >= this->cachedTex->framesCount) {
-            scmPushObject(createMovingBloodSpawner(this->pos, randAngle(), 14, 5, 2, 9));
-            scmPushObject(createMovingBloodSpawner(this->pos, randAngle(), 14, 5, 2, 9));
-            scmPushObject(createMovingBloodSpawner(this->pos, randAngle(), 14, 5, 2, 9));
-            scmPushObject(createMovingBloodSpawner(this->pos, randAngle(), 14, 5, 2, 9));
-            spawnSpotBlood(20, 30, this->pos);
+            for(int i = 0; i < ZOMBIE_DEAD_MSB; i++)
+            scmPushObject(createMovingBloodSpawner(this->pos, randAngle(),
+                    ZOMBIE_DEAD_MSB_SPEED, ZOMBIE_DEAD_MSB_TTL, ZOMBIE_DEAD_MSB_COUNT, ZOMBIE_DEAD_MSB_RANGE));
+
+            spawnSpotBlood(ZOMBIE_DEAD_COUNT, ZOMBIE_DEAD_RANGE, this->pos);
             srfDrawTexture(texmGetID(TEXID_BLOOD_DEAD), randBool(), color(1, 1, 1, 1), this->pos, randAngle(), randRange(0.8, 1.1));
             scmDestroyObject(this, true);
         }
@@ -39,13 +39,13 @@ int enemy_zombie_harm(double damage, gameObject_t* this)
     if(lastHp >= 2 * ZOMBIE_HP / 3.0 && ed->hp <= 2 * ZOMBIE_HP / 3.0)
     {
         this->frame = ed->larm ? 1 : 2;
-        spawnSpotBlood(10, 15, this->pos);
+        spawnSpotBlood(ZOMBIE_HARM_ARM1_COUNT, ZOMBIE_HARM_ARM1_RANGE, this->pos);
         srfDrawTexture(texmGetID(ed->larm ? TEXID_ENEMY_LARM : TEXID_ENEMY_RARM),
                        0, color(1, 1, 1, 1), this->pos, randAngle(), randRange(0.8, 1));
     }
     if(lastHp >= ZOMBIE_HP / 3.0 && ed->hp < ZOMBIE_HP / 3.0)
     {
-        spawnSpotBlood(10, 15, this->pos);
+        spawnSpotBlood(ZOMBIE_HARM_ARM2_COUNT, ZOMBIE_HARM_ARM2_RANGE, this->pos);
         srfDrawTexture(texmGetID((!ed->larm) ? TEXID_ENEMY_LARM : TEXID_ENEMY_RARM),
                        0, color(1, 1, 1, 1), this->pos, randAngle(), randRange(0.8, 1));
         this->frame = 3;
