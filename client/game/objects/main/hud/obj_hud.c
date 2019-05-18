@@ -132,6 +132,7 @@ void hud_update(gameObject_t* this, void* data)
 
     //Drawing progress bar
     double killed =  getKilledPercentage(md);
+    if(killed > 1) killed = 1;
     dqnDrawStretchedTexture(progressBarTex, vec(winW / 2.0 - 400 / 2.0, 30), 0, hudColor, 400 / (double)progressBarTex->width * killed + 1, 1.15, hudDepth);
     dqnDrawSprite(borderTex, color(0, 0, 0, hudColor.a), 0, vec(winW / 2.0, 40.8), 0, 1, hudDepth + 1);
 

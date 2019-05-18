@@ -25,8 +25,8 @@ void bloodSpawnerInit(void)
 void mbs_update(gameObject_t* this, void* data)
 {
     movingBS_data_t* mbs = this->data;
-    this->pos.x += cos(this->angle) * mbs->speed;
-    this->pos.y += sin(this->angle) * mbs->speed;
+    this->pos.x += mbs->xOffset;
+    this->pos.y += mbs->yOffset;
 
     spawnSpotBlood(mbs->bloodCount, mbs->bloodRange, this->pos);
 
@@ -56,6 +56,9 @@ gameObject_t* createMovingBloodSpawner(vec_t pos, double angle, double speed, lo
     data->speed = speed;
     data->bloodCount = count;
     data->bloodRange = range;
+
+    data->xOffset = cos(obj->angle) * data->speed;
+    data->yOffset = sin(obj->angle) * data->speed;
 
     return obj;
 }

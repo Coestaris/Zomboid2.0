@@ -69,6 +69,10 @@
 #define TEXID_ENEMY_GHOST           64
 #define TEXID_ENEMY_SLICER          65
 
+#define TEXID_ZOMBIE_DEAD1          67
+#define TEXID_ZOMBIE_DEAD2          68
+#define TEXID_BEETLE_DEAD           69
+
 #define SCENEID_MAIN_MENU   1
 #define SCENEID_GAME        0
 

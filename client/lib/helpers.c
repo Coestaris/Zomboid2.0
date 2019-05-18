@@ -51,6 +51,11 @@ int randIntRange(int a, int b)
     return min + rand() / (RAND_MAX / (max - min + 1) + 1);
 }
 
+double randAngle()
+{
+    return randRange(-M_PI, M_PI);
+}
+
 double randRange(double a, double b)
 {
     if (a == b) return a;

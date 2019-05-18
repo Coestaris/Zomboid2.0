@@ -157,7 +157,7 @@ void spawnEnemy(gameMobData_t* md)
 
         printf("Spawned mob %i. To spawn: %i\n", i, sum);
 
-        scmPushObject(getMob(i, md->pd));
+        //scmPushObject(getMob(i, md->pd));
     }
 }
 

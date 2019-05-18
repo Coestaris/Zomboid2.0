@@ -18,6 +18,9 @@ typedef struct _movingBS_data{
     int bloodCount;
     double bloodRange;
 
+    double xOffset;
+    double yOffset;
+
 } movingBS_data_t;
 
 gameObject_t* createMovingBloodSpawner(vec_t pos, double angle, double speed, long long int ttl, int count, double range);

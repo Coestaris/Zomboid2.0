@@ -18,6 +18,7 @@ void mbeetle_event_update(gameObject_t* this, void* data)
         if (isInObjectRect(this, getMousePos()))
         {
             spawnSpotBlood(MBEETLE_BLOOD_COUNT, MBEETLE_BLOOD_RANGE, this->pos);
+            srfDrawTexture(texmGetID(TEXID_BEETLE_DEAD), 0, color(1, 1, 1, 1), this->pos, randAngle(), randRange(0.9, 1.1));
             scmDestroyObject(this, true);
         }
     }

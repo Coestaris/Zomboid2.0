@@ -18,6 +18,7 @@
 #define glCheck(file,s) if((glerror = glGetError()) != GL_NO_ERROR) { printf(file"[ERROR]: "s".Gl error: %i (%s)\n", glerror, gluErrorString(glerror)); return 0; }
 
 int randBool();
+double randAngle();
 int randIntRange(int a, int b);
 double randRange(double a, double b);
 color_t randColor(double alpha);

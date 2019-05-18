@@ -17,6 +17,7 @@ typedef struct _zombieData
 
     int larm;
     double speed;
+    double frame;
 
 } zombieData_t;
 

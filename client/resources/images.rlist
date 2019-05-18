@@ -75,3 +75,7 @@ animation   3           TEXID_ENEMY_BODY            TEXSCOPE_GAME       0   0   
 animation   10          TEXID_ENEMY_SLUG            TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/slug/image%i.png
 animation   3           TEXID_ENEMY_GHOST           TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/ghost/image%i.png
 image                   TEXID_ENEMY_SLICER          TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/slicer.png
+
+animation   4           TEXID_ZOMBIE_DEAD1          TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/zombieDead1/image%i.png
+animation   4           TEXID_ZOMBIE_DEAD2          TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/zombieDead2/image%i.png
+image                   TEXID_BEETLE_DEAD           TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/beetleDead.png

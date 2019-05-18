@@ -9,7 +9,7 @@
 
 #include "../bloodSpawner.h"
 
-#define MBEETLE_ROOM_OFFSET 10
+#define MBEETLE_ROOM_OFFSET 30
 #define MBEETLE_BLOOD_COUNT 10
 #define MBEETLE_BLOOD_RANGE 10
 
