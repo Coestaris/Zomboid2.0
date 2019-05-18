@@ -39,6 +39,7 @@ int winW, winH;
 void hud_update(gameObject_t* this, void* data)
 {
     playerData_t* pd = ((hudData_t*)this->data)->playerData;
+    gameMobData_t* md = ((hudData_t*)this->data)->md;
     gameControllerData_t* gd = ((hudData_t*)this->data)->gcData;
 
     //Drawing weapon slots
@@ -56,7 +57,6 @@ void hud_update(gameObject_t* this, void* data)
     double strW = fontGetStringWidth(weaponText, hudFont, 0.4);
     double strH = fontGetStringHeight(weaponText, hudFont, 0.4);
     dqnDrawText(vec(winW - strW - wepSlotTex->width + 4, winH - strH + 10), hudColor, hudFont, weaponText, 0.4, hudDepth);
-
 
     //Drawing weapon left sprites
     tex_t* leftTex = getWeaponLeftTexture(pd->weapon);
@@ -126,16 +126,17 @@ void hud_update(gameObject_t* this, void* data)
     dqnDrawText(vec(armourTex->width - 1 - strW / 2.0 + hpTex->width, winH - 10.5), hudColor, hudFont, armourText, 0.8, hudDepth);
 
     //Drawing wave text
-    snprintf(waveText, waveTextLen, "Wave %i", gd->wave);
+    snprintf(waveText, waveTextLen, "Wave %i", md->wave + 1);
     strW = fontGetStringWidth(waveText, hudFont, 0.6);
     dqnDrawText(vec(winW / 2.0 - strW / 2.0 + .1, 70), hudColor, hudFont, waveText, 0.6, hudDepth);
 
     //Drawing progress bar
-    dqnDrawStretchedTexture(progressBarTex, vec(winW / 2.0 - 400 / 2.0, 30), 0, hudColor, 400 / (double)progressBarTex->width * gd->completed / 100 + 1, 1.15, hudDepth);
+    double killed =  getKilledPercentage(md);
+    dqnDrawStretchedTexture(progressBarTex, vec(winW / 2.0 - 400 / 2.0, 30), 0, hudColor, 400 / (double)progressBarTex->width * killed + 1, 1.15, hudDepth);
     dqnDrawSprite(borderTex, color(0, 0, 0, hudColor.a), 0, vec(winW / 2.0, 40.8), 0, 1, hudDepth + 1);
 
     //Completed text
-    snprintf(completedText, completedTextLen, "%.0lf%% Completed", gd->completed);
+    snprintf(completedText, completedTextLen, "%.0lf%% Completed", killed * 100);
     strW = fontGetStringWidth(completedText, hudFont, 0.6);
     dqnDrawText(vec(winW / 2.0 - strW / 2.0 + .1, 120.1), hudColor, hudFont, completedText, 0.6, hudDepth);
 
@@ -168,6 +169,7 @@ void hud_init(gameObject_t* this)
        {
            hd->gcData = objects[i]->data;
            hd->playerData = hd->gcData->players[0];
+           hd->md = hd->gcData->mobData[0];
        }
     }
 }

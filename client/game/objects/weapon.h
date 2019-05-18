@@ -23,7 +23,7 @@ tex_t* getWeaponTexture(int wtype);
 tex_t* getWeaponLeftTexture(int wtype);
 tex_t* getPlayerReloadTexture(int wtype);
 int getWeaponAutoFire(int wtype);
-void fire(playerData_t* player);
+void fire(gameMobData_t* md, playerData_t* player);
 void reload(playerData_t* player);
 double getWeaponShootingSpeed(int wtype);
 double getWeaponReloadingSpeed(int wtype);

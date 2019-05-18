@@ -13,17 +13,20 @@ void enemy_event_update(gameObject_t* this, void* data)
     this->pos.y += sin(this->angle) * ed->speed;
 }
 
-void enemy_zombie_harm(double damage, gameObject_t* this)
+int enemy_zombie_harm(double damage, gameObject_t* this)
 {
     zombieData_t* ed = this->data;
     ed->hp -= damage;
 
-    if(ed->hp < 2 * ENEMY_HP / 3.0) this->frame = ed->larm ? 1 : 2;
-    if(ed->hp < ENEMY_HP / 3.0) this->frame = 3;
+    if(ed->hp < 2 * ZOMBIE_HP / 3.0) this->frame = ed->larm ? 1 : 2;
+    if(ed->hp < ZOMBIE_HP / 3.0) this->frame = 3;
     if(ed->hp <= 0) {
         scmDestroyObject(this, true);
         spawnSpotBlood(20, 30, this->pos);
+        return 1;
     }
+
+    return 0;
 }
 
 void enemy_init(gameObject_t* this)
@@ -31,7 +34,7 @@ void enemy_init(gameObject_t* this)
     evqSubscribeEvent(this, EVT_Update, enemy_event_update);
 }
 
-gameObject_t* createEnemy(playerData_t* player, vec_t pos)
+gameObject_t* createZombie(playerData_t* player, vec_t pos)
 {
     gameObject_t* obj = object();
     obj->drawable = 1;
@@ -47,8 +50,8 @@ gameObject_t* createEnemy(playerData_t* player, vec_t pos)
     obj->data = malloc(sizeof(zombieData_t));
     zombieData_t* ed = obj->data;
     ed->player = player;
-    ed->hp = ENEMY_HP;
-    ed->speed = randRange(ENEMY_SPEED_MIN, ENEMY_SPEED_MAX);
+    ed->hp = ZOMBIE_HP;
+    ed->speed = randRange(ZOMBIE_SPEED_MIN, ZOMBIE_SPEED_MAX);
 
     ed->larm = randBool();
 
