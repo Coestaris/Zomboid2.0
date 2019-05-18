@@ -56,7 +56,9 @@ void initGraphics(int argc, char** argv, int w, int h, const char* title, int is
     shmInit();
     shmPushBuiltInShaders();
 
-    srfInit(w, h);
+    if(!srfInit(w, h)) {
+        exit(1);
+    }
     fontsInit();
     initEventFuncs();
     registerEvents();

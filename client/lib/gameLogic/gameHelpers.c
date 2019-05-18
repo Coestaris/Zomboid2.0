@@ -56,7 +56,7 @@ int isInWindowRect(gameObject_t* object)
 vec_t relativeCoordinatesEx(tex_t* tex, vec_t pos, double angle)
 {
     vec_t result;
-    dcCreatePoint(
+    createRotatedPoint(
             &result,
             pos,
             cos(angle),
@@ -64,8 +64,8 @@ vec_t relativeCoordinatesEx(tex_t* tex, vec_t pos, double angle)
             0,
             0,
             vec(
-                -tex->center.x + pos.x,
-                -tex->center.y + pos.y),
+                    -tex->center.x + pos.x,
+                    -tex->center.y + pos.y),
             0, 0);
     return result;
 }
@@ -79,7 +79,7 @@ vec_t relativeCoordinates(gameObject_t* obj)
     else
     {
         vec_t result;
-        dcCreatePoint(
+        createRotatedPoint(
                 &result,
                 obj->pos,
                 cos(obj->angle),

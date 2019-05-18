@@ -171,7 +171,7 @@ void increaseLevel(gameMobData_t* md)
 gameMobData_t* createMobData()
 {
     gameMobData_t* md = malloc(sizeof(gameMobData_t));
-    md->wave = 11;
+    md->wave = -1;
     md->currentMobs = 0;
     md->lastSpawnFrame = 0;
     increaseLevel(md);

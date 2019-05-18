@@ -284,12 +284,12 @@ void eventReshapeFunc(int w, int h)
     }
     else
     {
-        srfFree();
-
         winW = w;
         winH = h;
 
-        srfInit();
+        if(!srfFree() || !srfInit()) {
+            exit(1);
+        }
 
         glViewport(0, 0, w, h);
         glMatrixMode(GL_PROJECTION);

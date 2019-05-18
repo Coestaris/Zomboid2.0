@@ -4,200 +4,128 @@
 
 #include "surface.h"
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+GLuint surfTexID;
+GLuint surfFBO;
 
-uint8_t pixelData[SCREEN_HEIGHT][SCREEN_WIDTH][4];
-
-GLuint surfGLID;
-
-void srfFree()
+#define glSrfCheck(s) glCheck("surface.c", s)
+int srfFree()
 {
-    /*for(int i = 0; i < winW; i++) {
-        for(int j = 0; j < winH; j++) {
-            free(pixelData[i][j]);
-        }
-        free(pixelData[i]);
-    }
-    free(pixelData);
-    pixelData = NULL;*/
+    GLenum glerror = glGetError(); //reset gl error flag
+
+    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    glSrfCheck("Unable to unbind framebuffer");
+
+    glDeleteFramebuffers( 1, &surfFBO );
+    glSrfCheck("Unable to delete framebuffer");
+
+    glDeleteTextures(1, &surfTexID);
+    glSrfCheck("Unable to delete texture");
+
+    return 1;
 }
 
 void srfBind()
 {
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glBlendFunc(GL_ONE, GL_ONE);
     glColor4f(1, 1, 1, 1);
-    glBindTexture(GL_TEXTURE_2D, surfGLID);
+    glBindTexture(GL_TEXTURE_2D, surfTexID);
 }
 
-/*
-
-void free_data(uint8_t ***data, size_t xlen, size_t ylen)
+int winW, winH;
+int srfInit()
 {
-    size_t i, j;
+    GLenum glerror = glGetError(); //reset gl error flag
 
-    for (i=0; i < xlen; ++i) {
-        if (data[i] != NULL) {
-            for (j=0; j < ylen; ++j)
-                free(data[i][j]);
-            free(data[i]);
-        }
-    }
-    free(data);
-}
+    glGenTextures(1, &surfTexID);
+    glSrfCheck("Unable to generate textures");
 
-uint8_t  ***alloc_data(size_t xlen, size_t ylen, size_t zlen)
-{
-    uint8_t  ***p;
-    size_t i, j;
-
-    if ((p = malloc(xlen * sizeof *p)) == NULL) {
-        perror("malloc 1");
-        return NULL;
-    }
-
-    for (i=0; i < xlen; ++i)
-        p[i] = NULL;
-
-    for (i=0; i < xlen; ++i)
-        if ((p[i] = malloc(ylen * sizeof *p[i])) == NULL) {
-            perror("malloc 2");
-            free_data(p, xlen, ylen);
-            return NULL;
-        }
-
-    for (i=0; i < xlen; ++i)
-        for (j=0; j < ylen; ++j)
-            p[i][j] = NULL;
-
-    for (i=0; i < xlen; ++i)
-        for (j=0; j < ylen; ++j)
-            if ((p[i][j] = malloc(zlen * sizeof *p[i][j])) == NULL) {
-                perror("malloc 3");
-                free_data(p, xlen, ylen);
-                return NULL;
-            }
-
-    return p;
-}
-*/
-
-void srfInit(int wW, int wH)
-{
-/*
-    if(!(pixelData = alloc_data((size_t)SCREEN_HEIGHT, (size_t)SCREEN_WIDTH, 4))) {
-        puts("Unable allocate data to surface");
-        exit(1);
-    }*/
-
-
-    for (int y = 0; y < SCREEN_HEIGHT; ++y)
-        for (int x = 0; x < SCREEN_WIDTH; ++x)
-        {
-            pixelData[y][x][0] = pixelData[y][x][1] = pixelData[y][x][2] = 4;
-            pixelData[y][x][3] = 0;
-        }
-
-
-    glGenTextures(1, &surfGLID);
-
-    glBindTexture(GL_TEXTURE_2D, surfGLID);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV,
-                 (GLvoid*) pixelData);
+    glBindTexture(GL_TEXTURE_2D, surfTexID);
+    glSrfCheck("Unable to bind texture");
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glSrfCheck("Unable to set tex parameter: mag filter");
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glSrfCheck("Unable to set tex parameter: min_filter");
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glSrfCheck("Unable to set tex parameter: wrap_s");
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glSrfCheck("Unable to set tex parameter: wrap_t");
+
+    uint8_t* data = malloc(winW * winH * 4);
+    memset(data, 0, winW * winH * 4);
+    glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, winW, winH, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glSrfCheck("Unable to set tex parameters");
+
+    free(data);
+
+    glGenFramebuffers(1, &surfFBO);
+    glSrfCheck("Unable to generate FBO");
+
+    glBindFramebuffer( GL_FRAMEBUFFER, surfFBO );
+    glSrfCheck("Unable to bind FBO");
+
+    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, surfTexID, 0 );
+    glSrfCheck("Unable to attach FBO");
+
+    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    glSrfCheck("Unable to unbind FBO");
+
+    return true;
 }
 
-void srfClear()
+int srfClear()
 {
-    for (int y = 0; y < SCREEN_HEIGHT; ++y)
-        for (int x = 0; x < SCREEN_WIDTH; ++x)
-        {
-            pixelData[y][x][0] = 0;
-            pixelData[y][x][1] = 0;
-            pixelData[y][x][2] = 0;
-            pixelData[y][x][3] = 0;
-        }
+    GLenum glerror = glGetError(); //reset gl error flag
 
-    glBindTexture(GL_TEXTURE_2D, surfGLID);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV,
-                    (GLvoid*) pixelData);
+    uint8_t* data = malloc(winW * winH * 4);
+    memset(data, 0, winW * winH * 4);
+    glBindTexture(GL_TEXTURE_2D, surfTexID);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, winW, winH, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glSrfCheck("Unable to set tex parameters");
+
+    free(data);
+
+    return true;
 }
 
-void getPixel(uint8_t* pixels, int x, int y, int w, int h, uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* a)
+void srfDrawTexture(tex_t* tex, int frame, color_t color, vec_t pos, double angle, double scaleFactor)
 {
-    const int offset = (y * w + x) * 4;
-    *r = pixels[offset];
-    *g = pixels[offset + 1];
-    *b = pixels[offset + 2];
-    *a = pixels[offset + 3];
-}
+    glBindFramebuffer(GL_FRAMEBUFFER, surfFBO);
+    glViewport(0, 0, winW, winH);
 
-uint8_t clip(double a)
-{
-    if (a >= 255) return 255;
-    else if (a <= 0) return 0;
-    else return (uint8_t) a;
-}
+    pos.y = winH - pos.y;
 
-void srfDrawTexture(tex_t* tex, int frame, double alpha, vec_t pos, int flipX, int flipY)
-{
-    GLint width, height;
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
-    size_t numBytes = width * height * 4U;
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glBlendFunc(GL_ONE, GL_ONE);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    //glBlendEquation(GL_MAX);
 
-    uint8_t* pixels = (uint8_t*) malloc(numBytes);
+    glColor4d(color.r, color.g, color.b, color.a);
 
-    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-    for (int x = 0; x < width; x++)
-    {
-        for (int y = 0; y < height; y++)
-        {
+    const double hw = tex->width / 2.0;
+    const double hh = tex->height / 2.0;
 
-            uint8_t r, g, b, a;
-            getPixel(pixels, x, y, width, height, &r, &g, &b, &a);
+    const double acos = cos(angle) * scaleFactor;
+    const double asin = sin(angle) * scaleFactor;
 
-            if (a)
-            {
+    vec_t p1, p2, p3, p4;
 
-                int xPos = (int) (flipX ? (width - x + pos.x) : (x + pos.x));
-                int yPos = (int) (flipY ? (height - y + pos.y) : (y + pos.y));
+    createRotatedPoint(&p1, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), -1, -1);
+    createRotatedPoint(&p2, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), -1, 1);
+    createRotatedPoint(&p3, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), 1, -1);
+    createRotatedPoint(&p4, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), 1, 1);
 
-                if (xPos >= SCREEN_WIDTH || yPos >= SCREEN_HEIGHT || xPos <= 0 || yPos <= 0)
-                    continue;
+    glBegin(GL_QUAD_STRIP);
+        glTexCoord2i(0, 1); glVertex2f(p1.x, p1.y);
+        glTexCoord2i(0, 0); glVertex2f(p2.x, p2.y);
+        glTexCoord2i(1, 1); glVertex2f(p3.x, p3.y);
+        glTexCoord2i(1, 0); glVertex2f(p4.x, p4.y);
+    glEnd();
 
-                if (tex->mode == TEXMODE_OVERLAY)
-                {
-
-                    double oldAlpha = pixelData[yPos][xPos][3] / 255.0 * alpha;
-
-                    pixelData[yPos][xPos][0] = clip((oldAlpha * pixelData[yPos][xPos][0] + (1 - oldAlpha) * r));
-                    pixelData[yPos][xPos][1] = clip((oldAlpha * pixelData[yPos][xPos][1] + (1 - oldAlpha) * g));
-                    pixelData[yPos][xPos][2] = clip((oldAlpha * pixelData[yPos][xPos][2] + (1 - oldAlpha) * b));
-                    pixelData[yPos][xPos][3] = clip((oldAlpha * pixelData[yPos][xPos][3] + (1 - oldAlpha) * a));
-
-
-                }
-                else
-                {
-
-                    pixelData[yPos][xPos][0] = clip(r);
-                    pixelData[yPos][xPos][1] = clip(g);
-                    pixelData[yPos][xPos][2] = clip(b);
-                    pixelData[yPos][xPos][3] = clip(a * alpha);
-                }
-            }
-        }
-    }
-    free(pixels);
-
-    glBindTexture(GL_TEXTURE_2D, surfGLID);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV,
-                    (GLvoid*) pixelData);
+    //glBlendEquation(GL_FUNC_ADD);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

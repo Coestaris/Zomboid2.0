@@ -103,7 +103,7 @@ void gc_keyPressed(gameObject_t* this, void* data)
 {
     keyboardEvent_t* ke = data;
     gameControllerData_t* gd = this->data;
-    playerData_t* pd = gd->player;
+    playerData_t* pd = gd->players[0];
 
     if (ke->key == 'f')
     {
@@ -111,11 +111,13 @@ void gc_keyPressed(gameObject_t* this, void* data)
     }
     else if (ke->key == 'e')
     {
-        srfDrawTexture(texmGetID(TEXID_BOX), 0, 1, vec(100, 100), 0, 0);
+        srfDrawTexture(texmGetID(TEXID_BOX), 0, color(1, 1, 1, 1), vec(100, 100), randRange(0, M_2_PI), 1);
     }
     else if (ke->key == 'c')
     {
-        srfClear();
+        if(!srfClear()) {
+            exit(1);
+        }
     }
     else if (ke->key == 'q')
     {
@@ -163,7 +165,8 @@ void gc_init(gameObject_t* this)
 void gc_destroy(gameObject_t* this)
 {
     gameControllerData_t* gd = this->data;
-    free(gd->player);
+    for(int i = 0; i < ASD; i++)
+        free(gd->players[i]);
 }
 
 gameObject_t* createGameController()
@@ -175,9 +178,9 @@ gameObject_t* createGameController()
 
     allocData(gameControllerData_t, obj, data);
 
-    data->player = malloc(sizeof(playerData_t));
-    data->player->weapon = 0;
-    data->player->pos = randVector(winW, winH);
+    data->players[0] = malloc(sizeof(playerData_t));
+    data->players[0]->weapon = 0;
+    data->players[0]->pos = randVector(winW, winH);
 
     data->players[0]->hp = MAX_PLAYER_HP / 2;
     data->players[0]->armour = MAX_PLAYER_ARMOUR / 3;
@@ -189,9 +192,9 @@ gameObject_t* createGameController()
     data->mobData[0]->pd = data->players[0];
 
     for(int i = 0; i < WEAPON_COUNT; i++) {
-        data->player->weaponStates[i] = 1;
-        data->player->weaponCount[i] = getWeaponCount(i);
-        data->player->weaponMaxCount[i] = getWeaponMaxCount(i);
+        data->players[0]->weaponStates[i] = 1;
+        data->players[0]->weaponCount[i] = getWeaponCount(i);
+        data->players[0]->weaponMaxCount[i] = getWeaponMaxCount(i);
     }
 
     return obj;

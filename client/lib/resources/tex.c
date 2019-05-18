@@ -172,7 +172,7 @@ void bindTex(tex_t* tex, int frame)
         if (tex->mode == TEXMODE_OVERLAY)
         {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-            glBlendEquation(GL_ADD);
+            //glBlendEquation(GL_ADD);
         }
         else
         {

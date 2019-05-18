@@ -11,9 +11,9 @@ void spawnSpotBlood(int count, double range, vec_t position)
     for (size_t i = 0; i < count; i++)
     {
         srfDrawTexture(
-                bloodTex, randIntRange(0, bloodTex->framesCount - 1), 1,
+                bloodTex, randIntRange(0, bloodTex->framesCount - 1), color(1, 1, 1, 1),
                 vec_add(position, vec(randRange(-range, range), randRange(-range, range))),
-                randBool(), randBool());
+                randRange(0, M_2_PI), randRange(0.9, 1.1));
     }
 }
 

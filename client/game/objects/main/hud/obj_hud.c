@@ -146,8 +146,6 @@ void hud_update(gameObject_t* this, void* data)
     snprintf(scoreText, scoreTextLen, "Score %i", pd->score);
     strW = fontGetStringWidth(scoreText, hudFont, 0.5);
     dqnDrawText(vec(winW - strW, 60), hudColor, hudFont, scoreText, 0.5, hudDepth);
-
-
 }
 
 void hud_init(gameObject_t* this)

@@ -16,15 +16,18 @@
 
 #define BODY_SPEED_MIN      0.7
 #define BODY_SPEED_MAX      0.5
+#define BODY_ANSPEED        15
 
 #define ZOMBIE_SPEED_MIN    0.1
 #define ZOMBIE_SPEED_MAX    0.5
 
 #define SLUG_SPEED_MIN      0.3
 #define SLUG_SPEED_MAX      0.3
+#define SLUG_ANSPEED        15
 
 #define GHOST_SPEED_MIN     0.3
 #define GHOST_SPEED_MAX     0.3
+#define GHOST_ANSPEED        15
 
 #define SLICER_SPEED_MIN    0.3
 #define SLICER_SPEED_MAX    0.3

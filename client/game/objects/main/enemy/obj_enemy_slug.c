@@ -26,6 +26,7 @@ gameObject_t* createSlug(playerData_t* player, vec_t pos)
     this->onInit = slug_init;
     this->pos = pos;
     this->ID = OBJECT_SLUG;
+    this->animationSpeed = SLUG_ANSPEED;
 
     allocData(slugData_t, this, data);
     data->speed = randRange(SLUG_SPEED_MIN, SLUG_SPEED_MAX);

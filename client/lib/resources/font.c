@@ -6,8 +6,7 @@
 
 FT_Library ft;
 
-#define glCheck(s) if((glerror = glGetError()) != GL_NO_ERROR) { printf("[font.c][ERROR]: "s".Gl error: %i\n", glerror); return NULL; }
-
+#define glFontCheck(s) glCheck("font.c", s)
 font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endIndex)
 {
     GLint glerror;
@@ -34,7 +33,7 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
     glGetError(); //Reset error flag
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glCheck("Unable to disable pixel alignment")
+    glFontCheck("Unable to disable pixel alignment")
 
     font_t* f = malloc(sizeof(font_t));
     f->chars = malloc(sizeof(font_character_t) * (endIndex - startIndex + 1));
@@ -54,10 +53,10 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
         GLuint texture;
 
         glGenTextures(1, &texture);
-        glCheck("Unable to generate texture")
+        glFontCheck("Unable to generate texture")
 
         glBindTexture(GL_TEXTURE_2D, texture);
-        glCheck("Unable to bind texture")
+        glFontCheck("Unable to bind texture")
 
         glTexImage2D(
                 GL_TEXTURE_2D,
@@ -70,19 +69,19 @@ font_t* fontLoad(char* filename, int penSize, uint8_t startIndex, uint8_t endInd
                 GL_UNSIGNED_BYTE,
                 face->glyph->bitmap.buffer
         );
-        glCheck("Unable fill texture data")
+        glFontCheck("Unable fill texture data")
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glCheck("Unable to set texture attribute: wrap_s")
+        glFontCheck("Unable to set texture attribute: wrap_s")
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glCheck("Unable to set texture attribute: wrap_t")
+        glFontCheck("Unable to set texture attribute: wrap_t")
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glCheck("Unable to set texture attribute: min_filt")
+        glFontCheck("Unable to set texture attribute: min_filt")
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glCheck("Unable to set texture attribute: mag_filt")
+        glFontCheck("Unable to set texture attribute: mag_filt")
 
         font_character_t ch =
                 {

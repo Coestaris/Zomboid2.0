@@ -40,6 +40,7 @@ gameObject_t* createBody(playerData_t* player, vec_t pos)
     this->onInit = body_init;
     this->pos = pos;
     this->ID = OBJECT_BODY;
+    this->animationSpeed = BODY_ANSPEED;
 
     allocData(bodyData_t, this, data);
     data->pd = player;

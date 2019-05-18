@@ -26,6 +26,7 @@ gameObject_t* createGhost(playerData_t* player, vec_t pos)
     this->onInit = ghost_init;
     this->pos = pos;
     this->ID = OBJECT_GHOST;
+    this->animationSpeed = GHOST_ANSPEED;
 
     allocData(ghostData_t, this, data);
     data->speed = randRange(GHOST_SPEED_MIN, GHOST_SPEED_MAX);

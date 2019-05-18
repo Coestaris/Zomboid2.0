@@ -14,15 +14,6 @@ shader_t* textShader;
 
 int winW, winH;
 
-void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, double hh, vec_t cp, int s1, int s2)
-{
-    inp.x += hw * s1;
-    inp.y += hh * s2;
-
-    p->x = inp.x * vcos - inp.y * vsin - cp.x * (vcos - 1) + cp.y * vsin;
-    p->y = inp.x * vsin + inp.y * vcos - cp.y * (vcos - 1) - cp.x * vsin;
-}
-
 void dcDrawText(vec_t pos, color_t col, font_t* font, const char* string, double scale)
 {
     if (!string) return;
@@ -127,8 +118,6 @@ void dcDrawStretchedTexture(tex_t* tex, vec_t pos, int frame, color_t col, doubl
 {
     bindTex(tex, frame);
 
-    glPushMatrix();
-
     glColor4d(col.r, col.g, col.b, col.a);
 
     glBegin(GL_QUAD_STRIP);
@@ -137,15 +126,11 @@ void dcDrawStretchedTexture(tex_t* tex, vec_t pos, int frame, color_t col, doubl
         glTexCoord2i(1, 1); glVertex2f(pos.x + tex->width * w, pos.y + tex->height * h);
         glTexCoord2i(1, 0); glVertex2f(pos.x + tex->width * w, pos.y);
     glEnd();
-
-    glPopMatrix();
 }
 
 void dcDrawBackground(tex_t* tex, int frame, int windowW, int windowH)
 {
     bindTex(tex, frame);
-
-    glPushMatrix();
 
     double texW = (double) windowW / tex->width;
     double texH = (double) windowH / tex->height;
@@ -164,8 +149,6 @@ void dcDrawBackground(tex_t* tex, int frame, int windowW, int windowH)
         glTexCoord2f((GLfloat) texW, 0);
         glVertex2f((GLfloat) windowW + BACKGROUND_OFFSET, (GLfloat) windowH + BACKGROUND_OFFSET);
     glEnd();
-
-    glPopMatrix();
 }
 
 void dcDrawLine(vec_t p1, vec_t p2, color_t col)
@@ -312,8 +295,6 @@ void dcDrawTexture(tex_t* tex, color_t col, int frame, vec_t pos, double angle, 
 {
     bindTex(tex, frame);
 
-    glPushMatrix();
-
     const double hw = tex->width / 2.0;
     const double hh = tex->height / 2.0;
 
@@ -322,10 +303,10 @@ void dcDrawTexture(tex_t* tex, color_t col, int frame, vec_t pos, double angle, 
 
     vec_t p1, p2, p3, p4;
 
-    dcCreatePoint(&p1, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), -1, -1);
-    dcCreatePoint(&p2, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), -1, 1);
-    dcCreatePoint(&p3, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), 1, -1);
-    dcCreatePoint(&p4, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), 1, 1);
+    createRotatedPoint(&p1, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), -1, -1);
+    createRotatedPoint(&p2, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), -1, 1);
+    createRotatedPoint(&p3, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), 1, -1);
+    createRotatedPoint(&p4, pos, acos, asin, hw, hh, vec(-tex->center.x + pos.x, tex->center.y + pos.y), 1, 1);
 
     glColor4f(col.r, col.g, col.b, col.a);
 
@@ -335,8 +316,6 @@ void dcDrawTexture(tex_t* tex, color_t col, int frame, vec_t pos, double angle, 
         glTexCoord2i(1, 1); glVertex2f(p3.x, p3.y);
         glTexCoord2i(1, 0); glVertex2f(p4.x, p4.y);
     glEnd();
-
-    glPopMatrix();
 }
 
 void dcBeginDraw(void)

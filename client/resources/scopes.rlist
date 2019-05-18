@@ -69,7 +69,6 @@
 #define TEXID_ENEMY_GHOST           64
 #define TEXID_ENEMY_SLICER          65
 
-
 #define SCENEID_MAIN_MENU   1
 #define SCENEID_GAME        0
 

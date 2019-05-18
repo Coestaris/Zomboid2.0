@@ -4,6 +4,15 @@
 
 #include "helpers.h"
 
+void createRotatedPoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, double hh, vec_t cp, int s1, int s2)
+{
+    inp.x += hw * s1;
+    inp.y += hh * s2;
+
+    p->x = inp.x * vcos - inp.y * vsin - cp.x * (vcos - 1) + cp.y * vsin;
+    p->y = inp.x * vsin + inp.y * vcos - cp.y * (vcos - 1) - cp.x * vsin;
+}
+
 int fileExists(const char* filename)
 {
     FILE* f = fopen(filename, "rb");

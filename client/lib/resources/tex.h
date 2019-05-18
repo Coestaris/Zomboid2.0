@@ -5,7 +5,7 @@
 #ifndef ZOMBOID2_TEX_H
 #define ZOMBOID2_TEX_H
 
-//#define USE_SOIL
+#define USE_SOIL
 
 #include <malloc.h>
 #include <stdio.h>

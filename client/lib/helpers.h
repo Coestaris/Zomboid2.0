@@ -15,6 +15,7 @@
 #define TRUE 1
 #define false 0
 #define FALSE 0
+#define glCheck(file,s) if((glerror = glGetError()) != GL_NO_ERROR) { printf(file"[ERROR]: "s".Gl error: %i (%s)\n", glerror, gluErrorString(glerror)); return 0; }
 
 int randBool();
 int randIntRange(int a, int b);
@@ -26,5 +27,6 @@ double twoPointsAngle(vec_t p1, vec_t p2);
 double distance(vec_t p1, vec_t p2);
 double toRad(double angle);
 double toDeg(double angle);
+void createRotatedPoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, double hh, vec_t cp, int s1, int s2);
 
 #endif //ZOMBOID2_HELPERS_H

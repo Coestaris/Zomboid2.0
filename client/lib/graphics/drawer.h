@@ -77,7 +77,6 @@ void dqnClearQueue(void);
 
 void dcDrawStretchedTexture(tex_t* tex, vec_t pos, int frame, color_t col, double w, double h);
 void dcRotateScreen(double angle, double sceneW, double sceneH);
-void dcCreatePoint(vec_t* p, vec_t inp, double vcos, double vsin, double hw, double hh, vec_t cp, int s1, int s2);
 void dcDrawText(vec_t pos, color_t col, font_t* font, const char* string, double size);
 void dcDrawBackground(tex_t* tex, int frame, int windowW, int windowH);
 void dcDrawTexture(tex_t* tex, color_t color, int frame, vec_t pos, double angle, double scaleFactor);
