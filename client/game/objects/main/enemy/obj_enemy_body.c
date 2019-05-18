@@ -32,7 +32,6 @@ int enemy_body_harm(double damage, gameObject_t* this)
     return 0;
 }
 
-
 gameObject_t* createBody(playerData_t* player, vec_t pos)
 {
     gameObject_t* this = object();

@@ -8,9 +8,7 @@
 #include "../../menu/object_menu_beetle.h"
 #include "../../../objectInclude.h"
 #include "../../playerData.h"
-
-#define TIC_SPEED 0.2
-#define TIC_HP 30
+#include "../../enemy.h"
 
 typedef struct _ticData {
     double xOffset;

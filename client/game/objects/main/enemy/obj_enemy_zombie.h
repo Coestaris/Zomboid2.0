@@ -6,14 +6,9 @@
 #define ZOMBOID2_OBJ_ENEMY_H
 
 #include "../../../objectInclude.h"
-
 #include "../../bloodSpawner.h"
 #include "../../playerData.h"
-
-#define ZOMBIE_SPEED_MAX 0.5
-#define ZOMBIE_SPEED_MIN 0.1
-
-#define ZOMBIE_HP 100.0
+#include "../../enemy.h"
 
 typedef struct _zombieData
 {

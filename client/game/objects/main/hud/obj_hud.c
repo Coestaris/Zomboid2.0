@@ -126,7 +126,7 @@ void hud_update(gameObject_t* this, void* data)
     dqnDrawText(vec(armourTex->width - 1 - strW / 2.0 + hpTex->width, winH - 10.5), hudColor, hudFont, armourText, 0.8, hudDepth);
 
     //Drawing wave text
-    snprintf(waveText, waveTextLen, "Wave %i", md->wave);
+    snprintf(waveText, waveTextLen, "Wave %i", md->wave + 1);
     strW = fontGetStringWidth(waveText, hudFont, 0.6);
     dqnDrawText(vec(winW / 2.0 - strW / 2.0 + .1, 70), hudColor, hudFont, waveText, 0.6, hudDepth);
 

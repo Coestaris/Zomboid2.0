@@ -58,19 +58,19 @@ gameObject_t* getMob(int id, playerData_t* pd)
     switch (dir)
     {
         case 0: //from top edge
-            pos = vec(randRange(0, winW), 0);
+            pos = vec(randRange(0, winW), -30);
             angle = randRange(M_PI_4, M_PI - M_PI_4);
             break;
         case 1: //from right edge
-            pos = vec(winW, randRange(0, winH));
+            pos = vec(winW + 30, randRange(0, winH));
             angle = randRange(M_PI_2 + M_PI_4, 3 * M_PI_2 - M_PI_4);
             break;
         case 2: //from bottom edge
-            pos = vec(randRange(0, winW), winH);
+            pos = vec(randRange(0, winW), winH + 30);
             angle = randRange(M_PI_4 + M_PI, 2 * M_PI - M_PI_4);
             break;
         case 3: //from left edge
-            pos = vec(0, randRange(0, winH));
+            pos = vec(-30, randRange(0, winH));
             angle = randRange(M_PI_4 - M_PI_2, M_PI - M_PI_4 - M_PI_2);
             break;
     }
@@ -84,9 +84,11 @@ gameObject_t* getMob(int id, playerData_t* pd)
         case 2:
             return createZombie(pd, pos);
         case 3:
+            return createSlug(pd, pos);
         case 4:
+            return createGhost(pd, pos);
         case 5:
-            return NULL;
+            return createSlicer(pd, pos);
 
         default:
             assert(0);
@@ -169,7 +171,7 @@ void increaseLevel(gameMobData_t* md)
 gameMobData_t* createMobData()
 {
     gameMobData_t* md = malloc(sizeof(gameMobData_t));
-    md->wave = 0;
+    md->wave = 11;
     md->currentMobs = 0;
     md->lastSpawnFrame = 0;
     increaseLevel(md);

@@ -8,10 +8,7 @@
 #include "../../../objectInclude.h"
 #include "../../bloodSpawner.h"
 #include "../../playerData.h"
-
-#define BODY_SPEED_MIN 0.7
-#define BODY_SPEED_MAX 0.5
-#define BODY_HP         70
+#include "../../enemy.h"
 
 typedef struct _bodyData {
     playerData_t* pd;

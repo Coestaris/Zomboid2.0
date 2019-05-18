@@ -186,6 +186,7 @@ gameObject_t* createGameController()
     data->players[0]->armour = MAX_PLAYER_ARMOUR / 3;
     data->players[0]->frame = 0;
     data->players[0]->lastFireFrame = 0;
+    data->players[0]->score = 0;
 
     data->mobData[0] = createMobData();
     data->mobData[0]->pd = data->players[0];

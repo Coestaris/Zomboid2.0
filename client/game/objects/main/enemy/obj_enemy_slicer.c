@@ -6,7 +6,11 @@
 
 void slicer_update(gameObject_t* this, void* data)
 {
+    slicerData_t* sd = this->data;
+    this->angle = twoPointsAngle(this->pos, sd->pd->pos);
 
+    this->pos.x += cos(this->angle) * sd->speed;
+    this->pos.y += sin(this->angle) * sd->speed;
 }
 
 void slicer_init(gameObject_t* this)
@@ -24,6 +28,8 @@ gameObject_t* createSlicer(playerData_t* player, vec_t pos)
     this->ID = OBJECT_SLICER;
 
     allocData(slicerData_t, this, data);
+    data->speed = randRange(SLICER_SPEED_MIN, SLICER_SPEED_MAX);
+    data->hp = SLICER_HP;
     data->pd = player;
 
     return this;

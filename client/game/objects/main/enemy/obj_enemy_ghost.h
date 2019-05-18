@@ -7,9 +7,11 @@
 
 #include "../../../objectInclude.h"
 #include "../../playerData.h"
+#include "../../enemy.h"
 
 typedef struct _ghostData {
     playerData_t* pd;
+    double speed;
     double hp;
 
 } ghostData_t;

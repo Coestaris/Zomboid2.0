@@ -6,7 +6,11 @@
 
 void slug_update(gameObject_t* this, void* data)
 {
+    slugData_t* sd = this->data;
+    this->angle = twoPointsAngle(this->pos, sd->pd->pos);
 
+    this->pos.x += cos(this->angle) * sd->speed;
+    this->pos.y += sin(this->angle) * sd->speed;
 }
 
 void slug_init(gameObject_t* this)
@@ -24,6 +28,8 @@ gameObject_t* createSlug(playerData_t* player, vec_t pos)
     this->ID = OBJECT_SLUG;
 
     allocData(slugData_t, this, data);
+    data->speed = randRange(SLUG_SPEED_MIN, SLUG_SPEED_MAX);
+    data->hp = SLUG_HP;
     data->pd = player;
 
     return this;

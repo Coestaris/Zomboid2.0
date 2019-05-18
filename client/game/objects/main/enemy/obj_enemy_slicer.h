@@ -7,9 +7,11 @@
 
 #include "../../../objectInclude.h"
 #include "../../playerData.h"
+#include "../../enemy.h"
 
 typedef struct _slicerData {
     playerData_t* pd;
+    double speed;
     double hp;
 
 } slicerData_t;
