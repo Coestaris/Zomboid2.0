@@ -10,6 +10,17 @@
 #define WEAPON_COUNT 6
 #define PLAYER_MOVE_X 2.5
 #define PLAYER_MOVE_Y 2.5
+#define MAX_PLAYER_HP 100.0
+#define MAX_PLAYER_ARMOUR 100.0
+
+#define PLAYER_LIGHT_ALPHA_START 0.08
+#define PLAYER_LIGHT_ALPHA_REDUCTION .85
+#define PLAYER_LIGHT_SIZE_START .5
+#define PLAYER_LIGHT_SIZE_INCREASE 1.85
+
+#define PLAYER_MAXLIGHTS 3
+#define PLAYER_BACKLIGHT_SIZE .5
+#define PLAYER_BACKLIGHT_ALPHA .04
 
 typedef enum _playerState {
     nothing, shooting, reloading
@@ -25,6 +36,14 @@ typedef struct _playerData
     long long lastFireFrame;
 
     playerState_t state;
+
+    //light stuff
+    double currLightSize;
+    double currLightAlpha;
+    int lightFrame;
+    gameObject_t* fireLights[PLAYER_MAXLIGHTS];
+    //gameObject_t* backLight;
+    //gameObject_t* flashlight;
 
     //Weapon stuff
     int weapon;

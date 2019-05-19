@@ -6,8 +6,6 @@
 #define ZOMBOID2_OBJ_BULLET_H
 
 #define BULLET_SPEED 15
-#define BULLET_LIGHT_ALPHA .15
-#define BULLET_LIGHT_SIZE 400
 
 #include "../../enemy.h"
 

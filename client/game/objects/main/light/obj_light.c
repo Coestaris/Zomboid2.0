@@ -4,15 +4,15 @@
 
 #include "obj_light.h"
 
-gameObject_t* createLight(vec_t p, double size, double alpha)
+gameObject_t* createLight(vec_t pos, int texID, double size, double alpha)
 {
     gameObject_t* go = object();
     go->drawable = true;
 
     go->depth = 0;
-    go->pos = p;
+    go->pos = pos;
 
-    go->texID = TEXID_LIGHT;
+    go->texID = texID;
     go->size = size;
     go->alpha = alpha;
     return go;

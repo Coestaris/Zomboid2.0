@@ -7,6 +7,6 @@
 
 #include "../../../objectInclude.h"
 
-gameObject_t* createLight(vec_t y, double size, double alpha);
+gameObject_t* createLight(vec_t pos, int texID, double size, double alpha);
 
 #endif //ZOMBOID2_OBJ_LIGHT_H

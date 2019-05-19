@@ -12,9 +12,8 @@
 #include "playerData.h"
 
 #define MAX_GRENADES 4
-#define MAX_PLAYER_HP 100.0
-#define MAX_PLAYER_ARMOUR 100.0
 
+void pushPlayerFireLight(playerData_t* pd);
 int getWeaponMaxCount(int wtype);
 int getWeaponCount(int wtype);
 tex_t* getPlayerTexture(int wtype);

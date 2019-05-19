@@ -237,10 +237,33 @@ void fire(gameMobData_t* md, playerData_t* player)
         {
             player->state = shooting;
         }
+
+        if(player->lightFrame != -1)
+        {
+            for(int i = 0; i < player->lightFrame + 1; i++)
+                scmDestroyObject(player->fireLights[i], true);
+        }
+
+        player->lightFrame = 0;
+        player->currLightSize = PLAYER_LIGHT_SIZE_START;
+        player->currLightAlpha = PLAYER_LIGHT_ALPHA_START;
+        pushPlayerFireLight(player);
+
     }
     else if(player->weaponMaxCount[player->weapon] != 0 && player->state != reloading) {
         player->state = reloading;
     }
+}
+
+void pushPlayerFireLight(playerData_t* pd)
+{
+    gameObject_t* light = createLight(pd->pos, TEXID_LIGHT, pd->currLightSize, pd->currLightAlpha);
+    pd->fireLights[pd->lightFrame++] = light;
+
+    pd->currLightAlpha *= PLAYER_LIGHT_ALPHA_REDUCTION;
+    pd->currLightSize *= PLAYER_LIGHT_SIZE_INCREASE;
+
+    scmPushObject(light);
 }
 
 int getWeaponAutoFire(int wtype)

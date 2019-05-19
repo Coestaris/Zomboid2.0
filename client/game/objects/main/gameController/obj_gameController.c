@@ -69,6 +69,20 @@ void gc_update(gameObject_t* this, void* data)
                       vec_sub(pd->pos, vec(pd->weapon == 5 ? 18 : 0, 0)), pd->angle, 1, 4);
     }
 
+    if(pd->lightFrame != -1 && frame % 2 == 0)
+    {
+        if(pd->lightFrame != PLAYER_MAXLIGHTS)
+        {
+            pushPlayerFireLight(pd);
+        }
+        else
+        {
+            for(int i = 0; i < PLAYER_MAXLIGHTS; i++)
+                scmDestroyObject(pd->fireLights[i], true);
+            pd->lightFrame = -1;
+        }
+    }
+
     if(frame - md->lastSpawnFrame > getMobSpawnInterval(md->wave) && shouldSpawnMob(md))
     {
         spawnEnemy(md);
@@ -192,6 +206,7 @@ gameObject_t* createGameController()
     data->players[0]->frame = 0;
     data->players[0]->lastFireFrame = 0;
     data->players[0]->score = 0;
+    data->players[0]->lightFrame = -1;
 
     data->mobData[0] = createMobData();
     data->mobData[0]->pd = data->players[0];
