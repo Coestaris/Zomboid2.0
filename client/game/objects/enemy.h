@@ -49,11 +49,19 @@
 
 #define SLUG_SPEED_MIN      0.3
 #define SLUG_SPEED_MAX      0.3
-#define SLUG_ANSPEED        15
+#define SLUG_ANSPEED        5
 #define SLUG_MBS_SPEED      14
-#define SLUG_MBS_TTL        5
-#define SLUG_MBS_COUNT      2
-#define SLUG_MBS_RANGE      9
+#define SLUG_MBS_TTL        2
+#define SLUG_MBS_COUNT      1
+#define SLUG_MBS_RANGE      4
+#define SLUG_DEAD_ANSPEED   0.6
+#define SLUG_DEAD_MSB         4
+#define SLUG_DEAD_MSB_SPEED   14
+#define SLUG_DEAD_MSB_TTL     1
+#define SLUG_DEAD_MSB_COUNT   1
+#define SLUG_DEAD_MSB_RANGE   4
+#define SLUG_DEAD_COUNT       15
+#define SLUG_DEAD_RANGE       20
 
 #define GHOST_SPEED_MIN     0.3
 #define GHOST_SPEED_MAX     0.3

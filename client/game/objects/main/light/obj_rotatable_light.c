@@ -30,7 +30,7 @@ gameObject_t* create_rotatableLight(vec_t pos, double speed, gameObject_t* light
     ld->obj = light;
     light->pos = pos;
     this->pos = pos;
-    light->angle = randRange(0, M_2_PI);
+    light->angle = randAngle();
 
     this->pos = pos;
 

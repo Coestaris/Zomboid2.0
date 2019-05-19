@@ -111,7 +111,12 @@ void gc_keyPressed(gameObject_t* this, void* data)
     }
     else if (ke->key == 'e')
     {
-        srfDrawTexture(texmGetID(TEXID_BOX), 0, color(1, 1, 1, 1), vec(100, 100), randRange(0, M_2_PI), 1);
+        //srfDrawTexture(texmGetID(TEXID_BOX), 0, color(1, 1, 1, 1), vec(100, 100), M_PI_4, 1);
+        for(double angle = 0; angle < 2 * M_PI; angle += 0.3) {
+            vec_t pos = vec_add(pd->pos, vec_mult(vec(sin(angle), cos(angle)), 100));
+            srfDrawTexture(texmGetID(TEXID_SLUG_DEAD), 3, color(1, 1, 1, 1), pos,
+                    twoPointsAngle(vec(pd->pos.x, winH - pd->pos.y), vec(pos.x, winH - pos.y)), 1);
+        }
     }
     else if (ke->key == 'c')
     {
@@ -121,7 +126,7 @@ void gc_keyPressed(gameObject_t* this, void* data)
     }
     else if (ke->key == 'q')
     {
-        scmPushObject(createZombie(pd, vec(randRange(0, winW), randRange(0, winH))));
+        scmPushObject(createSlug(pd, vec(randRange(0, winW), randRange(0, winH))));
     }
     else if(ke->key >= '1' && ke->key <= '6')
     {

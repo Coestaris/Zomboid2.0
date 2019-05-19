@@ -72,6 +72,10 @@
 #define TEXID_ZOMBIE_DEAD1          67
 #define TEXID_ZOMBIE_DEAD2          68
 #define TEXID_BEETLE_DEAD           69
+#define TEXID_BLOOD_SLUGEMARK       70
+#define TEXID_SLUG_DEAD             71
+
+#define TEXID_SHELLCASE_SHOTGUN     72
 
 #define SCENEID_MAIN_MENU   1
 #define SCENEID_GAME        0

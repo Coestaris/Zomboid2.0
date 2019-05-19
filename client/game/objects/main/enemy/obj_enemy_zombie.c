@@ -19,7 +19,7 @@ void enemy_event_update(gameObject_t* this, void* data)
         this->frame = (int)(ed->frame += ZOMBIE_DEAD_ANSPEED);
         if(this->frame >= this->cachedTex->framesCount) {
             for(int i = 0; i < ZOMBIE_DEAD_MSB; i++)
-            scmPushObject(createMovingBloodSpawner(this->pos, randAngle(),
+                scmPushObject(createMovingBloodSpawner(this->pos, randAngle(),
                     ZOMBIE_DEAD_MSB_SPEED, ZOMBIE_DEAD_MSB_TTL, ZOMBIE_DEAD_MSB_COUNT, ZOMBIE_DEAD_MSB_RANGE));
 
             spawnSpotBlood(ZOMBIE_DEAD_COUNT, ZOMBIE_DEAD_RANGE, this->pos);

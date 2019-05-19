@@ -14,6 +14,7 @@ typedef struct _slugData {
     playerData_t* pd;
     double speed;
     double hp;
+    double frame;
 
 } slugData_t;
 

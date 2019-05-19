@@ -75,12 +75,12 @@ inline double twoPointsAngle(vec_t p1, vec_t p2)
 
 double toRad(double angle)
 {
-    return (angle / 360.0) * M_2_PI;
+    return (angle / 360.0) * M_PI * 2;
 }
 
 double toDeg(double angle)
 {
-    return (angle / M_2_PI) * 360.0;
+    return (angle / (M_PI * 2)) * 360.0;
 }
 
 double distance(vec_t p1, vec_t p2)

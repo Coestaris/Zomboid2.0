@@ -9,6 +9,7 @@
 
 #include "../../weapon.h"
 #include "../enemy/obj_enemy_zombie.h"
+#include "../enemy/obj_enemy_slug.h"
 #include "../../playerData.h"
 #include "../../score.h"
 

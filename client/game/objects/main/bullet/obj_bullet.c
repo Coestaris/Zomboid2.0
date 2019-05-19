@@ -62,12 +62,13 @@ void bullet_body(gameObject_t* this, gameObject_t* body)
     scmDestroyObject(this, true);
 }
 
-void bullet_slug(gameObject_t* this, gameObject_t* body)
+void bullet_slug(gameObject_t* this, gameObject_t* slug)
 {
     bulletData_t* bd = this->data;
-    scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
+    scmPushObject(createMovingSlugSpawner(this->pos, this->angle,
            SLUG_MBS_SPEED, SLUG_MBS_TTL, SLUG_MBS_COUNT, SLUG_MBS_RANGE));
-    if(enemy_slug_harm(bd->damage, body)) { killEnemy(bd->md, 4);  }
+    spawnSpotBlood(SLUG_DEAD_COUNT / 2.5, SLUG_DEAD_RANGE / 2.5, slug->pos);
+    if(enemy_slug_harm(bd->damage, slug)) { killEnemy(bd->md, 4);  }
 
     scmDestroyObject(this, true);
 }

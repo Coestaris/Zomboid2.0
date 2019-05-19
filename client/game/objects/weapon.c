@@ -67,6 +67,7 @@ tex_t* cachedPlayerTextures[WEAPON_COUNT * 2];
 tex_t* cachedTextures[WEAPON_COUNT];
 tex_t* cachedLeftTextures[WEAPON_COUNT];
 tex_t* cachedGrenTexture;
+tex_t* shellcaseTex, *shotgunShellcaseTex;
 
 int winW, winH;
 
@@ -87,18 +88,19 @@ int winW, winH;
 void proceedLaser(playerData_t* pd)
 {
     int count = 0;
+    long long frame = getFrame();
+
     gameObject_t** objects = scmGetObjects(&count);
 
     vec_t rel = relativeCoordinatesEx(getPlayerTexture(pd->weapon), pd->pos, pd->angle);
     vec_t dest = vec_add(rel, vec_mult(vec(cos(pd->angle), sin(pd->angle)), winW * M_SQRT2));
-
 
     double minX = dest.x, minY = dest.y;
     double minDist = winW * winW;
     gameObject_t* minObject = NULL;
 
     for(int i = 0; i < count; i++) {
-        if(objects[i]->ID == OBJECT_ZOMBIE) {
+        if(objects[i]->ID == OBJECT_ZOMBIE || objects[i]->ID == OBJECT_TIC || objects[i]->ID == OBJECT_SLUG) {
 
             double intX, intY;
             double dist;
@@ -120,9 +122,41 @@ void proceedLaser(playerData_t* pd)
 
     if(minX != dest.x && minY != dest.y)
     {
-        //harmZombie(pd, minObject);
-        enemy_zombie_harm(randRange(weapon[pd->weapon * 6 + 0], weapon[pd->weapon * 6 + 1]), minObject);
-        spawnSpotBlood(1, 10, minObject->pos);
+        switch(minObject->ID)
+        {
+            case OBJECT_TIC:
+                enemy_tic_harm(randRange(weapon[pd->weapon * 6 + 0], weapon[pd->weapon * 6 + 1]), minObject);
+                break;
+            case OBJECT_BODY:
+                enemy_body_harm(randRange(weapon[pd->weapon * 6 + 0], weapon[pd->weapon * 6 + 1]), minObject);
+                break;
+            case OBJECT_ZOMBIE:
+                enemy_zombie_harm(randRange(weapon[pd->weapon * 6 + 0], weapon[pd->weapon * 6 + 1]), minObject);
+                break;
+            case OBJECT_SLUG:
+                enemy_slug_harm(randRange(weapon[pd->weapon * 6 + 0], weapon[pd->weapon * 6 + 1]), minObject);
+                break;
+            case OBJECT_GHOST:
+                enemy_ghost_harm(randRange(weapon[pd->weapon * 6 + 0], weapon[pd->weapon * 6 + 1]), minObject);
+                break;
+            case OBJECT_SLICER:
+                enemy_slicer_harm(randRange(weapon[pd->weapon * 6 + 0], weapon[pd->weapon * 6 + 1]), minObject);
+                break;
+            default:
+                break;
+        }
+
+        if(frame % 5 == 0)
+        {
+            if (minObject->ID == OBJECT_SLUG)
+            {
+                if (randIntRange(0, 5) == 4)
+                    spawnSpotBlood(1, 10, minObject->pos);
+                else
+                    spawnSpotSlug(1, 10, minObject->pos);
+            }
+            else spawnSpotBlood(1, 10, minObject->pos);
+        }
     }
 
 }
@@ -167,16 +201,28 @@ void fire(gameMobData_t* md, playerData_t* player)
         {
             case 2:
             case 0:
+            {
                 scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET, damage));
+                vec_t pos = vec_add(rel, randVector(15, 15));
+                double angle = randAngle();
+                for (int i = 0; i < 5; i++)
+                    srfDrawTexture(shellcaseTex, 0, color(1, 1, 1, 1), pos, angle, 1);
+            }
                 break;
             case 1:
                 scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_BOLT, damage));
                 break;
             case 3:
-                scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
-                scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
-                scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
-                scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
+            {
+                scmPushObject(
+                        createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
+                scmPushObject(
+                        createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
+                scmPushObject(
+                        createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
+                scmPushObject(
+                        createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_SHOTGUN, damage));
+            }
                 break;
             case 5:
                 scmPushObject(createBullet(md, rel, player->angle + randRange(-range, range), TEXID_BULLET_ROCKET, damage));
@@ -259,4 +305,6 @@ void weaponCache()
         cachedPlayerTextures[i] = texmGetID(playerTextures[i]);
 
     cachedGrenTexture = texmGetID(grenTexture);
+    shellcaseTex = texmGetID(TEXID_SHELLCASE);
+    shotgunShellcaseTex = texmGetID(TEXID_SHELLCASE_SHOTGUN);
 }
