@@ -30,7 +30,7 @@ typedef struct _gameMobData {
 
 int shouldSpawnMob(gameMobData_t* md);
 double getKilledPercentage(gameMobData_t* md);
-int killEnemy(gameMobData_t* md, int id);
+int killEnemy(int id);
 double getMobSpawnInterval(int level);
 int getMaxMobs(int level);
 void increaseLevel(gameMobData_t* md);

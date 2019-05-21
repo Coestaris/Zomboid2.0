@@ -119,19 +119,21 @@ double getKilledPercentage(gameMobData_t* md)
 }
 
 int ticCount;
-int killEnemy(gameMobData_t* md, int id)
+gameMobData_t* gmd;
+int killEnemy(int id)
 {
     if(id == 1)
         ticCount--;
     else
     {
-        if (md->currentMobs != 0)
-            md->currentMobs -= 1;
+        if (gmd->currentMobs != 0)
+            gmd->currentMobs -= 1;
     }
 }
 
 void spawnEnemy(gameMobData_t* md)
 {
+    gmd = md;
     if(ticCount != levels[md->wave * MAX_ENEMIES])
     {
         scmPushObject(getMob(0, md->pd));

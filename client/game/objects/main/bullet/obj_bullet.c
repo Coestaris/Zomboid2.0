@@ -33,7 +33,7 @@ void bullet_zombie(gameObject_t* this, gameObject_t* zombie)
     bulletData_t* bd = this->data;
     scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
             ZOMBIE_MBS_SPEED, ZOMBIE_MBS_TTL, ZOMBIE_MBS_COUNT, ZOMBIE_MBS_RANGE));
-    if(enemy_zombie_harm(bd->damage, zombie)) { killEnemy(bd->md, 3); }
+    if(enemy_zombie_harm(bd->damage, zombie)) { killEnemy(3); }
 
     scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
@@ -44,7 +44,7 @@ void bullet_tic(gameObject_t* this, gameObject_t* tic)
     bulletData_t* bd = this->data;
     scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
            TIC_MBS_SPEED, TIC_MBS_TTL, TIC_MBS_COUNT, TIC_MBS_RANGE));
-    if(enemy_tic_harm(bd->damage, tic)) { killEnemy(bd->md, 1); }
+    if(enemy_tic_harm(bd->damage, tic)) { killEnemy(1); }
 
     scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
@@ -55,7 +55,7 @@ void bullet_body(gameObject_t* this, gameObject_t* body)
     bulletData_t* bd = this->data;
     scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
            BODY_MBS_SPEED, BODY_MBS_TTL, BODY_MBS_COUNT, BODY_MBS_RANGE));
-    if(enemy_body_harm(bd->damage, body)) { killEnemy(bd->md, 2);  }
+    if(enemy_body_harm(bd->damage, body)) { killEnemy(2);  }
 
     scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
@@ -67,7 +67,7 @@ void bullet_slug(gameObject_t* this, gameObject_t* slug)
     scmPushObject(createMovingSlugSpawner(this->pos, this->angle,
            SLUG_MBS_SPEED, SLUG_MBS_TTL, SLUG_MBS_COUNT, SLUG_MBS_RANGE));
     spawnSpotBlood(SLUG_DEAD_COUNT / 2.5, SLUG_DEAD_RANGE / 2.5, slug->pos);
-    if(enemy_slug_harm(bd->damage, slug)) { killEnemy(bd->md, 4);  }
+    if(enemy_slug_harm(bd->damage, slug)) { killEnemy(4);  }
 
     scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
@@ -78,7 +78,7 @@ void bullet_ghost(gameObject_t* this, gameObject_t* body)
     bulletData_t* bd = this->data;
     scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
             GHOST_MBS_SPEED, GHOST_MBS_TTL, GHOST_MBS_COUNT, GHOST_MBS_RANGE));
-    if(enemy_ghost_harm(bd->damage, body)) { killEnemy(bd->md, 5);  }
+    if(enemy_ghost_harm(bd->damage, body)) { killEnemy(5);  }
 
     scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
@@ -89,7 +89,7 @@ void bullet_slicer(gameObject_t* this, gameObject_t* body)
     bulletData_t* bd = this->data;
     scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
             SLICER_MBS_SPEED, SLICER_MBS_TTL, SLICER_MBS_COUNT, SLICER_MBS_RANGE));
-    if(enemy_slicer_harm(bd->damage, body)) { killEnemy(bd->md, 6);  }
+    if(enemy_slicer_harm(bd->damage, body)) { killEnemy(6);  }
 
     scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
