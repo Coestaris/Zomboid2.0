@@ -13,6 +13,7 @@
 typedef struct _slicerData {
     playerData_t* pd;
     double speed;
+    double frame;
     double hp;
 
 } slicerData_t;

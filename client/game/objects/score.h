@@ -13,6 +13,7 @@
 #include "main/enemy/obj_enemy_slug.h"
 #include "main/enemy/obj_enemy_ghost.h"
 #include "main/enemy/obj_enemy_slicer.h"
+#include "enemy.h"
 
 #define MAX_LEVELS 13
 #define MAX_ENEMIES 6

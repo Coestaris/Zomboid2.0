@@ -6,11 +6,11 @@
 #define ZOMBOID2_ENEMY_H
 
 #define TIC_HP              15
-#define BODY_HP             70
-#define ZOMBIE_HP           100.0
-#define SLUG_HP             50
-#define GHOST_HP            50
-#define SLICER_HP           50
+#define BODY_HP             50
+#define ZOMBIE_HP           100
+#define SLUG_HP             100
+#define GHOST_HP            75
+#define SLICER_HP           175
 
 #define TIC_SPEED           0.2
 #define TIC_MBS_SPEED       14
@@ -63,16 +63,16 @@
 #define SLUG_DEAD_COUNT       15
 #define SLUG_DEAD_RANGE       20
 
-#define GHOST_SPEED_MIN     0.3
-#define GHOST_SPEED_MAX     0.3
+#define GHOST_SPEED_MIN     0.6
+#define GHOST_SPEED_MAX     0.7
 #define GHOST_ANSPEED       15
 #define GHOST_MBS_SPEED     14
 #define GHOST_MBS_TTL       5
 #define GHOST_MBS_COUNT     2
 #define GHOST_MBS_RANGE     9
 
-#define SLICER_SPEED_MIN    0.3
-#define SLICER_SPEED_MAX    0.3
+#define SLICER_SPEED        1.2
+#define SLICER_SPEED_MIN    .8
 #define SLICER_MBS_SPEED    14
 #define SLICER_MBS_TTL      5
 #define SLICER_MBS_COUNT    2

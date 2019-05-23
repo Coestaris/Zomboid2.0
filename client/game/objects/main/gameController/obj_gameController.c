@@ -138,9 +138,29 @@ void gc_keyPressed(gameObject_t* this, void* data)
             exit(1);
         }
     }
-    else if (ke->key == 'q')
+    else if (ke->key == 'u')
+    {
+        scmPushObject(createTic(pd, vec(randRange(0, winW), randRange(0, winH)), randAngle()));
+    }
+    else if (ke->key == 'i')
+    {
+        scmPushObject(createBody(pd, vec(randRange(0, winW), randRange(0, winH))));
+    }
+    else if (ke->key == 'o')
+    {
+        scmPushObject(createZombie(pd, vec(randRange(0, winW), randRange(0, winH))));
+    }
+    else if (ke->key == 'j')
     {
         scmPushObject(createSlug(pd, vec(randRange(0, winW), randRange(0, winH))));
+    }
+    else if (ke->key == 'k')
+    {
+        scmPushObject(createGhost(pd, vec(randRange(0, winW), randRange(0, winH))));
+    }
+    else if (ke->key == 'l')
+    {
+        scmPushObject(createSlicer(pd, vec(randRange(0, winW), randRange(0, winH))));
     }
     else if(ke->key >= '1' && ke->key <= '6')
     {

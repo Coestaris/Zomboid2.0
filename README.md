@@ -12,6 +12,13 @@ sudo apt install mesa-utils freeglut3-dev libfreetype6-dev
 sudo apt install cmake # If needed
 ```
 
+#### Build
+###### To build client
+```bash
+cd client
+cmake CMakeLists.txt 
+make all
+```
 
 If you got errors like 
 "***fatal error**: ft2build.h: No such file or directory*"
@@ -26,14 +33,6 @@ pkg-config --cflags freetype2
 vim client/CMakeList.txt 
 # and past it to include_directories section 
 # as space separated arguments
-```
-
-#### Build
-###### To build client
-```bash
-cd client
-cmake CMakeLists.txt 
-make all
 ```
 
 ###### To build server

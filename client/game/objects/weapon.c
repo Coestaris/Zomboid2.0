@@ -11,7 +11,7 @@ double weapon[WEAPON_COUNT * 6] = {
         3,            8,           5,            6,             1,          0.1,         //2 - smg
         15,           20,          60,           65,            1,          0.12,        //3 - shotgun
         1,            1.2,         0,            0,             1,          0,           //4 - laser
-        100,          100,         200,          200,           0,          0,           //5 - rpg
+        10,           10,          200,          200,           0,          0,           //5 - rpg
 };
 
 int maxWeaponCount[WEAPON_COUNT * 2] = {
@@ -100,7 +100,8 @@ void proceedLaser(playerData_t* pd)
     gameObject_t* minObject = NULL;
 
     for(int i = 0; i < count; i++) {
-        if(objects[i]->ID == OBJECT_ZOMBIE || objects[i]->ID == OBJECT_TIC || objects[i]->ID == OBJECT_SLUG) {
+        if(objects[i]->ID == OBJECT_ZOMBIE || objects[i]->ID == OBJECT_TIC    || objects[i]->ID == OBJECT_SLUG ||
+           objects[i]->ID == OBJECT_BODY   || objects[i]->ID == OBJECT_SLICER) {
 
             double intX, intY;
             double dist;
@@ -238,16 +239,19 @@ void fire(gameMobData_t* md, playerData_t* player)
             player->state = shooting;
         }
 
-        if(player->lightFrame != -1)
+        if(player->weapon != 1)
         {
-            for(int i = 0; i < player->lightFrame + 1; i++)
-                scmDestroyObject(player->fireLights[i], true);
-        }
+            if (player->lightFrame != -1)
+            {
+                for (int i = 0; i < player->lightFrame + 1; i++)
+                    scmDestroyObject(player->fireLights[i], true);
+            }
 
-        player->lightFrame = 0;
-        player->currLightSize = PLAYER_LIGHT_SIZE_START;
-        player->currLightAlpha = PLAYER_LIGHT_ALPHA_START;
-        pushPlayerFireLight(player);
+            player->lightFrame = 0;
+            player->currLightSize = PLAYER_LIGHT_SIZE_START;
+            player->currLightAlpha = PLAYER_LIGHT_ALPHA_START;
+            pushPlayerFireLight(player);
+        }
 
     }
     else if(player->weaponMaxCount[player->weapon] != 0 && player->state != reloading) {

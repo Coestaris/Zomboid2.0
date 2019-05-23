@@ -98,6 +98,8 @@ void srfDrawTexture(tex_t* tex, int frame, color_t color, vec_t pos, double angl
 
     pos.y = winH - pos.y;
 
+    assert(tex!= NULL && frame >= 0 && frame < tex->framesCount && tex->textureIds[frame] != 0);
+
     glBindTexture(GL_TEXTURE_2D, tex->textureIds[frame]);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     //glBlendFunc(GL_ONE, GL_ONE);

@@ -10,21 +10,21 @@ void bullet_event_update(gameObject_t* object, void* data)
 
     if (isInWindowExtendedRect(object, 100, 100))
     {
-        scmDestroyObject(bd->light, true);
+        if(bd->light) scmDestroyObject(bd->light, true);
         scmDestroyObject(object, true);
     }
     else
     {
         object->pos.x += bd->xOffset;
         object->pos.y += bd->yOffset;
-        bd->light->pos = object->pos;
+        if(bd->light) bd->light->pos = object->pos;
     }
 }
 
 void bullet_box(gameObject_t* this, gameObject_t* box)
 {
     bulletData_t* bd = this->data;
-    scmDestroyObject(bd->light, true);
+    if(bd->light) scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
 }
 
@@ -35,7 +35,12 @@ void bullet_zombie(gameObject_t* this, gameObject_t* zombie)
             ZOMBIE_MBS_SPEED, ZOMBIE_MBS_TTL, ZOMBIE_MBS_COUNT, ZOMBIE_MBS_RANGE));
     if(enemy_zombie_harm(bd->damage, zombie)) { killEnemy(3); }
 
-    scmDestroyObject(bd->light, true);
+    if(this->texID == TEXID_BULLET_ROCKET)
+    {
+        scmPushObject(createExplosion(this->pos));
+    }
+
+    if(bd->light) scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
 }
 
@@ -46,7 +51,12 @@ void bullet_tic(gameObject_t* this, gameObject_t* tic)
            TIC_MBS_SPEED, TIC_MBS_TTL, TIC_MBS_COUNT, TIC_MBS_RANGE));
     if(enemy_tic_harm(bd->damage, tic)) { killEnemy(1); }
 
-    scmDestroyObject(bd->light, true);
+    if(this->texID == TEXID_BULLET_ROCKET)
+    {
+        scmPushObject(createExplosion(this->pos));
+    }
+
+    if(bd->light) scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
 }
 
@@ -57,7 +67,12 @@ void bullet_body(gameObject_t* this, gameObject_t* body)
            BODY_MBS_SPEED, BODY_MBS_TTL, BODY_MBS_COUNT, BODY_MBS_RANGE));
     if(enemy_body_harm(bd->damage, body)) { killEnemy(2);  }
 
-    scmDestroyObject(bd->light, true);
+    if(this->texID == TEXID_BULLET_ROCKET)
+    {
+        scmPushObject(createExplosion(this->pos));
+    }
+
+    if(bd->light) scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
 }
 
@@ -69,19 +84,28 @@ void bullet_slug(gameObject_t* this, gameObject_t* slug)
     spawnSpotBlood(SLUG_DEAD_COUNT / 2.5, SLUG_DEAD_RANGE / 2.5, slug->pos);
     if(enemy_slug_harm(bd->damage, slug)) { killEnemy(4);  }
 
-    scmDestroyObject(bd->light, true);
+    if(this->texID == TEXID_BULLET_ROCKET)
+    {
+        scmPushObject(createExplosion(this->pos));
+    }
+
+    if(bd->light) scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
 }
 
 void bullet_ghost(gameObject_t* this, gameObject_t* body)
 {
     bulletData_t* bd = this->data;
-    scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
-            GHOST_MBS_SPEED, GHOST_MBS_TTL, GHOST_MBS_COUNT, GHOST_MBS_RANGE));
-    if(enemy_ghost_harm(bd->damage, body)) { killEnemy(5);  }
+    if(this->texID == TEXID_BULLET_BOLT)
+    {
+        scmPushObject(createMovingBloodSpawner(this->pos, this->angle,
+                                               GHOST_MBS_SPEED, GHOST_MBS_TTL, GHOST_MBS_COUNT, GHOST_MBS_RANGE));
+        if (enemy_ghost_harm(bd->damage, body))
+        { killEnemy(5); }
 
-    scmDestroyObject(bd->light, true);
-    scmDestroyObject(this, true);
+        if(bd->light) scmDestroyObject(bd->light, true);
+        scmDestroyObject(this, true);
+    }
 }
 
 void bullet_slicer(gameObject_t* this, gameObject_t* body)
@@ -91,7 +115,12 @@ void bullet_slicer(gameObject_t* this, gameObject_t* body)
             SLICER_MBS_SPEED, SLICER_MBS_TTL, SLICER_MBS_COUNT, SLICER_MBS_RANGE));
     if(enemy_slicer_harm(bd->damage, body)) { killEnemy(6);  }
 
-    scmDestroyObject(bd->light, true);
+    if(this->texID == TEXID_BULLET_ROCKET)
+    {
+        scmPushObject(createExplosion(this->pos));
+    }
+
+    if(bd->light)  scmDestroyObject(bd->light, true);
     scmDestroyObject(this, true);
 }
 
@@ -128,8 +157,14 @@ gameObject_t* createBullet(gameMobData_t* md, vec_t p, double angle, int texID, 
 
     go->animationSpeed = 1;
 
-    bd->light = createLight(p, TEXID_LIGHT, 0.8, 0.03);
-    scmPushObject(bd->light);
+    if(texID != TEXID_BULLET_BOLT)
+    {
+        bd->light = createLight(p, TEXID_LIGHT, 0.8, 0.03);
+        scmPushObject(bd->light);
+    } else
+    {
+        bd->light = NULL;
+    }
 
     bd->xOffset = cos(go->angle) * BULLET_SPEED;
     bd->yOffset = sin(go->angle) * BULLET_SPEED;

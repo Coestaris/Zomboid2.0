@@ -218,7 +218,7 @@ void scmLoadScene(int id)
             {
                 ltracerReset();
             }
-
+            srfClear();
             currentScene = i;
 
             if (scenes[i]->destroyObjects)

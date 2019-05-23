@@ -49,8 +49,10 @@ int getMaxMobs(int level)
 }
 
 int winW, winH;
+playerData_t* gpd;
 gameObject_t* getMob(int id, playerData_t* pd)
 {
+    gpd = pd;
     int dir = (int) randRange(0, 4);
     vec_t pos = vec(0, 0);
     double angle = 0;
@@ -129,6 +131,21 @@ int killEnemy(int id)
         if (gmd->currentMobs != 0)
             gmd->currentMobs -= 1;
     }
+
+    switch(id) {
+        case(1): gpd->score += TIC_HP;
+            break;
+        case(2): gpd->score += BODY_HP;
+            break;
+        case(3): gpd->score += ZOMBIE_HP;
+            break;
+        case(4): gpd->score += SLUG_HP;
+            break;
+        case(5): gpd->score += GHOST_HP;
+            break;
+        case(6): gpd->score += SLICER_HP;
+            break;
+    }
 }
 
 void spawnEnemy(gameMobData_t* md)
@@ -159,7 +176,7 @@ void spawnEnemy(gameMobData_t* md)
 
         printf("Spawned mob %i. To spawn: %i\n", i, sum);
 
-        //scmPushObject(getMob(i, md->pd));
+        scmPushObject(getMob(i, md->pd));
     }
 }
 

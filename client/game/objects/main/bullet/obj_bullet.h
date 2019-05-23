@@ -7,17 +7,22 @@
 
 #define BULLET_SPEED 15
 
-#include "../../enemy.h"
 
 #include "../../../objectInclude.h"
 
 #include "../../bloodSpawner.h"
 #include "../../score.h"
+#include "../../enemy.h"
 
-#include "../enemy/obj_enemy_zombie.h"
 #include "../enemy/obj_enemy_tic.h"
+#include "../enemy/obj_enemy_body.h"
+#include "../enemy/obj_enemy_zombie.h"
+#include "../enemy/obj_enemy_slug.h"
+#include "../enemy/obj_enemy_ghost.h"
+#include "../enemy/obj_enemy_slicer.h"
 
 #include "../light/obj_light.h"
+#include "obj_explosion.h"
 
 typedef struct _bulletData
 {

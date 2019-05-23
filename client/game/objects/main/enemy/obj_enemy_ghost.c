@@ -19,7 +19,6 @@ int enemy_ghost_harm(double damage, gameObject_t* this)
     gd->hp -= damage;
 
     if(gd->hp <= 0) {
-        spawnSpotBlood(20, 30, this->pos);
         scmDestroyObject(this, true);
         return 1;
     }
@@ -40,6 +39,7 @@ gameObject_t* createGhost(playerData_t* player, vec_t pos)
     this->onInit = ghost_init;
     this->pos = pos;
     this->ID = OBJECT_GHOST;
+    this->alpha = 0.3;
     this->animationSpeed = GHOST_ANSPEED;
 
     allocData(ghostData_t, this, data);

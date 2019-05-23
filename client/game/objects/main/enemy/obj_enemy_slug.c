@@ -13,8 +13,8 @@ void slug_update(gameObject_t* this, void* data)
     {
         this->angle = twoPointsAngle(this->pos, sd->pd->pos);
         int frame = getFrame();
-        this->pos.x += cos(this->angle) * sd->speed * (fabs(cos(frame / 15.0)) + 0.2);
-        this->pos.y += sin(this->angle) * sd->speed * (fabs(cos(frame / 15.0)) + 0.2);
+        this->pos.x += cos(this->angle) * sd->speed * (fabs(cos(frame / 15.0)) + 0.15);
+        this->pos.y += sin(this->angle) * sd->speed * (fabs(cos(frame / 15.0)) + 0.15);
 
         if (frame % 10 == 0)
         {

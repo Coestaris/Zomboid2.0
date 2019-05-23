@@ -68,7 +68,7 @@ image                   TEXID_PLAYER_LASER          TEXSCOPE_GAME      15   0   
 animation   4           TEXID_PLAYER_RPG            TEXSCOPE_GAME      -3   0     TM_DEFAULT   images/player/rpg_fire/image%i.png
 animation   15          TEXID_PLAYER_RPG_RELOAD     TEXSCOPE_GAME      -3   0     TM_DEFAULT   images/player/rpg_reload/image%i.png
 animation   3           TEXID_BULLET_ROCKET         TEXSCOPE_GAME       0   0     TM_DEFAULT   images/weapon/rocket/image%i.png
-animation   2           TEXID_EXPLOSION             TEXSCOPE_GAME       0   0     TM_DEFAULT   images/weapon/rocket/image%i.png
+animation   3           TEXID_EXPLOSION             TEXSCOPE_GAME       0   0     TM_DEFAULT   images/weapon/explosion/explosion%i.png
 
 animation   3           TEXID_ENEMY_BODY            TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/body/image%i.png
 animation   10          TEXID_ENEMY_SLUG            TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/slug/image%i.png
@@ -77,7 +77,7 @@ image                   TEXID_ENEMY_SLICER          TEXSCOPE_GAME       0   0   
 
 animation   4           TEXID_ZOMBIE_DEAD1          TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/zombieDead1/image%i.png
 animation   4           TEXID_ZOMBIE_DEAD2          TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/zombieDead2/image%i.png
-image                   TEXID_BEETLE_DEAD           TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/beetleDead.png
+image                   TEXID_BEETLE_DEAD           TEXSCOPE_MM_GEN     0   0     TM_DEFAULT   images/enemy/beetleDead.png
 animation   2           TEXID_BLOOD_SLUGEMARK       TEXSCOPE_GAME       0   0     TM_DEFAULT   images/blood/slugeMark/image%i.png
 animation   4           TEXID_SLUG_DEAD             TEXSCOPE_GAME       0   0     TM_DEFAULT   images/enemy/slugDead/image%i.png
 image                   TEXID_SHELLCASE             TEXSCOPE_GAME       0   0     TM_DEFAULT   images/weapon/shellcase.png
