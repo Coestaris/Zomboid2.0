@@ -42,7 +42,7 @@ cmake CMakeLists.txt
 make all
 ```
 
-####Some screenshots
+#### Game screenshots
 
 ![1](https://user-images.githubusercontent.com/19210828/58269521-6d0f6980-7d90-11e9-8c74-d1e73835c65c.png)
 
