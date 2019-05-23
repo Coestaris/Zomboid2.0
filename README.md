@@ -41,3 +41,17 @@ cd server
 cmake CMakeLists.txt 
 make all
 ```
+
+####Some screenshots
+
+![1](https://user-images.githubusercontent.com/19210828/58269521-6d0f6980-7d90-11e9-8c74-d1e73835c65c.png)
+
+![2](https://user-images.githubusercontent.com/19210828/58269523-6d0f6980-7d90-11e9-9116-4a2623f0a2ef.png)
+
+![3](https://user-images.githubusercontent.com/19210828/58269519-6d0f6980-7d90-11e9-8ae2-23cf624a13e3.png)
+
+![4](https://user-images.githubusercontent.com/19210828/58269517-6c76d300-7d90-11e9-9860-9b6fc1463a8d.png)
+
+![5](https://user-images.githubusercontent.com/19210828/58269518-6d0f6980-7d90-11e9-8cb8-77af8394000b.png)
+
+

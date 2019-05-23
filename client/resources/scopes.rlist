@@ -77,8 +77,8 @@
 
 #define TEXID_SHELLCASE_SHOTGUN     72
 
-#define SCENEID_MAIN_MENU   1
-#define SCENEID_GAME        0
+#define SCENEID_MAIN_MENU   0
+#define SCENEID_GAME        1
 
 #define OBJECT_BOX              0
 #define OBJECT_MENU             1

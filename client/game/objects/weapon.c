@@ -261,7 +261,8 @@ void fire(gameMobData_t* md, playerData_t* player)
 
 void pushPlayerFireLight(playerData_t* pd)
 {
-    gameObject_t* light = createLight(pd->pos, TEXID_LIGHT, pd->currLightSize, pd->currLightAlpha);
+    gameObject_t* light = createLight(relativeCoordinatesEx(getPlayerTexture(pd->weapon), pd->pos, pd->angle),
+            TEXID_LIGHT, pd->currLightSize, pd->currLightAlpha);
     pd->fireLights[pd->lightFrame++] = light;
 
     pd->currLightAlpha *= PLAYER_LIGHT_ALPHA_REDUCTION;

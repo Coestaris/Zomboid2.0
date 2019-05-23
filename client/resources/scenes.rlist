@@ -29,13 +29,13 @@ scm_close ;SCENEID_GAME
 scm_open  SCENEID_MAIN_MENU
 
     ; object_ex       scene_id           x     y     angle     size        texid       color      drawable   depth      ani_speed
-    scm_sog_add_ex    OBJECT_BOX         135   200   8.1       defaults    defaults    defaults   defaults   defaults   defaults
-    scm_sog_add_ex    OBJECT_BOX         300   400   4.4       defaults    defaults    defaults   defaults   defaults   defaults
-    scm_sog_add_ex    OBJECT_BOX         330    30   2.1       defaults    defaults    defaults   defaults   defaults   defaults
-    scm_sog_add_ex    OBJECT_BOX         590   400   6.4       defaults    defaults    defaults   defaults   defaults   defaults
-    scm_sog_add_ex    OBJECT_BOX         520   490   2.2       defaults    defaults    defaults   defaults   defaults   defaults
-    scm_sog_add_ex    OBJECT_BOX         620   100   1.8       defaults    defaults    defaults   defaults   defaults   defaults
-    scm_sog_add_ex    OBJECT_BOX         250   520   2.3       defaults    defaults    defaults   defaults   defaults   defaults
+    scm_sog_add_ex    OBJECT_BOX         167   266   8.1       defaults    defaults    defaults   defaults   defaults   defaults
+    scm_sog_add_ex    OBJECT_BOX         375   532   4.4       defaults    defaults    defaults   defaults   defaults   defaults
+    scm_sog_add_ex    OBJECT_BOX         413    40   2.1       defaults    defaults    defaults   defaults   defaults   defaults
+    scm_sog_add_ex    OBJECT_BOX         737   532   6.4       defaults    defaults    defaults   defaults   defaults   defaults
+    scm_sog_add_ex    OBJECT_BOX         650   651   2.2       defaults    defaults    defaults   defaults   defaults   defaults
+    scm_sog_add_ex    OBJECT_BOX         775   133   1.8       defaults    defaults    defaults   defaults   defaults   defaults
+    scm_sog_add_ex    OBJECT_BOX         312   692   2.3       defaults    defaults    defaults   defaults   defaults   defaults
 
     scm_sog_add OBJECT_MENU         0   0
     scm_sog_add OBJECT_MENU_SPAWNER 0   0
