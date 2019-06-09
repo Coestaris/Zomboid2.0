@@ -8,8 +8,8 @@ A small game on self-written GLUT-based game engine. Developing it just for fun.
 ```bash
 git clone --recurse-submodules https://github.com/Coestaris/Zomboid2.0
 cd Zomboid2.0
-sudo apt install mesa-utils freeglut3-dev libfreetype6-dev
-sudo apt install cmake # If needed
+sudo apt install mesa-utils freeglut3-dev libfreetype6-dev libxi-dev
+sudo apt install make cmake # If needed
 ```
 
 #### Build
