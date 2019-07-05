@@ -3,6 +3,7 @@ A small game on self-written GLUT-based game engine. Developing it just for fun.
 
 *Zomboid 1.0 is an [previous](https://github.com/Coestaris/Zomboid) abandoned c++-written version*
 
+The project is not completed, but I was terribly tired of programming it. If you have ambitions to complete it, you can create pullrequests or contact me directly via [telegram](https://t.me/coestaris).
 
 #### Setup
 ```bash
